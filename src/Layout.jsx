@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Button } from "@/components/ui/button";
-import { Sparkles, LayoutDashboard, Plus, Menu, X } from 'lucide-react';
+import { Sparkles, LayoutDashboard, Plus, Menu, X, Crown } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Layout({ children }) {
@@ -36,7 +36,13 @@ export default function Layout({ children }) {
                   New Business
                 </Button>
               </Link>
-            </div>
+              <Link to={createPageUrl('WhiteLabel')}>
+                <Button variant="outline" className="border-amber-300 text-amber-600 hover:bg-amber-50">
+                  <Crown className="w-4 h-4 mr-2" />
+                  White Label
+                </Button>
+              </Link>
+              </div>
 
             {/* Mobile Menu Button */}
             <button
@@ -63,7 +69,13 @@ export default function Layout({ children }) {
                 New Business
               </Button>
             </Link>
-          </div>
+            <Link to={createPageUrl('WhiteLabel')} onClick={() => setMobileMenuOpen(false)}>
+              <Button variant="outline" className="w-full border-amber-300 text-amber-600">
+                <Crown className="w-4 h-4 mr-2" />
+                White Label
+              </Button>
+            </Link>
+            </div>
         )}
       </nav>
 
