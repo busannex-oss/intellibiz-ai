@@ -3,7 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { ChevronRight, ChevronLeft, ExternalLink, Phone, Globe, Star, Zap, TrendingUp } from 'lucide-react';
+import { ChevronRight, ChevronLeft, ExternalLink, Phone, Globe, Star, Zap, TrendingUp, Sparkles } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
 
 const PHONE_SERVICES = [
@@ -188,7 +190,7 @@ const DIRECTORIES = [
   }
 ];
 
-export default function ResourcesStep({ project, onNext, onPrev }) {
+export default function ResourcesStep({ project, onNext, onPrev, projectId }) {
   const [activeTab, setActiveTab] = useState('phone');
 
   const categoryLabels = {
@@ -229,6 +231,41 @@ export default function ResourcesStep({ project, onNext, onPrev }) {
         </TabsList>
 
         <TabsContent value="phone" className="mt-6">
+          {/* Built-in AI Phone System */}
+          <Card className="border-2 border-violet-300 shadow-xl bg-gradient-to-r from-violet-50 to-indigo-50 mb-6">
+            <CardContent className="p-6">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center">
+                    <Phone className="w-7 h-7 text-white" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-xl font-bold text-slate-800">Built-in AI Phone System</h3>
+                      <Badge className="bg-violet-600">Recommended</Badge>
+                    </div>
+                    <p className="text-slate-600 mt-1">
+                      Advanced switchboard, AI receptionist, SMS, call transcription & more — built right into your app
+                    </p>
+                    <div className="flex flex-wrap gap-2 mt-2">
+                      <Badge variant="outline" className="text-violet-700 border-violet-300">AI Receptionist</Badge>
+                      <Badge variant="outline" className="text-violet-700 border-violet-300">Smart Routing</Badge>
+                      <Badge variant="outline" className="text-violet-700 border-violet-300">Call Transcription</Badge>
+                      <Badge variant="outline" className="text-violet-700 border-violet-300">Sentiment Analysis</Badge>
+                    </div>
+                  </div>
+                </div>
+                <Link to={createPageUrl(`PhoneSystem?projectId=${project?.id}`)}>
+                  <Button className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 h-12 px-6">
+                    <Sparkles className="w-5 h-5 mr-2" />
+                    Set Up Phone System
+                  </Button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+
+          <h3 className="text-lg font-semibold text-slate-700 mb-4">Or choose a standalone provider:</h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {PHONE_SERVICES.map((service) => (
               <Card key={service.name} className="border-0 shadow-lg hover:shadow-xl transition-shadow bg-white/80 backdrop-blur-sm">

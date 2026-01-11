@@ -152,6 +152,7 @@ export default function CreateBusiness() {
               <ResourcesStep
                 key="step6"
                 project={project}
+                projectId={projectId}
                 onNext={handleNext}
                 onPrev={handlePrev}
               />
