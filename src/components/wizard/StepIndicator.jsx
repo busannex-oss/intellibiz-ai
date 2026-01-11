@@ -3,18 +3,19 @@ import { Check, Circle } from 'lucide-react';
 import { cn } from "@/lib/utils";
 
 const steps = [
-  { id: 1, name: 'Business Plan', description: 'Define your vision' },
-  { id: 2, name: 'Logo', description: 'Create your brand' },
-  { id: 3, name: 'Website', description: 'Build your presence' },
-  { id: 4, name: 'Social Media', description: 'Connect & grow' },
-  { id: 5, name: 'Resources', description: 'Tools & directories' },
-  { id: 6, name: 'Newsletter', description: 'Build your list' },
+  { id: 1, name: 'Market Research', description: 'Analyze competitors' },
+  { id: 2, name: 'Business Plan', description: 'Strategic planning' },
+  { id: 3, name: 'Logo', description: 'Create your brand' },
+  { id: 4, name: 'Website', description: 'Build your presence' },
+  { id: 5, name: 'Social Media', description: 'Connect & grow' },
+  { id: 6, name: 'Resources', description: 'Tools & directories' },
+  { id: 7, name: 'Newsletter', description: 'Build your list' },
 ];
 
 export default function StepIndicator({ currentStep, onStepClick }) {
   return (
     <div className="w-full py-6">
-      <div className="hidden lg:flex items-center justify-between max-w-4xl mx-auto px-4">
+      <div className="hidden lg:flex items-center justify-between max-w-5xl mx-auto px-4">
         {steps.map((step, index) => (
           <React.Fragment key={step.id}>
             <button
@@ -27,7 +28,7 @@ export default function StepIndicator({ currentStep, onStepClick }) {
             >
               <div
                 className={cn(
-                  "w-12 h-12 rounded-full flex items-center justify-center transition-all duration-500 mb-2",
+                  "w-11 h-11 rounded-full flex items-center justify-center transition-all duration-500 mb-2",
                   step.id < currentStep
                     ? "bg-emerald-500 text-white shadow-lg shadow-emerald-200"
                     : step.id === currentStep
@@ -43,7 +44,7 @@ export default function StepIndicator({ currentStep, onStepClick }) {
               </div>
               <span
                 className={cn(
-                  "text-xs font-medium transition-colors",
+                  "text-xs font-medium transition-colors text-center",
                   step.id === currentStep ? "text-violet-700" : "text-slate-500"
                 )}
               >
@@ -53,7 +54,7 @@ export default function StepIndicator({ currentStep, onStepClick }) {
             {index < steps.length - 1 && (
               <div
                 className={cn(
-                  "flex-1 h-0.5 mx-2 transition-all duration-500",
+                  "flex-1 h-0.5 mx-1 transition-all duration-500",
                   step.id < currentStep ? "bg-emerald-400" : "bg-slate-200"
                 )}
               />
