@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, Sparkles, RefreshCw, Pencil, Check, ChevronRight } from 'lucide-react';
@@ -13,41 +12,79 @@ import ReactMarkdown from 'react-markdown';
 export default function BusinessPlanStep({ project, onUpdate, onNext }) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    business_name: project?.business_name || '',
-    industry: project?.industry || '',
-    description: project?.description || '',
-    target_audience: project?.target_audience || ''
-  });
   const [editedPlan, setEditedPlan] = useState('');
 
   const generateBusinessPlan = async () => {
-    if (!formData.business_name || !formData.industry || !formData.description) {
-      return;
-    }
-    
     setIsGenerating(true);
     
+    const marketResearch = project?.market_research;
+    const uvp = project?.unique_value_proposition;
+    const advantages = project?.competitive_advantages;
+    
     const response = await base44.integrations.Core.InvokeLLM({
-      prompt: `Create a comprehensive business plan for the following business:
+      prompt: `Create a comprehensive, competition-beating business plan based on market research:
         
-Business Name: ${formData.business_name}
-Industry: ${formData.industry}
-Description: ${formData.description}
-Target Audience: ${formData.target_audience || 'General consumers'}
+Business Name: ${project.business_name}
+Industry: ${project.industry}
+Description: ${project.description}
+Target Audience: ${project.target_audience || 'General consumers'}
+Location: ${project.location || 'United States'}
 
-Generate a complete business plan with the following sections:
-1. Executive Summary
-2. Company Description
-3. Market Analysis
-4. Products/Services
-5. Marketing Strategy
-6. Operations Plan
-7. Financial Projections (high-level)
-8. Key Success Factors
-9. Recommended Brand Colors (provide hex codes for primary, secondary, and accent colors that match the business personality)
+=== MARKET RESEARCH INSIGHTS ===
+Market Size: ${marketResearch?.market_size || 'Not available'}
+Growth Trends: ${marketResearch?.growth_trends || 'Not available'}
+Industry Overview: ${marketResearch?.industry_overview || 'Not available'}
 
-Be specific, actionable, and provide real insights. Format nicely with markdown.`,
+=== COMPETITOR ANALYSIS ===
+${marketResearch?.competitors?.map(c => `
+Competitor: ${c.name}
+- Weaknesses to exploit: ${c.weaknesses?.join(', ')}
+- Their pricing: ${c.pricing}
+`).join('\n') || 'No competitor data'}
+
+=== MARKET OPPORTUNITIES ===
+${marketResearch?.opportunities?.join('\n- ') || 'Not available'}
+
+=== MARKET GAPS TO FILL ===
+${marketResearch?.market_gaps?.join('\n- ') || 'Not available'}
+
+=== CUSTOMER PAIN POINTS ===
+${marketResearch?.customer_pain_points?.join('\n- ') || 'Not available'}
+
+=== YOUR UNIQUE VALUE PROPOSITION ===
+${uvp || 'Not defined'}
+
+=== YOUR COMPETITIVE ADVANTAGES ===
+${advantages?.join('\n- ') || 'Not defined'}
+
+=== PRICING INSIGHTS ===
+Low-end: ${marketResearch?.pricing_insights?.low_end || 'N/A'}
+Mid-range: ${marketResearch?.pricing_insights?.mid_range || 'N/A'}
+Premium: ${marketResearch?.pricing_insights?.premium || 'N/A'}
+Recommendation: ${marketResearch?.pricing_insights?.recommendation || 'N/A'}
+
+=== TARGET KEYWORDS ===
+${marketResearch?.keywords?.join(', ') || 'Not available'}
+
+Generate a STRATEGIC business plan that:
+1. Directly addresses competitor weaknesses
+2. Fills identified market gaps
+3. Solves customer pain points
+4. Leverages your unique advantages
+5. Includes specific strategies to outperform each competitor
+
+Sections needed:
+1. Executive Summary (emphasize competitive differentiation)
+2. Company Description (highlight unique positioning)
+3. Market Analysis (reference the research data)
+4. Products/Services (designed to beat competitors)
+5. Marketing Strategy (target competitor weaknesses, use keywords)
+6. Operations Plan (optimized for efficiency)
+7. Financial Projections (realistic based on market data)
+8. Competitive Battle Plan (specific tactics vs each competitor)
+9. Key Success Factors
+
+Be specific, actionable, and show exactly how this business will OUTPERFORM competitors. Format nicely with markdown.`,
       response_json_schema: {
         type: "object",
         properties: {
@@ -58,25 +95,16 @@ Be specific, actionable, and provide real insights. Format nicely with markdown.
           marketing_strategy: { type: "string" },
           operations_plan: { type: "string" },
           financial_projections: { type: "string" },
+          competitive_battle_plan: { type: "string" },
           key_success_factors: { type: "string" },
-          brand_colors: {
-            type: "object",
-            properties: {
-              primary: { type: "string" },
-              secondary: { type: "string" },
-              accent: { type: "string" }
-            }
-          },
           full_plan_markdown: { type: "string" }
         }
       }
     });
     
     await onUpdate({
-      ...formData,
       business_plan: response,
-      brand_colors: response.brand_colors,
-      current_step: 1
+      current_step: Math.max(project.current_step || 1, 2)
     });
     
     setIsGenerating(false);
@@ -103,68 +131,61 @@ Be specific, actionable, and provide real insights. Format nicely with markdown.
     >
       <div className="text-center space-y-3">
         <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-violet-700 to-indigo-700 bg-clip-text text-transparent">
-          Let's Build Your Business Plan
+          Strategic Business Plan
         </h2>
         <p className="text-slate-500 text-lg max-w-2xl mx-auto">
-          Tell us about your business idea and our AI will create a comprehensive plan
+          AI creates a competition-beating plan based on your market research
         </p>
       </div>
 
+      {/* Research Summary */}
+      {project?.market_research && (
+        <Card className="border-0 shadow-lg bg-gradient-to-r from-violet-50 to-indigo-50">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-4 flex-wrap">
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-slate-500">Competitors analyzed:</span>
+                <span className="font-semibold text-violet-700">{project.market_research.competitors?.length || 0}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-slate-500">Opportunities found:</span>
+                <span className="font-semibold text-emerald-700">{project.market_research.opportunities?.length || 0}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-slate-500">Market gaps:</span>
+                <span className="font-semibold text-amber-700">{project.market_research.market_gaps?.length || 0}</span>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {!businessPlan ? (
         <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
-          <CardContent className="p-8 space-y-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-2">
-                <Label className="text-slate-700 font-medium">Business Name *</Label>
-                <Input
-                  placeholder="e.g., TechFlow Solutions"
-                  value={formData.business_name}
-                  onChange={(e) => setFormData({ ...formData, business_name: e.target.value })}
-                  className="h-12 border-slate-200 focus:border-violet-400 focus:ring-violet-400"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label className="text-slate-700 font-medium">Industry *</Label>
-                <Input
-                  placeholder="e.g., SaaS, E-commerce, Consulting"
-                  value={formData.industry}
-                  onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
-                  className="h-12 border-slate-200 focus:border-violet-400 focus:ring-violet-400"
-                />
-              </div>
+          <CardContent className="p-8 text-center space-y-6">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-violet-100 to-indigo-100 mx-auto flex items-center justify-center">
+              <Sparkles className="w-10 h-10 text-violet-600" />
             </div>
-            <div className="space-y-2">
-              <Label className="text-slate-700 font-medium">Business Description *</Label>
-              <Textarea
-                placeholder="Describe what your business does, what problem it solves, and what makes it unique..."
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="min-h-[120px] border-slate-200 focus:border-violet-400 focus:ring-violet-400"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label className="text-slate-700 font-medium">Target Audience</Label>
-              <Input
-                placeholder="e.g., Small business owners, Tech startups, Working professionals"
-                value={formData.target_audience}
-                onChange={(e) => setFormData({ ...formData, target_audience: e.target.value })}
-                className="h-12 border-slate-200 focus:border-violet-400 focus:ring-violet-400"
-              />
+            <div>
+              <h3 className="text-xl font-semibold text-slate-800 mb-2">Ready to Create Your Strategic Plan</h3>
+              <p className="text-slate-500 max-w-lg mx-auto">
+                Our AI will use your market research data to create a business plan specifically designed to outperform your competitors.
+              </p>
             </div>
             <Button
               onClick={generateBusinessPlan}
-              disabled={isGenerating || !formData.business_name || !formData.industry || !formData.description}
-              className="w-full h-14 text-lg bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 shadow-lg shadow-violet-200 transition-all duration-300"
+              disabled={isGenerating}
+              className="h-14 px-8 text-lg bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 shadow-lg shadow-violet-200"
             >
               {isGenerating ? (
                 <>
                   <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Generating Your Business Plan...
+                  Creating Strategic Plan...
                 </>
               ) : (
                 <>
                   <Sparkles className="w-5 h-5 mr-2" />
-                  Generate Business Plan with AI
+                  Generate Competition-Beating Plan
                 </>
               )}
             </Button>
@@ -238,6 +259,7 @@ Be specific, actionable, and provide real insights. Format nicely with markdown.
                   <TabsList className="mb-4 bg-slate-100">
                     <TabsTrigger value="full">Full Plan</TabsTrigger>
                     <TabsTrigger value="executive">Executive Summary</TabsTrigger>
+                    <TabsTrigger value="battle">Battle Plan</TabsTrigger>
                     <TabsTrigger value="marketing">Marketing</TabsTrigger>
                     <TabsTrigger value="financial">Financial</TabsTrigger>
                   </TabsList>
@@ -246,6 +268,12 @@ Be specific, actionable, and provide real insights. Format nicely with markdown.
                   </TabsContent>
                   <TabsContent value="executive" className="prose prose-slate max-w-none">
                     <ReactMarkdown>{businessPlan.executive_summary}</ReactMarkdown>
+                  </TabsContent>
+                  <TabsContent value="battle" className="prose prose-slate max-w-none">
+                    <div className="not-prose mb-4 p-4 bg-gradient-to-r from-red-50 to-orange-50 rounded-lg border border-red-200">
+                      <p className="text-sm text-red-800 font-medium">🎯 Competitive Battle Plan - Strategies to outperform each competitor</p>
+                    </div>
+                    <ReactMarkdown>{businessPlan.competitive_battle_plan}</ReactMarkdown>
                   </TabsContent>
                   <TabsContent value="marketing" className="prose prose-slate max-w-none">
                     <ReactMarkdown>{businessPlan.marketing_strategy}</ReactMarkdown>
