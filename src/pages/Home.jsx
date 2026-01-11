@@ -15,46 +15,48 @@ import {
   Rocket,
   Zap,
   Shield,
-  ArrowRight
+  ArrowRight,
+  Search,
+  Target
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const features = [
   {
+    icon: Search,
+    title: 'Market Research',
+    description: 'AI analyzes competitors, market gaps, and opportunities to position you for success',
+    color: 'from-cyan-500 to-blue-500'
+  },
+  {
     icon: FileText,
-    title: 'AI Business Plan',
-    description: 'Generate comprehensive business plans with market analysis and strategies',
+    title: 'Strategic Business Plan',
+    description: 'Competition-beating plans that exploit competitor weaknesses',
     color: 'from-violet-500 to-purple-500'
   },
   {
     icon: Palette,
-    title: 'Brand Logo',
-    description: 'Create professional logos tailored to your business identity',
+    title: 'Differentiated Brand',
+    description: 'Logos and colors strategically designed to stand out from competitors',
     color: 'from-pink-500 to-rose-500'
   },
   {
     icon: Globe,
-    title: 'Website Content',
-    description: 'Build conversion-focused website copy and structure',
+    title: 'Conversion Website',
+    description: 'SEO-optimized content targeting keywords your competitors miss',
     color: 'from-blue-500 to-cyan-500'
   },
   {
     icon: Share2,
     title: 'Social Media',
-    description: 'Generate branded headers and profiles for all platforms',
+    description: 'Branded assets designed to capture market attention',
     color: 'from-orange-500 to-amber-500'
   },
   {
     icon: Phone,
     title: 'Business Resources',
-    description: 'Access AI phone services and essential directories',
+    description: 'AI phone services and directories for rapid market presence',
     color: 'from-emerald-500 to-green-500'
-  },
-  {
-    icon: Mail,
-    title: 'Newsletter System',
-    description: 'Build compliant email lists with opt-in management',
-    color: 'from-indigo-500 to-violet-500'
   }
 ];
 
@@ -80,14 +82,14 @@ export default function Home() {
             </div>
             
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-slate-900 mb-6 leading-tight">
-              Launch Your
-              <span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent"> Dream Business </span>
-              in Minutes
+              Build a Brand That
+              <span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent"> Outperforms </span>
+              Competitors
             </h1>
             
             <p className="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-              The all-in-one platform that creates your business plan, logo, website, 
-              social media presence, and marketing tools—all powered by AI.
+              AI-powered market research analyzes your competition, finds gaps, and builds 
+              a complete brand strategically designed to win market share.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -155,11 +157,12 @@ export default function Home() {
             <p className="text-lg opacity-90">Three simple steps to your complete business</p>
           </div>
           
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-4 gap-8">
             {[
-              { step: '01', title: 'Describe Your Vision', desc: 'Tell us about your business idea' },
-              { step: '02', title: 'AI Creates Everything', desc: 'Watch as AI builds your brand' },
-              { step: '03', title: 'Launch & Grow', desc: 'Download assets and go live' }
+              { step: '01', title: 'Describe Your Idea', desc: 'Tell us about your business' },
+              { step: '02', title: 'AI Researches Market', desc: 'Analyzes competitors & gaps' },
+              { step: '03', title: 'Strategic Creation', desc: 'Brand built to outperform' },
+              { step: '04', title: 'Launch & Dominate', desc: 'Enter market with advantage' }
             ].map((item, i) => (
               <motion.div
                 key={item.step}
@@ -187,9 +190,10 @@ export default function Home() {
             </h2>
             <div className="space-y-6">
               {[
-                { icon: Zap, title: 'Lightning Fast', desc: 'Complete business setup in under 10 minutes' },
-                { icon: Shield, title: 'Professional Quality', desc: 'Enterprise-grade content and designs' },
-                { icon: Sparkles, title: 'AI-Powered', desc: 'Cutting-edge AI creates unique content' }
+                { icon: Target, title: 'Competitor Intelligence', desc: 'AI analyzes real competitors to find exploitable weaknesses' },
+                { icon: Zap, title: 'Strategic Differentiation', desc: 'Every asset designed to fill market gaps' },
+                { icon: Shield, title: 'Data-Driven Decisions', desc: 'Brand colors, messaging, and positioning backed by research' },
+                { icon: Sparkles, title: 'Conversion Optimized', desc: 'Content targets keywords and pain points competitors miss' }
               ].map((benefit) => (
                 <div key={benefit.title} className="flex gap-4">
                   <div className="w-12 h-12 rounded-xl bg-violet-100 flex items-center justify-center flex-shrink-0">

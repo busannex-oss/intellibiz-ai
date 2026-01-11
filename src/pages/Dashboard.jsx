@@ -17,7 +17,8 @@ import {
   Calendar,
   MoreVertical,
   Trash2,
-  Eye
+  Eye,
+  Search
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -54,6 +55,7 @@ export default function Dashboard() {
 
   const getStepProgress = (project) => {
     const steps = [
+      { done: !!project.market_research, icon: Search, label: 'Research' },
       { done: !!project.business_plan, icon: FileText, label: 'Plan' },
       { done: !!project.logo_url, icon: Palette, label: 'Logo' },
       { done: !!project.website_content, icon: Globe, label: 'Website' },
