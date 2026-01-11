@@ -16,28 +16,60 @@ export default function WebsiteStep({ project, onUpdate, onNext, onPrev }) {
   const generateWebsite = async () => {
     setIsGenerating(true);
     
+    const marketResearch = project?.market_research;
+    const uvp = project?.unique_value_proposition;
+    const advantages = project?.competitive_advantages;
+    const brandPersonality = project?.brand_personality;
+    
     const response = await base44.integrations.Core.InvokeLLM({
-      prompt: `Create website content for "${project.business_name}" based on this business plan:
+      prompt: `Create CONVERSION-OPTIMIZED website content for "${project.business_name}" designed to OUTPERFORM competitors:
 
+=== BUSINESS INFO ===
 Business: ${project.business_name}
 Industry: ${project.industry}
 Description: ${project.description}
 Target Audience: ${project.target_audience}
 
-Executive Summary: ${project.business_plan?.executive_summary}
-Products/Services: ${project.business_plan?.products_services}
-Marketing Strategy: ${project.business_plan?.marketing_strategy}
+=== UNIQUE VALUE PROPOSITION ===
+${uvp || 'Premium service provider'}
 
-Generate engaging, conversion-focused website content for these sections:
-1. Hero Section (headline, subheadline, CTA button text)
-2. About Section
-3. Services/Products Section (list 3-4 key offerings with descriptions)
-4. Features/Benefits Section (list 4-6 key benefits)
-5. Testimonials (generate 3 realistic testimonials)
-6. Call to Action Section
+=== COMPETITIVE ADVANTAGES TO HIGHLIGHT ===
+${advantages?.map((a, i) => `${i + 1}. ${a}`).join('\n') || 'Quality, service, value'}
+
+=== COMPETITOR WEAKNESSES TO EXPLOIT IN COPY ===
+${marketResearch?.competitors?.flatMap(c => c.weaknesses || []).slice(0, 5).join('\n- ') || 'Generic messaging, poor support'}
+
+=== CUSTOMER PAIN POINTS TO ADDRESS ===
+${marketResearch?.customer_pain_points?.join('\n- ') || 'Not specified'}
+
+=== TARGET KEYWORDS FOR SEO ===
+${marketResearch?.keywords?.join(', ') || 'Not specified'}
+
+=== BRAND PERSONALITY ===
+Traits: ${brandPersonality?.traits?.join(', ') || 'Professional, trustworthy'}
+Tone: ${brandPersonality?.tone_of_voice || 'Confident and helpful'}
+
+=== BUSINESS PLAN CONTEXT ===
+Executive Summary: ${project.business_plan?.executive_summary?.substring(0, 500)}
+Products/Services: ${project.business_plan?.products_services?.substring(0, 500)}
+
+Generate STRATEGIC website content that:
+1. Immediately addresses customer pain points in the hero
+2. Emphasizes our advantages over competitors
+3. Uses target keywords naturally for SEO
+4. Builds trust through specific, credible claims
+5. Creates urgency with compelling CTAs
+
+Sections needed:
+1. Hero Section (headline that addresses main pain point, subheadline with UVP, strong CTA)
+2. About Section (trust-building, differentiation focus)
+3. Services/Products Section (4 key offerings that beat competitors)
+4. Features/Benefits Section (6 benefits that address competitor weaknesses)
+5. Testimonials (3 realistic testimonials addressing common objections)
+6. Call to Action Section (urgency-focused)
 7. Footer content
 
-Make it professional, persuasive, and aligned with the business's value proposition.`,
+Make every word count. Focus on conversion and differentiation.`,
       response_json_schema: {
         type: "object",
         properties: {

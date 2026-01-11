@@ -14,11 +14,31 @@ export default function LogoStep({ project, onUpdate, onNext, onPrev }) {
   const generateLogo = async (additionalInstructions = '') => {
     setIsGenerating(true);
     
+    const brandPersonality = project?.brand_personality;
+    const competitors = project?.market_research?.competitors;
+    
     const basePrompt = `Create a professional, modern logo for a business called "${project.business_name}" in the ${project.industry} industry. 
+
+BUSINESS DESCRIPTION:
 ${project.description}
-The logo should be clean, memorable, and work well on both light and dark backgrounds.
-${project.brand_colors ? `Use these brand colors: Primary: ${project.brand_colors.primary}, Secondary: ${project.brand_colors.secondary}, Accent: ${project.brand_colors.accent}` : ''}
-Style: Minimalist, professional, scalable vector-style design.
+
+UNIQUE VALUE PROPOSITION:
+${project.unique_value_proposition || 'Premium quality service'}
+
+BRAND PERSONALITY:
+${brandPersonality?.traits?.join(', ') || 'Professional, trustworthy, innovative'}
+Visual Style: ${brandPersonality?.visual_style || 'Modern and clean'}
+
+DIFFERENTIATION REQUIREMENTS:
+This logo must stand out from competitors like: ${competitors?.slice(0, 3).map(c => c.name).join(', ') || 'major industry players'}
+The design should communicate our competitive advantages and unique positioning.
+
+BRAND COLORS (strategically chosen based on market research):
+${project.brand_colors ? `Primary: ${project.brand_colors.primary}, Secondary: ${project.brand_colors.secondary}, Accent: ${project.brand_colors.accent}` : 'Modern, professional color palette'}
+${project.brand_colors?.rationale ? `Color rationale: ${project.brand_colors.rationale}` : ''}
+
+The logo should be clean, memorable, distinctive, and work well on both light and dark backgrounds.
+Style: Minimalist, professional, scalable vector-style design that conveys trust and innovation.
 ${additionalInstructions}`;
 
     const response = await base44.integrations.Core.GenerateImage({

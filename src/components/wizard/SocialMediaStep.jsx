@@ -39,11 +39,23 @@ export default function SocialMediaStep({ project, onUpdate, onNext, onPrev }) {
     const platform = PLATFORMS.find(p => p.id === platformId);
     const colors = project?.brand_colors || { primary: '#6366f1', secondary: '#8b5cf6' };
     
+    const brandPersonality = project?.brand_personality;
+    const uvp = project?.unique_value_proposition;
+    
     // Generate header
-    const headerPrompt = `Create a professional ${platform.name} header/banner image for "${project.business_name}" - a ${project.industry} business. 
-${project.description}
-Brand colors: ${colors.primary}, ${colors.secondary}
-Style: Modern, professional, clean design with brand elements.
+    const headerPrompt = `Create a professional ${platform.name} header/banner image for "${project.business_name}" - a ${project.industry} business.
+
+UNIQUE VALUE PROPOSITION: ${uvp || 'Premium service'}
+
+BRAND PERSONALITY:
+${brandPersonality?.traits?.join(', ') || 'Professional, innovative'}
+Visual Style: ${brandPersonality?.visual_style || 'Modern and clean'}
+
+Brand colors (strategically chosen): ${colors.primary}, ${colors.secondary}
+${project.brand_colors?.rationale ? `Color rationale: ${project.brand_colors.rationale}` : ''}
+
+Style: Modern, professional, clean design that stands out from competitors.
+The design should communicate trust, innovation, and our unique market position.
 Size: ${platform.headerSize}
 Include subtle branding elements but NO text on the image.`;
 
@@ -54,10 +66,14 @@ Include subtle branding elements but NO text on the image.`;
     // Generate profile image
     const profilePrompt = `Create a professional ${platform.name} profile picture for "${project.business_name}".
 Industry: ${project.industry}
-Brand colors: ${colors.primary}, ${colors.secondary}
-Style: Clean, minimal logo or brand mark that works at small sizes.
+
+BRAND PERSONALITY:
+${brandPersonality?.traits?.join(', ') || 'Professional, innovative'}
+
+Brand colors (strategically chosen): ${colors.primary}, ${colors.secondary}
+Style: Clean, minimal, distinctive logo or brand mark that stands out in feeds.
 Size: Square, ${platform.profileSize}
-Should be recognizable as an icon.`;
+Should be instantly recognizable and memorable.`;
 
     const profileResponse = await base44.integrations.Core.GenerateImage({
       prompt: profilePrompt
