@@ -26,7 +26,7 @@ import PhoneNumbers from '@/components/phone/PhoneNumbers';
 import Extensions from '@/components/phone/Extensions';
 import IVRBuilder from '@/components/phone/IVRBuilder';
 import AISettings from '@/components/phone/AISettings';
-import Analytics from '@/components/phone/Analytics';
+import Analytics from '@/components/phone/Analytics.jsx';
 
 export default function PhoneSystemPage() {
   const [searchParams] = useSearchParams();
