@@ -4,12 +4,12 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, Sparkles, RefreshCw, Pencil, Check, ChevronRight } from 'lucide-react';
+import { Loader2, Sparkles, RefreshCw, Pencil, Check, ChevronRight, ChevronLeft } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 
-export default function BusinessPlanStep({ project, onUpdate, onNext }) {
+export default function BusinessPlanStep({ project, onUpdate, onNext, onPrev }) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedPlan, setEditedPlan] = useState('');
@@ -315,7 +315,15 @@ Be specific, actionable, and show exactly how this business will OUTPERFORM comp
             </CardContent>
           </Card>
 
-          <div className="flex justify-end">
+          <div className="flex justify-between">
+            <Button
+              onClick={onPrev}
+              variant="outline"
+              className="h-12 px-6 border-slate-200"
+            >
+              <ChevronLeft className="w-5 h-5 mr-2" />
+              Back to Research
+            </Button>
             <Button
               onClick={onNext}
               className="h-12 px-8 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 shadow-lg"

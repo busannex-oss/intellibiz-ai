@@ -5,6 +5,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { AnimatePresence } from 'framer-motion';
 
 import StepIndicator from '@/components/wizard/StepIndicator';
+import MarketResearchStep from '@/components/wizard/MarketResearchStep';
 import BusinessPlanStep from '@/components/wizard/BusinessPlanStep';
 import LogoStep from '@/components/wizard/LogoStep';
 import WebsiteStep from '@/components/wizard/WebsiteStep';
@@ -62,7 +63,7 @@ export default function CreateBusiness() {
   };
 
   const handleNext = async () => {
-    const newStep = Math.min(currentStep + 1, 6);
+    const newStep = Math.min(currentStep + 1, 7);
     setCurrentStep(newStep);
     if (project?.id) {
       await updateProjectMutation.mutateAsync({ current_step: newStep });
@@ -104,7 +105,7 @@ export default function CreateBusiness() {
         <div className="mt-8 pb-12">
           <AnimatePresence mode="wait">
             {currentStep === 1 && (
-              <BusinessPlanStep
+              <MarketResearchStep
                 key="step1"
                 project={project}
                 onUpdate={handleUpdate}
@@ -112,7 +113,7 @@ export default function CreateBusiness() {
               />
             )}
             {currentStep === 2 && (
-              <LogoStep
+              <BusinessPlanStep
                 key="step2"
                 project={project}
                 onUpdate={handleUpdate}
@@ -121,7 +122,7 @@ export default function CreateBusiness() {
               />
             )}
             {currentStep === 3 && (
-              <WebsiteStep
+              <LogoStep
                 key="step3"
                 project={project}
                 onUpdate={handleUpdate}
@@ -130,7 +131,7 @@ export default function CreateBusiness() {
               />
             )}
             {currentStep === 4 && (
-              <SocialMediaStep
+              <WebsiteStep
                 key="step4"
                 project={project}
                 onUpdate={handleUpdate}
@@ -139,16 +140,25 @@ export default function CreateBusiness() {
               />
             )}
             {currentStep === 5 && (
-              <ResourcesStep
+              <SocialMediaStep
                 key="step5"
                 project={project}
+                onUpdate={handleUpdate}
                 onNext={handleNext}
                 onPrev={handlePrev}
               />
             )}
             {currentStep === 6 && (
-              <NewsletterStep
+              <ResourcesStep
                 key="step6"
+                project={project}
+                onNext={handleNext}
+                onPrev={handlePrev}
+              />
+            )}
+            {currentStep === 7 && (
+              <NewsletterStep
+                key="step7"
                 project={project}
                 onUpdate={handleUpdate}
                 onPrev={handlePrev}
