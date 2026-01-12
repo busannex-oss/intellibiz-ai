@@ -12,6 +12,7 @@ import WebsiteStep from '@/components/wizard/WebsiteStep';
 import SocialMediaStep from '@/components/wizard/SocialMediaStep';
 import ResourcesStep from '@/components/wizard/ResourcesStep';
 import NewsletterStep from '@/components/wizard/NewsletterStep';
+import OmnichannelStep from '@/components/wizard/OmnichannelStep';
 
 export default function CreateBusiness() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -63,7 +64,7 @@ export default function CreateBusiness() {
   };
 
   const handleNext = async () => {
-    const newStep = Math.min(currentStep + 1, 7);
+    const newStep = Math.min(currentStep + 1, 8);
     setCurrentStep(newStep);
     if (project?.id) {
       await updateProjectMutation.mutateAsync({ current_step: newStep });
@@ -149,17 +150,26 @@ export default function CreateBusiness() {
               />
             )}
             {currentStep === 6 && (
-              <ResourcesStep
+              <OmnichannelStep
                 key="step6"
+                project={project}
+                onUpdate={handleUpdate}
+                onNext={handleNext}
+                onPrev={handlePrev}
+              />
+            )}
+            {currentStep === 7 && (
+              <ResourcesStep
+                key="step7"
                 project={project}
                 projectId={projectId}
                 onNext={handleNext}
                 onPrev={handlePrev}
               />
             )}
-            {currentStep === 7 && (
+            {currentStep === 8 && (
               <NewsletterStep
-                key="step7"
+                key="step8"
                 project={project}
                 onUpdate={handleUpdate}
                 onPrev={handlePrev}
