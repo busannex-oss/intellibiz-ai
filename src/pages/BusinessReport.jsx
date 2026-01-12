@@ -1,0 +1,276 @@
+import React, { useState, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { base44 } from '@/api/base44Client';
+import { useQuery } from '@tanstack/react-query';
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { 
+  Download, Printer, Mail, Share2, ArrowLeft, FileText, 
+  Eye, MessageSquare, Users, Copy, Check, Link2
+} from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
+import {
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger
+} from "@/components/ui/dialog";
+import { toast } from "sonner";
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+
+import ReportDocument from '@/components/report/ReportDocument';
+
+export default function BusinessReport() {
+  const [searchParams] = useSearchParams();
+  const projectId = searchParams.get('projectId');
+  const reportRef = useRef(null);
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [shareEmail, setShareEmail] = useState('');
+  const [shareMessage, setShareMessage] = useState('');
+  const [copied, setCopied] = useState(false);
+
+  const { data: project, isLoading } = useQuery({
+    queryKey: ['project', projectId],
+    queryFn: async () => {
+      const projects = await base44.entities.BusinessProject.filter({ id: projectId });
+      return projects[0];
+    },
+    enabled: !!projectId
+  });
+
+  const generatePDF = async () => {
+    if (!reportRef.current) return;
+    setIsGenerating(true);
+
+    try {
+      const element = reportRef.current;
+      const canvas = await html2canvas(element, {
+        scale: 2,
+        useCORS: true,
+        logging: false,
+        windowWidth: 800
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
+      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
+      const imgX = (pdfWidth - imgWidth * ratio) / 2;
+
+      let heightLeft = imgHeight * ratio;
+      let position = 0;
+
+      pdf.addImage(imgData, 'PNG', imgX, position, imgWidth * ratio, imgHeight * ratio);
+      heightLeft -= pdfHeight;
+
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight * ratio;
+        pdf.addPage();
+        pdf.addImage(imgData, 'PNG', imgX, position, imgWidth * ratio, imgHeight * ratio);
+        heightLeft -= pdfHeight;
+      }
+
+      pdf.save(`${project?.business_name || 'Business'}_Report.pdf`);
+      toast.success('PDF downloaded successfully!');
+    } catch (error) {
+      toast.error('Failed to generate PDF');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handlePrint = () => {
+    window.print();
+  };
+
+  const handleEmailShare = async () => {
+    if (!shareEmail) return;
+    
+    await base44.integrations.Core.SendEmail({
+      to: shareEmail,
+      subject: `${project?.business_name} - Business Report`,
+      body: `
+        ${shareMessage || 'Please review the business report for ' + project?.business_name}
+        
+        View the full report here: ${window.location.href}
+        
+        Best regards,
+        ${project?.business_name} Team
+      `
+    });
+    
+    toast.success('Report shared via email!');
+    setShareEmail('');
+    setShareMessage('');
+  };
+
+  const copyShareLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+    toast.success('Link copied to clipboard!');
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-slate-100 flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-violet-600 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (!project) {
+    return (
+      <div className="min-h-screen bg-slate-100 flex items-center justify-center">
+        <p className="text-slate-500">Project not found</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-100">
+      {/* Header Actions - Hidden in print */}
+      <div className="print:hidden bg-white border-b sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Link to={createPageUrl(`CreateBusiness?projectId=${projectId}`)}>
+                <Button variant="ghost" size="icon">
+                  <ArrowLeft className="w-5 h-5" />
+                </Button>
+              </Link>
+              <div>
+                <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                  <FileText className="w-5 h-5 text-violet-600" />
+                  Business Report
+                </h1>
+                <p className="text-sm text-slate-500">{project.business_name}</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <Button variant="outline" onClick={handlePrint}>
+                <Printer className="w-4 h-4 mr-2" />
+                Print
+              </Button>
+
+              <Button 
+                onClick={generatePDF} 
+                disabled={isGenerating}
+                className="bg-violet-600 hover:bg-violet-700"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                {isGenerating ? 'Generating...' : 'Download PDF'}
+              </Button>
+
+              {/* Email Share Dialog */}
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="outline">
+                    <Mail className="w-4 h-4 mr-2" />
+                    Email
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Share Report via Email</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4 pt-4">
+                    <div className="space-y-2">
+                      <Label>Recipient Email</Label>
+                      <Input
+                        type="email"
+                        placeholder="colleague@company.com"
+                        value={shareEmail}
+                        onChange={(e) => setShareEmail(e.target.value)}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Message (optional)</Label>
+                      <Textarea
+                        placeholder="Add a personal message..."
+                        value={shareMessage}
+                        onChange={(e) => setShareMessage(e.target.value)}
+                        rows={3}
+                      />
+                    </div>
+                    <Button onClick={handleEmailShare} className="w-full" disabled={!shareEmail}>
+                      <Mail className="w-4 h-4 mr-2" />
+                      Send Report
+                    </Button>
+                  </div>
+                </DialogContent>
+              </Dialog>
+
+              {/* Share Link Dialog */}
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button variant="outline">
+                    <Share2 className="w-4 h-4 mr-2" />
+                    Share
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Share Report Link</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4 pt-4">
+                    <div className="space-y-2">
+                      <Label>Report Link</Label>
+                      <div className="flex gap-2">
+                        <Input value={window.location.href} readOnly />
+                        <Button onClick={copyShareLink} variant="outline">
+                          {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                        </Button>
+                      </div>
+                    </div>
+                    <div className="p-4 bg-slate-50 rounded-lg">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Users className="w-4 h-4 text-slate-500" />
+                        <span className="text-sm font-medium">Team Access</span>
+                      </div>
+                      <p className="text-xs text-slate-500">
+                        Share this link with team members to allow them to view and comment on the report.
+                      </p>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Report Content */}
+      <div className="max-w-4xl mx-auto py-8 px-4">
+        <div ref={reportRef} className="bg-white shadow-xl rounded-lg overflow-hidden">
+          <ReportDocument project={project} />
+        </div>
+      </div>
+
+      {/* Print Styles */}
+      <style>{`
+        @media print {
+          body * {
+            visibility: hidden;
+          }
+          #report-content, #report-content * {
+            visibility: visible;
+          }
+          #report-content {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+          }
+        }
+      `}</style>
+    </div>
+  );
+}

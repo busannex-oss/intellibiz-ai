@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import PhoneSystem from './pages/PhoneSystem';
 import WhiteLabel from './pages/WhiteLabel';
 import Omnichannel from './pages/Omnichannel';
+import BusinessReport from './pages/BusinessReport';
 import __Layout from './Layout.jsx';
 
 
@@ -14,6 +15,7 @@ export const PAGES = {
     "PhoneSystem": PhoneSystem,
     "WhiteLabel": WhiteLabel,
     "Omnichannel": Omnichannel,
+    "BusinessReport": BusinessReport,
 }
 
 export const pagesConfig = {
