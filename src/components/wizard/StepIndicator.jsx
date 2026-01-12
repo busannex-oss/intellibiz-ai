@@ -3,13 +3,14 @@ import { Check, Circle } from 'lucide-react';
 import { cn } from "@/lib/utils";
 
 const steps = [
-  { id: 1, name: 'Market Research', description: 'Analyze competitors' },
-  { id: 2, name: 'Business Plan', description: 'Strategic planning' },
+  { id: 1, name: 'Research', description: 'Analyze competitors' },
+  { id: 2, name: 'Plan', description: 'Strategic planning' },
   { id: 3, name: 'Logo', description: 'Create your brand' },
   { id: 4, name: 'Website', description: 'Build your presence' },
-  { id: 5, name: 'Social Media', description: 'Connect & grow' },
-  { id: 6, name: 'Resources', description: 'Tools & directories' },
-  { id: 7, name: 'Newsletter', description: 'Build your list' },
+  { id: 5, name: 'Social', description: 'Connect & grow' },
+  { id: 6, name: 'Omnichannel', description: 'Multi-channel comms' },
+  { id: 7, name: 'Resources', description: 'Tools & directories' },
+  { id: 8, name: 'Newsletter', description: 'Build your list' },
 ];
 
 export default function StepIndicator({ currentStep, onStepClick }) {
