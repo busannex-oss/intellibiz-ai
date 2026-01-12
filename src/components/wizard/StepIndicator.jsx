@@ -10,7 +10,8 @@ const steps = [
   { id: 5, name: 'Social', description: 'Connect & grow' },
   { id: 6, name: 'Omnichannel', description: 'Multi-channel comms' },
   { id: 7, name: 'Resources', description: 'Tools & directories' },
-  { id: 8, name: 'Newsletter', description: 'Build your list' },
+  { id: 8, name: 'Docs', description: 'Knowledge base' },
+  { id: 9, name: 'Newsletter', description: 'Build your list' },
 ];
 
 export default function StepIndicator({ currentStep, onStepClick }) {

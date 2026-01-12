@@ -13,6 +13,8 @@ import SocialMediaStep from '@/components/wizard/SocialMediaStep';
 import ResourcesStep from '@/components/wizard/ResourcesStep';
 import NewsletterStep from '@/components/wizard/NewsletterStep';
 import OmnichannelStep from '@/components/wizard/OmnichannelStep';
+import KnowledgeBaseStep from '@/components/wizard/KnowledgeBaseStep';
+import BusinessChatWidget from '@/components/chatbot/BusinessChatWidget';
 
 export default function CreateBusiness() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -64,7 +66,7 @@ export default function CreateBusiness() {
   };
 
   const handleNext = async () => {
-    const newStep = Math.min(currentStep + 1, 8);
+    const newStep = Math.min(currentStep + 1, 9);
     setCurrentStep(newStep);
     if (project?.id) {
       await updateProjectMutation.mutateAsync({ current_step: newStep });
@@ -168,8 +170,17 @@ export default function CreateBusiness() {
               />
             )}
             {currentStep === 8 && (
-              <NewsletterStep
+              <KnowledgeBaseStep
                 key="step8"
+                project={project}
+                onUpdate={handleUpdate}
+                onNext={handleNext}
+                onBack={handlePrev}
+              />
+            )}
+            {currentStep === 9 && (
+              <NewsletterStep
+                key="step9"
                 project={project}
                 onUpdate={handleUpdate}
                 onPrev={handlePrev}
@@ -178,6 +189,9 @@ export default function CreateBusiness() {
           </AnimatePresence>
         </div>
       </div>
+      
+      {/* AI Chat Widget */}
+      {project && <BusinessChatWidget project={project} />}
     </div>
   );
 }
