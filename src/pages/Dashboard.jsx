@@ -2,7 +2,6 @@ import React from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
-import { FileText } from 'lucide-react';
 import { createPageUrl } from '@/utils';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,7 +18,8 @@ import {
   MoreVertical,
   Trash2,
   Eye,
-  Search
+  Search,
+  Download
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -158,6 +158,12 @@ export default function Dashboard() {
                             <DropdownMenuItem>
                               <Eye className="w-4 h-4 mr-2" />
                               View / Edit
+                            </DropdownMenuItem>
+                          </Link>
+                          <Link to={createPageUrl(`BusinessReport?projectId=${project.id}`)}>
+                            <DropdownMenuItem>
+                              <Download className="w-4 h-4 mr-2" />
+                              Download Report
                             </DropdownMenuItem>
                           </Link>
                           <DropdownMenuItem
