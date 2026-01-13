@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Loader2, Sparkles, RefreshCw, ChevronRight, ChevronLeft, Download } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Loader2, Sparkles, RefreshCw, ChevronRight, ChevronLeft, Download, Palette } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { motion } from 'framer-motion';
+import BrandColorsStep from './BrandColorsStep';
 
 export default function LogoStep({ project, onUpdate, onNext, onPrev }) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [customPrompt, setCustomPrompt] = useState('');
+  const [activeTab, setActiveTab] = useState('logo');
 
   const generateLogo = async (additionalInstructions = '') => {
     setIsGenerating(true);
@@ -34,8 +37,7 @@ This logo must stand out from competitors like: ${competitors?.slice(0, 3).map(c
 The design should communicate our competitive advantages and unique positioning.
 
 BRAND COLORS (strategically chosen based on market research):
-${project.brand_colors ? `Primary: ${project.brand_colors.primary}, Secondary: ${project.brand_colors.secondary}, Accent: ${project.brand_colors.accent}` : 'Modern, professional color palette'}
-${project.brand_colors?.rationale ? `Color rationale: ${project.brand_colors.rationale}` : ''}
+${project.brand_colors?.length > 0 ? project.brand_colors.map(c => `${c.name}: ${c.hex}`).join(', ') : 'Modern, professional color palette'}
 
 The logo should be clean, memorable, distinctive, and work well on both light and dark backgrounds.
 Style: Minimalist, professional, scalable vector-style design that conveys trust and innovation.
@@ -70,9 +72,19 @@ ${additionalInstructions}`;
         </p>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8">
-        {/* Logo Preview */}
-        <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <TabsList className="grid w-full max-w-md mx-auto grid-cols-2">
+          <TabsTrigger value="logo">Logo Design</TabsTrigger>
+          <TabsTrigger value="colors">
+            <Palette className="w-4 h-4 mr-2" />
+            Brand Colors
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="logo" className="space-y-8">
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Logo Preview */}
+            <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden">
           <CardContent className="p-0">
             <div className="aspect-square bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center relative">
               {isGenerating ? (
@@ -108,23 +120,16 @@ ${additionalInstructions}`;
                   <p><span className="font-medium">Name:</span> {project?.business_name}</p>
                   <p><span className="font-medium">Industry:</span> {project?.industry}</p>
                 </div>
-                {project?.brand_colors && (
-                  <div className="flex gap-2 mt-3">
-                    <div
-                      className="w-6 h-6 rounded shadow-sm"
-                      style={{ backgroundColor: project.brand_colors.primary }}
-                      title="Primary"
-                    />
-                    <div
-                      className="w-6 h-6 rounded shadow-sm"
-                      style={{ backgroundColor: project.brand_colors.secondary }}
-                      title="Secondary"
-                    />
-                    <div
-                      className="w-6 h-6 rounded shadow-sm"
-                      style={{ backgroundColor: project.brand_colors.accent }}
-                      title="Accent"
-                    />
+                {project?.brand_colors?.length > 0 && (
+                  <div className="flex gap-2 mt-3 flex-wrap">
+                    {project.brand_colors.slice(0, 6).map((color, i) => (
+                      <div
+                        key={i}
+                        className="w-6 h-6 rounded shadow-sm"
+                        style={{ backgroundColor: color.hex }}
+                        title={color.name}
+                      />
+                    ))}
                   </div>
                 )}
               </div>
@@ -215,6 +220,37 @@ ${additionalInstructions}`;
           </div>
         </div>
       </div>
+        </TabsContent>
+
+        <TabsContent value="colors">
+          <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+            <CardContent className="p-6">
+              <BrandColorsStep
+                colors={project?.brand_colors || []}
+                onUpdate={(colors) => onUpdate({ brand_colors: colors })}
+              />
+            </CardContent>
+          </Card>
+
+          <div className="flex justify-between mt-6">
+            <Button
+              onClick={onPrev}
+              variant="outline"
+              className="h-12 px-6 border-slate-200"
+            >
+              <ChevronLeft className="w-5 h-5 mr-2" />
+              Back
+            </Button>
+            <Button
+              onClick={() => setActiveTab('logo')}
+              className="h-12 px-8 bg-gradient-to-r from-violet-600 to-indigo-600"
+            >
+              Continue to Logo
+              <ChevronRight className="w-5 h-5 ml-2" />
+            </Button>
+          </div>
+        </TabsContent>
+      </Tabs>
     </motion.div>
   );
 }

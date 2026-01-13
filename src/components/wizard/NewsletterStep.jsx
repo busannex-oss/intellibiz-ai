@@ -5,12 +5,14 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ChevronLeft, Mail, Users, Share2, Trash2, Plus, CheckCircle, AlertCircle, Copy, ExternalLink } from 'lucide-react';
+import { ChevronLeft, Mail, Users, Share2, Trash2, Plus, CheckCircle, AlertCircle, Copy, ExternalLink, Palette } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
+import NewsletterThemeEditor from '../newsletter/NewsletterThemeEditor';
 
 export default function NewsletterStep({ project, onUpdate, onPrev }) {
   const [newEmail, setNewEmail] = useState('');
@@ -136,7 +138,20 @@ export default function NewsletterStep({ project, onUpdate, onPrev }) {
         </Card>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-6">
+      <Tabs defaultValue="subscribers" className="space-y-6">
+        <TabsList className="grid w-full max-w-md mx-auto grid-cols-2">
+          <TabsTrigger value="subscribers">
+            <Users className="w-4 h-4 mr-2" />
+            Subscribers
+          </TabsTrigger>
+          <TabsTrigger value="themes">
+            <Palette className="w-4 h-4 mr-2" />
+            Email Themes
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="subscribers" className="space-y-6">
+          <div className="grid lg:grid-cols-3 gap-6">
         {/* Add Subscriber */}
         <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
           <CardHeader>
@@ -324,6 +339,12 @@ export default function NewsletterStep({ project, onUpdate, onPrev }) {
           )}
         </CardContent>
       </Card>
+        </TabsContent>
+
+        <TabsContent value="themes">
+          <NewsletterThemeEditor project={project} onUpdate={onUpdate} />
+        </TabsContent>
+      </Tabs>
 
       <div className="flex justify-between">
         <Button onClick={onPrev} variant="outline" className="h-12 px-6">
