@@ -255,7 +255,11 @@ Create:
       unique_value_proposition: strategyDevelopment.unique_value_proposition,
       competitive_advantages: strategyDevelopment.competitive_advantages,
       brand_personality: strategyDevelopment.brand_personality,
-      brand_colors: strategyDevelopment.brand_colors,
+      brand_colors: [
+        { hex: strategyDevelopment.brand_colors?.primary || '#7c3aed', name: 'Primary', role: 'primary', psychology: '' },
+        { hex: strategyDevelopment.brand_colors?.secondary || '#4f46e5', name: 'Secondary', role: 'secondary', psychology: '' },
+        { hex: strategyDevelopment.brand_colors?.accent || '#06b6d4', name: 'Accent', role: 'accent', psychology: '' }
+      ],
       current_step: 1,
       status: 'in_progress'
     });
@@ -650,26 +654,17 @@ Create:
                       <p className="text-sm text-slate-600"><strong>Visual Style:</strong> {project.brand_personality.visual_style}</p>
                     </div>
                   )}
-                  {project.brand_colors && (
+                  {project.brand_colors?.length > 0 && (
                     <div>
                       <h4 className="font-semibold text-slate-800 mb-3">Strategic Brand Colors</h4>
-                      <div className="flex items-center gap-4 mb-2">
-                        <div className="flex items-center gap-2">
-                          <div className="w-10 h-10 rounded-lg shadow-sm" style={{ backgroundColor: project.brand_colors.primary }} />
-                          <span className="text-sm text-slate-600">Primary</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-10 h-10 rounded-lg shadow-sm" style={{ backgroundColor: project.brand_colors.secondary }} />
-                          <span className="text-sm text-slate-600">Secondary</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-10 h-10 rounded-lg shadow-sm" style={{ backgroundColor: project.brand_colors.accent }} />
-                          <span className="text-sm text-slate-600">Accent</span>
-                        </div>
+                      <div className="flex items-center gap-4 mb-2 flex-wrap">
+                        {project.brand_colors.map((color, i) => (
+                          <div key={i} className="flex items-center gap-2">
+                            <div className="w-10 h-10 rounded-lg shadow-sm" style={{ backgroundColor: color.hex }} />
+                            <span className="text-sm text-slate-600">{color.name}</span>
+                          </div>
+                        ))}
                       </div>
-                      {project.brand_colors.rationale && (
-                        <p className="text-sm text-slate-500 italic">{project.brand_colors.rationale}</p>
-                      )}
                     </div>
                   )}
                 </TabsContent>
