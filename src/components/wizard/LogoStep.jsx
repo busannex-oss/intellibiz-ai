@@ -227,6 +227,7 @@ ${additionalInstructions}`;
             <CardContent className="p-6">
               <BrandColorsStep
                 colors={project?.brand_colors || []}
+                project={project}
                 onUpdate={(colors) => onUpdate({ brand_colors: colors })}
               />
             </CardContent>

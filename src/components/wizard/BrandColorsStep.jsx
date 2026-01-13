@@ -4,8 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Palette, Plus, Trash2, Info, Sparkles } from 'lucide-react';
+import { Palette, Plus, Trash2, Info, Sparkles, RefreshCw, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { base44 } from '@/api/base44Client';
+import { toast } from 'sonner';
 
 const COLOR_PSYCHOLOGY = {
   red: { emotion: 'Energy, Passion, Urgency', usage: 'Great for bold brands, food, sales' },
@@ -32,10 +34,11 @@ const getColorName = (hex) => {
   return match ? colors[match] : 'custom';
 };
 
-export default function BrandColorsStep({ colors = [], onUpdate }) {
+export default function BrandColorsStep({ colors = [], onUpdate, project }) {
   const [localColors, setLocalColors] = useState(colors.length > 0 ? colors : [
     { hex: '#7c3aed', name: 'Primary', role: 'primary', psychology: '' }
   ]);
+  const [isRegenerating, setIsRegenerating] = useState(false);
 
   const addColor = () => {
     const newColors = [...localColors, { hex: '#000000', name: 'New Color', role: 'custom', psychology: '' }];
@@ -78,6 +81,59 @@ export default function BrandColorsStep({ colors = [], onUpdate }) {
     updateColor(index, 'psychology', response.psychology);
   };
 
+  const regenerateColorScheme = async () => {
+    setIsRegenerating(true);
+    
+    try {
+      const response = await base44.integrations.Core.InvokeLLM({
+        prompt: `Generate a strategic color palette for "${project?.business_name}", a ${project?.industry} business.
+
+Business Context:
+- Description: ${project?.description}
+- Target Audience: ${project?.target_audience}
+- Brand Personality: ${project?.brand_personality?.traits?.join(', ') || 'Professional, trustworthy'}
+- Competitive Positioning: ${project?.unique_value_proposition || 'Premium quality'}
+
+Create a cohesive 5-color palette that:
+1. Aligns with the brand personality
+2. Appeals to the target audience
+3. Stands out from competitors
+4. Follows color psychology principles
+
+For each color, provide:
+- A descriptive name (e.g., "Ocean Blue", "Sunset Orange")
+- Hex code
+- Role (primary, secondary, accent, neutral, or custom)
+- Brief psychology explanation (2 sentences max)`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            colors: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  name: { type: "string" },
+                  hex: { type: "string" },
+                  role: { type: "string" },
+                  psychology: { type: "string" }
+                }
+              }
+            }
+          }
+        }
+      });
+
+      setLocalColors(response.colors);
+      onUpdate(response.colors);
+      toast.success('Color scheme regenerated!');
+    } catch (error) {
+      toast.error('Failed to regenerate colors');
+    } finally {
+      setIsRegenerating(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -88,10 +144,30 @@ export default function BrandColorsStep({ colors = [], onUpdate }) {
           </h3>
           <p className="text-sm text-slate-500">Define your brand color palette</p>
         </div>
-        <Button onClick={addColor} size="sm">
-          <Plus className="w-4 h-4 mr-2" />
-          Add Color
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            onClick={regenerateColorScheme} 
+            variant="outline" 
+            size="sm"
+            disabled={isRegenerating || !project}
+          >
+            {isRegenerating ? (
+              <>
+                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                Generating...
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-4 h-4 mr-2" />
+                Regenerate
+              </>
+            )}
+          </Button>
+          <Button onClick={addColor} size="sm">
+            <Plus className="w-4 h-4 mr-2" />
+            Add Color
+          </Button>
+        </div>
       </div>
 
       <div className="grid gap-4">
