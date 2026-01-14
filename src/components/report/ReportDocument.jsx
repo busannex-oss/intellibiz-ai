@@ -2,7 +2,15 @@ import React from 'react';
 import { format } from 'date-fns';
 
 export default function ReportDocument({ project }) {
-  const brandColor = project?.brand_colors?.primary || '#7c3aed';
+  // Handle both array and object format for brand_colors
+  const getPrimaryColor = () => {
+    if (Array.isArray(project?.brand_colors)) {
+      const primary = project.brand_colors.find(c => c.role === 'primary');
+      return primary?.hex || project.brand_colors[0]?.hex || '#7c3aed';
+    }
+    return project?.brand_colors?.primary || '#7c3aed';
+  };
+  const brandColor = getPrimaryColor();
 
   return (
     <div id="report-content" className="font-sans">
@@ -251,26 +259,41 @@ export default function ReportDocument({ project }) {
             <div>
               <h3 className="text-lg font-semibold text-slate-800 mb-4">Brand Colors</h3>
               <div className="grid grid-cols-3 gap-4">
-                {project.brand_colors.primary && (
-                  <div>
-                    <div className="h-24 rounded-xl mb-2" style={{ backgroundColor: project.brand_colors.primary }}></div>
-                    <p className="text-sm font-medium text-slate-800">Primary</p>
-                    <p className="text-xs text-slate-500 uppercase">{project.brand_colors.primary}</p>
-                  </div>
-                )}
-                {project.brand_colors.secondary && (
-                  <div>
-                    <div className="h-24 rounded-xl mb-2" style={{ backgroundColor: project.brand_colors.secondary }}></div>
-                    <p className="text-sm font-medium text-slate-800">Secondary</p>
-                    <p className="text-xs text-slate-500 uppercase">{project.brand_colors.secondary}</p>
-                  </div>
-                )}
-                {project.brand_colors.accent && (
-                  <div>
-                    <div className="h-24 rounded-xl mb-2" style={{ backgroundColor: project.brand_colors.accent }}></div>
-                    <p className="text-sm font-medium text-slate-800">Accent</p>
-                    <p className="text-xs text-slate-500 uppercase">{project.brand_colors.accent}</p>
-                  </div>
+                {Array.isArray(project.brand_colors) ? (
+                  project.brand_colors.map((color, i) => (
+                    <div key={i}>
+                      <div className="h-24 rounded-xl mb-2" style={{ backgroundColor: color.hex }}></div>
+                      <p className="text-sm font-medium text-slate-800">{color.name}</p>
+                      <p className="text-xs text-slate-500 uppercase">{color.hex}</p>
+                      {color.psychology && (
+                        <p className="text-xs text-slate-400 mt-1">{color.psychology}</p>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <>
+                    {project.brand_colors.primary && (
+                      <div>
+                        <div className="h-24 rounded-xl mb-2" style={{ backgroundColor: project.brand_colors.primary }}></div>
+                        <p className="text-sm font-medium text-slate-800">Primary</p>
+                        <p className="text-xs text-slate-500 uppercase">{project.brand_colors.primary}</p>
+                      </div>
+                    )}
+                    {project.brand_colors.secondary && (
+                      <div>
+                        <div className="h-24 rounded-xl mb-2" style={{ backgroundColor: project.brand_colors.secondary }}></div>
+                        <p className="text-sm font-medium text-slate-800">Secondary</p>
+                        <p className="text-xs text-slate-500 uppercase">{project.brand_colors.secondary}</p>
+                      </div>
+                    )}
+                    {project.brand_colors.accent && (
+                      <div>
+                        <div className="h-24 rounded-xl mb-2" style={{ backgroundColor: project.brand_colors.accent }}></div>
+                        <p className="text-sm font-medium text-slate-800">Accent</p>
+                        <p className="text-xs text-slate-500 uppercase">{project.brand_colors.accent}</p>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             </div>
