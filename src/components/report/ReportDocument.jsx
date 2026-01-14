@@ -254,48 +254,43 @@ export default function ReportDocument({ project }) {
             </div>
           )}
 
-          {/* Brand Colors */}
+          {/* Brand Colors with Psychology */}
           {project?.brand_colors && (
             <div>
-              <h3 className="text-lg font-semibold text-slate-800 mb-4">Brand Colors</h3>
-              <div className="grid grid-cols-3 gap-4">
-                {Array.isArray(project.brand_colors) ? (
-                  project.brand_colors.map((color, i) => (
-                    <div key={i}>
-                      <div className="h-24 rounded-xl mb-2" style={{ backgroundColor: color.hex }}></div>
+              <h3 className="text-lg font-semibold text-slate-800 mb-2">Brand Color Palette</h3>
+              <p className="text-slate-500 text-sm mb-6">Your strategic color choices and why they work for {project?.business_name}</p>
+              
+              {/* Color Swatches */}
+              <div className="flex gap-2 mb-8">
+                {(Array.isArray(project.brand_colors) ? project.brand_colors : []).map((color, i) => (
+                  <div key={i} className="flex-1">
+                    <div className="h-20 rounded-t-xl" style={{ backgroundColor: color.hex }}></div>
+                    <div className="bg-slate-50 rounded-b-xl p-3 text-center">
                       <p className="text-sm font-medium text-slate-800">{color.name}</p>
-                      <p className="text-xs text-slate-500 uppercase">{color.hex}</p>
-                      {color.psychology && (
-                        <p className="text-xs text-slate-400 mt-1">{color.psychology}</p>
-                      )}
+                      <p className="text-xs text-slate-400 uppercase">{color.hex}</p>
                     </div>
-                  ))
-                ) : (
-                  <>
-                    {project.brand_colors.primary && (
-                      <div>
-                        <div className="h-24 rounded-xl mb-2" style={{ backgroundColor: project.brand_colors.primary }}></div>
-                        <p className="text-sm font-medium text-slate-800">Primary</p>
-                        <p className="text-xs text-slate-500 uppercase">{project.brand_colors.primary}</p>
-                      </div>
-                    )}
-                    {project.brand_colors.secondary && (
-                      <div>
-                        <div className="h-24 rounded-xl mb-2" style={{ backgroundColor: project.brand_colors.secondary }}></div>
-                        <p className="text-sm font-medium text-slate-800">Secondary</p>
-                        <p className="text-xs text-slate-500 uppercase">{project.brand_colors.secondary}</p>
-                      </div>
-                    )}
-                    {project.brand_colors.accent && (
-                      <div>
-                        <div className="h-24 rounded-xl mb-2" style={{ backgroundColor: project.brand_colors.accent }}></div>
-                        <p className="text-sm font-medium text-slate-800">Accent</p>
-                        <p className="text-xs text-slate-500 uppercase">{project.brand_colors.accent}</p>
-                      </div>
-                    )}
-                  </>
-                )}
+                  </div>
+                ))}
               </div>
+
+              {/* Color Psychology Explanations */}
+              {Array.isArray(project.brand_colors) && project.brand_colors.some(c => c.psychology) && (
+                <div className="space-y-4">
+                  <h4 className="text-base font-semibold text-slate-700">Why These Colors Work for Your Brand</h4>
+                  {project.brand_colors.filter(c => c.psychology).map((color, i) => (
+                    <div key={i} className="flex gap-4 p-4 rounded-xl" style={{ backgroundColor: `${color.hex}15` }}>
+                      <div
+                        className="w-14 h-14 rounded-lg shadow-sm flex-shrink-0 border-2 border-white"
+                        style={{ backgroundColor: color.hex }}
+                      />
+                      <div>
+                        <p className="font-semibold text-slate-800">{color.name}</p>
+                        <p className="text-sm text-slate-600 mt-1 leading-relaxed">{color.psychology}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
 
@@ -306,8 +301,8 @@ export default function ReportDocument({ project }) {
               <div className="grid grid-cols-2 gap-4">
                 {Object.entries(project.brand_personality).map(([trait, value]) => (
                   <div key={trait} className="bg-slate-50 rounded-lg p-4">
-                    <p className="text-sm text-slate-500 capitalize">{trait}</p>
-                    <p className="font-medium text-slate-800">{value}</p>
+                    <p className="text-sm text-slate-500 capitalize">{trait.replace(/_/g, ' ')}</p>
+                    <p className="font-medium text-slate-800">{Array.isArray(value) ? value.join(', ') : value}</p>
                   </div>
                 ))}
               </div>

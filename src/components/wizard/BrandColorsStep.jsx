@@ -69,8 +69,16 @@ export default function BrandColorsStep({ colors = [], onUpdate, project }) {
   };
 
   const generateAIPsychology = async (color, index) => {
+    const businessContext = project ? `for ${project.business_name}, a ${project.industry} business targeting ${project.target_audience || 'general consumers'}` : '';
     const response = await base44.integrations.Core.InvokeLLM({
-      prompt: `Analyze the color ${color.hex} (${color.name}) in the context of branding. Provide a brief 2-sentence explanation of this color's psychological impact and why it works for the given brand context. Be specific and actionable.`,
+      prompt: `Analyze why the color ${color.hex} (${color.name}) works ${businessContext}. 
+
+Explain in 2-3 sentences:
+1. What emotions/associations this specific color evokes
+2. Why it's strategically right for this brand and audience
+3. How it will help the business stand out
+
+Be specific to this brand, not generic color theory.`,
       response_json_schema: {
         type: "object",
         properties: {
@@ -262,32 +270,31 @@ For each color, provide:
         </AnimatePresence>
       </div>
 
-      <Card className="border-violet-200 bg-gradient-to-br from-violet-50 to-indigo-50">
-        <CardHeader>
-          <CardTitle className="text-base flex items-center gap-2">
-            <Palette className="w-5 h-5 text-violet-600" />
-            Color Psychology Guide
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
-          {Object.entries(COLOR_PSYCHOLOGY).map(([color, data]) => (
-            <div
-              key={color}
-              className="p-3 bg-white rounded-lg border border-slate-200 hover:border-violet-300 transition-colors"
-            >
-              <div className="flex items-center gap-2 mb-2">
+      {/* Show Your Brand Colors Summary */}
+      {localColors.some(c => c.psychology) && (
+        <Card className="border-violet-200 bg-gradient-to-br from-violet-50 to-indigo-50">
+          <CardHeader>
+            <CardTitle className="text-base flex items-center gap-2">
+              <Sparkles className="w-5 h-5 text-violet-600" />
+              Why These Colors Work for {project?.business_name || 'Your Brand'}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {localColors.filter(c => c.psychology).map((color, i) => (
+              <div key={i} className="flex gap-4 items-start">
                 <div
-                  className="w-6 h-6 rounded border-2 border-white shadow-sm"
-                  style={{ backgroundColor: color }}
+                  className="w-12 h-12 rounded-lg shadow-sm flex-shrink-0"
+                  style={{ backgroundColor: color.hex }}
                 />
-                <span className="font-semibold text-sm capitalize">{color}</span>
+                <div>
+                  <p className="font-semibold text-slate-800">{color.name} <span className="text-xs text-slate-400 uppercase">{color.hex}</span></p>
+                  <p className="text-sm text-slate-600 mt-1">{color.psychology}</p>
+                </div>
               </div>
-              <p className="text-xs text-slate-600 mb-1">{data.emotion}</p>
-              <p className="text-xs text-slate-500">{data.usage}</p>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
