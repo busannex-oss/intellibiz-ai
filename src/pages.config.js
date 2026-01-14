@@ -1,21 +1,21 @@
+import BusinessReport from './pages/BusinessReport';
 import CreateBusiness from './pages/CreateBusiness';
 import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
+import Omnichannel from './pages/Omnichannel';
 import PhoneSystem from './pages/PhoneSystem';
 import WhiteLabel from './pages/WhiteLabel';
-import Omnichannel from './pages/Omnichannel';
-import BusinessReport from './pages/BusinessReport';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
+    "BusinessReport": BusinessReport,
     "CreateBusiness": CreateBusiness,
     "Dashboard": Dashboard,
     "Home": Home,
+    "Omnichannel": Omnichannel,
     "PhoneSystem": PhoneSystem,
     "WhiteLabel": WhiteLabel,
-    "Omnichannel": Omnichannel,
-    "BusinessReport": BusinessReport,
 }
 
 export const pagesConfig = {
