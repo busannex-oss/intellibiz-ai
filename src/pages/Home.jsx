@@ -62,46 +62,47 @@ const features = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-violet-50/30 to-indigo-50/50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Hero */}
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-violet-200/40 via-transparent to-transparent" />
-        <div className="absolute top-20 left-10 w-72 h-72 bg-violet-300/20 rounded-full blur-3xl" />
-        <div className="absolute top-40 right-10 w-96 h-96 bg-indigo-300/20 rounded-full blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent" />
+        <div className="absolute top-20 left-10 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl" />
+        <div className="absolute top-40 right-10 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent" />
         
-        <div className="relative max-w-7xl mx-auto px-4 py-20 md:py-32">
+        <div className="relative max-w-7xl mx-auto px-4 py-24 md:py-36">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-100 text-violet-700 text-sm font-medium mb-6">
+            <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm font-medium mb-8">
               <Sparkles className="w-4 h-4" />
               AI-Powered Business Builder
             </div>
             
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-slate-900 mb-6 leading-tight">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-8 leading-tight tracking-tight">
               Build a Brand That
-              <span className="bg-gradient-to-r from-violet-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent"> Outperforms </span>
+              <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 bg-clip-text text-transparent"> Outperforms </span>
               Competitors
             </h1>
             
-            <p className="text-lg md:text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-xl text-slate-400 mb-12 max-w-2xl mx-auto leading-relaxed">
               AI-powered market research analyzes your competition, finds gaps, and builds 
               a complete brand strategically designed to win market share.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to={createPageUrl('CreateBusiness')}>
-                <Button className="h-14 px-8 text-lg bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 shadow-xl shadow-violet-200 transition-all duration-300 hover:scale-105">
+                <Button className="h-16 px-10 text-lg bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-2xl shadow-amber-500/25 transition-all duration-300 hover:scale-105 font-semibold">
                   <Rocket className="w-5 h-5 mr-2" />
                   Start Building Now
                   <ChevronRight className="w-5 h-5 ml-2" />
                 </Button>
               </Link>
               <Link to={createPageUrl('Dashboard')}>
-                <Button variant="outline" className="h-14 px-8 text-lg border-slate-200 hover:bg-slate-50">
+                <Button variant="outline" className="h-16 px-10 text-lg border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white">
                   View My Projects
                 </Button>
               </Link>
@@ -111,17 +112,17 @@ export default function Home() {
       </div>
 
       {/* Features */}
-      <div className="max-w-7xl mx-auto px-4 py-20">
+      <div className="max-w-7xl mx-auto px-4 py-24">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Everything You Need to Launch
           </h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
             From business planning to marketing—we've got you covered
           </p>
         </motion.div>
@@ -135,13 +136,13 @@ export default function Home() {
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
             >
-              <Card className="group border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/80 backdrop-blur-sm h-full overflow-hidden">
-                <CardContent className="p-6">
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
+              <Card className="group border border-slate-700/50 bg-gradient-to-br from-slate-800/80 to-slate-800/40 backdrop-blur-sm h-full overflow-hidden hover:border-slate-600 transition-all duration-300">
+                <CardContent className="p-8">
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
                     <feature.icon className="w-7 h-7 text-white" />
                   </div>
-                  <h3 className="text-xl font-semibold text-slate-800 mb-2">{feature.title}</h3>
-                  <p className="text-slate-600">{feature.description}</p>
+                  <h3 className="text-xl font-semibold text-white mb-3">{feature.title}</h3>
+                  <p className="text-slate-400">{feature.description}</p>
                 </CardContent>
               </Card>
             </motion.div>
@@ -150,11 +151,15 @@ export default function Home() {
       </div>
 
       {/* Process */}
-      <div className="bg-gradient-to-r from-violet-600 to-indigo-600 py-20">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center text-white mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">How It Works</h2>
-            <p className="text-lg opacity-90">Three simple steps to your complete business</p>
+      <div className="relative py-24 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-amber-500/5 via-orange-500/5 to-amber-500/5" />
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent" />
+        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent" />
+        
+        <div className="relative max-w-7xl mx-auto px-4">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">How It Works</h2>
+            <p className="text-lg text-slate-400">Four simple steps to your complete business</p>
           </div>
           
           <div className="grid md:grid-cols-4 gap-8">
@@ -172,9 +177,9 @@ export default function Home() {
                 transition={{ delay: i * 0.2 }}
                 className="text-center"
               >
-                <div className="text-6xl font-bold text-white/20 mb-4">{item.step}</div>
+                <div className="text-7xl font-bold bg-gradient-to-b from-amber-500/30 to-transparent bg-clip-text text-transparent mb-4">{item.step}</div>
                 <h3 className="text-xl font-semibold text-white mb-2">{item.title}</h3>
-                <p className="text-white/80">{item.desc}</p>
+                <p className="text-slate-400">{item.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -182,10 +187,10 @@ export default function Home() {
       </div>
 
       {/* Benefits */}
-      <div className="max-w-7xl mx-auto px-4 py-20">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <div className="max-w-7xl mx-auto px-4 py-24">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
               Why Choose Our Platform?
             </h2>
             <div className="space-y-6">
@@ -196,23 +201,26 @@ export default function Home() {
                 { icon: Sparkles, title: 'Conversion Optimized', desc: 'Content targets keywords and pain points competitors miss' }
               ].map((benefit) => (
                 <div key={benefit.title} className="flex gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-violet-100 flex items-center justify-center flex-shrink-0">
-                    <benefit.icon className="w-6 h-6 text-violet-600" />
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30 flex items-center justify-center flex-shrink-0">
+                    <benefit.icon className="w-6 h-6 text-amber-400" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-slate-800 mb-1">{benefit.title}</h3>
-                    <p className="text-slate-600">{benefit.desc}</p>
+                    <h3 className="font-semibold text-white mb-1">{benefit.title}</h3>
+                    <p className="text-slate-400">{benefit.desc}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
           <div className="relative">
-            <div className="aspect-square bg-gradient-to-br from-violet-100 to-indigo-100 rounded-3xl flex items-center justify-center">
-              <div className="text-center p-8">
-                <Rocket className="w-24 h-24 text-violet-600 mx-auto mb-6" />
-                <p className="text-2xl font-bold text-slate-800">Ready to Launch?</p>
-                <p className="text-slate-600 mt-2">Your business awaits</p>
+            <div className="aspect-square bg-gradient-to-br from-slate-800 to-slate-800/50 rounded-3xl border border-slate-700/50 flex items-center justify-center overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-orange-500/5" />
+              <div className="text-center p-8 relative z-10">
+                <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-amber-500/30">
+                  <Rocket className="w-14 h-14 text-white" />
+                </div>
+                <p className="text-2xl font-bold text-white">Ready to Launch?</p>
+                <p className="text-slate-400 mt-2">Your business awaits</p>
               </div>
             </div>
           </div>
@@ -220,23 +228,31 @@ export default function Home() {
       </div>
 
       {/* CTA */}
-      <div className="max-w-4xl mx-auto px-4 py-20">
-        <Card className="border-0 shadow-2xl bg-gradient-to-r from-slate-900 to-slate-800 overflow-hidden">
-          <CardContent className="p-12 text-center">
+      <div className="max-w-4xl mx-auto px-4 py-24">
+        <Card className="border border-slate-700/50 bg-gradient-to-br from-slate-800 to-slate-800/50 overflow-hidden relative">
+          <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-orange-500/5" />
+          <CardContent className="p-14 text-center relative z-10">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Start Building Your Business Today
             </h2>
-            <p className="text-lg text-slate-300 mb-8 max-w-xl mx-auto">
+            <p className="text-lg text-slate-400 mb-10 max-w-xl mx-auto">
               Join thousands of entrepreneurs who launched their businesses with our AI-powered platform
             </p>
             <Link to={createPageUrl('CreateBusiness')}>
-              <Button className="h-14 px-10 text-lg bg-white text-slate-900 hover:bg-slate-100">
+              <Button className="h-16 px-12 text-lg bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-2xl shadow-amber-500/25 font-semibold">
                 Get Started Free
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </Link>
           </CardContent>
         </Card>
+      </div>
+      
+      {/* Footer */}
+      <div className="border-t border-slate-800 py-8">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+          <p className="text-slate-500 text-sm">© {new Date().getFullYear()} BrandForge. Premium AI Business Builder.</p>
+        </div>
       </div>
     </div>
   );
