@@ -1,5 +1,9 @@
 import React from 'react';
 import { format } from 'date-fns';
+import { 
+  MarketShareChart, CompetitorStrengthChart, BrandStrengthRadar, 
+  GrowthProjectionChart, OpportunityScoreChart 
+} from './ReportCharts';
 
 export default function ReportDocument({ project }) {
   // Handle both array and object format for brand_colors
@@ -10,49 +14,90 @@ export default function ReportDocument({ project }) {
     }
     return project?.brand_colors?.primary || '#7c3aed';
   };
+  
+  const getSecondaryColor = () => {
+    if (Array.isArray(project?.brand_colors)) {
+      const secondary = project.brand_colors.find(c => c.role === 'secondary');
+      return secondary?.hex || project.brand_colors[1]?.hex || '#4f46e5';
+    }
+    return '#4f46e5';
+  };
+  
   const brandColor = getPrimaryColor();
+  const secondaryColor = getSecondaryColor();
 
   return (
     <div id="report-content" className="font-sans">
       {/* Cover Page */}
       <div 
-        className="min-h-[800px] flex flex-col justify-center items-center text-center p-12"
-        style={{ background: `linear-gradient(135deg, ${brandColor} 0%, ${brandColor}dd 100%)` }}
+        className="min-h-[800px] flex flex-col justify-center items-center text-center p-12 relative"
+        style={{ background: `linear-gradient(135deg, ${brandColor} 0%, ${secondaryColor} 100%)` }}
       >
-        {project?.logo_url && (
-          <img 
-            src={project.logo_url} 
-            alt={project.business_name} 
-            className="w-32 h-32 object-contain mb-8 rounded-2xl bg-white p-4"
-          />
-        )}
-        <h1 className="text-5xl font-bold text-white mb-4">{project?.business_name}</h1>
-        <p className="text-xl text-white/90 mb-8">{project?.industry}</p>
-        <div className="bg-white/20 backdrop-blur-sm rounded-xl px-8 py-4">
-          <p className="text-white text-lg">Business Plan & Brand Kit</p>
+        {/* Decorative elements */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-20 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
         </div>
-        <p className="text-white/70 mt-auto pt-12">
-          Generated on {format(new Date(), 'MMMM d, yyyy')}
-        </p>
+        
+        {/* Top logo watermark */}
+        <div className="absolute top-8 left-8">
+          {project?.logo_url && (
+            <img src={project.logo_url} alt="" className="w-16 h-16 object-contain rounded-lg bg-white/10 p-2" />
+          )}
+        </div>
+        
+        <div className="relative z-10">
+          {project?.logo_url && (
+            <img 
+              src={project.logo_url} 
+              alt={project.business_name} 
+              className="w-40 h-40 object-contain mb-8 rounded-3xl bg-white p-6 shadow-2xl mx-auto"
+            />
+          )}
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 tracking-tight">{project?.business_name}</h1>
+          <p className="text-xl text-white/90 mb-8 font-light">{project?.industry}</p>
+          <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-10 py-5 border border-white/30">
+            <p className="text-white text-xl font-semibold">Business Plan & Brand Kit</p>
+          </div>
+        </div>
+        
+        <div className="mt-auto pt-12 relative z-10">
+          <p className="text-white/70 text-sm">
+            Generated on {format(new Date(), 'MMMM d, yyyy')}
+          </p>
+        </div>
+        
+        {/* Bottom logo */}
+        <div className="absolute bottom-8 right-8">
+          {project?.logo_url && (
+            <img src={project.logo_url} alt="" className="w-12 h-12 object-contain opacity-50" />
+          )}
+        </div>
       </div>
 
       {/* Table of Contents */}
       <div className="p-12 border-b">
-        <h2 className="text-2xl font-bold text-slate-800 mb-6">Table of Contents</h2>
-        <div className="space-y-3">
+        <div className="flex items-center justify-between mb-8">
+          {project?.logo_url && (
+            <img src={project.logo_url} alt="" className="w-10 h-10 object-contain" />
+          )}
+          <p className="text-xs text-slate-400 uppercase tracking-widest">{project?.business_name}</p>
+        </div>
+        
+        <h2 className="text-3xl font-bold text-slate-800 mb-8">Table of Contents</h2>
+        <div className="space-y-4">
           {[
-            { num: '1', title: 'Executive Summary', page: '3' },
-            { num: '2', title: 'Market Research & Analysis', page: '4' },
-            { num: '3', title: 'Business Strategy', page: '6' },
-            { num: '4', title: 'Marketing Plan', page: '8' },
-            { num: '5', title: 'Financial Projections', page: '10' },
-            { num: '6', title: 'Brand Identity Kit', page: '12' },
-            { num: '7', title: 'Digital Assets', page: '14' },
+            { num: '01', title: 'Executive Summary', page: '3' },
+            { num: '02', title: 'Market Research & Analysis', page: '4' },
+            { num: '03', title: 'Business Strategy', page: '6' },
+            { num: '04', title: 'Growth Projections', page: '8' },
+            { num: '05', title: 'Brand Identity Kit', page: '10' },
+            { num: '06', title: 'Digital Assets', page: '12' },
           ].map((item) => (
-            <div key={item.num} className="flex items-center gap-4">
-              <span className="text-violet-600 font-bold">{item.num}</span>
-              <span className="flex-1 border-b border-dotted border-slate-300">{item.title}</span>
-              <span className="text-slate-500">{item.page}</span>
+            <div key={item.num} className="flex items-center gap-4 p-3 rounded-lg hover:bg-slate-50 transition-colors">
+              <span className="text-2xl font-bold" style={{ color: brandColor }}>{item.num}</span>
+              <span className="flex-1 font-medium text-slate-700">{item.title}</span>
+              <span className="text-slate-400 font-light">{item.page}</span>
             </div>
           ))}
         </div>
@@ -60,38 +105,52 @@ export default function ReportDocument({ project }) {
 
       {/* Executive Summary */}
       <div className="p-12 border-b">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold" style={{ backgroundColor: brandColor }}>1</div>
-          <h2 className="text-2xl font-bold text-slate-800">Executive Summary</h2>
+        <div className="flex items-center justify-between mb-8">
+          {project?.logo_url && (
+            <img src={project.logo_url} alt="" className="w-10 h-10 object-contain" />
+          )}
+          <p className="text-xs text-slate-400 uppercase tracking-widest">Executive Summary</p>
         </div>
+        
+        <div className="flex items-center gap-4 mb-8">
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-lg" style={{ backgroundColor: brandColor }}>01</div>
+          <h2 className="text-3xl font-bold text-slate-800">Executive Summary</h2>
+        </div>
+        
         <div className="prose max-w-none">
-          <p className="text-lg text-slate-600 leading-relaxed mb-6">
+          <p className="text-lg text-slate-600 leading-relaxed mb-8">
             {project?.description || 'No description available.'}
           </p>
           
-          <div className="grid grid-cols-2 gap-6 mt-8">
-            <div className="bg-slate-50 rounded-xl p-6">
-              <p className="text-sm text-slate-500 mb-1">Industry</p>
-              <p className="text-lg font-semibold text-slate-800">{project?.industry}</p>
+          <div className="grid grid-cols-2 gap-6 mb-8">
+            <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-6 border border-slate-200">
+              <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">Industry</p>
+              <p className="text-xl font-bold text-slate-800">{project?.industry}</p>
             </div>
-            <div className="bg-slate-50 rounded-xl p-6">
-              <p className="text-sm text-slate-500 mb-1">Target Audience</p>
-              <p className="text-lg font-semibold text-slate-800">{project?.target_audience || 'General Market'}</p>
+            <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-6 border border-slate-200">
+              <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">Target Audience</p>
+              <p className="text-xl font-bold text-slate-800">{project?.target_audience || 'General Market'}</p>
             </div>
-            <div className="bg-slate-50 rounded-xl p-6">
-              <p className="text-sm text-slate-500 mb-1">Location</p>
-              <p className="text-lg font-semibold text-slate-800">{project?.location || 'Global'}</p>
+            <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-6 border border-slate-200">
+              <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">Location</p>
+              <p className="text-xl font-bold text-slate-800">{project?.location || 'Global'}</p>
             </div>
-            <div className="bg-slate-50 rounded-xl p-6">
-              <p className="text-sm text-slate-500 mb-1">Status</p>
-              <p className="text-lg font-semibold text-slate-800 capitalize">{project?.status || 'In Progress'}</p>
+            <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-6 border border-slate-200">
+              <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">Status</p>
+              <p className="text-xl font-bold text-slate-800 capitalize">{project?.status || 'In Progress'}</p>
             </div>
           </div>
 
+          {/* Brand Strength Radar */}
+          <div className="bg-white rounded-2xl border border-slate-200 p-6 mb-8">
+            <h3 className="text-lg font-semibold text-slate-800 mb-4">Brand Readiness Score</h3>
+            <BrandStrengthRadar project={project} brandColor={brandColor} />
+          </div>
+
           {project?.unique_value_proposition && (
-            <div className="mt-8 p-6 rounded-xl border-l-4" style={{ borderColor: brandColor, backgroundColor: `${brandColor}10` }}>
-              <p className="text-sm font-semibold mb-2" style={{ color: brandColor }}>Unique Value Proposition</p>
-              <p className="text-slate-700">{project.unique_value_proposition}</p>
+            <div className="p-8 rounded-2xl border-l-4 shadow-sm" style={{ borderColor: brandColor, backgroundColor: `${brandColor}08` }}>
+              <p className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: brandColor }}>Unique Value Proposition</p>
+              <p className="text-lg text-slate-700 font-medium">{project.unique_value_proposition}</p>
             </div>
           )}
         </div>
@@ -99,29 +158,53 @@ export default function ReportDocument({ project }) {
 
       {/* Market Research */}
       <div className="p-12 border-b">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold" style={{ backgroundColor: brandColor }}>2</div>
-          <h2 className="text-2xl font-bold text-slate-800">Market Research & Analysis</h2>
+        <div className="flex items-center justify-between mb-8">
+          {project?.logo_url && (
+            <img src={project.logo_url} alt="" className="w-10 h-10 object-contain" />
+          )}
+          <p className="text-xs text-slate-400 uppercase tracking-widest">Market Analysis</p>
+        </div>
+        
+        <div className="flex items-center gap-4 mb-8">
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-lg" style={{ backgroundColor: brandColor }}>02</div>
+          <h2 className="text-3xl font-bold text-slate-800">Market Research & Analysis</h2>
         </div>
         
         {project?.market_research ? (
           <div className="space-y-8">
             {project.market_research.industry_overview && (
-              <div>
+              <div className="bg-slate-50 rounded-2xl p-6">
                 <h3 className="text-lg font-semibold text-slate-800 mb-3">Industry Overview</h3>
-                <p className="text-slate-600">{project.market_research.industry_overview}</p>
+                <p className="text-slate-600 leading-relaxed">{project.market_research.industry_overview}</p>
               </div>
             )}
 
             {project.market_research.market_size && (
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-emerald-50 rounded-xl p-6 text-center">
-                  <p className="text-sm text-emerald-600 mb-1">Market Size</p>
-                  <p className="text-2xl font-bold text-emerald-700">{project.market_research.market_size}</p>
+              <div className="grid grid-cols-2 gap-6">
+                <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl p-8 text-center border border-emerald-200">
+                  <p className="text-sm text-emerald-600 uppercase tracking-wide mb-2">Market Size</p>
+                  <p className="text-3xl font-bold text-emerald-700">{project.market_research.market_size}</p>
                 </div>
-                <div className="bg-blue-50 rounded-xl p-6 text-center">
-                  <p className="text-sm text-blue-600 mb-1">Growth Trends</p>
-                  <p className="text-2xl font-bold text-blue-700">{project.market_research.growth_trends || 'Growing'}</p>
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 text-center border border-blue-200">
+                  <p className="text-sm text-blue-600 uppercase tracking-wide mb-2">Growth Trends</p>
+                  <p className="text-3xl font-bold text-blue-700">{project.market_research.growth_trends || 'Growing'}</p>
+                </div>
+              </div>
+            )}
+            
+            {/* Market Share Chart */}
+            {project.market_research.competitors?.length > 0 && (
+              <div className="bg-white rounded-2xl border border-slate-200 p-6">
+                <h3 className="text-lg font-semibold text-slate-800 mb-4">Competitive Landscape</h3>
+                <div className="grid grid-cols-2 gap-6">
+                  <div>
+                    <p className="text-sm text-slate-500 mb-2">Market Share Distribution</p>
+                    <MarketShareChart competitors={project.market_research.competitors} brandColor={brandColor} />
+                  </div>
+                  <div>
+                    <p className="text-sm text-slate-500 mb-2">Competitor Analysis</p>
+                    <CompetitorStrengthChart competitors={project.market_research.competitors} brandColor={brandColor} />
+                  </div>
                 </div>
               </div>
             )}
@@ -359,13 +442,20 @@ export default function ReportDocument({ project }) {
       </div>
 
       {/* Footer */}
-      <div className="p-12 text-center" style={{ backgroundColor: `${brandColor}10` }}>
-        <p className="text-sm text-slate-500 mb-2">
-          This report was generated by BrandForge AI
-        </p>
-        <p className="text-xs text-slate-400">
-          © {new Date().getFullYear()} {project?.business_name}. All rights reserved.
-        </p>
+      <div className="p-12" style={{ background: `linear-gradient(135deg, ${brandColor}15 0%, ${secondaryColor}15 100%)` }}>
+        <div className="flex items-center justify-between">
+          {project?.logo_url && (
+            <img src={project.logo_url} alt="" className="w-16 h-16 object-contain" />
+          )}
+          <div className="text-right">
+            <p className="text-sm text-slate-600 font-medium mb-1">
+              {project?.business_name} Business Report
+            </p>
+            <p className="text-xs text-slate-400">
+              Generated by BrandForge AI • © {new Date().getFullYear()}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
