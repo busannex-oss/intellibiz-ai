@@ -139,8 +139,8 @@ export default function Dashboard() {
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-white">My Projects</h1>
-            <p className="text-slate-400 mt-2">Manage your business brands and assets</p>
+            <h1 className="text-3xl md:text-4xl font-bold text-white tracking-[-0.02em]">My Projects</h1>
+            <p className="text-slate-400 mt-2 leading-[1.6] tracking-[-0.011em]">Manage your business brands and assets</p>
           </div>
           <Link to={createPageUrl('CreateBusiness')}>
             <Button className="h-14 px-8 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-xl shadow-amber-500/20 font-semibold">
@@ -173,8 +173,8 @@ export default function Dashboard() {
               <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 mx-auto mb-6 flex items-center justify-center shadow-xl shadow-amber-500/20">
                 <Zap className="w-12 h-12 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-white mb-2">Create Your First Business</h3>
-              <p className="text-slate-400 mb-8 max-w-md mx-auto">Launch a complete brand with AI-powered market research, business planning, and design</p>
+              <h3 className="text-2xl font-bold text-white mb-2 tracking-[-0.02em]">Create Your First Business</h3>
+              <p className="text-slate-400 mb-8 max-w-md mx-auto leading-[1.6] tracking-[-0.011em]">Launch a complete brand with AI-powered market research, business planning, and design</p>
               <Link to={createPageUrl('CreateBusiness')}>
                 <Button className="h-14 px-8 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-xl font-semibold">
                   <Sparkles className="w-5 h-5 mr-2" />
@@ -222,8 +222,8 @@ export default function Dashboard() {
                             </div>
                           )}
                           <div>
-                            <CardTitle className="text-lg text-white">{project.business_name}</CardTitle>
-                            <p className="text-sm text-slate-400">{project.industry}</p>
+                            <CardTitle className="text-lg text-white tracking-[-0.02em]">{project.business_name}</CardTitle>
+                            <p className="text-sm text-slate-400 tracking-[-0.011em]">{project.industry}</p>
                           </div>
                         </div>
                         <DropdownMenu>
