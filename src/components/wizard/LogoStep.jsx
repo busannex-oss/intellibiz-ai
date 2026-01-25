@@ -26,26 +26,32 @@ export default function LogoStep({ project, onUpdate, onNext, onPrev }) {
         ? project.brand_colors.find(c => c.role === 'primary')?.hex || project.brand_colors[0]?.hex
         : null;
       
-      const basePrompt = `Create a professional, modern, minimalist logo icon for "${project.business_name}" in the ${project.industry} industry.
+      const basePrompt = `Create a single professional, modern, minimalist logo icon for "${project.business_name}" in the ${project.industry} industry.
+
+CRITICAL REQUIREMENTS:
+- Generate ONLY ONE logo with a fully TRANSPARENT background (PNG with alpha channel)
+- NO white background, NO black background, NO colored backgrounds
+- The logo must be a standalone icon/symbol that works on any background color
+- Complete transparency around all edges
 
 BUSINESS CONTEXT:
 ${project.description}
 
-STYLE REQUIREMENTS:
+DESIGN SPECIFICATIONS:
 - Clean, simple geometric design
 - Minimalist and memorable
 - Premium, professional appearance
-- Works on both light and dark backgrounds
 ${primaryColor ? `- Use ${primaryColor} as the primary color` : '- Use modern, professional colors'}
 - Centered composition with balanced proportions
-- No text, icon/symbol only
+- No text in the logo, icon/symbol only
 - Vector-style, flat design aesthetic
+- Sharp, clean edges with proper anti-aliasing
 
 BRAND PERSONALITY: ${brandPersonality?.traits?.join(', ') || 'Professional, trustworthy, innovative'}
 
 ${additionalInstructions ? `ADDITIONAL NOTES: ${additionalInstructions}` : ''}
 
-Create a distinctive mark that represents the brand's unique value and stands out from competitors.`;
+OUTPUT: A single logo mark with transparent background that can be placed on light backgrounds, dark backgrounds, or colored backgrounds.`;
 
       const response = await base44.integrations.Core.GenerateImage({
         prompt: basePrompt
