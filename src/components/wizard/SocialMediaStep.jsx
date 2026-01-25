@@ -37,46 +37,85 @@ export default function SocialMediaStep({ project, onUpdate, onNext, onPrev }) {
     setGeneratingPlatform(platformId);
     
     const platform = PLATFORMS.find(p => p.id === platformId);
-    const colors = project?.brand_colors || { primary: '#6366f1', secondary: '#8b5cf6' };
-    
     const brandPersonality = project?.brand_personality;
     const uvp = project?.unique_value_proposition;
     
-    // Generate header
+    // Get brand colors
+    const brandColors = Array.isArray(project?.brand_colors) 
+      ? project.brand_colors.map(c => c.hex).join(', ')
+      : '#6366f1, #8b5cf6';
+    
+    const primaryColor = Array.isArray(project?.brand_colors)
+      ? project.brand_colors.find(c => c.role === 'primary')?.hex || project.brand_colors[0]?.hex
+      : '#6366f1';
+    
+    // Generate header with brand consistency
     const headerPrompt = `Create a professional ${platform.name} header/banner image for "${project.business_name}" - a ${project.industry} business.
 
-UNIQUE VALUE PROPOSITION: ${uvp || 'Premium service'}
+⚠️ CRITICAL - BRAND CONSISTENCY REQUIREMENTS:
+- MUST incorporate the brand logo prominently (but not dominate the design)
+- MUST use ONLY the brand colors: ${brandColors}
+- The design must establish brand identity and be instantly recognizable
+- Maintain professional spacing and composition
+
+BRAND ASSETS:
+Logo URL: ${project?.logo_url || 'Use abstract brand symbol'}
+Primary Color: ${primaryColor}
+Brand Colors Palette: ${brandColors}
+
+BUSINESS CONTEXT:
+${uvp || 'Premium service and innovation'}
 
 BRAND PERSONALITY:
 ${brandPersonality?.traits?.join(', ') || 'Professional, innovative'}
 Visual Style: ${brandPersonality?.visual_style || 'Modern and clean'}
 
-Brand colors (strategically chosen): ${colors.primary}, ${colors.secondary}
-${project.brand_colors?.rationale ? `Color rationale: ${project.brand_colors.rationale}` : ''}
+DESIGN REQUIREMENTS:
+- Size: ${platform.headerSize}
+- Modern, professional, clean design
+- Logo should be integrated tastefully (not too large, not too small)
+- Use brand colors as the primary color scheme
+- NO text or typography on the image
+- Design should work well with the platform's UI overlay
 
-Style: Modern, professional, clean design that stands out from competitors.
-The design should communicate trust, innovation, and our unique market position.
-Size: ${platform.headerSize}
-Include subtle branding elements but NO text on the image.`;
+OUTPUT: A cohesive brand header that maintains consistency across all platforms.`;
 
     const headerResponse = await base44.integrations.Core.GenerateImage({
-      prompt: headerPrompt
+      prompt: headerPrompt,
+      existing_image_urls: project?.logo_url ? [project.logo_url] : undefined
     });
 
-    // Generate profile image
+    // Generate profile image with brand consistency
     const profilePrompt = `Create a professional ${platform.name} profile picture for "${project.business_name}".
-Industry: ${project.industry}
+
+⚠️ CRITICAL - BRAND CONSISTENCY REQUIREMENTS:
+- MUST feature the brand logo as the central element
+- MUST use ONLY the brand colors: ${brandColors}
+- Must be instantly recognizable as part of the same brand across all platforms
+- Maintain consistent visual language with the header image
+
+BRAND ASSETS:
+Logo URL: ${project?.logo_url || 'Create branded symbol'}
+Primary Color: ${primaryColor}
+Brand Colors: ${brandColors}
+
+DESIGN REQUIREMENTS:
+- Industry: ${project.industry}
+- Size: Square, ${platform.profileSize}
+- Logo should be the focal point (60-70% of the space)
+- Background using brand colors in a simple, clean way
+- Modern, minimal, professional aesthetic
+- Should look cohesive with the header image
+- Must stand out in social media feeds
 
 BRAND PERSONALITY:
 ${brandPersonality?.traits?.join(', ') || 'Professional, innovative'}
 
-Brand colors (strategically chosen): ${colors.primary}, ${colors.secondary}
-Style: Clean, minimal, distinctive logo or brand mark that stands out in feeds.
-Size: Square, ${platform.profileSize}
-Should be instantly recognizable and memorable.`;
+OUTPUT: A profile image that clearly represents the brand with logo and brand colors.`;
 
     const profileResponse = await base44.integrations.Core.GenerateImage({
-      prompt: profilePrompt
+      prompt: profilePrompt,
+      existing_image_urls: project?.logo_url ? [project.logo_url] : undefined
     });
 
     const existingAssets = project?.social_media_assets || [];
