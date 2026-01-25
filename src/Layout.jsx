@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Button } from "@/components/ui/button";
-import { Sparkles, LayoutDashboard, Plus, Menu, X, Crown } from 'lucide-react';
+import { Zap, LayoutGrid, Sparkles, Menu, X, Crown } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Layout({ children }) {
@@ -17,7 +17,7 @@ export default function Layout({ children }) {
             {/* Logo */}
             <Link to={createPageUrl('Home')} className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/20">
-                <Sparkles className="w-5 h-5 text-white" />
+                <Zap className="w-5 h-5 text-white" />
               </div>
               <span className="font-bold text-xl text-white tracking-tight">BrandForge</span>
             </Link>
@@ -26,13 +26,13 @@ export default function Layout({ children }) {
             <div className="hidden md:flex items-center gap-3">
               <Link to={createPageUrl('Dashboard')}>
                 <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
-                  <LayoutDashboard className="w-4 h-4 mr-2" />
+                  <LayoutGrid className="w-4 h-4 mr-2" />
                   Dashboard
                 </Button>
               </Link>
               <Link to={createPageUrl('CreateBusiness')}>
                 <Button className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-lg shadow-amber-500/20">
-                  <Plus className="w-4 h-4 mr-2" />
+                  <Sparkles className="w-4 h-4 mr-2" />
                   New Business
                 </Button>
               </Link>
@@ -59,13 +59,13 @@ export default function Layout({ children }) {
           <div className="md:hidden border-t border-slate-800 bg-slate-900 p-4 space-y-2">
             <Link to={createPageUrl('Dashboard')} onClick={() => setMobileMenuOpen(false)}>
               <Button variant="ghost" className="w-full justify-start text-slate-300 hover:text-white hover:bg-slate-800">
-                <LayoutDashboard className="w-4 h-4 mr-2" />
+                <LayoutGrid className="w-4 h-4 mr-2" />
                 Dashboard
               </Button>
             </Link>
             <Link to={createPageUrl('CreateBusiness')} onClick={() => setMobileMenuOpen(false)}>
               <Button className="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white">
-                <Plus className="w-4 h-4 mr-2" />
+                <Sparkles className="w-4 h-4 mr-2" />
                 New Business
               </Button>
             </Link>

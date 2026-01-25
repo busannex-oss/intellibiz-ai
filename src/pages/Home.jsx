@@ -4,56 +4,56 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { 
-  Sparkles, 
-  FileText, 
-  Palette, 
-  Globe, 
-  Share2, 
-  Phone, 
+  Zap as LogoIcon, 
+  FileBarChart, 
+  Wand2, 
+  Globe2, 
+  Megaphone, 
+  Headphones, 
   Mail,
   ChevronRight,
   Rocket,
   Zap,
   Shield,
   ArrowRight,
-  Search,
+  Radar,
   Target
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const features = [
   {
-    icon: Search,
+    icon: Radar,
     title: 'Market Research',
     description: 'AI analyzes competitors, market gaps, and opportunities to position you for success',
     color: 'from-cyan-500 to-blue-500'
   },
   {
-    icon: FileText,
+    icon: FileBarChart,
     title: 'Strategic Business Plan',
     description: 'Competition-beating plans that exploit competitor weaknesses',
     color: 'from-violet-500 to-purple-500'
   },
   {
-    icon: Palette,
+    icon: Wand2,
     title: 'Differentiated Brand',
     description: 'Logos and colors strategically designed to stand out from competitors',
     color: 'from-pink-500 to-rose-500'
   },
   {
-    icon: Globe,
+    icon: Globe2,
     title: 'Conversion Website',
     description: 'SEO-optimized content targeting keywords your competitors miss',
     color: 'from-blue-500 to-cyan-500'
   },
   {
-    icon: Share2,
+    icon: Megaphone,
     title: 'Social Media',
     description: 'Branded assets designed to capture market attention',
     color: 'from-orange-500 to-amber-500'
   },
   {
-    icon: Phone,
+    icon: Headphones,
     title: 'Business Resources',
     description: 'AI phone services and directories for rapid market presence',
     color: 'from-emerald-500 to-green-500'
@@ -78,7 +78,7 @@ export default function Home() {
             className="text-center max-w-4xl mx-auto"
           >
             <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm font-medium mb-8">
-              <Sparkles className="w-4 h-4" />
+              <Zap className="w-4 h-4" />
               AI-Powered Business Builder
             </div>
             
@@ -198,7 +198,7 @@ export default function Home() {
                 { icon: Target, title: 'Competitor Intelligence', desc: 'AI analyzes real competitors to find exploitable weaknesses' },
                 { icon: Zap, title: 'Strategic Differentiation', desc: 'Every asset designed to fill market gaps' },
                 { icon: Shield, title: 'Data-Driven Decisions', desc: 'Brand colors, messaging, and positioning backed by research' },
-                { icon: Sparkles, title: 'Conversion Optimized', desc: 'Content targets keywords and pain points competitors miss' }
+                { icon: LogoIcon, title: 'Conversion Optimized', desc: 'Content targets keywords and pain points competitors miss' }
               ].map((benefit) => (
                 <div key={benefit.title} className="flex gap-4">
                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30 flex items-center justify-center flex-shrink-0">

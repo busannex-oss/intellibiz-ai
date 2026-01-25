@@ -10,22 +10,22 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
-  Plus, 
-  Building2, 
-  FileText, 
-  Palette, 
-  Globe, 
-  Share2,
+  Sparkles, 
+  Briefcase, 
+  FileBarChart, 
+  Wand2, 
+  Globe2, 
+  Megaphone,
   ChevronRight,
   Calendar,
   MoreVertical,
   Trash2,
   Eye,
-  Search,
-  Download,
-  BookOpen,
+  Radar,
+  FileDown,
+  BookText,
   Loader2,
-  Sparkles
+  Zap
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -115,11 +115,11 @@ export default function Dashboard() {
 
   const getStepProgress = (project) => {
     const steps = [
-      { done: !!project.market_research, icon: Search, label: 'Research' },
-      { done: !!project.business_plan, icon: FileText, label: 'Plan' },
-      { done: !!project.logo_url, icon: Palette, label: 'Logo' },
-      { done: !!project.website_content, icon: Globe, label: 'Website' },
-      { done: project.social_media_assets?.length > 0, icon: Share2, label: 'Social' }
+      { done: !!project.market_research, icon: Radar, label: 'Research' },
+      { done: !!project.business_plan, icon: FileBarChart, label: 'Plan' },
+      { done: !!project.logo_url, icon: Wand2, label: 'Logo' },
+      { done: !!project.website_content, icon: Globe2, label: 'Website' },
+      { done: project.social_media_assets?.length > 0, icon: Megaphone, label: 'Social' }
     ];
     return steps;
   };
@@ -144,7 +144,7 @@ export default function Dashboard() {
           </div>
           <Link to={createPageUrl('CreateBusiness')}>
             <Button className="h-14 px-8 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-xl shadow-amber-500/20 font-semibold">
-              <Plus className="w-5 h-5 mr-2" />
+              <Sparkles className="w-5 h-5 mr-2" />
               New Business
             </Button>
           </Link>
@@ -171,13 +171,13 @@ export default function Dashboard() {
           <Card className="border-0 bg-slate-800/50 backdrop-blur-sm border border-slate-700">
             <CardContent className="p-12 text-center">
               <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 mx-auto mb-6 flex items-center justify-center shadow-xl shadow-amber-500/20">
-                <Sparkles className="w-12 h-12 text-white" />
+                <Zap className="w-12 h-12 text-white" />
               </div>
               <h3 className="text-2xl font-bold text-white mb-2">Create Your First Business</h3>
               <p className="text-slate-400 mb-8 max-w-md mx-auto">Launch a complete brand with AI-powered market research, business planning, and design</p>
               <Link to={createPageUrl('CreateBusiness')}>
                 <Button className="h-14 px-8 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-xl font-semibold">
-                  <Plus className="w-5 h-5 mr-2" />
+                  <Sparkles className="w-5 h-5 mr-2" />
                   Get Started
                 </Button>
               </Link>
@@ -235,7 +235,7 @@ export default function Dashboard() {
                             </Link>
                             <Link to={createPageUrl(`BusinessReport?projectId=${project.id}`)}>
                               <DropdownMenuItem className="text-slate-200 hover:bg-slate-700 focus:bg-slate-700">
-                                <FileText className="w-4 h-4 mr-2" />
+                                <FileDown className="w-4 h-4 mr-2" />
                                 Business Report
                               </DropdownMenuItem>
                             </Link>
@@ -247,7 +247,7 @@ export default function Dashboard() {
                               {generatingKit === project.id ? (
                                 <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                               ) : (
-                                <BookOpen className="w-4 h-4 mr-2" />
+                                <BookText className="w-4 h-4 mr-2" />
                               )}
                               Brand Guidelines
                             </DropdownMenuItem>
