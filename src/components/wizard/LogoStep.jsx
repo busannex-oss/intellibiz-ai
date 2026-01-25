@@ -5,7 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Sparkles, RefreshCw, ChevronRight, ChevronLeft, Download, Palette, Save, Eye, EyeOff, Trash2 } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Textarea } from "@/components/ui/textarea";
+import { Loader2, Sparkles, RefreshCw, ChevronRight, ChevronLeft, Download, Palette, Save, Eye, EyeOff, Trash2, Upload, Edit2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { motion } from 'framer-motion';
 import BrandColorsStep from './BrandColorsStep';
@@ -16,6 +18,8 @@ export default function LogoStep({ project, onUpdate, onNext, onPrev }) {
   const [customPrompt, setCustomPrompt] = useState('');
   const [activeTab, setActiveTab] = useState('logo');
   const [currentLogoUrl, setCurrentLogoUrl] = useState(project?.logo_url || null);
+  const [editingLogoId, setEditingLogoId] = useState(null);
+  const [editPrompt, setEditPrompt] = useState('');
   
   const savedLogos = project?.saved_logos || [];
 
@@ -103,11 +107,47 @@ OUTPUT: A single logo mark with transparent background that can be placed on lig
     const publishedLogo = updatedLogos.find(l => l.published);
     await onUpdate({
       saved_logos: updatedLogos,
-      logo_url: publishedLogo?.url || null,
-      logo_prompt: publishedLogo?.prompt || null
+      logo_url: publishedLogo?.url || savedLogos.find(l => l.id === logoId)?.url,
+      logo_prompt: publishedLogo?.prompt || savedLogos.find(l => l.id === logoId)?.prompt
     });
     
     toast.success(publishedLogo ? 'Logo published!' : 'Logo unpublished');
+  };
+
+  const uploadLogo = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setIsGenerating(true);
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      
+      const newLogo = {
+        id: Date.now().toString(),
+        url: file_url,
+        prompt: 'Uploaded by user',
+        published: false,
+        created_at: new Date().toISOString()
+      };
+      
+      const updatedLogos = [...savedLogos, newLogo];
+      await onUpdate({ saved_logos: updatedLogos });
+      setCurrentLogoUrl(file_url);
+      toast.success('Logo uploaded and saved!');
+    } catch (error) {
+      console.error('Upload failed:', error);
+      toast.error('Failed to upload logo');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const editLogoPrompt = async (logoId, newPrompt) => {
+    const updatedLogos = savedLogos.map(logo => 
+      logo.id === logoId ? { ...logo, prompt: newPrompt } : logo
+    );
+    await onUpdate({ saved_logos: updatedLogos });
+    toast.success('Logo notes updated');
   };
 
   const deleteLogo = async (logoId) => {
@@ -239,6 +279,24 @@ OUTPUT: A single logo mark with transparent background that can be placed on lig
                   )}
                 </Button>
                 
+                <div className="relative">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={uploadLogo}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    disabled={isGenerating}
+                  />
+                  <Button
+                    variant="outline"
+                    className="w-full h-12 border-slate-200"
+                    disabled={isGenerating}
+                  >
+                    <Upload className="w-5 h-5 mr-2" />
+                    Upload Your Own Logo
+                  </Button>
+                </div>
+                
                 {currentLogoUrl && !savedLogos.find(l => l.url === currentLogoUrl) && (
                   <Button
                     onClick={saveLogo}
@@ -279,23 +337,62 @@ OUTPUT: A single logo mark with transparent background that can be placed on lig
                     className="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border-2 hover:border-violet-200 transition-colors"
                     style={{ borderColor: logo.published ? '#7c3aed' : 'transparent' }}
                   >
-                    <div className="w-16 h-16 bg-white rounded-lg flex items-center justify-center p-2 shadow-sm">
+                    <div 
+                      className="w-16 h-16 bg-white rounded-lg flex items-center justify-center p-2 shadow-sm cursor-pointer hover:ring-2 hover:ring-violet-300"
+                      onClick={() => setCurrentLogoUrl(logo.url)}
+                    >
                       <img src={logo.url} alt="Logo" className="max-w-full max-h-full object-contain" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
                         <span className="text-sm font-medium text-slate-700 truncate">
-                          Logo {savedLogos.indexOf(logo) + 1}
+                          {logo.prompt === 'Uploaded by user' ? 'Uploaded Logo' : `Logo ${savedLogos.indexOf(logo) + 1}`}
                         </span>
                         {logo.published && (
                           <Badge className="bg-violet-600">Published</Badge>
                         )}
                       </div>
-                      <p className="text-xs text-slate-400">
+                      <p className="text-xs text-slate-400 truncate">
                         {new Date(logo.created_at).toLocaleDateString()}
                       </p>
                     </div>
                     <div className="flex gap-2">
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              setEditingLogoId(logo.id);
+                              setEditPrompt(logo.prompt || '');
+                            }}
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                          <DialogHeader>
+                            <DialogTitle>Edit Logo Notes</DialogTitle>
+                          </DialogHeader>
+                          <div className="space-y-4">
+                            <Textarea
+                              value={editPrompt}
+                              onChange={(e) => setEditPrompt(e.target.value)}
+                              placeholder="Add notes about this logo..."
+                              rows={4}
+                            />
+                            <Button
+                              onClick={() => {
+                                editLogoPrompt(logo.id, editPrompt);
+                                setEditingLogoId(null);
+                              }}
+                              className="w-full"
+                            >
+                              Save Notes
+                            </Button>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
                       <Button
                         size="sm"
                         variant={logo.published ? "default" : "outline"}
