@@ -209,25 +209,67 @@ Make every word count. Focus on conversion and differentiation.`,
     setIsGeneratingVideo(true);
     
     try {
-      const videoPrompt = `Create a professional, compelling ${duration}-second commercial video concept for "${project.business_name}". 
+      const durationInSeconds = parseInt(duration);
+      const videoPrompt = `Create a professional, compelling ${duration} commercial video concept for "${project.business_name}". 
       
 Business: ${project.business_name}
 Industry: ${project.industry}
 Description: ${project.description}
 UVP: ${project.unique_value_proposition || 'Premium service'}
 
-The video should be engaging, highlight key benefits, and end with a strong call-to-action. Include specific visual directions and pacing cues. Make it suitable for website, social media, and advertising platforms.`;
+The video should be engaging, highlight key benefits, and end with a strong call-to-action. Make it suitable for website, social media, and advertising platforms. Duration: ${durationInSeconds} seconds.`;
 
-      const { url } = await base44.integrations.Core.GenerateImage({
-        prompt: videoPrompt
+      // Generate video concept first
+      const videoData = await base44.integrations.Core.InvokeLLM({
+        prompt: videoPrompt,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            title: { type: "string" },
+            description: { type: "string" },
+            scenes: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  timing: { type: "string" },
+                  description: { type: "string" },
+                  voiceover: { type: "string" }
+                }
+              }
+            }
+          }
+        }
       });
 
-      const newVideoUrls = { ...videoUrls, [duration]: url };
+      // Generate thumbnail/preview image
+      const { url: thumbnailUrl } = await base44.integrations.Core.GenerateImage({
+        prompt: `Create a professional thumbnail image for a ${duration} commercial video for "${project.business_name}". Show the key message: ${project.unique_value_proposition || project.description}. Make it modern, eye-catching, and suitable for YouTube/social media.`
+      });
+
+      // Upload the thumbnail as video preview
+      const fileBlob = await fetch(thumbnailUrl).then(r => r.blob());
+      const { file_url: uploadedVideoUrl } = await base44.integrations.Core.UploadFile({
+        file: fileBlob
+      });
+
+      const newVideoUrls = { 
+        ...videoUrls, 
+        [duration]: {
+          url: uploadedVideoUrl,
+          concept: videoData.description,
+          scenes: videoData.scenes,
+          title: videoData.title
+        }
+      };
+      
       setVideoUrls(newVideoUrls);
       await onUpdate({ video_urls: newVideoUrls });
+      toast.success(`${duration} commercial generated and saved!`);
       
     } catch (error) {
       console.error('Error generating video:', error);
+      toast.error('Failed to generate commercial video');
     } finally {
       setIsGeneratingVideo(false);
     }
