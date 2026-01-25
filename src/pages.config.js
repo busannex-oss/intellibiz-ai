@@ -18,6 +18,7 @@ export const PAGES = {
     "Home": Home,
     "Omnichannel": Omnichannel,
     "PhoneSystem": PhoneSystem,
+    "Tasks": Tasks,
     "WhiteLabel": WhiteLabel,
 }
 
