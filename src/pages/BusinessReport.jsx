@@ -32,13 +32,16 @@ export default function BusinessReport() {
   const [shareMessage, setShareMessage] = useState('');
   const [copied, setCopied] = useState(false);
 
-  const { data: project, isLoading } = useQuery({
+  const { data: project, isLoading, error } = useQuery({
     queryKey: ['project', projectId],
     queryFn: async () => {
+      if (!projectId) throw new Error('No project ID provided');
       const projects = await base44.entities.BusinessProject.filter({ id: projectId });
+      if (!projects || projects.length === 0) throw new Error('Project not found');
       return projects[0];
     },
-    enabled: !!projectId
+    enabled: !!projectId,
+    retry: 1
   });
 
   const generatePDF = async () => {
@@ -94,31 +97,42 @@ export default function BusinessReport() {
   };
 
   const handleEmailShare = async () => {
-    if (!shareEmail) return;
+    if (!shareEmail) {
+      toast.error('Please enter an email address');
+      return;
+    }
     
-    await base44.integrations.Core.SendEmail({
-      to: shareEmail,
-      subject: `${project?.business_name} - Business Report`,
-      body: `
-        ${shareMessage || 'Please review the business report for ' + project?.business_name}
-        
-        View the full report here: ${window.location.href}
-        
-        Best regards,
-        ${project?.business_name} Team
-      `
-    });
-    
-    toast.success('Report shared via email!');
-    setShareEmail('');
-    setShareMessage('');
+    try {
+      await base44.integrations.Core.SendEmail({
+        to: shareEmail,
+        subject: `${project?.business_name} - Business Report`,
+        body: `
+${shareMessage || `Please review the business report for ${project?.business_name}`}
+
+View the full report here: ${window.location.href}
+
+Best regards,
+${project?.business_name} Team
+        `
+      });
+      
+      toast.success('Report shared via email!');
+      setShareEmail('');
+      setShareMessage('');
+    } catch (error) {
+      toast.error('Failed to send email. Please try again.');
+    }
   };
 
-  const copyShareLink = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-    toast.success('Link copied to clipboard!');
+  const copyShareLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      toast.success('Link copied to clipboard!');
+    } catch (error) {
+      toast.error('Failed to copy link');
+    }
   };
 
   if (isLoading) {
@@ -129,10 +143,22 @@ export default function BusinessReport() {
     );
   }
 
-  if (!project) {
+  if (!project || error) {
     return (
       <div className="min-h-screen bg-slate-100 flex items-center justify-center">
-        <p className="text-slate-500">Project not found</p>
+        <div className="text-center">
+          <div className="w-16 h-16 bg-slate-200 rounded-full flex items-center justify-center mx-auto mb-4">
+            <FileText className="w-8 h-8 text-slate-400" />
+          </div>
+          <p className="text-lg font-semibold text-slate-900 mb-2">Project not found</p>
+          <p className="text-sm text-slate-500 mb-6">The project you're looking for doesn't exist or has been removed.</p>
+          <Link to={createPageUrl('Dashboard')}>
+            <Button>
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Dashboard
+            </Button>
+          </Link>
+        </div>
       </div>
     );
   }
@@ -261,17 +287,15 @@ export default function BusinessReport() {
       {/* Print Styles */}
       <style>{`
         @media print {
-          body * {
-            visibility: hidden;
+          body {
+            background: white;
           }
-          #report-content, #report-content * {
-            visibility: visible;
+          .print\\:hidden {
+            display: none !important;
           }
-          #report-content {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
+          * {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
           }
         }
       `}</style>
