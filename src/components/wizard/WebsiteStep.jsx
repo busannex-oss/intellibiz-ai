@@ -381,15 +381,60 @@ The video should be engaging, highlight key benefits, and end with a strong call
               <div className="p-12 md:p-16 bg-white">
                 <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-4 text-center">See Us In Action</h2>
                 <p className="text-slate-600 mb-8 text-center max-w-2xl mx-auto">{website.video_commercial?.concept}</p>
-                <div className="max-w-4xl mx-auto aspect-video bg-slate-900 rounded-xl flex items-center justify-center relative overflow-hidden">
-                  <div className="absolute inset-0 bg-gradient-to-br from-violet-600/20 to-indigo-600/20" />
-                  <div className="text-center z-10">
-                    <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 mx-auto">
-                      <div className="w-0 h-0 border-l-[16px] border-l-white border-t-[12px] border-t-transparent border-b-[12px] border-b-transparent ml-1" />
-                    </div>
-                    <p className="text-white/80 text-sm">{website.video_commercial?.duration} Commercial</p>
-                  </div>
+
+                {/* Video Duration Buttons */}
+                <div className="flex justify-center gap-4 mb-8">
+                  {['30sec', '60sec', '90sec'].map((duration) => (
+                    <Button
+                      key={duration}
+                      onClick={() => generateCommercialVideo(duration)}
+                      disabled={isGeneratingVideo || videoUrls[duration]}
+                      className="h-10 bg-violet-600 hover:bg-violet-700"
+                    >
+                      {isGeneratingVideo && videoUrls[duration] === undefined ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          {duration}
+                        </>
+                      ) : videoUrls[duration] ? (
+                        <>
+                          ✓ {duration}
+                        </>
+                      ) : (
+                        `Generate ${duration}`
+                      )}
+                    </Button>
+                  ))}
                 </div>
+
+                {/* Video Display */}
+                <div className="max-w-4xl mx-auto">
+                  {videoUrls['30sec'] || videoUrls['60sec'] || videoUrls['90sec'] ? (
+                    <div className="space-y-4">
+                      {Object.entries(videoUrls).map(([duration, url]) => (
+                        <div key={duration} className="rounded-xl overflow-hidden border border-slate-200">
+                          <img 
+                            src={url} 
+                            alt={`${duration} Commercial`} 
+                            className="w-full h-auto object-cover"
+                            onError={(e) => e.target.style.display = 'none'}
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="aspect-video bg-slate-900 rounded-xl flex items-center justify-center relative overflow-hidden">
+                      <div className="absolute inset-0 bg-gradient-to-br from-violet-600/20 to-indigo-600/20" />
+                      <div className="text-center z-10">
+                        <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 mx-auto">
+                          <div className="w-0 h-0 border-l-[16px] border-l-white border-t-[12px] border-t-transparent border-b-[12px] border-b-transparent ml-1" />
+                        </div>
+                        <p className="text-white/80 text-sm">Generate a commercial above to see it here</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
                 <div className="mt-6 p-6 bg-slate-50 rounded-xl max-w-4xl mx-auto">
                   <p className="text-sm text-slate-600 font-medium mb-2">Video Script:</p>
                   <p className="text-sm text-slate-700 whitespace-pre-line">{website.video_commercial?.script}</p>
