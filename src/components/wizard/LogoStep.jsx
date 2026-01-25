@@ -263,6 +263,9 @@ ${additionalInstructions ? `CUSTOM INSTRUCTIONS: ${additionalInstructions}` : ''
                   onChange={(e) => setCustomPrompt(e.target.value)}
                   className="border-slate-200"
                 />
+                <p className="text-xs text-slate-500">
+                  ✓ All logos generated with transparent background by default
+                </p>
               </div>
 
               <div className="space-y-3">
