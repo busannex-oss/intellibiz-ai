@@ -204,6 +204,34 @@ Make every word count. Focus on conversion and differentiation.`,
     setEditContent(typeof content === 'string' ? content : JSON.stringify(content, null, 2));
   };
 
+  const generateCommercialVideo = async (duration) => {
+    setIsGeneratingVideo(true);
+    
+    try {
+      const videoPrompt = `Create a professional, compelling ${duration}-second commercial video concept for "${project.business_name}". 
+      
+Business: ${project.business_name}
+Industry: ${project.industry}
+Description: ${project.description}
+UVP: ${project.unique_value_proposition || 'Premium service'}
+
+The video should be engaging, highlight key benefits, and end with a strong call-to-action. Include specific visual directions and pacing cues. Make it suitable for website, social media, and advertising platforms.`;
+
+      const { url } = await base44.integrations.Core.GenerateImage({
+        prompt: videoPrompt
+      });
+
+      const newVideoUrls = { ...videoUrls, [duration]: url };
+      setVideoUrls(newVideoUrls);
+      await onUpdate({ video_urls: newVideoUrls });
+      
+    } catch (error) {
+      console.error('Error generating video:', error);
+    } finally {
+      setIsGeneratingVideo(false);
+    }
+  };
+
   const website = project?.website_content;
   const colors = project?.brand_colors || { primary: '#6366f1', secondary: '#8b5cf6', accent: '#ec4899' };
 
