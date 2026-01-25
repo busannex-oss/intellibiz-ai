@@ -637,8 +637,8 @@ The video should be engaging, highlight key benefits, and end with a strong call
             <Button onClick={onPrev} variant="outline" className="h-12 px-6">
               <ChevronLeft className="w-5 h-5 mr-2" /> Back
             </Button>
-            <Button onClick={onNext} className="h-12 px-8 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 shadow-lg">
-              Continue to Social Media
+            <Button onClick={onNext} className="h-12 px-8 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg">
+              Complete Setup
               <ChevronRight className="w-5 h-5 ml-2" />
             </Button>
           </div>
