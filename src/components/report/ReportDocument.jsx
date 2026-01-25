@@ -71,8 +71,8 @@ export default function ReportDocument({ project }) {
               </div>
             </div>
           )}
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 tracking-tight">{project?.business_name}</h1>
-          <p className="text-xl text-white/90 mb-8 font-light">{project?.industry}</p>
+          <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 tracking-[-0.03em]">{project?.business_name}</h1>
+          <p className="text-xl text-white/90 mb-8 font-medium tracking-[-0.011em]">{project?.industry}</p>
           <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-10 py-5 border border-white/30">
             <p className="text-white text-xl font-semibold">Business Plan & Brand Kit</p>
           </div>
@@ -117,7 +117,7 @@ export default function ReportDocument({ project }) {
           <p className="text-xs text-slate-400 uppercase tracking-widest">{project?.business_name}</p>
         </div>
         
-        <h2 className="text-3xl font-bold text-slate-800 mb-8">Table of Contents</h2>
+        <h2 className="text-3xl font-bold text-slate-800 mb-8 tracking-[-0.02em]">Table of Contents</h2>
         <div className="space-y-4">
           {[
             { num: '01', title: 'Executive Summary', page: '3' },
@@ -128,8 +128,8 @@ export default function ReportDocument({ project }) {
             { num: '06', title: 'Digital Assets', page: '12' },
           ].map((item) => (
             <div key={item.num} className="flex items-center gap-4 p-3 rounded-lg hover:bg-slate-50 transition-colors">
-              <span className="text-2xl font-bold" style={{ color: brandColor }}>{item.num}</span>
-              <span className="flex-1 font-medium text-slate-700">{item.title}</span>
+              <span className="text-2xl font-bold tracking-[-0.02em]" style={{ color: brandColor }}>{item.num}</span>
+              <span className="flex-1 font-medium text-slate-700 tracking-[-0.011em]">{item.title}</span>
               <span className="text-slate-400 font-light">{item.page}</span>
             </div>
           ))}
@@ -149,11 +149,11 @@ export default function ReportDocument({ project }) {
         
         <div className="flex items-center gap-4 mb-8">
           <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-lg" style={{ backgroundColor: brandColor }}>01</div>
-          <h2 className="text-3xl font-bold text-slate-800">Executive Summary</h2>
+          <h2 className="text-3xl font-bold text-slate-800 tracking-[-0.02em]">Executive Summary</h2>
         </div>
         
         <div className="prose max-w-none">
-          <p className="text-lg text-slate-600 leading-relaxed mb-8">
+          <p className="text-lg text-slate-600 leading-[1.7] tracking-[-0.011em] mb-8">
             {project?.description || 'No description available.'}
           </p>
           

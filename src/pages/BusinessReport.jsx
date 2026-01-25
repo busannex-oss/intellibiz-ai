@@ -150,11 +150,11 @@ export default function BusinessReport() {
                 </Button>
               </Link>
               <div>
-                <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <h1 className="text-xl font-bold text-slate-900 flex items-center gap-2 tracking-[-0.02em]">
                   <FileText className="w-5 h-5 text-violet-600" />
                   Business Report
                 </h1>
-                <p className="text-sm text-slate-500">{project.business_name}</p>
+                <p className="text-sm text-slate-500 tracking-[-0.011em]">{project.business_name}</p>
               </div>
             </div>
 

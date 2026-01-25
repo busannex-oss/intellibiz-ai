@@ -154,10 +154,10 @@ OUTPUT: A profile image that clearly represents the brand with logo and brand co
       className="max-w-6xl mx-auto space-y-8"
     >
       <div className="text-center space-y-3">
-        <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-violet-700 to-indigo-700 bg-clip-text text-transparent">
+        <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-violet-700 to-indigo-700 bg-clip-text text-transparent tracking-[-0.02em]">
           Social Media Assets
         </h2>
-        <p className="text-slate-500 text-lg max-w-2xl mx-auto">
+        <p className="text-slate-500 text-lg max-w-2xl mx-auto leading-[1.6] tracking-[-0.011em]">
           Generate professional headers and profile images for your social media presence
         </p>
       </div>
