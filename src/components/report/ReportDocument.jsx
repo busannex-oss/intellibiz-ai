@@ -291,9 +291,16 @@ export default function ReportDocument({ project }) {
 
       {/* Business Plan */}
       <div className="p-12 border-b">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold" style={{ backgroundColor: brandColor }}>3</div>
-          <h2 className="text-2xl font-bold text-slate-800">Business Strategy</h2>
+        <div className="flex items-center justify-between mb-8">
+          {project?.logo_url && (
+            <img src={project.logo_url} alt="" className="w-10 h-10 object-contain" />
+          )}
+          <p className="text-xs text-slate-400 uppercase tracking-widest">Business Strategy</p>
+        </div>
+        
+        <div className="flex items-center gap-4 mb-8">
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-lg" style={{ backgroundColor: brandColor }}>03</div>
+          <h2 className="text-3xl font-bold text-slate-800">Business Strategy</h2>
         </div>
         
         {project?.business_plan ? (
@@ -347,9 +354,16 @@ export default function ReportDocument({ project }) {
 
       {/* Brand Identity Kit */}
       <div className="p-12 border-b">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold" style={{ backgroundColor: brandColor }}>6</div>
-          <h2 className="text-2xl font-bold text-slate-800">Brand Identity Kit</h2>
+        <div className="flex items-center justify-between mb-8">
+          {project?.logo_url && (
+            <img src={project.logo_url} alt="" className="w-10 h-10 object-contain" />
+          )}
+          <p className="text-xs text-slate-400 uppercase tracking-widest">Brand Identity</p>
+        </div>
+        
+        <div className="flex items-center gap-4 mb-8">
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-lg" style={{ backgroundColor: brandColor }}>05</div>
+          <h2 className="text-3xl font-bold text-slate-800">Brand Identity Kit</h2>
         </div>
         
         <div className="space-y-8">
@@ -357,12 +371,12 @@ export default function ReportDocument({ project }) {
           {project?.logo_url && (
             <div>
               <h3 className="text-lg font-semibold text-slate-800 mb-4">Primary Logo</h3>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-white border rounded-xl p-8 flex items-center justify-center">
-                  <img src={project.logo_url} alt="Logo" className="max-h-32 object-contain" />
+              <div className="grid grid-cols-2 gap-6">
+                <div className="bg-white border-2 border-slate-200 rounded-2xl p-10 flex items-center justify-center min-h-[200px]">
+                  <img src={project.logo_url} alt="Logo on light" className="max-w-[200px] max-h-[150px] object-contain" />
                 </div>
-                <div className="bg-slate-900 rounded-xl p-8 flex items-center justify-center">
-                  <img src={project.logo_url} alt="Logo on dark" className="max-h-32 object-contain" />
+                <div className="bg-slate-900 rounded-2xl p-10 flex items-center justify-center min-h-[200px]">
+                  <img src={project.logo_url} alt="Logo on dark" className="max-w-[200px] max-h-[150px] object-contain" />
                 </div>
               </div>
             </div>
@@ -427,9 +441,16 @@ export default function ReportDocument({ project }) {
 
       {/* Digital Assets */}
       <div className="p-12 border-b">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold" style={{ backgroundColor: brandColor }}>7</div>
-          <h2 className="text-2xl font-bold text-slate-800">Digital Assets</h2>
+        <div className="flex items-center justify-between mb-8">
+          {project?.logo_url && (
+            <img src={project.logo_url} alt="" className="w-10 h-10 object-contain" />
+          )}
+          <p className="text-xs text-slate-400 uppercase tracking-widest">Digital Assets</p>
+        </div>
+        
+        <div className="flex items-center gap-4 mb-8">
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-lg" style={{ backgroundColor: brandColor }}>06</div>
+          <h2 className="text-3xl font-bold text-slate-800">Digital Assets</h2>
         </div>
         
         {project?.social_media_assets?.length > 0 && (

@@ -51,34 +51,38 @@ export default function BusinessReport() {
         scale: 2,
         useCORS: true,
         logging: false,
-        windowWidth: 800
+        windowWidth: 800,
+        allowTaint: true
       });
 
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
-      const ratio = Math.min(pdfWidth / imgWidth, pdfHeight / imgHeight);
-      const imgX = (pdfWidth - imgWidth * ratio) / 2;
-
-      let heightLeft = imgHeight * ratio;
+      
+      // Calculate dimensions to fit page width
+      const imgWidth = pdfWidth;
+      const imgHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      let heightLeft = imgHeight;
       let position = 0;
 
-      pdf.addImage(imgData, 'PNG', imgX, position, imgWidth * ratio, imgHeight * ratio);
+      // Add first page
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
       heightLeft -= pdfHeight;
 
+      // Add additional pages for overflow
       while (heightLeft > 0) {
-        position = heightLeft - imgHeight * ratio;
+        position = heightLeft - imgHeight;
         pdf.addPage();
-        pdf.addImage(imgData, 'PNG', imgX, position, imgWidth * ratio, imgHeight * ratio);
+        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
         heightLeft -= pdfHeight;
       }
 
       pdf.save(`${project?.business_name || 'Business'}_Report.pdf`);
       toast.success('PDF downloaded successfully!');
     } catch (error) {
+      console.error('PDF generation error:', error);
       toast.error('Failed to generate PDF');
     } finally {
       setIsGenerating(false);

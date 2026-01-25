@@ -137,25 +137,35 @@ export default function BrandingKitDocument({ project }) {
         {project?.logo_url && (
           <div className="space-y-8">
             {/* Logo Variations */}
-            <div className="grid grid-cols-2 gap-6">
-              <div className="bg-white border-2 border-slate-100 rounded-2xl p-10 flex items-center justify-center">
-                <img src={project.logo_url} alt="Logo on light" className="max-h-32 object-contain" />
+            <div>
+              <h3 className="text-lg font-semibold text-slate-800 mb-4">Logo Variations</h3>
+              <p className="text-slate-600 text-sm mb-4">The logo should work on both light and dark backgrounds with proper spacing</p>
+              <div className="grid grid-cols-2 gap-6">
+                <div className="bg-white border-2 border-slate-200 rounded-2xl p-12 flex items-center justify-center min-h-[250px]">
+                  <img src={project.logo_url} alt="Logo on light background" className="max-w-[200px] max-h-[180px] object-contain" />
+                </div>
+                <div className="bg-slate-900 rounded-2xl p-12 flex items-center justify-center min-h-[250px]">
+                  <img src={project.logo_url} alt="Logo on dark background" className="max-w-[200px] max-h-[180px] object-contain" />
+                </div>
               </div>
-              <div className="bg-slate-900 rounded-2xl p-10 flex items-center justify-center">
-                <img src={project.logo_url} alt="Logo on dark" className="max-h-32 object-contain" />
-              </div>
+              <p className="text-xs text-slate-500 text-center mt-4">Always use the logo with transparent background and maintain proper spacing</p>
             </div>
 
             {/* Clear Space */}
             <div>
-              <h3 className="text-lg font-semibold text-slate-800 mb-4">Clear Space Requirements</h3>
-              <div className="bg-slate-50 rounded-xl p-8 text-center">
-                <div className="inline-block border-2 border-dashed border-slate-300 p-8 rounded-xl">
-                  <img src={project.logo_url} alt="" className="w-24 h-24 object-contain mx-auto" />
+              <h3 className="text-lg font-semibold text-slate-800 mb-4">Clear Space & Spacing Requirements</h3>
+              <div className="bg-slate-50 rounded-xl p-8">
+                <div className="text-center mb-4">
+                  <div className="inline-block border-2 border-dashed border-slate-400 p-12 rounded-xl bg-white">
+                    <img src={project.logo_url} alt="" className="w-32 h-32 object-contain mx-auto" />
+                  </div>
                 </div>
-                <p className="text-sm text-slate-500 mt-4">
-                  Maintain minimum clear space equal to the "X" height of the logo mark on all sides
-                </p>
+                <div className="space-y-2 text-sm text-slate-600">
+                  <p>✓ Always maintain adequate clear space around the logo (minimum 20% of logo height on all sides)</p>
+                  <p>✓ Never crop or crowd the logo against other elements</p>
+                  <p>✓ Ensure logo has breathing room in all applications</p>
+                  <p>✓ Use transparent PNG format to prevent white boxes or backgrounds</p>
+                </div>
               </div>
             </div>
 
