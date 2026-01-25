@@ -71,16 +71,6 @@ export default function BusinessPlanDocument({ project }) {
           </p>
         </div>
         
-        <div className="absolute bottom-8 right-8 opacity-20">
-          {project?.logo_url && (
-            <img 
-              src={project.logo_url} 
-              alt="" 
-              className="w-12 h-12 object-contain filter drop-shadow-lg"
-              onError={(e) => e.target.style.display = 'none'}
-            />
-          )}
-        </div>
       </div>
 
       {/* Table of Contents */}
