@@ -37,17 +37,7 @@ export default function BusinessPlanDocument({ project }) {
           <div className="absolute bottom-20 right-20 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
         </div>
         
-        <div className="absolute top-8 left-8 opacity-30">
-          {project?.logo_url && (
-            <img 
-              src={project.logo_url} 
-              alt="" 
-              className="w-16 h-16 object-contain filter drop-shadow-lg"
-              onError={(e) => e.target.style.display = 'none'}
-            />
-          )}
-        </div>
-        
+
         <div className="relative z-10">
           {project?.logo_url ? (
             <div className="w-48 h-48 mx-auto mb-8 rounded-3xl bg-white/95 backdrop-blur-sm p-8 shadow-2xl flex items-center justify-center">
