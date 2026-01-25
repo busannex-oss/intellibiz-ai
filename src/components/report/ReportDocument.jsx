@@ -40,19 +40,36 @@ export default function ReportDocument({ project }) {
         </div>
         
         {/* Top logo watermark */}
-        <div className="absolute top-8 left-8">
+        <div className="absolute top-8 left-8 opacity-30">
           {project?.logo_url && (
-            <img src={project.logo_url} alt="" className="w-16 h-16 object-contain rounded-lg bg-white/10 p-2" />
+            <img 
+              src={project.logo_url} 
+              alt="" 
+              className="w-16 h-16 object-contain filter drop-shadow-lg"
+              onError={(e) => e.target.style.display = 'none'}
+            />
           )}
         </div>
         
         <div className="relative z-10">
-          {project?.logo_url && (
-            <img 
-              src={project.logo_url} 
-              alt={project.business_name} 
-              className="w-40 h-40 object-contain mb-8 rounded-3xl bg-white p-6 shadow-2xl mx-auto"
-            />
+          {project?.logo_url ? (
+            <div className="w-48 h-48 mx-auto mb-8 rounded-3xl bg-white/95 backdrop-blur-sm p-8 shadow-2xl flex items-center justify-center">
+              <img 
+                src={project.logo_url} 
+                alt={project.business_name}
+                className="max-w-full max-h-full object-contain"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.parentElement.classList.add('bg-white/10');
+                }}
+              />
+            </div>
+          ) : (
+            <div className="w-48 h-48 mx-auto mb-8 rounded-3xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
+              <div className="text-white/50 text-center">
+                <div className="text-4xl mb-2">{project?.business_name?.[0] || 'B'}</div>
+              </div>
+            </div>
           )}
           <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 tracking-tight">{project?.business_name}</h1>
           <p className="text-xl text-white/90 mb-8 font-light">{project?.industry}</p>
@@ -68,9 +85,14 @@ export default function ReportDocument({ project }) {
         </div>
         
         {/* Bottom logo */}
-        <div className="absolute bottom-8 right-8">
+        <div className="absolute bottom-8 right-8 opacity-20">
           {project?.logo_url && (
-            <img src={project.logo_url} alt="" className="w-12 h-12 object-contain opacity-50" />
+            <img 
+              src={project.logo_url} 
+              alt="" 
+              className="w-12 h-12 object-contain filter drop-shadow-lg"
+              onError={(e) => e.target.style.display = 'none'}
+            />
           )}
         </div>
       </div>
@@ -78,8 +100,17 @@ export default function ReportDocument({ project }) {
       {/* Table of Contents */}
       <div className="p-12 border-b">
         <div className="flex items-center justify-between mb-8">
-          {project?.logo_url && (
-            <img src={project.logo_url} alt="" className="w-10 h-10 object-contain" />
+          {project?.logo_url ? (
+            <img 
+              src={project.logo_url} 
+              alt="" 
+              className="w-10 h-10 object-contain"
+              onError={(e) => e.target.style.display = 'none'}
+            />
+          ) : (
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center text-slate-500 font-bold text-sm">
+              {project?.business_name?.[0] || 'B'}
+            </div>
           )}
           <p className="text-xs text-slate-400 uppercase tracking-widest">{project?.business_name}</p>
         </div>

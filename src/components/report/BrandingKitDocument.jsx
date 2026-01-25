@@ -51,18 +51,33 @@ export default function BrandingKitDocument({ project }) {
         className="min-h-[800px] flex flex-col justify-center items-center text-center p-12 relative"
         style={{ background: `linear-gradient(135deg, ${brandColor} 0%, ${secondaryColor} 100%)` }}
       >
-        <div className="absolute top-8 left-8">
+        <div className="absolute top-8 left-8 opacity-30">
           {project?.logo_url && (
-            <img src={project.logo_url} alt="" className="w-16 h-16 object-contain rounded-lg bg-white/10 p-2" />
+            <img 
+              src={project.logo_url} 
+              alt="" 
+              className="w-16 h-16 object-contain filter drop-shadow-lg"
+              onError={(e) => e.target.style.display = 'none'}
+            />
           )}
         </div>
         
-        {project?.logo_url && (
-          <img 
-            src={project.logo_url} 
-            alt={project.business_name} 
-            className="w-40 h-40 object-contain mb-8 rounded-2xl bg-white p-6 shadow-2xl"
-          />
+        {project?.logo_url ? (
+          <div className="w-48 h-48 mb-8 rounded-3xl bg-white p-8 shadow-2xl flex items-center justify-center">
+            <img 
+              src={project.logo_url} 
+              alt={project.business_name} 
+              className="max-w-full max-h-full object-contain"
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.parentElement.classList.add('bg-white/10');
+              }}
+            />
+          </div>
+        ) : (
+          <div className="w-48 h-48 mb-8 rounded-3xl bg-white/10 flex items-center justify-center">
+            <div className="text-white text-4xl font-bold">{project?.business_name?.[0] || 'B'}</div>
+          </div>
         )}
         <h1 className="text-5xl font-bold text-white mb-4">{project?.business_name}</h1>
         <div className="bg-white/20 backdrop-blur-sm rounded-xl px-10 py-5 mb-8">
@@ -73,9 +88,14 @@ export default function BrandingKitDocument({ project }) {
           Version 1.0 • {format(new Date(), 'MMMM yyyy')}
         </p>
         
-        <div className="absolute bottom-8 right-8">
+        <div className="absolute bottom-8 right-8 opacity-20">
           {project?.logo_url && (
-            <img src={project.logo_url} alt="" className="w-12 h-12 object-contain opacity-50" />
+            <img 
+              src={project.logo_url} 
+              alt="" 
+              className="w-12 h-12 object-contain filter drop-shadow-lg"
+              onError={(e) => e.target.style.display = 'none'}
+            />
           )}
         </div>
       </div>
