@@ -151,29 +151,38 @@ export default function CreateBusiness() {
                 onPrev={handlePrev}
               />
             )}
-            {currentStep === 7 && (
+            {currentStep === 6 && (
               <ResourcesStep
-                key="step7"
+                key="step6"
                 project={project}
                 projectId={projectId}
                 onNext={handleNext}
                 onPrev={handlePrev}
               />
             )}
-            {currentStep === 8 && (
+            {currentStep === 7 && (
               <KnowledgeBaseStep
-                key="step8"
+                key="step7"
                 project={project}
                 onUpdate={handleUpdate}
                 onNext={handleNext}
                 onBack={handlePrev}
               />
             )}
-            {currentStep === 9 && (
+            {currentStep === 8 && (
               <NewsletterStep
+                key="step8"
+                project={project}
+                onUpdate={handleUpdate}
+                onPrev={handlePrev}
+              />
+            )}
+            {currentStep === 9 && (
+              <WebsiteStep
                 key="step9"
                 project={project}
                 onUpdate={handleUpdate}
+                onNext={handleNext}
                 onPrev={handlePrev}
               />
             )}
