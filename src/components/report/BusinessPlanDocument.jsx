@@ -151,12 +151,7 @@ export default function BusinessPlanDocument({ project }) {
 
       {/* Market Research */}
       <div className="p-12 border-b">
-        <div className="flex items-center justify-between mb-8">
-          {project?.logo_url && (
-            <div className="w-14 h-14 flex items-center justify-center p-2">
-              <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
-            </div>
-          )}
+        <div className="mb-8">
           <p className="text-xs text-slate-400 uppercase tracking-widest">Market Analysis</p>
         </div>
         
