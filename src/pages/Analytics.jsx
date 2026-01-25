@@ -13,6 +13,9 @@ import MetricsOverview from '../components/analytics/MetricsOverview';
 import TrafficChart from '../components/analytics/TrafficChart';
 import ConversionChart from '../components/analytics/ConversionChart';
 import BehaviorMetrics from '../components/analytics/BehaviorMetrics';
+import AgentPerformance from '../components/analytics/AgentPerformance';
+import AnomaliesDetection from '../components/analytics/AnomaliesDetection';
+import BusinessInsights from '../components/analytics/BusinessInsights';
 
 export default function Analytics() {
   const [selectedProject, setSelectedProject] = useState('all');
@@ -21,6 +24,7 @@ export default function Analytics() {
     to: new Date()
   });
   const [timeframe, setTimeframe] = useState('30d');
+  const [activeView, setActiveView] = useState('overview');
 
   const { data: projects = [] } = useQuery({
     queryKey: ['projects'],
@@ -138,24 +142,47 @@ export default function Analytics() {
         {/* Metrics Overview */}
         <MetricsOverview data={filteredData} isLoading={isLoading} />
 
-        {/* Charts */}
-        <Tabs defaultValue="traffic" className="space-y-4">
+        {/* Main View Tabs */}
+        <Tabs value={activeView} onValueChange={setActiveView} className="space-y-4">
           <TabsList className="bg-white border border-slate-200 p-1">
-            <TabsTrigger value="traffic">Traffic</TabsTrigger>
-            <TabsTrigger value="conversions">Conversions</TabsTrigger>
-            <TabsTrigger value="behavior">Behavior</TabsTrigger>
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="agents">Agent Performance</TabsTrigger>
+            <TabsTrigger value="anomalies">Anomalies & Alerts</TabsTrigger>
+            <TabsTrigger value="insights">Business Insights</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="traffic" className="space-y-4">
-            <TrafficChart data={filteredData} dateRange={dateRange} />
+          <TabsContent value="overview" className="space-y-4">
+            <Tabs defaultValue="traffic" className="space-y-4">
+              <TabsList className="bg-white border border-slate-200 p-1">
+                <TabsTrigger value="traffic">Traffic</TabsTrigger>
+                <TabsTrigger value="conversions">Conversions</TabsTrigger>
+                <TabsTrigger value="behavior">Behavior</TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="traffic" className="space-y-4">
+                <TrafficChart data={filteredData} dateRange={dateRange} />
+              </TabsContent>
+
+              <TabsContent value="conversions" className="space-y-4">
+                <ConversionChart data={filteredData} />
+              </TabsContent>
+
+              <TabsContent value="behavior" className="space-y-4">
+                <BehaviorMetrics data={filteredData} />
+              </TabsContent>
+            </Tabs>
           </TabsContent>
 
-          <TabsContent value="conversions" className="space-y-4">
-            <ConversionChart data={filteredData} />
+          <TabsContent value="agents" className="space-y-4">
+            <AgentPerformance />
           </TabsContent>
 
-          <TabsContent value="behavior" className="space-y-4">
-            <BehaviorMetrics data={filteredData} />
+          <TabsContent value="anomalies" className="space-y-4">
+            <AnomaliesDetection />
+          </TabsContent>
+
+          <TabsContent value="insights" className="space-y-4">
+            <BusinessInsights />
           </TabsContent>
         </Tabs>
       </div>
