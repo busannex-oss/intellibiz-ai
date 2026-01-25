@@ -104,7 +104,9 @@ export default function BrandingKitDocument({ project }) {
       <div className="p-12 border-b">
         <div className="flex items-center justify-between mb-8">
           {project?.logo_url && (
-            <img src={project.logo_url} alt="" className="w-10 h-10 object-contain" />
+            <div className="w-14 h-14 flex items-center justify-center p-2">
+              <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
+            </div>
           )}
           <p className="text-xs text-slate-400 uppercase tracking-widest">Brand Guidelines</p>
         </div>
@@ -127,7 +129,9 @@ export default function BrandingKitDocument({ project }) {
       <div className="p-12 border-b">
         <div className="flex items-center justify-between mb-8">
           {project?.logo_url && (
-            <img src={project.logo_url} alt="" className="w-10 h-10 object-contain" />
+            <div className="w-14 h-14 flex items-center justify-center p-2">
+              <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
+            </div>
           )}
           <p className="text-xs text-slate-400 uppercase tracking-widest">Logo Guidelines</p>
         </div>
@@ -191,7 +195,9 @@ export default function BrandingKitDocument({ project }) {
       <div className="p-12 border-b">
         <div className="flex items-center justify-between mb-8">
           {project?.logo_url && (
-            <img src={project.logo_url} alt="" className="w-10 h-10 object-contain" />
+            <div className="w-14 h-14 flex items-center justify-center p-2">
+              <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
+            </div>
           )}
           <p className="text-xs text-slate-400 uppercase tracking-widest">Color System</p>
         </div>
@@ -250,7 +256,9 @@ export default function BrandingKitDocument({ project }) {
       <div className="p-12 border-b">
         <div className="flex items-center justify-between mb-8">
           {project?.logo_url && (
-            <img src={project.logo_url} alt="" className="w-10 h-10 object-contain" />
+            <div className="w-14 h-14 flex items-center justify-center p-2">
+              <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
+            </div>
           )}
           <p className="text-xs text-slate-400 uppercase tracking-widest">Usage Rules</p>
         </div>
@@ -301,7 +309,9 @@ export default function BrandingKitDocument({ project }) {
         <div className="p-12 border-b">
           <div className="flex items-center justify-between mb-8">
             {project?.logo_url && (
-              <img src={project.logo_url} alt="" className="w-10 h-10 object-contain" />
+              <div className="w-14 h-14 flex items-center justify-center p-2">
+                <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
+              </div>
             )}
             <p className="text-xs text-slate-400 uppercase tracking-widest">Voice & Tone</p>
           </div>
@@ -335,7 +345,9 @@ export default function BrandingKitDocument({ project }) {
       <div className="p-12" style={{ backgroundColor: `${brandColor}10` }}>
         <div className="flex items-center justify-between">
           {project?.logo_url && (
-            <img src={project.logo_url} alt="" className="w-16 h-16 object-contain" />
+            <div className="w-20 h-20 flex items-center justify-center p-3">
+              <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
+            </div>
           )}
           <div className="text-right">
             <p className="text-sm text-slate-500 mb-1">

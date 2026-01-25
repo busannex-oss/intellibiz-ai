@@ -101,14 +101,16 @@ export default function ReportDocument({ project }) {
       <div className="p-12 border-b">
         <div className="flex items-center justify-between mb-8">
           {project?.logo_url ? (
-            <img 
-              src={project.logo_url} 
-              alt="" 
-              className="w-10 h-10 object-contain"
-              onError={(e) => e.target.style.display = 'none'}
-            />
+            <div className="w-14 h-14 flex items-center justify-center p-2">
+              <img 
+                src={project.logo_url} 
+                alt="" 
+                className="max-w-full max-h-full object-contain"
+                onError={(e) => e.target.style.display = 'none'}
+              />
+            </div>
           ) : (
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center text-slate-500 font-bold text-sm">
+            <div className="w-14 h-14 rounded-lg bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center text-slate-500 font-bold text-sm">
               {project?.business_name?.[0] || 'B'}
             </div>
           )}
@@ -138,7 +140,9 @@ export default function ReportDocument({ project }) {
       <div className="p-12 border-b">
         <div className="flex items-center justify-between mb-8">
           {project?.logo_url && (
-            <img src={project.logo_url} alt="" className="w-10 h-10 object-contain" />
+            <div className="w-14 h-14 flex items-center justify-center p-2">
+              <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
+            </div>
           )}
           <p className="text-xs text-slate-400 uppercase tracking-widest">Executive Summary</p>
         </div>
@@ -191,7 +195,9 @@ export default function ReportDocument({ project }) {
       <div className="p-12 border-b">
         <div className="flex items-center justify-between mb-8">
           {project?.logo_url && (
-            <img src={project.logo_url} alt="" className="w-10 h-10 object-contain" />
+            <div className="w-14 h-14 flex items-center justify-center p-2">
+              <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
+            </div>
           )}
           <p className="text-xs text-slate-400 uppercase tracking-widest">Market Analysis</p>
         </div>
@@ -293,7 +299,9 @@ export default function ReportDocument({ project }) {
       <div className="p-12 border-b">
         <div className="flex items-center justify-between mb-8">
           {project?.logo_url && (
-            <img src={project.logo_url} alt="" className="w-10 h-10 object-contain" />
+            <div className="w-14 h-14 flex items-center justify-center p-2">
+              <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
+            </div>
           )}
           <p className="text-xs text-slate-400 uppercase tracking-widest">Business Strategy</p>
         </div>
@@ -356,7 +364,9 @@ export default function ReportDocument({ project }) {
       <div className="p-12 border-b">
         <div className="flex items-center justify-between mb-8">
           {project?.logo_url && (
-            <img src={project.logo_url} alt="" className="w-10 h-10 object-contain" />
+            <div className="w-14 h-14 flex items-center justify-center p-2">
+              <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
+            </div>
           )}
           <p className="text-xs text-slate-400 uppercase tracking-widest">Brand Identity</p>
         </div>
@@ -443,7 +453,9 @@ export default function ReportDocument({ project }) {
       <div className="p-12 border-b">
         <div className="flex items-center justify-between mb-8">
           {project?.logo_url && (
-            <img src={project.logo_url} alt="" className="w-10 h-10 object-contain" />
+            <div className="w-14 h-14 flex items-center justify-center p-2">
+              <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
+            </div>
           )}
           <p className="text-xs text-slate-400 uppercase tracking-widest">Digital Assets</p>
         </div>
@@ -497,7 +509,9 @@ export default function ReportDocument({ project }) {
       <div className="p-12" style={{ background: `linear-gradient(135deg, ${brandColor}15 0%, ${secondaryColor}15 100%)` }}>
         <div className="flex items-center justify-between">
           {project?.logo_url && (
-            <img src={project.logo_url} alt="" className="w-16 h-16 object-contain" />
+            <div className="w-20 h-20 flex items-center justify-center p-3">
+              <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
+            </div>
           )}
           <div className="text-right">
             <p className="text-sm text-slate-600 font-medium mb-1">

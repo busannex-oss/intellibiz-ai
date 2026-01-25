@@ -202,11 +202,17 @@ export default function Dashboard() {
                       <div className="flex items-start justify-between">
                         <div className="flex items-center gap-4">
                           {project.logo_url ? (
-                            <img
-                              src={project.logo_url}
-                              alt={project.business_name}
-                              className="w-14 h-14 rounded-xl object-cover shadow-lg ring-2 ring-white/10"
-                            />
+                            <div className="w-14 h-14 rounded-xl bg-white/5 flex items-center justify-center p-2 shadow-lg">
+                              <img
+                                src={project.logo_url}
+                                alt={project.business_name}
+                                className="max-w-full max-h-full object-contain"
+                                onError={(e) => {
+                                  e.target.style.display = 'none';
+                                  e.target.parentElement.innerHTML = `<div class="w-full h-full rounded-xl flex items-center justify-center text-white font-bold text-xl" style="background-color: ${primaryColor}">${project.business_name?.[0]?.toUpperCase() || 'B'}</div>`;
+                                }}
+                              />
+                            </div>
                           ) : (
                             <div 
                               className="w-14 h-14 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg"
