@@ -36,12 +36,19 @@ export default function BusinessReport() {
     queryKey: ['project', projectId],
     queryFn: async () => {
       if (!projectId) throw new Error('No project ID provided');
-      const projects = await base44.entities.BusinessProject.filter({ id: projectId });
-      if (!projects || projects.length === 0) throw new Error('Project not found');
-      return projects[0];
+      try {
+        const projects = await base44.entities.BusinessProject.filter({ id: projectId });
+        if (!projects || projects.length === 0) throw new Error('Project not found');
+        return projects[0];
+      } catch (err) {
+        console.error('Failed to fetch project:', err);
+        toast.error('Failed to load project. Please check your connection.');
+        throw err;
+      }
     },
     enabled: !!projectId,
-    retry: 1
+    retry: 2,
+    retryDelay: 1000
   });
 
   const generatePDF = async () => {
