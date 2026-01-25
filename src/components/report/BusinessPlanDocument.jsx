@@ -75,21 +75,7 @@ export default function BusinessPlanDocument({ project }) {
 
       {/* Table of Contents */}
       <div className="p-12 border-b">
-        <div className="flex items-center justify-between mb-8">
-          {project?.logo_url ? (
-            <div className="w-14 h-14 flex items-center justify-center p-2">
-              <img 
-                src={project.logo_url} 
-                alt="" 
-                className="max-w-full max-h-full object-contain"
-                onError={(e) => e.target.style.display = 'none'}
-              />
-            </div>
-          ) : (
-            <div className="w-14 h-14 rounded-lg bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center text-slate-500 font-bold text-sm">
-              {project?.business_name?.[0] || 'B'}
-            </div>
-          )}
+        <div className="mb-8">
           <p className="text-xs text-slate-400 uppercase tracking-widest">{project?.business_name}</p>
         </div>
         
