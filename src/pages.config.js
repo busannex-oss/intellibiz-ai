@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import Omnichannel from './pages/Omnichannel';
 import PhoneSystem from './pages/PhoneSystem';
 import WhiteLabel from './pages/WhiteLabel';
+import Tasks from './pages/Tasks';
 import __Layout from './Layout.jsx';
 
 
@@ -18,6 +19,7 @@ export const PAGES = {
     "Omnichannel": Omnichannel,
     "PhoneSystem": PhoneSystem,
     "WhiteLabel": WhiteLabel,
+    "Tasks": Tasks,
 }
 
 export const pagesConfig = {
