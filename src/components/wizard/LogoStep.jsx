@@ -4,15 +4,20 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, Sparkles, RefreshCw, ChevronRight, ChevronLeft, Download, Palette } from 'lucide-react';
+import { Badge } from "@/components/ui/badge";
+import { Loader2, Sparkles, RefreshCw, ChevronRight, ChevronLeft, Download, Palette, Save, Eye, EyeOff, Trash2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { motion } from 'framer-motion';
 import BrandColorsStep from './BrandColorsStep';
+import { toast } from 'sonner';
 
 export default function LogoStep({ project, onUpdate, onNext, onPrev }) {
   const [isGenerating, setIsGenerating] = useState(false);
   const [customPrompt, setCustomPrompt] = useState('');
   const [activeTab, setActiveTab] = useState('logo');
+  const [currentLogoUrl, setCurrentLogoUrl] = useState(project?.logo_url || null);
+  
+  const savedLogos = project?.saved_logos || [];
 
   const generateLogo = async (additionalInstructions = '') => {
     setIsGenerating(true);
@@ -58,10 +63,8 @@ OUTPUT: A single logo mark with transparent background that can be placed on lig
       });
       
       if (response?.url) {
-        await onUpdate({
-          logo_url: response.url,
-          logo_prompt: basePrompt
-        });
+        setCurrentLogoUrl(response.url);
+        toast.success('Logo generated! Click "Save Logo" to add it to your collection.');
       } else {
         throw new Error('No logo URL returned');
       }
@@ -69,10 +72,56 @@ OUTPUT: A single logo mark with transparent background that can be placed on lig
       setCustomPrompt('');
     } catch (error) {
       console.error('Logo generation failed:', error);
-      alert('Failed to generate logo. Please try again.');
+      toast.error('Failed to generate logo. Please try again.');
     } finally {
       setIsGenerating(false);
     }
+  };
+
+  const saveLogo = async () => {
+    if (!currentLogoUrl) return;
+    
+    const newLogo = {
+      id: Date.now().toString(),
+      url: currentLogoUrl,
+      prompt: project?.logo_prompt || '',
+      published: false,
+      created_at: new Date().toISOString()
+    };
+    
+    const updatedLogos = [...savedLogos, newLogo];
+    await onUpdate({ saved_logos: updatedLogos });
+    toast.success('Logo saved to your collection!');
+  };
+
+  const togglePublished = async (logoId) => {
+    const updatedLogos = savedLogos.map(logo => ({
+      ...logo,
+      published: logo.id === logoId ? !logo.published : false
+    }));
+    
+    const publishedLogo = updatedLogos.find(l => l.published);
+    await onUpdate({
+      saved_logos: updatedLogos,
+      logo_url: publishedLogo?.url || null,
+      logo_prompt: publishedLogo?.prompt || null
+    });
+    
+    toast.success(publishedLogo ? 'Logo published!' : 'Logo unpublished');
+  };
+
+  const deleteLogo = async (logoId) => {
+    const logoToDelete = savedLogos.find(l => l.id === logoId);
+    const updatedLogos = savedLogos.filter(logo => logo.id !== logoId);
+    
+    const updates = { saved_logos: updatedLogos };
+    if (logoToDelete?.published) {
+      updates.logo_url = null;
+      updates.logo_prompt = null;
+    }
+    
+    await onUpdate(updates);
+    toast.success('Logo deleted');
   };
 
   return (
@@ -112,25 +161,18 @@ OUTPUT: A single logo mark with transparent background that can be placed on lig
                       <p className="text-slate-500 font-medium">Creating your logo...</p>
                       <p className="text-xs text-slate-400">This may take 10-15 seconds</p>
                     </div>
-                  ) : project?.logo_url ? (
-                    <>
-                      <img
-                        src={project.logo_url}
-                        alt={`${project.business_name} logo`}
-                        className="max-w-[80%] max-h-[80%] object-contain"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.parentElement.innerHTML += '<div class="text-red-500">Failed to load logo</div>';
-                        }}
-                      />
-                      {/* Dark background preview toggle */}
-                      <div className="absolute bottom-4 right-4 bg-white/90 backdrop-blur-sm rounded-lg p-2 shadow-lg">
-                        <div className="flex gap-2">
-                          <div className="w-6 h-6 bg-white border border-slate-200 rounded cursor-pointer" title="Light" />
-                          <div className="w-6 h-6 bg-slate-900 rounded cursor-pointer" title="Dark" />
-                        </div>
-                      </div>
-                    </>
+                  ) : currentLogoUrl ? (
+                   <>
+                     <img
+                       src={currentLogoUrl}
+                       alt={`${project.business_name} logo`}
+                       className="max-w-[80%] max-h-[80%] object-contain"
+                       onError={(e) => {
+                         e.target.style.display = 'none';
+                         e.target.parentElement.innerHTML += '<div class="text-red-500">Failed to load logo</div>';
+                       }}
+                     />
+                   </>
                   ) : (
                     <div className="text-center p-8">
                       <div className="w-24 h-24 rounded-full bg-slate-200 mx-auto mb-4 flex items-center justify-center">
@@ -179,60 +221,103 @@ OUTPUT: A single logo mark with transparent background that can be placed on lig
               </div>
 
               <div className="space-y-3">
-                {!project?.logo_url ? (
+                <Button
+                  onClick={() => generateLogo(customPrompt)}
+                  disabled={isGenerating}
+                  className="w-full h-12 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700"
+                >
+                  {isGenerating ? (
+                    <>
+                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                      Generating...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-5 h-5 mr-2" />
+                      {currentLogoUrl ? 'Generate New' : 'Generate Logo'}
+                    </>
+                  )}
+                </Button>
+                
+                {currentLogoUrl && !savedLogos.find(l => l.url === currentLogoUrl) && (
                   <Button
-                    onClick={() => generateLogo(customPrompt)}
-                    disabled={isGenerating}
-                    className="w-full h-12 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700"
+                    onClick={saveLogo}
+                    className="w-full h-12 bg-emerald-600 hover:bg-emerald-700"
                   >
-                    {isGenerating ? (
-                      <>
-                        <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                        Generating...
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="w-5 h-5 mr-2" />
-                        Generate Logo
-                      </>
-                    )}
+                    <Save className="w-5 h-5 mr-2" />
+                    Save Logo
                   </Button>
-                ) : (
-                  <>
-                    <Button
-                      onClick={() => generateLogo(customPrompt)}
-                      disabled={isGenerating}
-                      variant="outline"
-                      className="w-full h-12 border-slate-200"
-                    >
-                      {isGenerating ? (
-                        <>
-                          <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                          Regenerating...
-                        </>
-                      ) : (
-                        <>
-                          <RefreshCw className="w-5 h-5 mr-2" />
-                          Regenerate Logo
-                        </>
-                      )}
+                )}
+                
+                {currentLogoUrl && (
+                  <a
+                    href={currentLogoUrl}
+                    download={`${project.business_name}-logo.png`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button variant="outline" className="w-full h-12 border-slate-200">
+                      <Download className="w-5 h-5 mr-2" />
+                      Download Logo
                     </Button>
-                    <a
-                      href={project.logo_url}
-                      download={`${project.business_name}-logo.png`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <Button variant="outline" className="w-full h-12 border-slate-200">
-                        <Download className="w-5 h-5 mr-2" />
-                        Download Logo
-                      </Button>
-                    </a>
-                  </>
+                  </a>
                 )}
               </div>
             </CardContent>
           </Card>
+
+          {/* Saved Logos */}
+          {savedLogos.length > 0 && (
+            <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="text-lg">Saved Logos ({savedLogos.length})</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {savedLogos.map((logo) => (
+                  <div 
+                    key={logo.id} 
+                    className="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border-2 hover:border-violet-200 transition-colors"
+                    style={{ borderColor: logo.published ? '#7c3aed' : 'transparent' }}
+                  >
+                    <div className="w-16 h-16 bg-white rounded-lg flex items-center justify-center p-2 shadow-sm">
+                      <img src={logo.url} alt="Logo" className="max-w-full max-h-full object-contain" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-sm font-medium text-slate-700 truncate">
+                          Logo {savedLogos.indexOf(logo) + 1}
+                        </span>
+                        {logo.published && (
+                          <Badge className="bg-violet-600">Published</Badge>
+                        )}
+                      </div>
+                      <p className="text-xs text-slate-400">
+                        {new Date(logo.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        size="sm"
+                        variant={logo.published ? "default" : "outline"}
+                        onClick={() => togglePublished(logo.id)}
+                        className={logo.published ? "bg-violet-600" : ""}
+                      >
+                        {logo.published ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => deleteLogo(logo.id)}
+                        className="text-red-600 hover:bg-red-50"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          )}
 
           <div className="flex justify-between">
             <Button
