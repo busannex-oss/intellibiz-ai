@@ -9,9 +9,11 @@ import { motion } from 'framer-motion';
 
 export default function WebsiteStep({ project, onUpdate, onNext, onPrev }) {
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isGeneratingVideo, setIsGeneratingVideo] = useState(false);
   const [editingSection, setEditingSection] = useState(null);
   const [editContent, setEditContent] = useState('');
   const [viewMode, setViewMode] = useState('preview');
+  const [videoUrls, setVideoUrls] = useState(project?.video_urls || {});
 
   const generateWebsite = async () => {
     setIsGenerating(true);
