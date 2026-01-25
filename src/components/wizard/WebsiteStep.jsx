@@ -65,9 +65,12 @@ Sections needed:
 2. About Section (trust-building, differentiation focus)
 3. Services/Products Section (4 key offerings that beat competitors)
 4. Features/Benefits Section (6 benefits that address competitor weaknesses)
-5. Testimonials (3 realistic testimonials addressing common objections)
-6. Call to Action Section (urgency-focused)
-7. Footer content
+5. Video Commercial Section (compelling video description for AI generation, 30-60 seconds concept)
+6. CEO Message Section (optional inspiring message from CEO, include name and title)
+7. Testimonials (3 realistic testimonials addressing common objections)
+8. Newsletter Section (compelling signup headline and description)
+9. Call to Action Section (urgency-focused)
+10. Footer content
 
 Make every word count. Focus on conversion and differentiation.`,
       response_json_schema: {
@@ -103,6 +106,22 @@ Make every word count. Focus on conversion and differentiation.`,
               }
             }
           },
+          video_commercial: {
+            type: "object",
+            properties: {
+              concept: { type: "string" },
+              script: { type: "string" },
+              duration: { type: "string" }
+            }
+          },
+          ceo_message: {
+            type: "object",
+            properties: {
+              name: { type: "string" },
+              title: { type: "string" },
+              message: { type: "string" }
+            }
+          },
           testimonials: {
             type: "array",
             items: {
@@ -112,6 +131,15 @@ Make every word count. Focus on conversion and differentiation.`,
                 role: { type: "string" },
                 quote: { type: "string" }
               }
+            }
+          },
+          newsletter: {
+            type: "object",
+            properties: {
+              headline: { type: "string" },
+              description: { type: "string" },
+              placeholder: { type: "string" },
+              button_text: { type: "string" }
             }
           },
           cta: {
@@ -157,6 +185,12 @@ Make every word count. Focus on conversion and differentiation.`,
       updatedContent.testimonials = JSON.parse(editContent);
     } else if (section === 'cta') {
       updatedContent.cta = JSON.parse(editContent);
+    } else if (section === 'video_commercial') {
+      updatedContent.video_commercial = JSON.parse(editContent);
+    } else if (section === 'ceo_message') {
+      updatedContent.ceo_message = JSON.parse(editContent);
+    } else if (section === 'newsletter') {
+      updatedContent.newsletter = JSON.parse(editContent);
     }
     
     await onUpdate({ website_content: updatedContent });
@@ -313,12 +347,50 @@ Make every word count. Focus on conversion and differentiation.`,
                 </div>
               </div>
 
+              {/* Video Commercial Preview */}
+              <div className="p-12 md:p-16 bg-white">
+                <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-4 text-center">See Us In Action</h2>
+                <p className="text-slate-600 mb-8 text-center max-w-2xl mx-auto">{website.video_commercial?.concept}</p>
+                <div className="max-w-4xl mx-auto aspect-video bg-slate-900 rounded-xl flex items-center justify-center relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-violet-600/20 to-indigo-600/20" />
+                  <div className="text-center z-10">
+                    <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center mb-4 mx-auto">
+                      <div className="w-0 h-0 border-l-[16px] border-l-white border-t-[12px] border-t-transparent border-b-[12px] border-b-transparent ml-1" />
+                    </div>
+                    <p className="text-white/80 text-sm">{website.video_commercial?.duration} Commercial</p>
+                  </div>
+                </div>
+                <div className="mt-6 p-6 bg-slate-50 rounded-xl max-w-4xl mx-auto">
+                  <p className="text-sm text-slate-600 font-medium mb-2">Video Script:</p>
+                  <p className="text-sm text-slate-700 whitespace-pre-line">{website.video_commercial?.script}</p>
+                </div>
+              </div>
+
+              {/* CEO Message Preview */}
+              {website.ceo_message && (
+                <div className="p-12 md:p-16 bg-slate-50">
+                  <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-8 text-center">A Message From Our CEO</h2>
+                  <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-8 items-center">
+                    <div className="w-48 h-48 rounded-2xl bg-gradient-to-br from-slate-200 to-slate-300 flex-shrink-0 flex items-center justify-center">
+                      <div className="text-6xl text-slate-500">{website.ceo_message.name?.charAt(0)}</div>
+                    </div>
+                    <div>
+                      <p className="text-lg text-slate-700 leading-relaxed mb-4 italic">"{website.ceo_message.message}"</p>
+                      <div>
+                        <p className="font-semibold text-slate-900">{website.ceo_message.name}</p>
+                        <p className="text-sm text-slate-600">{website.ceo_message.title}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Testimonials Preview */}
-              <div className="p-12 md:p-16 bg-slate-50">
+              <div className="p-12 md:p-16 bg-white">
                 <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-8 text-center">What Our Clients Say</h2>
                 <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
                   {website.testimonials?.map((testimonial, i) => (
-                    <div key={i} className="bg-white rounded-xl p-6 shadow-sm">
+                    <div key={i} className="bg-slate-50 rounded-xl p-6 shadow-sm">
                       <p className="text-slate-600 italic mb-4">"{testimonial.quote}"</p>
                       <div>
                         <p className="font-semibold text-slate-800">{testimonial.name}</p>
@@ -326,6 +398,47 @@ Make every word count. Focus on conversion and differentiation.`,
                       </div>
                     </div>
                   ))}
+                </div>
+              </div>
+
+              {/* Newsletter Signup Preview */}
+              <div className="p-12 md:p-16 bg-gradient-to-br from-slate-50 to-white">
+                <div className="max-w-2xl mx-auto text-center">
+                  <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-3">{website.newsletter?.headline}</h2>
+                  <p className="text-slate-600 mb-8">{website.newsletter?.description}</p>
+                  <div className="flex gap-2 max-w-md mx-auto">
+                    <input 
+                      type="email" 
+                      placeholder={website.newsletter?.placeholder || "Enter your email"}
+                      className="flex-1 h-12 px-4 rounded-lg border border-slate-300 focus:border-violet-500 focus:outline-none"
+                    />
+                    <Button 
+                      className="h-12 px-6"
+                      style={{ backgroundColor: colors.primary }}
+                    >
+                      {website.newsletter?.button_text || "Subscribe"}
+                    </Button>
+                  </div>
+                  
+                  {/* Social Media Icons */}
+                  <div className="mt-8 flex justify-center gap-4">
+                    {project.selected_platforms?.map((platform) => (
+                      <a
+                        key={platform}
+                        href="#"
+                        className="w-10 h-10 rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center transition-colors"
+                      >
+                        <span className="text-slate-700 text-sm font-semibold">
+                          {platform === 'facebook' && 'f'}
+                          {platform === 'instagram' && 'ig'}
+                          {platform === 'twitter' && '𝕏'}
+                          {platform === 'linkedin' && 'in'}
+                          {platform === 'youtube' && 'yt'}
+                          {platform === 'tiktok' && 'tt'}
+                        </span>
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -349,7 +462,7 @@ Make every word count. Focus on conversion and differentiation.`,
             </Card>
           ) : (
             <div className="grid gap-4">
-              {['hero', 'about', 'services', 'features', 'testimonials', 'cta'].map((section) => (
+              {['hero', 'about', 'services', 'features', 'video_commercial', 'ceo_message', 'testimonials', 'newsletter', 'cta'].map((section) => (
                 <Card key={section} className="border-0 shadow-lg">
                   <CardHeader className="pb-2">
                     <div className="flex items-center justify-between">
