@@ -3,10 +3,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { ChevronRight, ChevronLeft, ExternalLink, Phone, Globe, Star, Zap, TrendingUp, Sparkles } from 'lucide-react';
+import { ChevronRight, ChevronLeft, ExternalLink, Phone, Globe, Star, Zap, TrendingUp, Sparkles, Search, Loader2, CheckCircle, XCircle, Hash } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { motion } from 'framer-motion';
+import { base44 } from '@/api/base44Client';
 
 const PHONE_SERVICES = [
   {
@@ -192,6 +193,8 @@ const DIRECTORIES = [
 
 export default function ResourcesStep({ project, onNext, onPrev, projectId }) {
   const [activeTab, setActiveTab] = useState('phone');
+  const [directoryStatuses, setDirectoryStatuses] = useState({});
+  const [isScanning, setIsScanning] = useState(false);
 
   const categoryLabels = {
     essential: 'Essential',
@@ -200,6 +203,60 @@ export default function ResourcesStep({ project, onNext, onPrev, projectId }) {
     trust: 'Trust & Reviews',
     b2b: 'B2B',
     general: 'General'
+  };
+
+  const scanDirectory = async (directory) => {
+    const businessName = project?.business_name;
+    const industry = project?.industry;
+    const location = project?.location;
+
+    try {
+      const response = await base44.integrations.Core.InvokeLLM({
+        prompt: `Search for "${businessName}" (${industry} business${location ? ` in ${location}` : ''}) on ${directory.name}.
+
+Check if this business is currently listed in the directory by searching the web.
+If found, extract:
+1. Whether it's listed (true/false)
+2. Approximate ranking position when searching for relevant keywords (e.g., "${industry} ${location || ''}")
+3. URL to the listing if found
+
+Return ONLY valid JSON, no markdown:`,
+        add_context_from_internet: true,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            listed: { type: "boolean" },
+            rank: { type: "number" },
+            listing_url: { type: "string" },
+            search_keywords: { type: "string" }
+          }
+        }
+      });
+
+      return {
+        listed: response.listed || false,
+        rank: response.rank || null,
+        listing_url: response.listing_url || null,
+        search_keywords: response.search_keywords || null
+      };
+    } catch (error) {
+      return { listed: false, rank: null, listing_url: null, search_keywords: null };
+    }
+  };
+
+  const scanAllDirectories = async () => {
+    setIsScanning(true);
+    const essentialDirs = DIRECTORIES.filter(d => d.category === 'essential');
+    
+    for (const dir of essentialDirs) {
+      const status = await scanDirectory(dir);
+      setDirectoryStatuses(prev => ({
+        ...prev,
+        [dir.name]: status
+      }));
+    }
+    
+    setIsScanning(false);
   };
 
   return (
@@ -315,6 +372,42 @@ export default function ResourcesStep({ project, onNext, onPrev, projectId }) {
         </TabsContent>
 
         <TabsContent value="directories" className="mt-6">
+          {/* Directory Scanner */}
+          <Card className="border-2 border-violet-300 shadow-xl bg-gradient-to-r from-violet-50 to-indigo-50 mb-6">
+            <CardContent className="p-6">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center">
+                    <Search className="w-7 h-7 text-white" />
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-slate-800">Directory Presence Scanner</h3>
+                    <p className="text-slate-600 mt-1">
+                      Scan major directories to check if your business is listed and see your ranking position
+                    </p>
+                  </div>
+                </div>
+                <Button
+                  onClick={scanAllDirectories}
+                  disabled={isScanning}
+                  className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 h-12 px-6"
+                >
+                  {isScanning ? (
+                    <>
+                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                      Scanning...
+                    </>
+                  ) : (
+                    <>
+                      <Search className="w-5 h-5 mr-2" />
+                      Scan Directories
+                    </>
+                  )}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
           <div className="grid gap-4">
             {Object.keys(categoryLabels).map((category) => {
               const categoryDirs = DIRECTORIES.filter(d => d.category === category);
@@ -329,36 +422,74 @@ export default function ResourcesStep({ project, onNext, onPrev, projectId }) {
                     </Badge>
                   </h3>
                   <div className="grid md:grid-cols-2 gap-4">
-                    {categoryDirs.map((dir) => (
-                      <Card key={dir.name} className="border-0 shadow-md hover:shadow-lg transition-shadow bg-white/80">
-                        <CardContent className="p-4">
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2">
-                                <h4 className="font-semibold text-slate-800">{dir.name}</h4>
-                                {dir.free && (
-                                  <Badge className="bg-emerald-100 text-emerald-700 text-xs">Free</Badge>
+                    {categoryDirs.map((dir) => {
+                      const status = directoryStatuses[dir.name];
+                      
+                      return (
+                        <Card key={dir.name} className="border-0 shadow-md hover:shadow-lg transition-shadow bg-white/80">
+                          <CardContent className="p-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <h4 className="font-semibold text-slate-800">{dir.name}</h4>
+                                  {dir.free && (
+                                    <Badge className="bg-emerald-100 text-emerald-700 text-xs">Free</Badge>
+                                  )}
+                                  {status && (
+                                    <Badge className={status.listed ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-700"}>
+                                      {status.listed ? (
+                                        <><CheckCircle className="w-3 h-3 mr-1" /> Listed</>
+                                      ) : (
+                                        <><XCircle className="w-3 h-3 mr-1" /> Not Listed</>
+                                      )}
+                                    </Badge>
+                                  )}
+                                </div>
+                                <p className="text-sm text-slate-500 mt-1">{dir.description}</p>
+                                
+                                {status?.listed && status.rank && (
+                                  <div className="mt-2 flex items-center gap-2">
+                                    <Hash className="w-4 h-4 text-violet-600" />
+                                    <span className="text-sm font-medium text-slate-700">
+                                      Rank: <span className="text-violet-600">#{status.rank}</span>
+                                    </span>
+                                    {status.search_keywords && (
+                                      <span className="text-xs text-slate-500">
+                                        for "{status.search_keywords}"
+                                      </span>
+                                    )}
+                                  </div>
                                 )}
                               </div>
-                              <p className="text-sm text-slate-500 mt-1">{dir.description}</p>
+                              <div className="flex items-center gap-1 ml-4">
+                                <TrendingUp className={`w-4 h-4 ${
+                                  dir.impact === 'High' ? 'text-emerald-500' :
+                                  dir.impact === 'Medium' ? 'text-amber-500' : 'text-slate-400'
+                                }`} />
+                                <span className="text-xs text-slate-500">{dir.impact}</span>
+                              </div>
                             </div>
-                            <div className="flex items-center gap-1 ml-4">
-                              <TrendingUp className={`w-4 h-4 ${
-                                dir.impact === 'High' ? 'text-emerald-500' :
-                                dir.impact === 'Medium' ? 'text-amber-500' : 'text-slate-400'
-                              }`} />
-                              <span className="text-xs text-slate-500">{dir.impact}</span>
+                            <div className="mt-3 flex gap-2">
+                              {status?.listing_url ? (
+                                <a href={status.listing_url} target="_blank" rel="noopener noreferrer">
+                                  <Button variant="ghost" size="sm" className="text-violet-600 hover:text-violet-700">
+                                    View Listing
+                                    <ExternalLink className="w-3 h-3 ml-1" />
+                                  </Button>
+                                </a>
+                              ) : (
+                                <a href={dir.url} target="_blank" rel="noopener noreferrer">
+                                  <Button variant="ghost" size="sm" className="text-violet-600 hover:text-violet-700">
+                                    Submit Listing
+                                    <ExternalLink className="w-3 h-3 ml-1" />
+                                  </Button>
+                                </a>
+                              )}
                             </div>
-                          </div>
-                          <a href={dir.url} target="_blank" rel="noopener noreferrer" className="mt-3 inline-block">
-                            <Button variant="ghost" size="sm" className="text-violet-600 hover:text-violet-700">
-                              Submit Listing
-                              <ExternalLink className="w-3 h-3 ml-1" />
-                            </Button>
-                          </a>
-                        </CardContent>
-                      </Card>
-                    ))}
+                          </CardContent>
+                        </Card>
+                      );
+                    })}
                   </div>
                 </div>
               );
