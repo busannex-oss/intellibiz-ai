@@ -35,32 +35,37 @@ export default function LogoStep({ project, onUpdate, onNext, onPrev }) {
         ? project.brand_colors.find(c => c.role === 'primary')?.hex || project.brand_colors[0]?.hex
         : null;
       
-      const basePrompt = `Create a single professional, modern, minimalist logo icon for "${project.business_name}" in the ${project.industry} industry.
+      const basePrompt = `MANDATORY: Create ONE professional logo icon with TRANSPARENT BACKGROUND (PNG with alpha channel) for "${project.business_name}".
 
-CRITICAL REQUIREMENTS:
-- Generate ONLY ONE logo with a fully TRANSPARENT background (PNG with alpha channel)
-- NO white background, NO black background, NO colored backgrounds
-- The logo must be a standalone icon/symbol that works on any background color
-- Complete transparency around all edges
+⚠️ CRITICAL - TRANSPARENT BACKGROUND REQUIREMENTS:
+- MUST BE TRANSPARENT BACKGROUND - NO EXCEPTIONS
+- NO white background, NO black background, NO solid color backgrounds
+- PNG format with alpha channel transparency
+- All pixels outside the logo MUST BE 100% transparent
+- Logo should be clearly visible when placed on ANY background color
+- Include appropriate whitespace/padding around the logo (20% of canvas)
 
-BUSINESS CONTEXT:
-${project.description}
+📐 COMPOSITION & SPACING:
+- Logo should occupy 60-70% of canvas (leaving 15-20% breathing room on all sides)
+- Centered positioning
+- Zoom in to show design details clearly
+- Professional spacing that follows logo design standards
 
-DESIGN SPECIFICATIONS:
-- Clean, simple geometric design
-- Minimalist and memorable
-- Premium, professional appearance
-${primaryColor ? `- Use ${primaryColor} as the primary color` : '- Use modern, professional colors'}
-- Centered composition with balanced proportions
-- No text in the logo, icon/symbol only
+🎨 DESIGN STYLE:
+Industry: ${project.industry}
+Description: ${project.description}
+- Clean, modern, minimalist design
+- Premium and memorable
+${primaryColor ? `- Primary color: ${primaryColor}` : '- Professional color palette'}
+- Icon/symbol only - NO TEXT
 - Vector-style, flat design aesthetic
-- Sharp, clean edges with proper anti-aliasing
+- Sharp edges with smooth anti-aliasing
 
-BRAND PERSONALITY: ${brandPersonality?.traits?.join(', ') || 'Professional, trustworthy, innovative'}
+PERSONALITY: ${brandPersonality?.traits?.join(', ') || 'Professional, trustworthy, innovative'}
 
-${additionalInstructions ? `ADDITIONAL NOTES: ${additionalInstructions}` : ''}
+${additionalInstructions ? `CUSTOM INSTRUCTIONS: ${additionalInstructions}` : ''}
 
-OUTPUT: A single logo mark with transparent background that can be placed on light backgrounds, dark backgrounds, or colored backgrounds.`;
+✅ FINAL OUTPUT: Single logo icon on TRANSPARENT background, properly spaced, zoomed to show details, ready for use on any surface.`;
 
       const response = await base44.integrations.Core.GenerateImage({
         prompt: basePrompt
