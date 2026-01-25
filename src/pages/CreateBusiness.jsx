@@ -66,7 +66,7 @@ export default function CreateBusiness() {
   };
 
   const handleNext = async () => {
-    const newStep = Math.min(currentStep + 1, 9);
+    const newStep = Math.min(currentStep + 1, 10);
     setCurrentStep(newStep);
     if (project?.id) {
       await updateProjectMutation.mutateAsync({ current_step: newStep });
