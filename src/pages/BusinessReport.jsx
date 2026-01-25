@@ -62,12 +62,18 @@ export default function BusinessReport() {
     try {
       const element = ref.current;
       const canvas = await html2canvas(element, {
-        scale: 2,
+        scale: 1.5,
         useCORS: true,
         logging: false,
         windowWidth: 800,
-        allowTaint: true
+        allowTaint: true,
+        backgroundColor: '#ffffff',
+        foreignObjectRendering: true
       });
+
+      if (!canvas || canvas.width === 0 || canvas.height === 0) {
+        throw new Error('Canvas failed to render properly');
+      }
 
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF('p', 'mm', 'a4');
@@ -94,7 +100,7 @@ export default function BusinessReport() {
       toast.success('PDF downloaded successfully!');
     } catch (error) {
       console.error('PDF generation error:', error);
-      toast.error('Failed to generate PDF');
+      toast.error('PDF download failed. Please try again or use the print option.');
     } finally {
       setIsGenerating(false);
     }
