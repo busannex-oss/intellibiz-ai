@@ -134,7 +134,7 @@ export default function CreateBusiness() {
               />
             )}
             {currentStep === 4 && (
-              <WebsiteStep
+              <SocialMediaStep
                 key="step4"
                 project={project}
                 onUpdate={handleUpdate}
@@ -143,17 +143,8 @@ export default function CreateBusiness() {
               />
             )}
             {currentStep === 5 && (
-              <SocialMediaStep
-                key="step5"
-                project={project}
-                onUpdate={handleUpdate}
-                onNext={handleNext}
-                onPrev={handlePrev}
-              />
-            )}
-            {currentStep === 6 && (
               <OmnichannelStep
-                key="step6"
+                key="step5"
                 project={project}
                 onUpdate={handleUpdate}
                 onNext={handleNext}
