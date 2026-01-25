@@ -90,6 +90,12 @@ export default function Layout({ children }) {
                 Dashboard
               </Button>
             </Link>
+            <Link to={createPageUrl('Tasks')} onClick={() => setMobileMenuOpen(false)}>
+              <Button variant="ghost" className="w-full justify-start text-slate-300 hover:text-white hover:bg-slate-800">
+                <Zap className="w-4 h-4 mr-2" />
+                Tasks
+              </Button>
+            </Link>
             <Link to={createPageUrl('CreateBusiness')} onClick={() => setMobileMenuOpen(false)}>
               <Button className="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white">
                 <Sparkles className="w-4 h-4 mr-2" />
