@@ -22,11 +22,15 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
 import ReportDocument from '@/components/report/ReportDocument';
+import BusinessPlanDocument from '@/components/report/BusinessPlanDocument';
+import BrandStyleGuideDocument from '@/components/report/BrandStyleGuideDocument';
 
 export default function BusinessReport() {
   const [searchParams] = useSearchParams();
   const projectId = searchParams.get('projectId');
   const reportRef = useRef(null);
+  const businessPlanRef = useRef(null);
+  const brandStyleGuideRef = useRef(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [shareEmail, setShareEmail] = useState('');
   const [shareMessage, setShareMessage] = useState('');
@@ -51,12 +55,12 @@ export default function BusinessReport() {
     retryDelay: 1000
   });
 
-  const generatePDF = async () => {
-    if (!reportRef.current) return;
+  const generatePDF = async (ref, fileName) => {
+    if (!ref.current) return;
     setIsGenerating(true);
 
     try {
-      const element = reportRef.current;
+      const element = ref.current;
       const canvas = await html2canvas(element, {
         scale: 2,
         useCORS: true,
@@ -70,18 +74,15 @@ export default function BusinessReport() {
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
       
-      // Calculate dimensions to fit page width
       const imgWidth = pdfWidth;
       const imgHeight = (canvas.height * pdfWidth) / canvas.width;
       
       let heightLeft = imgHeight;
       let position = 0;
 
-      // Add first page
       pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
       heightLeft -= pdfHeight;
 
-      // Add additional pages for overflow
       while (heightLeft > 0) {
         position = heightLeft - imgHeight;
         pdf.addPage();
@@ -89,7 +90,7 @@ export default function BusinessReport() {
         heightLeft -= pdfHeight;
       }
 
-      pdf.save(`${project?.business_name || 'Business'}_Report.pdf`);
+      pdf.save(fileName);
       toast.success('PDF downloaded successfully!');
     } catch (error) {
       console.error('PDF generation error:', error);
@@ -198,12 +199,30 @@ ${project?.business_name} Team
               </Button>
 
               <Button 
-                onClick={generatePDF} 
+                onClick={() => generatePDF(reportRef, `${project?.business_name || 'Business'}_Report.pdf`)}
                 disabled={isGenerating}
                 className="bg-violet-600 hover:bg-violet-700"
               >
                 <Download className="w-4 h-4 mr-2" />
-                {isGenerating ? 'Generating...' : 'Download PDF'}
+                Report
+              </Button>
+
+              <Button 
+                onClick={() => generatePDF(businessPlanRef, `${project?.business_name || 'Business'}_Business_Plan.pdf`)}
+                disabled={isGenerating}
+                variant="outline"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Business Plan
+              </Button>
+
+              <Button 
+                onClick={() => generatePDF(brandStyleGuideRef, `${project?.business_name || 'Business'}_Brand_Style_Guide.pdf`)}
+                disabled={isGenerating}
+                variant="outline"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Brand Guide
               </Button>
 
               {/* Email Share Dialog */}
@@ -281,6 +300,16 @@ ${project?.business_name} Team
               </Dialog>
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* Report Content - Hidden References for PDF Generation */}
+      <div className="hidden">
+        <div ref={businessPlanRef}>
+          <BusinessPlanDocument project={project} />
+        </div>
+        <div ref={brandStyleGuideRef}>
+          <BrandStyleGuideDocument project={project} />
         </div>
       </div>
 
