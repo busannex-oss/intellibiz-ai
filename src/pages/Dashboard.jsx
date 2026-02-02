@@ -202,7 +202,7 @@ export default function Dashboard() {
                       <div className="flex items-start justify-between">
                         <div className="flex items-center gap-4">
                           {project.logo_url ? (
-                            <div className="w-14 h-14 rounded-xl bg-transparent flex items-center justify-center p-2 shadow-lg">
+                            <div className="logo w-14 h-14 rounded-xl p-2 shadow-lg">
                               <img
                                 src={project.logo_url}
                                 alt={project.business_name}
