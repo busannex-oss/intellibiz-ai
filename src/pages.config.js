@@ -57,6 +57,8 @@ import PhoneSystem from './pages/PhoneSystem';
 import Tasks from './pages/Tasks';
 import WhiteLabel from './pages/WhiteLabel';
 import BrandKit from './pages/BrandKit';
+import CustomerFeedback from './pages/CustomerFeedback';
+import PerformanceReports from './pages/PerformanceReports';
 import __Layout from './Layout.jsx';
 
 
@@ -71,6 +73,8 @@ export const PAGES = {
     "Tasks": Tasks,
     "WhiteLabel": WhiteLabel,
     "BrandKit": BrandKit,
+    "CustomerFeedback": CustomerFeedback,
+    "PerformanceReports": PerformanceReports,
 }
 
 export const pagesConfig = {

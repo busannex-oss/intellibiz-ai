@@ -63,6 +63,18 @@ export default function Layout({ children }) {
                   Brand Kit
                 </Button>
               </Link>
+              <Link to={createPageUrl('CustomerFeedback')}>
+                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Feedback
+                </Button>
+              </Link>
+              <Link to={createPageUrl('PerformanceReports')}>
+                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Reports
+                </Button>
+              </Link>
               <Link to={createPageUrl('CreateBusiness')}>
                 <Button className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-lg shadow-amber-500/20">
                   <Sparkles className="w-4 h-4 mr-2" />
