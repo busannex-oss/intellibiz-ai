@@ -57,6 +57,7 @@ export default function StepIndicator({ currentStep, onStepClick }) {
             </button>
             {index < steps.length - 1 && (
               <div
+                key={`connector-${step.id}`}
                 className={cn(
                   "flex-1 h-0.5 mx-1 transition-all duration-500",
                   step.id < currentStep ? "bg-emerald-400" : "bg-slate-200"
