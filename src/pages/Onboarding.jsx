@@ -184,7 +184,8 @@ Provide a helpful, concise answer focused on onboarding and getting started with
             >
               <Card>
                 <CardHeader>
-                  <CardTitle>What would you like to build?</CardTitle>
+                  <CardTitle>Follow These Steps to Build Your Brand</CardTitle>
+                  <p className="text-sm text-slate-600 mt-2">Choose your path: complete setup covers all aspects from research to launch, or focus on specific areas.</p>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid md:grid-cols-2 gap-4">
