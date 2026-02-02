@@ -59,8 +59,8 @@ import Onboarding from './pages/Onboarding';
 import PerformanceReports from './pages/PerformanceReports';
 import PhoneSystem from './pages/PhoneSystem';
 import Tasks from './pages/Tasks';
-import WhiteLabel from './pages/WhiteLabel';
 import VideoCreation from './pages/VideoCreation';
+import WhiteLabel from './pages/WhiteLabel';
 import __Layout from './Layout.jsx';
 
 
@@ -77,8 +77,8 @@ export const PAGES = {
     "PerformanceReports": PerformanceReports,
     "PhoneSystem": PhoneSystem,
     "Tasks": Tasks,
-    "WhiteLabel": WhiteLabel,
     "VideoCreation": VideoCreation,
+    "WhiteLabel": WhiteLabel,
 }
 
 export const pagesConfig = {
