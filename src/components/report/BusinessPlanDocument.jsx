@@ -117,6 +117,7 @@ export default function BusinessPlanDocument({ project }) {
       </div>
 
       {/* Executive Summary */}
+      {shouldInclude('executive_summary') && (
       <div className="p-12 border-b">
         <div className="mb-8">
           <p className="text-xs text-slate-400 uppercase tracking-widest">Executive Summary</p>
@@ -166,8 +167,10 @@ export default function BusinessPlanDocument({ project }) {
           </div>
         </div>
       </div>
+      )}
 
       {/* Market Research */}
+      {shouldInclude('market_research') && (
       <div className="p-12 border-b">
         <div className="mb-8">
           <p className="text-xs text-slate-400 uppercase tracking-widest">Market Analysis</p>
@@ -264,8 +267,10 @@ export default function BusinessPlanDocument({ project }) {
           <p className="text-slate-500 italic">Market research data not yet generated.</p>
         )}
       </div>
+      )}
 
       {/* Business Strategy */}
+      {shouldInclude('business_strategy') && (
       <div className="p-12 border-b">
         <div className="mb-8">
           <p className="text-xs text-slate-400 uppercase tracking-widest">Strategy</p>
@@ -324,8 +329,10 @@ export default function BusinessPlanDocument({ project }) {
           <p className="text-slate-500 italic">Business strategy not yet generated.</p>
         )}
       </div>
+      )}
 
       {/* Financial Projections */}
+      {shouldInclude('financial_projections') && (
       <div className="p-12 border-b">
         <div className="mb-8">
           <p className="text-xs text-slate-400 uppercase tracking-widest">Projections</p>
@@ -337,6 +344,82 @@ export default function BusinessPlanDocument({ project }) {
         </div>
         
         <div className="space-y-8">
+          {project?.financial_data?.revenue_forecast?.length > 0 && (
+            <>
+              <div>
+                <h3 className="text-lg font-semibold text-slate-800 mb-4">Revenue Forecast</h3>
+                <div className="grid grid-cols-3 gap-4">
+                  {project.financial_data.revenue_forecast.map((year, idx) => (
+                    <div key={idx} className="bg-white rounded-xl border border-slate-200 p-5">
+                      <p className="text-sm text-slate-500 mb-2">Year {year.year}</p>
+                      <p className="text-2xl font-bold text-slate-800 mb-3">${year.revenue?.toLocaleString() || 0}</p>
+                      <div className="space-y-1 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-slate-500">Revenue</span>
+                          <span className="font-medium">${year.revenue?.toLocaleString() || 0}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-slate-500">COGS</span>
+                          <span className="font-medium text-red-600">-${year.cogs?.toLocaleString() || 0}</span>
+                        </div>
+                        <div className="flex justify-between pt-1 border-t">
+                          <span className="text-slate-700 font-medium">Gross Profit</span>
+                          <span className="font-bold text-emerald-600">${year.gross_profit?.toLocaleString() || 0}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {project.financial_data.startup_costs && (
+                <div className="bg-slate-50 rounded-xl p-6">
+                  <h3 className="text-lg font-semibold text-slate-800 mb-4">Startup Costs Breakdown</h3>
+                  <div className="grid grid-cols-2 gap-4">
+                    {Object.entries(project.financial_data.startup_costs).map(([key, value]) => (
+                      <div key={key} className="flex justify-between items-center p-3 bg-white rounded-lg">
+                        <span className="text-slate-600 capitalize">{key.replace(/_/g, ' ')}</span>
+                        <span className="font-semibold text-slate-800">${value?.toLocaleString() || 0}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {project.financial_data.cash_flow_projections?.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-semibold text-slate-800 mb-4">12-Month Cash Flow Projection</h3>
+                  <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+                    <table className="w-full text-sm">
+                      <thead className="bg-slate-50">
+                        <tr>
+                          <th className="px-4 py-3 text-left font-semibold text-slate-700">Month</th>
+                          <th className="px-4 py-3 text-right font-semibold text-slate-700">Cash In</th>
+                          <th className="px-4 py-3 text-right font-semibold text-slate-700">Cash Out</th>
+                          <th className="px-4 py-3 text-right font-semibold text-slate-700">Net</th>
+                          <th className="px-4 py-3 text-right font-semibold text-slate-700">Cumulative</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {project.financial_data.cash_flow_projections.slice(0, 6).map((month, idx) => (
+                          <tr key={idx} className="border-t">
+                            <td className="px-4 py-3 text-slate-600">{month.month}</td>
+                            <td className="px-4 py-3 text-right text-emerald-600">${month.cash_in?.toLocaleString() || 0}</td>
+                            <td className="px-4 py-3 text-right text-red-600">${month.cash_out?.toLocaleString() || 0}</td>
+                            <td className="px-4 py-3 text-right font-medium">${month.net_cash_flow?.toLocaleString() || 0}</td>
+                            <td className="px-4 py-3 text-right font-bold" style={{ color: month.cumulative_cash >= 0 ? '#10b981' : '#ef4444' }}>
+                              ${month.cumulative_cash?.toLocaleString() || 0}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+
           <div className="bg-white rounded-2xl border border-slate-200 p-6">
             <h3 className="text-lg font-semibold text-slate-800 mb-4">Growth Projections</h3>
             <GrowthProjectionChart project={project} brandColor={brandColor} />
@@ -358,6 +441,7 @@ export default function BusinessPlanDocument({ project }) {
           </div>
         </div>
       </div>
+      )}
 
       {/* Operations */}
       <div className="p-12 border-b">
