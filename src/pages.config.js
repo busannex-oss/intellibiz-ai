@@ -59,6 +59,7 @@ import WhiteLabel from './pages/WhiteLabel';
 import BrandKit from './pages/BrandKit';
 import CustomerFeedback from './pages/CustomerFeedback';
 import PerformanceReports from './pages/PerformanceReports';
+import Onboarding from './pages/Onboarding';
 import __Layout from './Layout.jsx';
 
 
@@ -75,6 +76,7 @@ export const PAGES = {
     "BrandKit": BrandKit,
     "CustomerFeedback": CustomerFeedback,
     "PerformanceReports": PerformanceReports,
+    "Onboarding": Onboarding,
 }
 
 export const pagesConfig = {
