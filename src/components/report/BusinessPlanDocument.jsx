@@ -6,24 +6,34 @@ import {
 } from './ReportCharts';
 
 export default function BusinessPlanDocument({ project }) {
-  const getPrimaryColor = () => {
-    if (Array.isArray(project?.brand_colors)) {
-      const primary = project.brand_colors.find(c => c.role === 'primary');
-      return primary?.hex || project.brand_colors[0]?.hex || '#7c3aed';
-    }
-    return project?.brand_colors?.primary || '#7c3aed';
+  const customization = project?.business_plan_customization || {
+    included_sections: ['executive_summary', 'market_research', 'business_strategy', 'financial_projections', 'operations', 'risk_analysis'],
+    color_theme: 'brand',
+    custom_header: {},
+    custom_footer: { show_page_numbers: true }
   };
-  
-  const getSecondaryColor = () => {
-    if (Array.isArray(project?.brand_colors)) {
-      const secondary = project.brand_colors.find(c => c.role === 'secondary');
-      return secondary?.hex || project.brand_colors[1]?.hex || '#4f46e5';
-    }
-    return '#4f46e5';
+
+  const getThemeColors = () => {
+    const themes = {
+      brand: {
+        primary: Array.isArray(project?.brand_colors) 
+          ? (project.brand_colors.find(c => c.role === 'primary')?.hex || project.brand_colors[0]?.hex || '#7c3aed')
+          : (project?.brand_colors?.primary || '#7c3aed'),
+        secondary: Array.isArray(project?.brand_colors)
+          ? (project.brand_colors.find(c => c.role === 'secondary')?.hex || project.brand_colors[1]?.hex || '#4f46e5')
+          : '#4f46e5'
+      },
+      professional_blue: { primary: '#0ea5e9', secondary: '#06b6d4' },
+      executive_navy: { primary: '#1e40af', secondary: '#1e3a8a' },
+      modern_purple: { primary: '#7c3aed', secondary: '#8b5cf6' },
+      growth_green: { primary: '#10b981', secondary: '#059669' },
+      warm_orange: { primary: '#f97316', secondary: '#ea580c' }
+    };
+    return themes[customization.color_theme] || themes.brand;
   };
-  
-  const brandColor = getPrimaryColor();
-  const secondaryColor = getSecondaryColor();
+
+  const { primary: brandColor, secondary: secondaryColor } = getThemeColors();
+  const shouldInclude = (section) => customization.included_sections.includes(section);
 
   return (
     <div id="business-plan-content" className="font-sans">
