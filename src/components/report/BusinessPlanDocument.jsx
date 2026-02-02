@@ -36,51 +36,64 @@ export default function BusinessPlanDocument({ project }) {
   const shouldInclude = (section) => customization.included_sections.includes(section);
 
   return (
-    <div id="business-plan-content" className="font-sans">
+    <div id="business-plan-content" className="font-sans bg-white">
+      <style>{`
+        @media print, (prefers-color-scheme: light) {
+          .page-break-after {
+            page-break-after: always;
+            break-after: page;
+          }
+          * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+          }
+        }
+      `}</style>
       {/* Cover Page */}
       <div 
-        className="min-h-[800px] flex flex-col justify-center items-center text-center p-12 relative"
+        className="min-h-[1100px] flex flex-col justify-center items-center text-center p-16 relative page-break-after"
         style={{ background: `linear-gradient(135deg, ${brandColor} 0%, ${secondaryColor} 100%)` }}
       >
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-20 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
           <div className="absolute bottom-20 right-20 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
         </div>
-        
+
 
         <div className="relative z-10">
           {project?.logo_url ? (
-            <div className="w-48 h-48 mx-auto mb-8 rounded-3xl bg-white/95 backdrop-blur-sm p-8 shadow-2xl flex items-center justify-center">
+            <div className="w-56 h-56 mx-auto mb-12 rounded-3xl bg-transparent p-8 flex items-center justify-center">
               <img 
                 src={project.logo_url} 
                 alt={project.business_name}
-                className="max-w-full max-h-full object-contain"
+                className="max-w-full max-h-full object-contain drop-shadow-2xl"
+                style={{ filter: 'drop-shadow(0 10px 30px rgba(0,0,0,0.3))' }}
                 onError={(e) => {
                   e.target.style.display = 'none';
-                  e.target.parentElement.classList.add('bg-white/10');
                 }}
               />
             </div>
           ) : (
-            <div className="w-48 h-48 mx-auto mb-8 rounded-3xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
-              <div className="text-white/50 text-center">
-                <div className="text-4xl mb-2">{project?.business_name?.[0] || 'B'}</div>
+            <div className="w-56 h-56 mx-auto mb-12 rounded-3xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
+              <div className="text-white/60 text-center">
+                <div className="text-6xl font-bold mb-2">{project?.business_name?.[0] || 'B'}</div>
               </div>
             </div>
           )}
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-4 tracking-[-0.03em]">{project?.business_name}</h1>
-          <p className="text-xl text-white/90 mb-8 font-medium tracking-[-0.011em]">{project?.industry}</p>
-          <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-10 py-5 border border-white/30">
-            <p className="text-white text-xl font-semibold">Business Plan</p>
+          <h1 className="text-6xl md:text-7xl font-black text-white mb-6 tracking-tight leading-none">{project?.business_name}</h1>
+          <p className="text-2xl text-white/95 mb-12 font-semibold tracking-tight">{project?.industry}</p>
+          <div className="bg-white/25 backdrop-blur-md rounded-3xl px-12 py-6 border-2 border-white/40 shadow-2xl">
+            <p className="text-white text-2xl font-bold tracking-tight">Business Plan</p>
           </div>
         </div>
-        
-        <div className="mt-auto pt-12 relative z-10">
-          <p className="text-white/70 text-sm">
+
+        <div className="mt-auto pt-16 relative z-10">
+          <p className="text-white/80 text-base font-medium">
             Generated on {format(new Date(), 'MMMM d, yyyy')}
           </p>
         </div>
-        
+
       </div>
 
       {/* Table of Contents */}
@@ -271,54 +284,87 @@ export default function BusinessPlanDocument({ project }) {
 
       {/* Business Strategy */}
       {shouldInclude('business_strategy') && (
-      <div className="p-12 border-b">
+      <div className="p-12 border-b page-break-after">
         <div className="mb-8">
-          <p className="text-xs text-slate-400 uppercase tracking-widest">Strategy</p>
+          <p className="text-xs text-slate-400 uppercase tracking-widest font-medium">Strategy</p>
         </div>
-        
+
         <div className="flex items-center gap-4 mb-8">
           <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-lg" style={{ backgroundColor: brandColor }}>03</div>
-          <h2 className="text-3xl font-bold text-slate-800">Business Strategy & Objectives</h2>
+          <h2 className="text-4xl font-bold text-slate-900 tracking-tight leading-tight">Business Strategy & Objectives</h2>
         </div>
-        
+
         {project?.business_plan ? (
           <div className="space-y-8">
             {project.business_plan.mission && (
-              <div className="p-6 rounded-xl" style={{ backgroundColor: `${brandColor}10` }}>
-                <p className="text-sm font-semibold mb-2" style={{ color: brandColor }}>Mission Statement</p>
-                <p className="text-slate-700 text-lg">{project.business_plan.mission}</p>
+              <div className="p-8 rounded-2xl border-l-4 shadow-sm" style={{ borderColor: brandColor, backgroundColor: `${brandColor}08` }}>
+                <p className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: brandColor }}>Mission Statement</p>
+                <p className="text-slate-800 text-xl leading-relaxed font-medium">{project.business_plan.mission}</p>
               </div>
             )}
 
             {project.business_plan.vision && (
-              <div>
-                <h3 className="text-lg font-semibold text-slate-800 mb-2">Vision</h3>
-                <p className="text-slate-600">{project.business_plan.vision}</p>
+              <div className="p-8 rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-slate-200">
+                <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                  <span className="w-2 h-8 rounded-full" style={{ backgroundColor: brandColor }}></span>
+                  Vision
+                </h3>
+                <p className="text-slate-700 text-lg leading-relaxed">{project.business_plan.vision}</p>
               </div>
             )}
 
-            {project.business_plan.objectives?.length > 0 && (
+            {project.business_plan.core_values?.length > 0 && (
               <div>
-                <h3 className="text-lg font-semibold text-slate-800 mb-3">Key Objectives</h3>
-                <div className="grid gap-3">
-                  {project.business_plan.objectives.map((obj, i) => (
-                    <div key={i} className="flex items-center gap-3 p-4 bg-slate-50 rounded-lg">
-                      <span className="w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-sm" style={{ backgroundColor: brandColor }}>{i + 1}</span>
-                      <span className="text-slate-700">{obj}</span>
+                <h3 className="text-xl font-bold text-slate-900 mb-4">Core Values</h3>
+                <div className="grid gap-4">
+                  {project.business_plan.core_values.map((value, i) => (
+                    <div key={i} className="flex items-start gap-4 p-5 bg-white rounded-xl border border-slate-200 shadow-sm">
+                      <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold flex-shrink-0" style={{ backgroundColor: brandColor }}>
+                        {i + 1}
+                      </div>
+                      <p className="text-slate-700 text-base leading-relaxed pt-1">{value}</p>
                     </div>
                   ))}
                 </div>
               </div>
             )}
 
+            {project.business_plan.objectives?.length > 0 && (
+              <div>
+                <h3 className="text-xl font-bold text-slate-900 mb-4">Strategic Objectives</h3>
+                <div className="grid gap-4">
+                  {project.business_plan.objectives.map((obj, i) => (
+                    <div key={i} className="flex items-start gap-4 p-5 bg-gradient-to-r from-slate-50 to-white rounded-xl border border-slate-200">
+                      <span className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-base flex-shrink-0" style={{ backgroundColor: brandColor }}>{i + 1}</span>
+                      <span className="text-slate-800 text-base leading-relaxed pt-1.5 font-medium">{obj}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {project.business_plan.success_metrics?.length > 0 && (
+              <div className="p-8 rounded-2xl bg-emerald-50 border border-emerald-200">
+                <h3 className="text-xl font-bold text-emerald-900 mb-4">Key Success Metrics</h3>
+                <ul className="space-y-3">
+                  {project.business_plan.success_metrics.map((metric, i) => (
+                    <li key={i} className="flex items-start gap-3 text-slate-700 text-base">
+                      <span className="text-emerald-600 font-bold">✓</span>
+                      <span className="leading-relaxed">{metric}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             {project.business_plan.competitive_advantages?.length > 0 && (
               <div>
-                <h3 className="text-lg font-semibold text-slate-800 mb-3">Competitive Advantages</h3>
-                <ul className="space-y-2">
+                <h3 className="text-xl font-bold text-slate-900 mb-4">Competitive Advantages</h3>
+                <ul className="space-y-3">
                   {project.business_plan.competitive_advantages.map((adv, i) => (
-                    <li key={i} className="flex items-start gap-2 text-slate-600">
-                      <span style={{ color: brandColor }}>✓</span>
-                      {adv}
+                    <li key={i} className="flex items-start gap-3 text-slate-700 text-base p-4 bg-white rounded-lg border border-slate-200">
+                      <span style={{ color: brandColor }} className="font-bold text-lg">✓</span>
+                      <span className="leading-relaxed">{adv}</span>
                     </li>
                   ))}
                 </ul>
@@ -326,7 +372,7 @@ export default function BusinessPlanDocument({ project }) {
             )}
           </div>
         ) : (
-          <p className="text-slate-500 italic">Business strategy not yet generated.</p>
+          <p className="text-slate-500 italic text-base">Business strategy not yet generated.</p>
         )}
       </div>
       )}

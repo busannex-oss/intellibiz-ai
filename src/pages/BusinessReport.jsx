@@ -62,13 +62,14 @@ export default function BusinessReport() {
     try {
       const element = ref.current;
       const canvas = await html2canvas(element, {
-        scale: 1.5,
+        scale: 2,
         useCORS: true,
         logging: false,
-        windowWidth: 800,
+        windowWidth: 1200,
         allowTaint: true,
         backgroundColor: '#ffffff',
-        foreignObjectRendering: true
+        foreignObjectRendering: true,
+        imageTimeout: 0
       });
 
       if (!canvas || canvas.width === 0 || canvas.height === 0) {
