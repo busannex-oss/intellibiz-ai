@@ -5,7 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { DollarSign, TrendingUp, Calendar, ArrowRight, ArrowLeft, Plus, Trash2 } from 'lucide-react';
+import { DollarSign, TrendingUp, Calendar, ArrowRight, ArrowLeft, Plus, Trash2, Sparkles, Loader2, AlertTriangle, Lightbulb, Target } from 'lucide-react';
+import { base44 } from '@/api/base44Client';
+import { toast } from 'sonner';
 
 export default function FinancialPlanningStep({ project, onUpdate, onNext, onPrev }) {
   const [financialData, setFinancialData] = useState(project?.financial_data || {
@@ -42,6 +44,7 @@ export default function FinancialPlanningStep({ project, onUpdate, onNext, onPre
   });
 
   const [loading, setLoading] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const updateStartupCosts = (field, value) => {
     setFinancialData(prev => ({
@@ -88,31 +91,108 @@ export default function FinancialPlanningStep({ project, onUpdate, onNext, onPre
     }));
   };
 
-  const generateCashFlowProjections = () => {
-    const projections = [];
-    const monthlyRevenue = financialData.revenue_forecast[0]?.revenue / 12 || 0;
-    const totalMonthlyExpenses = Object.values(financialData.monthly_expenses).reduce((sum, val) => sum + val, 0);
-    let cumulativeCash = financialData.funding_requirements.total_needed || 0;
+  const generateCashFlowProjections = async () => {
+    setIsGenerating(true);
+    
+    try {
+      const response = await base44.integrations.Core.InvokeLLM({
+        prompt: `Generate comprehensive financial projections for this business:
 
-    for (let i = 1; i <= 12; i++) {
-      const cashIn = monthlyRevenue;
-      const cashOut = totalMonthlyExpenses;
-      const netCashFlow = cashIn - cashOut;
-      cumulativeCash += netCashFlow;
+Business: ${project.business_name}
+Industry: ${project.industry}
+Target Market: ${project.target_audience}
 
-      projections.push({
-        month: `Month ${i}`,
-        cash_in: cashIn,
-        cash_out: cashOut,
-        net_cash_flow: netCashFlow,
-        cumulative_cash: cumulativeCash
+STARTUP COSTS:
+${Object.entries(financialData.startup_costs).map(([k, v]) => `${k}: $${v}`).join('\n')}
+
+FUNDING:
+Total Needed: $${financialData.funding_requirements.total_needed}
+Sources: Equity ($${financialData.funding_requirements.equity_investment}), Loans ($${financialData.funding_requirements.loans}), Personal ($${financialData.funding_requirements.personal_funds})
+
+REVENUE FORECAST:
+${financialData.revenue_forecast.map(y => `Year ${y.year}: $${y.revenue} revenue, $${y.cogs} COGS, $${y.gross_profit} gross profit`).join('\n')}
+
+MONTHLY EXPENSES:
+${Object.entries(financialData.monthly_expenses).map(([k, v]) => `${k}: $${v}`).join('\n')}
+
+Generate:
+1. Detailed 12-month cash flow with realistic monthly variations
+2. 3-year P&L statement with quarterly breakdown
+3. Basic balance sheet projections (assets, liabilities, equity)
+4. Key financial metrics (burn rate, runway, break-even point, ROI)
+5. Financial risk analysis (top 3 risks)
+6. Growth opportunities (top 3 opportunities)
+7. Recommendations for financial optimization
+
+Be realistic based on industry standards.`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            cash_flow_projections: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  month: { type: "string" },
+                  cash_in: { type: "number" },
+                  cash_out: { type: "number" },
+                  net_cash_flow: { type: "number" },
+                  cumulative_cash: { type: "number" }
+                }
+              }
+            },
+            pl_statement: {
+              type: "object",
+              properties: {
+                year_1: { type: "object" },
+                year_2: { type: "object" },
+                year_3: { type: "object" }
+              }
+            },
+            balance_sheet: {
+              type: "object",
+              properties: {
+                assets: { type: "object" },
+                liabilities: { type: "object" },
+                equity: { type: "object" }
+              }
+            },
+            key_metrics: {
+              type: "object",
+              properties: {
+                burn_rate: { type: "number" },
+                runway_months: { type: "number" },
+                break_even_month: { type: "number" },
+                roi_3year: { type: "number" }
+              }
+            },
+            risks: {
+              type: "array",
+              items: { type: "string" }
+            },
+            opportunities: {
+              type: "array",
+              items: { type: "string" }
+            },
+            recommendations: {
+              type: "array",
+              items: { type: "string" }
+            }
+          }
+        }
       });
+      
+      setFinancialData(prev => ({
+        ...prev,
+        ...response
+      }));
+      
+      toast.success('AI-powered financial projections generated!');
+    } catch (error) {
+      toast.error('Failed to generate projections');
+    } finally {
+      setIsGenerating(false);
     }
-
-    setFinancialData(prev => ({
-      ...prev,
-      cash_flow_projections: projections
-    }));
   };
 
   const handleSave = async () => {
@@ -145,11 +225,12 @@ export default function FinancialPlanningStep({ project, onUpdate, onNext, onPre
         </CardHeader>
         <CardContent className="p-6">
           <Tabs defaultValue="startup" className="w-full">
-            <TabsList className="grid w-full grid-cols-4 mb-6">
+            <TabsList className="grid w-full grid-cols-5 mb-6">
               <TabsTrigger value="startup">Startup Costs</TabsTrigger>
               <TabsTrigger value="funding">Funding</TabsTrigger>
-              <TabsTrigger value="revenue">Revenue Forecast</TabsTrigger>
+              <TabsTrigger value="revenue">Revenue</TabsTrigger>
               <TabsTrigger value="expenses">Expenses</TabsTrigger>
+              <TabsTrigger value="analysis">Analysis</TabsTrigger>
             </TabsList>
 
             {/* Startup Costs */}
@@ -384,11 +465,156 @@ export default function FinancialPlanningStep({ project, onUpdate, onNext, onPre
               </div>
               <Button
                 onClick={generateCashFlowProjections}
+                disabled={isGenerating}
                 className="w-full bg-gradient-to-r from-purple-500 to-pink-500"
               >
-                <Calendar className="w-4 h-4 mr-2" />
-                Generate 12-Month Cash Flow Projection
+                {isGenerating ? (
+                  <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Generating AI Projections...</>
+                ) : (
+                  <><Sparkles className="w-4 h-4 mr-2" />AI Generate Projections</>
+                )}
               </Button>
+            </TabsContent>
+
+            {/* AI Analysis */}
+            <TabsContent value="analysis" className="space-y-6">
+              {financialData.key_metrics ? (
+                <div className="space-y-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Target className="w-5 h-5" />
+                        Key Financial Metrics
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div className="p-4 bg-slate-50 rounded-lg">
+                          <p className="text-sm text-slate-500 mb-1">Monthly Burn Rate</p>
+                          <p className="text-2xl font-bold text-slate-800">${financialData.key_metrics.burn_rate?.toLocaleString()}</p>
+                        </div>
+                        <div className="p-4 bg-slate-50 rounded-lg">
+                          <p className="text-sm text-slate-500 mb-1">Runway</p>
+                          <p className="text-2xl font-bold text-slate-800">{financialData.key_metrics.runway_months} mo</p>
+                        </div>
+                        <div className="p-4 bg-slate-50 rounded-lg">
+                          <p className="text-sm text-slate-500 mb-1">Break-Even</p>
+                          <p className="text-2xl font-bold text-slate-800">Month {financialData.key_metrics.break_even_month}</p>
+                        </div>
+                        <div className="p-4 bg-slate-50 rounded-lg">
+                          <p className="text-sm text-slate-500 mb-1">3-Year ROI</p>
+                          <p className="text-2xl font-bold text-emerald-600">{financialData.key_metrics.roi_3year}%</p>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <Card className="border-red-200 bg-red-50">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-red-800">
+                          <AlertTriangle className="w-5 h-5" />
+                          Financial Risks
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ul className="space-y-3">
+                          {financialData.risks?.map((risk, i) => (
+                            <li key={i} className="flex items-start gap-2 text-sm text-red-900">
+                              <span className="text-red-500 mt-0.5">⚠</span>
+                              {risk}
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+
+                    <Card className="border-emerald-200 bg-emerald-50">
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2 text-emerald-800">
+                          <Lightbulb className="w-5 h-5" />
+                          Growth Opportunities
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ul className="space-y-3">
+                          {financialData.opportunities?.map((opp, i) => (
+                            <li key={i} className="flex items-start gap-2 text-sm text-emerald-900">
+                              <span className="text-emerald-500 mt-0.5">✓</span>
+                              {opp}
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  </div>
+
+                  {financialData.recommendations && (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <Target className="w-5 h-5" />
+                          AI Recommendations
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <ul className="space-y-3">
+                          {financialData.recommendations.map((rec, i) => (
+                            <li key={i} className="flex items-start gap-3 p-3 bg-slate-50 rounded-lg">
+                              <span className="w-6 h-6 rounded-full bg-violet-600 text-white flex items-center justify-center text-sm font-bold flex-shrink-0">
+                                {i + 1}
+                              </span>
+                              <span className="text-slate-700">{rec}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  )}
+
+                  {financialData.pl_statement && (
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>3-Year P&L Statement</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-sm">
+                            <thead className="bg-slate-50">
+                              <tr>
+                                <th className="px-4 py-3 text-left font-semibold text-slate-700">Item</th>
+                                <th className="px-4 py-3 text-right font-semibold text-slate-700">Year 1</th>
+                                <th className="px-4 py-3 text-right font-semibold text-slate-700">Year 2</th>
+                                <th className="px-4 py-3 text-right font-semibold text-slate-700">Year 3</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {Object.keys(financialData.pl_statement.year_1 || {}).map(key => (
+                                <tr key={key} className="border-t">
+                                  <td className="px-4 py-3 text-slate-600 capitalize">{key.replace(/_/g, ' ')}</td>
+                                  <td className="px-4 py-3 text-right font-medium">${financialData.pl_statement.year_1[key]?.toLocaleString()}</td>
+                                  <td className="px-4 py-3 text-right font-medium">${financialData.pl_statement.year_2[key]?.toLocaleString()}</td>
+                                  <td className="px-4 py-3 text-right font-medium">${financialData.pl_statement.year_3[key]?.toLocaleString()}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
+              ) : (
+                <Card>
+                  <CardContent className="p-12 text-center">
+                    <Target className="w-16 h-16 text-slate-300 mx-auto mb-4" />
+                    <p className="text-slate-500 mb-4">Generate AI-powered financial projections to see detailed analysis</p>
+                    <Button onClick={generateCashFlowProjections} disabled={isGenerating}>
+                      {isGenerating ? 'Generating...' : 'Generate Analysis'}
+                    </Button>
+                  </CardContent>
+                </Card>
+              )}
             </TabsContent>
           </Tabs>
 
