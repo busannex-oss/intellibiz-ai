@@ -11,9 +11,7 @@ const steps = [
   { id: 6, name: 'Resources', description: 'Tools & directories' },
   { id: 7, name: 'Docs', description: 'Knowledge base' },
   { id: 8, name: 'Newsletter', description: 'Build your list' },
-  { id: 9, name: 'Website', description: 'Build your presence' },
-  { id: 10, name: 'Financials', description: 'Financial planning' },
-  { id: 11, name: 'Customize', description: 'Report options' },
+  { id: 9, name: 'Website', description: 'Launch your site' },
 ];
 
 export default function StepIndicator({ currentStep, onStepClick }) {
