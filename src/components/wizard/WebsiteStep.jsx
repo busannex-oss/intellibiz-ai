@@ -439,26 +439,6 @@ Make every word count. Focus on conversion and differentiation.`,
                       {website.newsletter?.button_text || "Subscribe"}
                     </Button>
                   </div>
-                  
-                  {/* Social Media Icons */}
-                  <div className="mt-8 flex justify-center gap-4">
-                    {project.selected_platforms?.map((platform) => (
-                      <a
-                        key={platform}
-                        href="#"
-                        className="w-10 h-10 rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center transition-colors"
-                      >
-                        <span className="text-slate-700 text-sm font-semibold">
-                          {platform === 'facebook' && 'f'}
-                          {platform === 'instagram' && 'ig'}
-                          {platform === 'twitter' && '𝕏'}
-                          {platform === 'linkedin' && 'in'}
-                          {platform === 'youtube' && 'yt'}
-                          {platform === 'tiktok' && 'tt'}
-                        </span>
-                      </a>
-                    ))}
-                  </div>
                 </div>
               </div>
 
@@ -476,6 +456,25 @@ Make every word count. Focus on conversion and differentiation.`,
 
               {/* Footer Preview */}
               <div className="p-8 bg-slate-900 text-center">
+                {/* Social Media Icons */}
+                <div className="mb-6 flex justify-center gap-4">
+                  {project.selected_platforms?.map((platform) => (
+                    <a
+                      key={platform}
+                      href="#"
+                      className="w-10 h-10 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-colors"
+                    >
+                      <span className="text-slate-300 text-sm font-semibold">
+                        {platform === 'facebook' && 'f'}
+                        {platform === 'instagram' && 'ig'}
+                        {platform === 'twitter' && '𝕏'}
+                        {platform === 'linkedin' && 'in'}
+                        {platform === 'youtube' && 'yt'}
+                        {platform === 'tiktok' && 'tt'}
+                      </span>
+                    </a>
+                  ))}
+                </div>
                 <p className="text-slate-400 mb-2">{website.footer?.tagline}</p>
                 <p className="text-sm text-slate-500">{website.footer?.copyright}</p>
               </div>
