@@ -377,114 +377,212 @@ export default function BusinessPlanDocument({ project }) {
       </div>
       )}
 
-      {/* Financial Projections */}
-      {shouldInclude('financial_projections') && (
-      <div className="p-12 border-b">
+      {/* Financial Analysis & Projections */}
+      {shouldInclude('financial_projections') && project?.financial_data && (
+      <div className="p-12 border-b page-break-after">
         <div className="mb-8">
-          <p className="text-xs text-slate-400 uppercase tracking-widest">Projections</p>
+          <p className="text-xs text-slate-400 uppercase tracking-widest">Financial Analysis</p>
         </div>
         
         <div className="flex items-center gap-4 mb-8">
           <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-lg" style={{ backgroundColor: brandColor }}>04</div>
-          <h2 className="text-3xl font-bold text-slate-800">Financial Projections</h2>
+          <h2 className="text-3xl font-bold text-slate-800">Financial Analysis & Projections</h2>
         </div>
         
         <div className="space-y-8">
-          {project?.financial_data?.revenue_forecast?.length > 0 && (
-            <>
-              <div>
-                <h3 className="text-lg font-semibold text-slate-800 mb-4">Revenue Forecast</h3>
-                <div className="grid grid-cols-3 gap-4">
-                  {project.financial_data.revenue_forecast.map((year, idx) => (
-                    <div key={idx} className="bg-white rounded-xl border border-slate-200 p-5">
-                      <p className="text-sm text-slate-500 mb-2">Year {year.year}</p>
-                      <p className="text-2xl font-bold text-slate-800 mb-3">${year.revenue?.toLocaleString() || 0}</p>
-                      <div className="space-y-1 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-slate-500">Revenue</span>
-                          <span className="font-medium">${year.revenue?.toLocaleString() || 0}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-slate-500">COGS</span>
-                          <span className="font-medium text-red-600">-${year.cogs?.toLocaleString() || 0}</span>
-                        </div>
-                        <div className="flex justify-between pt-1 border-t">
-                          <span className="text-slate-700 font-medium">Gross Profit</span>
-                          <span className="font-bold text-emerald-600">${year.gross_profit?.toLocaleString() || 0}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+          {/* Key Metrics */}
+          {project.financial_data.key_metrics && (
+            <div className="grid grid-cols-4 gap-4">
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-5 border border-blue-200">
+                <p className="text-xs text-blue-600 uppercase tracking-wide mb-1">Burn Rate</p>
+                <p className="text-2xl font-bold text-blue-900">${project.financial_data.key_metrics.burn_rate?.toLocaleString()}/mo</p>
               </div>
-
-              {project.financial_data.startup_costs && (
-                <div className="bg-slate-50 rounded-xl p-6">
-                  <h3 className="text-lg font-semibold text-slate-800 mb-4">Startup Costs Breakdown</h3>
-                  <div className="grid grid-cols-2 gap-4">
-                    {Object.entries(project.financial_data.startup_costs).map(([key, value]) => (
-                      <div key={key} className="flex justify-between items-center p-3 bg-white rounded-lg">
-                        <span className="text-slate-600 capitalize">{key.replace(/_/g, ' ')}</span>
-                        <span className="font-semibold text-slate-800">${value?.toLocaleString() || 0}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {project.financial_data.cash_flow_projections?.length > 0 && (
-                <div>
-                  <h3 className="text-lg font-semibold text-slate-800 mb-4">12-Month Cash Flow Projection</h3>
-                  <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-                    <table className="w-full text-sm">
-                      <thead className="bg-slate-50">
-                        <tr>
-                          <th className="px-4 py-3 text-left font-semibold text-slate-700">Month</th>
-                          <th className="px-4 py-3 text-right font-semibold text-slate-700">Cash In</th>
-                          <th className="px-4 py-3 text-right font-semibold text-slate-700">Cash Out</th>
-                          <th className="px-4 py-3 text-right font-semibold text-slate-700">Net</th>
-                          <th className="px-4 py-3 text-right font-semibold text-slate-700">Cumulative</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {project.financial_data.cash_flow_projections.slice(0, 6).map((month, idx) => (
-                          <tr key={idx} className="border-t">
-                            <td className="px-4 py-3 text-slate-600">{month.month}</td>
-                            <td className="px-4 py-3 text-right text-emerald-600">${month.cash_in?.toLocaleString() || 0}</td>
-                            <td className="px-4 py-3 text-right text-red-600">${month.cash_out?.toLocaleString() || 0}</td>
-                            <td className="px-4 py-3 text-right font-medium">${month.net_cash_flow?.toLocaleString() || 0}</td>
-                            <td className="px-4 py-3 text-right font-bold" style={{ color: month.cumulative_cash >= 0 ? '#10b981' : '#ef4444' }}>
-                              ${month.cumulative_cash?.toLocaleString() || 0}
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              )}
-            </>
+              <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-xl p-5 border border-emerald-200">
+                <p className="text-xs text-emerald-600 uppercase tracking-wide mb-1">Runway</p>
+                <p className="text-2xl font-bold text-emerald-900">{project.financial_data.key_metrics.runway_months} months</p>
+              </div>
+              <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-xl p-5 border border-purple-200">
+                <p className="text-xs text-purple-600 uppercase tracking-wide mb-1">Break-Even</p>
+                <p className="text-2xl font-bold text-purple-900">Month {project.financial_data.key_metrics.break_even_month}</p>
+              </div>
+              <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-xl p-5 border border-amber-200">
+                <p className="text-xs text-amber-600 uppercase tracking-wide mb-1">3-Year ROI</p>
+                <p className="text-2xl font-bold text-amber-900">{project.financial_data.key_metrics.roi_3year}%</p>
+              </div>
+            </div>
           )}
 
-          <div className="bg-white rounded-2xl border border-slate-200 p-6">
-            <h3 className="text-lg font-semibold text-slate-800 mb-4">Growth Projections</h3>
-            <GrowthProjectionChart project={project} brandColor={brandColor} />
+          {/* P&L Statement */}
+          {project.financial_data.pl_statement && (
+            <div>
+              <h3 className="text-xl font-bold text-slate-900 mb-4">3-Year Profit & Loss Statement</h3>
+              <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+                <table className="w-full text-sm">
+                  <thead className="bg-slate-50">
+                    <tr>
+                      <th className="px-4 py-3 text-left font-bold text-slate-800">Line Item</th>
+                      <th className="px-4 py-3 text-right font-bold text-slate-800">Year 1</th>
+                      <th className="px-4 py-3 text-right font-bold text-slate-800">Year 2</th>
+                      <th className="px-4 py-3 text-right font-bold text-slate-800">Year 3</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.keys(project.financial_data.pl_statement.year_1 || {}).map((key, idx) => (
+                      <tr key={key} className={`border-t ${key === 'net_income' ? 'bg-emerald-50 font-bold' : ''}`}>
+                        <td className="px-4 py-3 text-slate-700 capitalize">{key.replace(/_/g, ' ')}</td>
+                        <td className="px-4 py-3 text-right font-medium text-slate-800">
+                          ${project.financial_data.pl_statement.year_1[key]?.toLocaleString()}
+                        </td>
+                        <td className="px-4 py-3 text-right font-medium text-slate-800">
+                          ${project.financial_data.pl_statement.year_2[key]?.toLocaleString()}
+                        </td>
+                        <td className="px-4 py-3 text-right font-medium text-slate-800">
+                          ${project.financial_data.pl_statement.year_3[key]?.toLocaleString()}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* Balance Sheet */}
+          {project.financial_data.balance_sheet && (
+            <div>
+              <h3 className="text-xl font-bold text-slate-900 mb-4">Balance Sheet Overview</h3>
+              <div className="grid md:grid-cols-3 gap-6">
+                {project.financial_data.balance_sheet.assets && (
+                  <div className="bg-blue-50 rounded-xl p-5 border border-blue-200">
+                    <h4 className="font-bold text-blue-900 mb-3">Assets</h4>
+                    <div className="space-y-2 text-sm">
+                      {Object.entries(project.financial_data.balance_sheet.assets).map(([key, value]) => (
+                        <div key={key} className="flex justify-between">
+                          <span className="text-blue-700 capitalize">{key.replace(/_/g, ' ')}</span>
+                          <span className="font-semibold text-blue-900">${value?.toLocaleString()}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {project.financial_data.balance_sheet.liabilities && (
+                  <div className="bg-red-50 rounded-xl p-5 border border-red-200">
+                    <h4 className="font-bold text-red-900 mb-3">Liabilities</h4>
+                    <div className="space-y-2 text-sm">
+                      {Object.entries(project.financial_data.balance_sheet.liabilities).map(([key, value]) => (
+                        <div key={key} className="flex justify-between">
+                          <span className="text-red-700 capitalize">{key.replace(/_/g, ' ')}</span>
+                          <span className="font-semibold text-red-900">${value?.toLocaleString()}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {project.financial_data.balance_sheet.equity && (
+                  <div className="bg-emerald-50 rounded-xl p-5 border border-emerald-200">
+                    <h4 className="font-bold text-emerald-900 mb-3">Equity</h4>
+                    <div className="space-y-2 text-sm">
+                      {Object.entries(project.financial_data.balance_sheet.equity).map(([key, value]) => (
+                        <div key={key} className="flex justify-between">
+                          <span className="text-emerald-700 capitalize">{key.replace(/_/g, ' ')}</span>
+                          <span className="font-semibold text-emerald-900">${value?.toLocaleString()}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Cash Flow */}
+          {project.financial_data.cash_flow_projections?.length > 0 && (
+            <div>
+              <h3 className="text-xl font-bold text-slate-900 mb-4">12-Month Cash Flow Projection</h3>
+              <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+                <table className="w-full text-sm">
+                  <thead className="bg-slate-50">
+                    <tr>
+                      <th className="px-4 py-3 text-left font-semibold text-slate-700">Month</th>
+                      <th className="px-4 py-3 text-right font-semibold text-slate-700">Cash In</th>
+                      <th className="px-4 py-3 text-right font-semibold text-slate-700">Cash Out</th>
+                      <th className="px-4 py-3 text-right font-semibold text-slate-700">Net Flow</th>
+                      <th className="px-4 py-3 text-right font-semibold text-slate-700">Balance</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {project.financial_data.cash_flow_projections.map((month, idx) => (
+                      <tr key={idx} className="border-t">
+                        <td className="px-4 py-3 text-slate-700 font-medium">{month.month}</td>
+                        <td className="px-4 py-3 text-right text-emerald-600 font-medium">
+                          ${month.cash_in?.toLocaleString() || 0}
+                        </td>
+                        <td className="px-4 py-3 text-right text-red-600 font-medium">
+                          ${month.cash_out?.toLocaleString() || 0}
+                        </td>
+                        <td className="px-4 py-3 text-right font-medium">
+                          ${month.net_cash_flow?.toLocaleString() || 0}
+                        </td>
+                        <td className="px-4 py-3 text-right font-bold" style={{ 
+                          color: month.cumulative_cash >= 0 ? '#10b981' : '#ef4444' 
+                        }}>
+                          ${month.cumulative_cash?.toLocaleString() || 0}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+
+          {/* Financial Risks & Opportunities */}
+          <div className="grid md:grid-cols-2 gap-6">
+            {project.financial_data.risks && (
+              <div className="bg-red-50 rounded-xl p-6 border border-red-200">
+                <h3 className="text-lg font-bold text-red-900 mb-4">Financial Risks</h3>
+                <ul className="space-y-2">
+                  {project.financial_data.risks.map((risk, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-red-900">
+                      <span className="text-red-600 font-bold">⚠</span>
+                      {risk}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {project.financial_data.opportunities && (
+              <div className="bg-emerald-50 rounded-xl p-6 border border-emerald-200">
+                <h3 className="text-lg font-bold text-emerald-900 mb-4">Growth Opportunities</h3>
+                <ul className="space-y-2">
+                  {project.financial_data.opportunities.map((opp, i) => (
+                    <li key={i} className="flex items-start gap-2 text-sm text-emerald-900">
+                      <span className="text-emerald-600 font-bold">✓</span>
+                      {opp}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
-          <div className="grid grid-cols-3 gap-6">
-            <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border border-blue-200">
-              <p className="text-sm text-blue-600 uppercase tracking-wide mb-2">Year 1 Target</p>
-              <p className="text-2xl font-bold text-blue-700">Achieve Market Entry</p>
+          {/* Recommendations */}
+          {project.financial_data.recommendations && (
+            <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
+              <h3 className="text-lg font-bold text-slate-900 mb-4">Strategic Financial Recommendations</h3>
+              <ul className="space-y-3">
+                {project.financial_data.recommendations.map((rec, i) => (
+                  <li key={i} className="flex items-start gap-3">
+                    <span className="w-7 h-7 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0" 
+                      style={{ backgroundColor: brandColor }}>
+                      {i + 1}
+                    </span>
+                    <span className="text-slate-700 pt-0.5">{rec}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl p-6 border border-emerald-200">
-              <p className="text-sm text-emerald-600 uppercase tracking-wide mb-2">Year 2 Target</p>
-              <p className="text-2xl font-bold text-emerald-700">Scale Operations</p>
-            </div>
-            <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl p-6 border border-purple-200">
-              <p className="text-sm text-purple-600 uppercase tracking-wide mb-2">Year 3 Target</p>
-              <p className="text-2xl font-bold text-purple-700">Market Leadership</p>
-            </div>
-          </div>
+          )}
         </div>
       </div>
       )}

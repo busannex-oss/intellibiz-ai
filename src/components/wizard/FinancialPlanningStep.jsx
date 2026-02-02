@@ -95,36 +95,63 @@ export default function FinancialPlanningStep({ project, onUpdate, onNext, onPre
     setIsGenerating(true);
     
     try {
+      // Calculate totals for AI context
+      const totalStartup = Object.values(financialData.startup_costs).reduce((sum, val) => sum + val, 0);
+      const totalFunding = Object.values(financialData.funding_requirements).reduce((sum, val) => sum + val, 0);
+      const totalMonthlyExpenses = Object.values(financialData.monthly_expenses).reduce((sum, val) => sum + val, 0);
+      const year1Revenue = financialData.revenue_forecast[0]?.revenue || 0;
+      
       const response = await base44.integrations.Core.InvokeLLM({
-        prompt: `Generate comprehensive financial projections for this business:
+        prompt: `You are a financial analyst. Generate COMPLETE financial projections for this business:
 
 Business: ${project.business_name}
 Industry: ${project.industry}
+Description: ${project.description}
 Target Market: ${project.target_audience}
 
-STARTUP COSTS:
-${Object.entries(financialData.startup_costs).map(([k, v]) => `${k}: $${v}`).join('\n')}
+USER INPUT DATA:
+- Total Startup Costs: $${totalStartup}
+- Total Funding Available: $${totalFunding}
+- Year 1 Revenue Target: $${year1Revenue}
+- Monthly Operating Expenses: $${totalMonthlyExpenses}
 
-FUNDING:
-Total Needed: $${financialData.funding_requirements.total_needed}
-Sources: Equity ($${financialData.funding_requirements.equity_investment}), Loans ($${financialData.funding_requirements.loans}), Personal ($${financialData.funding_requirements.personal_funds})
+Generate COMPLETE and REALISTIC financial projections:
 
-REVENUE FORECAST:
-${financialData.revenue_forecast.map(y => `Year ${y.year}: $${y.revenue} revenue, $${y.cogs} COGS, $${y.gross_profit} gross profit`).join('\n')}
+1. COMPLETE 12-month cash flow projection with month-by-month detail
+   - Start with initial funding as opening balance
+   - Apply realistic revenue growth patterns
+   - Factor in seasonal variations if applicable
+   - Include all monthly operating expenses
 
-MONTHLY EXPENSES:
-${Object.entries(financialData.monthly_expenses).map(([k, v]) => `${k}: $${v}`).join('\n')}
+2. COMPLETE 3-year P&L statement with these line items for EACH year:
+   - Revenue (growing realistically year over year)
+   - Cost of Goods Sold
+   - Gross Profit
+   - Operating Expenses (broken down: salaries, rent, marketing, other)
+   - EBITDA
+   - Depreciation & Amortization
+   - Interest Expense
+   - Taxes
+   - Net Income
 
-Generate:
-1. Detailed 12-month cash flow with realistic monthly variations
-2. 3-year P&L statement with quarterly breakdown
-3. Basic balance sheet projections (assets, liabilities, equity)
-4. Key financial metrics (burn rate, runway, break-even point, ROI)
-5. Financial risk analysis (top 3 risks)
-6. Growth opportunities (top 3 opportunities)
-7. Recommendations for financial optimization
+3. Balance sheet (Year 1, 2, 3):
+   - Assets: Cash, Accounts Receivable, Inventory, PP&E
+   - Liabilities: Accounts Payable, Loans, Credit Lines
+   - Equity: Initial Investment, Retained Earnings
 
-Be realistic based on industry standards.`,
+4. Key Metrics:
+   - Monthly Burn Rate
+   - Runway (months)
+   - Break-Even Month (1-24)
+   - 3-Year ROI percentage
+
+5. Risk Analysis (3-5 specific financial risks for this business)
+
+6. Opportunities (3-5 growth opportunities)
+
+7. Recommendations (5-7 actionable financial strategies)
+
+Use realistic industry benchmarks for ${project.industry}. Be detailed and specific.`,
         response_json_schema: {
           type: "object",
           properties: {
@@ -220,7 +247,7 @@ Be realistic based on industry standards.`,
             Financial Planning
           </CardTitle>
           <p className="text-emerald-50 text-sm mt-2">
-            Input your financial data to generate comprehensive financial statements
+            AI will generate comprehensive financial forecasts, P&L statements, and analysis
           </p>
         </CardHeader>
         <CardContent className="p-6">
