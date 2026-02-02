@@ -107,9 +107,9 @@ export default function Home() {
                 </Button>
               </Link>
               <Link to={createPageUrl('Dashboard')}>
-                <Button variant="outline" className="h-16 px-10 text-lg border-slate-600 text-slate-300 hover:bg-slate-800 hover:text-white">
-                  View My Projects
-                </Button>
+                <Button variant="outline" className="h-16 px-10 text-lg border-slate-600 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white">
+                    View My Projects
+                  </Button>
               </Link>
             </div>
           </motion.div>
