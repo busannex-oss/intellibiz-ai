@@ -14,8 +14,7 @@ import ResourcesStep from '@/components/wizard/ResourcesStep';
 import NewsletterStep from '@/components/wizard/NewsletterStep';
 import OmnichannelStep from '@/components/wizard/OmnichannelStep';
 import KnowledgeBaseStep from '@/components/wizard/KnowledgeBaseStep';
-import FinancialPlanningStep from '@/components/wizard/FinancialPlanningStep';
-import BusinessPlanCustomizationStep from '@/components/wizard/BusinessPlanCustomizationStep';
+
 import BusinessChatWidget from '@/components/chatbot/BusinessChatWidget';
 
 export default function CreateBusiness() {
