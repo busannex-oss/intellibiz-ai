@@ -46,62 +46,55 @@ export default function BrandStyleGuideDocument({ project }) {
 
   return (
     <div id="brand-style-guide-content" className="font-sans bg-white">
+      <style>{`
+        @media print, (prefers-color-scheme: light) {
+          .page-break-after {
+            page-break-after: always;
+            break-after: page;
+          }
+          * {
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+            color-adjust: exact !important;
+          }
+        }
+      `}</style>
       {/* Cover Page */}
       <div 
-        className="min-h-[800px] flex flex-col justify-center items-center text-center p-12 relative"
+        className="min-h-[1100px] flex flex-col justify-center items-center text-center p-16 relative page-break-after"
         style={{ background: `linear-gradient(135deg, ${brandColor} 0%, ${secondaryColor} 100%)` }}
       >
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
           <div className="absolute top-20 left-20 w-64 h-64 bg-white/5 rounded-full blur-3xl" />
           <div className="absolute bottom-20 right-20 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
         </div>
-
-        <div className="absolute top-8 left-8 opacity-30">
-          {project?.logo_url && (
-            <img 
-              src={project.logo_url} 
-              alt="" 
-              className="w-16 h-16 object-contain filter drop-shadow-lg"
-              onError={(e) => e.target.style.display = 'none'}
-            />
-          )}
-        </div>
         
         <div className="relative z-10">
           {project?.logo_url ? (
-            <div className="w-48 h-48 mb-8 rounded-3xl bg-white p-8 shadow-2xl flex items-center justify-center">
+            <div className="w-56 h-56 mx-auto mb-12 rounded-3xl bg-transparent p-8 flex items-center justify-center">
               <img 
                 src={project.logo_url} 
                 alt={project.business_name} 
-                className="max-w-full max-h-full object-contain"
+                className="max-w-full max-h-full object-contain drop-shadow-2xl"
+                style={{ filter: 'drop-shadow(0 10px 30px rgba(0,0,0,0.3))' }}
                 onError={(e) => {
                   e.target.style.display = 'none';
-                  e.target.parentElement.classList.add('bg-white/10');
                 }}
               />
             </div>
           ) : (
-            <div className="w-48 h-48 mb-8 rounded-3xl bg-white/10 flex items-center justify-center">
-              <div className="text-white text-4xl font-bold">{project?.business_name?.[0] || 'B'}</div>
+            <div className="w-56 h-56 mx-auto mb-12 rounded-3xl bg-white/10 backdrop-blur-sm flex items-center justify-center">
+              <div className="text-white/60 text-center">
+                <div className="text-6xl font-bold mb-2">{project?.business_name?.[0] || 'B'}</div>
+              </div>
             </div>
           )}
-          <h1 className="text-5xl font-bold text-white mb-4 tracking-[-0.03em]">{project?.business_name}</h1>
-          <div className="bg-white/20 backdrop-blur-sm rounded-2xl px-10 py-5 mb-8 border border-white/30">
-            <p className="text-white text-xl font-semibold">Brand Style Guide</p>
+          <h1 className="text-6xl md:text-7xl font-black text-white mb-6 tracking-tight leading-none">{project?.business_name}</h1>
+          <div className="bg-white/25 backdrop-blur-md rounded-3xl px-12 py-6 mb-8 border-2 border-white/40 shadow-2xl">
+            <p className="text-white text-2xl font-bold tracking-tight">Brand Style Guide</p>
           </div>
-          <p className="text-white/80 text-lg">Official Brand Identity & Usage Standards</p>
-          <p className="text-white/60 mt-8">Version 1.0 • {format(new Date(), 'MMMM yyyy')}</p>
-        </div>
-        
-        <div className="absolute bottom-8 right-8 opacity-20">
-          {project?.logo_url && (
-            <img 
-              src={project.logo_url} 
-              alt="" 
-              className="w-12 h-12 object-contain filter drop-shadow-lg"
-              onError={(e) => e.target.style.display = 'none'}
-            />
-          )}
+          <p className="text-white/90 text-xl font-medium mb-2">Official Brand Identity & Usage Standards</p>
+          <p className="text-white/70 mt-8 text-base">Version 1.0 • {format(new Date(), 'MMMM yyyy')}</p>
         </div>
       </div>
 
