@@ -85,20 +85,28 @@ export default function BusinessPlanDocument({ project }) {
 
       {/* Table of Contents */}
       <div className="p-12 border-b">
-        <div className="mb-8">
-          <p className="text-xs text-slate-400 uppercase tracking-widest">{project?.business_name}</p>
-        </div>
+        {customization.custom_header?.company_name && (
+          <div className="mb-8">
+            <h3 className="text-lg font-bold text-slate-800">{customization.custom_header.company_name}</h3>
+            {customization.custom_header.tagline && (
+              <p className="text-sm text-slate-500">{customization.custom_header.tagline}</p>
+            )}
+            {customization.custom_header.contact_info && (
+              <p className="text-xs text-slate-400 mt-1">{customization.custom_header.contact_info}</p>
+            )}
+          </div>
+        )}
         
         <h2 className="text-3xl font-bold text-slate-800 mb-8 tracking-[-0.02em]">Table of Contents</h2>
         <div className="space-y-4">
           {[
-            { num: '01', title: 'Executive Summary', page: '3' },
-            { num: '02', title: 'Market Research & Analysis', page: '4' },
-            { num: '03', title: 'Business Strategy & Objectives', page: '6' },
-            { num: '04', title: 'Financial Projections', page: '8' },
-            { num: '05', title: 'Operations & Implementation', page: '10' },
-            { num: '06', title: 'Risk Analysis & Mitigation', page: '11' },
-          ].map((item) => (
+            { id: 'executive_summary', num: '01', title: 'Executive Summary', page: '3' },
+            { id: 'market_research', num: '02', title: 'Market Research & Analysis', page: '4' },
+            { id: 'business_strategy', num: '03', title: 'Business Strategy & Objectives', page: '6' },
+            { id: 'financial_projections', num: '04', title: 'Financial Projections', page: '8' },
+            { id: 'operations', num: '05', title: 'Operations & Implementation', page: '10' },
+            { id: 'risk_analysis', num: '06', title: 'Risk Analysis & Mitigation', page: '11' },
+          ].filter(item => shouldInclude(item.id)).map((item) => (
             <div key={item.num} className="flex items-center gap-4 p-3 rounded-lg hover:bg-slate-50 transition-colors">
               <span className="text-2xl font-bold tracking-[-0.02em]" style={{ color: brandColor }}>{item.num}</span>
               <span className="flex-1 font-medium text-slate-700 tracking-[-0.011em]">{item.title}</span>
