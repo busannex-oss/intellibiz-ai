@@ -368,7 +368,7 @@ The video should be engaging, highlight key benefits, and end with a strong call
                 style={{ background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})` }}
               >
                 {project.logo_url && (
-                  <img src={project.logo_url} alt="Logo" className="h-16 mx-auto mb-6 object-contain" />
+                  <img src={project.logo_url} alt="Logo" className="h-[500px] mx-auto mb-6 object-contain" />
                 )}
                 <h1 className="text-3xl md:text-5xl font-bold mb-4">{website.hero?.headline}</h1>
                 <p className="text-lg md:text-xl opacity-90 mb-8 max-w-2xl mx-auto">{website.hero?.subheadline}</p>
