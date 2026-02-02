@@ -3,17 +3,18 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, Sparkles, RefreshCw, ChevronRight, ChevronLeft, Pencil, Check, Eye, Code, Play } from 'lucide-react';
+import { Loader2, Sparkles, RefreshCw, ChevronRight, ChevronLeft, Pencil, Check, Eye, Code, Download, Play } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
 
 export default function WebsiteStep({ project, onUpdate, onNext, onPrev }) {
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isGeneratingVideo, setIsGeneratingVideo] = useState(false);
   const [editingSection, setEditingSection] = useState(null);
   const [editContent, setEditContent] = useState('');
   const [viewMode, setViewMode] = useState('preview');
-  const videoUrls = project?.video_urls || {};
+  const [videoUrls, setVideoUrls] = useState(project?.video_urls || {});
 
   const generateWebsite = async () => {
     setIsGenerating(true);
@@ -204,6 +205,76 @@ Make every word count. Focus on conversion and differentiation.`,
     setEditContent(typeof content === 'string' ? content : JSON.stringify(content, null, 2));
   };
 
+  const generateCommercialVideo = async (duration) => {
+    setIsGeneratingVideo(true);
+    
+    try {
+      const durationInSeconds = parseInt(duration);
+      const videoPrompt = `Create a professional, compelling ${duration} commercial video concept for "${project.business_name}". 
+      
+Business: ${project.business_name}
+Industry: ${project.industry}
+Description: ${project.description}
+UVP: ${project.unique_value_proposition || 'Premium service'}
+
+The video should be engaging, highlight key benefits, and end with a strong call-to-action. Make it suitable for website, social media, and advertising platforms. Duration: ${durationInSeconds} seconds.`;
+
+      // Generate video concept first
+      const videoData = await base44.integrations.Core.InvokeLLM({
+        prompt: videoPrompt,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            title: { type: "string" },
+            description: { type: "string" },
+            scenes: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  timing: { type: "string" },
+                  description: { type: "string" },
+                  voiceover: { type: "string" }
+                }
+              }
+            }
+          }
+        }
+      });
+
+      // Generate thumbnail/preview image
+      const { url: thumbnailUrl } = await base44.integrations.Core.GenerateImage({
+        prompt: `Create a professional thumbnail image for a ${duration} commercial video for "${project.business_name}". Show the key message: ${project.unique_value_proposition || project.description}. Make it modern, eye-catching, and suitable for YouTube/social media.`
+      });
+
+      // Upload the thumbnail as video preview
+      const fileBlob = await fetch(thumbnailUrl).then(r => r.blob());
+      const { file_url: uploadedVideoUrl } = await base44.integrations.Core.UploadFile({
+        file: fileBlob
+      });
+
+      const newVideoUrls = { 
+        ...videoUrls, 
+        [duration]: {
+          url: uploadedVideoUrl,
+          concept: videoData.description,
+          scenes: videoData.scenes,
+          title: videoData.title
+        }
+      };
+      
+      setVideoUrls(newVideoUrls);
+      await onUpdate({ video_urls: newVideoUrls });
+      toast.success(`${duration} commercial generated and saved!`);
+      
+    } catch (error) {
+      console.error('Error generating video:', error);
+      toast.error('Failed to generate commercial video');
+    } finally {
+      setIsGeneratingVideo(false);
+    }
+  };
+
   const website = project?.website_content;
   const colors = project?.brand_colors || { primary: '#6366f1', secondary: '#8b5cf6', accent: '#ec4899' };
 
@@ -294,7 +365,7 @@ Make every word count. Focus on conversion and differentiation.`,
                 style={{ background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})` }}
               >
                 {project.logo_url && (
-                  <img src={project.logo_url} alt="Logo" className="h-[500px] mx-auto mb-6 object-contain" />
+                  <img src={project.logo_url} alt="Logo" className="h-16 mx-auto mb-6 object-contain" />
                 )}
                 <h1 className="text-3xl md:text-5xl font-bold mb-4">{website.hero?.headline}</h1>
                 <p className="text-lg md:text-xl opacity-90 mb-8 max-w-2xl mx-auto">{website.hero?.subheadline}</p>
@@ -349,40 +420,83 @@ Make every word count. Focus on conversion and differentiation.`,
                 </div>
               </div>
 
-              {/* Video Commercial Preview - Website Visitor View Only */}
+              {/* Video Commercial Preview */}
               <div className="p-12 md:p-16 bg-white">
                 <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-4 text-center">See Us In Action</h2>
                 <p className="text-slate-600 mb-8 text-center max-w-2xl mx-auto">{website.video_commercial?.concept}</p>
 
-                {/* Video Display for Website Visitors */}
-                <div className="max-w-4xl mx-auto">
-                  {videoUrls['30sec']?.url || videoUrls['60sec']?.url || videoUrls['90sec']?.url ? (
-                    <div className="rounded-xl overflow-hidden border border-slate-200 shadow-lg">
-                      <div className="bg-slate-900 aspect-video relative overflow-hidden flex items-center justify-center group cursor-pointer">
-                        <img 
-                          src={(videoUrls['30sec']?.url || videoUrls['60sec']?.url || videoUrls['90sec']?.url)} 
-                          alt="Commercial Preview" 
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-all flex items-center justify-center">
-                          <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/30 group-hover:scale-110 transition-all">
-                            <Play className="w-10 h-10 text-white fill-white" />
-                          </div>
+                {/* Video Duration Buttons - For Business Owner to Generate */}
+                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-8">
+                  <p className="text-sm text-amber-800 mb-4 font-medium">Generate commercials for your business:</p>
+                  <div className="flex justify-center gap-4 flex-wrap">
+                    {['30sec', '60sec', '90sec'].map((duration) => (
+                      <Button
+                        key={duration}
+                        onClick={() => generateCommercialVideo(duration)}
+                        disabled={isGeneratingVideo || (videoUrls[duration] && videoUrls[duration].url)}
+                        className="bg-violet-600 hover:bg-violet-700"
+                      >
+                        {isGeneratingVideo && !videoUrls[duration] ? (
+                          <>
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                            Generating {duration}...
+                          </>
+                        ) : (videoUrls[duration] && videoUrls[duration].url) ? (
+                          <>
+                            <Check className="w-4 h-4 mr-2" />
+                            {duration} Ready
+                          </>
+                        ) : (
+                          <>
+                            <Play className="w-4 h-4 mr-2" />
+                            Generate {duration}
+                          </>
+                        )}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Video Display for Website Viewers */}
+                <div className="max-w-4xl mx-auto space-y-6">
+                  {['30sec', '60sec', '90sec'].map((duration) => {
+                    const videoData = videoUrls[duration];
+                    return (
+                      <div key={duration} className="rounded-xl overflow-hidden border border-slate-200">
+                        <div className="bg-slate-900 aspect-video relative overflow-hidden flex items-center justify-center group">
+                          {videoData?.url ? (
+                            <>
+                              <img 
+                                src={videoData.url} 
+                                alt={`${duration} Commercial Preview`} 
+                                className="w-full h-full object-cover"
+                              />
+                              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-all flex items-center justify-center">
+                                <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/30 transition-all">
+                                  <Play className="w-8 h-8 text-white fill-white" />
+                                </div>
+                              </div>
+                            </>
+                          ) : (
+                            <div className="text-center text-slate-400 py-12">
+                              <p className="text-sm">Generate {duration} commercial to display preview</p>
+                            </div>
+                          )}
                         </div>
+                        {videoData && (
+                          <div className="p-4 bg-white">
+                            <p className="text-sm font-semibold text-slate-800 mb-1">{videoData.title}</p>
+                            <p className="text-xs text-slate-600 line-clamp-2">{videoData.concept}</p>
+                          </div>
+                        )}
                       </div>
-                      <div className="p-5 bg-white">
-                        <p className="font-bold text-slate-900">{(videoUrls['30sec']?.title || videoUrls['60sec']?.title || videoUrls['90sec']?.title)}</p>
-                        <p className="text-sm text-slate-600 mt-2">{(videoUrls['30sec']?.concept || videoUrls['60sec']?.concept || videoUrls['90sec']?.concept)}</p>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="aspect-video bg-slate-100 rounded-xl flex items-center justify-center text-slate-400 border border-slate-200">
-                      <div className="text-center">
-                        <Play className="w-16 h-16 mx-auto mb-3 opacity-30" />
-                        <p>Video will appear here once generated</p>
-                      </div>
-                    </div>
-                  )}
+                    );
+                  })}
+                </div>
+
+                <div className="mt-6 p-6 bg-slate-50 rounded-xl max-w-4xl mx-auto">
+                  <p className="text-sm text-slate-600 font-medium mb-2">Video Script:</p>
+                  <p className="text-sm text-slate-700 whitespace-pre-line">{website.video_commercial?.script}</p>
                 </div>
               </div>
 
@@ -439,6 +553,26 @@ Make every word count. Focus on conversion and differentiation.`,
                       {website.newsletter?.button_text || "Subscribe"}
                     </Button>
                   </div>
+                  
+                  {/* Social Media Icons */}
+                  <div className="mt-8 flex justify-center gap-4">
+                    {project.selected_platforms?.map((platform) => (
+                      <a
+                        key={platform}
+                        href="#"
+                        className="w-10 h-10 rounded-full bg-slate-200 hover:bg-slate-300 flex items-center justify-center transition-colors"
+                      >
+                        <span className="text-slate-700 text-sm font-semibold">
+                          {platform === 'facebook' && 'f'}
+                          {platform === 'instagram' && 'ig'}
+                          {platform === 'twitter' && '𝕏'}
+                          {platform === 'linkedin' && 'in'}
+                          {platform === 'youtube' && 'yt'}
+                          {platform === 'tiktok' && 'tt'}
+                        </span>
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
 
@@ -456,25 +590,6 @@ Make every word count. Focus on conversion and differentiation.`,
 
               {/* Footer Preview */}
               <div className="p-8 bg-slate-900 text-center">
-                {/* Social Media Icons */}
-                <div className="mb-6 flex justify-center gap-4">
-                  {project.selected_platforms?.map((platform) => (
-                    <a
-                      key={platform}
-                      href="#"
-                      className="w-10 h-10 rounded-full bg-slate-800 hover:bg-slate-700 flex items-center justify-center transition-colors"
-                    >
-                      <span className="text-slate-300 text-sm font-semibold">
-                        {platform === 'facebook' && 'f'}
-                        {platform === 'instagram' && 'ig'}
-                        {platform === 'twitter' && '𝕏'}
-                        {platform === 'linkedin' && 'in'}
-                        {platform === 'youtube' && 'yt'}
-                        {platform === 'tiktok' && 'tt'}
-                      </span>
-                    </a>
-                  ))}
-                </div>
                 <p className="text-slate-400 mb-2">{website.footer?.tagline}</p>
                 <p className="text-sm text-slate-500">{website.footer?.copyright}</p>
               </div>
