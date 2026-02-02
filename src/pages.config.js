@@ -56,6 +56,7 @@ import Omnichannel from './pages/Omnichannel';
 import PhoneSystem from './pages/PhoneSystem';
 import Tasks from './pages/Tasks';
 import WhiteLabel from './pages/WhiteLabel';
+import BrandKit from './pages/BrandKit';
 import __Layout from './Layout.jsx';
 
 
@@ -69,6 +70,7 @@ export const PAGES = {
     "PhoneSystem": PhoneSystem,
     "Tasks": Tasks,
     "WhiteLabel": WhiteLabel,
+    "BrandKit": BrandKit,
 }
 
 export const pagesConfig = {

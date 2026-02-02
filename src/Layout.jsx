@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Button } from "@/components/ui/button";
-import { Zap, LayoutGrid, Sparkles, Menu, X, Crown } from 'lucide-react';
+import { Zap, LayoutGrid, Sparkles, Menu, X, Crown, Palette } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Layout({ children }) {
@@ -57,6 +57,12 @@ export default function Layout({ children }) {
                   Tasks
                 </Button>
               </Link>
+              <Link to={createPageUrl('BrandKit')}>
+                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Brand Kit
+                </Button>
+              </Link>
               <Link to={createPageUrl('CreateBusiness')}>
                 <Button className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-lg shadow-amber-500/20">
                   <Sparkles className="w-4 h-4 mr-2" />
@@ -94,6 +100,12 @@ export default function Layout({ children }) {
               <Button variant="ghost" className="w-full justify-start text-slate-300 hover:text-white hover:bg-slate-800">
                 <Zap className="w-4 h-4 mr-2" />
                 Tasks
+              </Button>
+            </Link>
+            <Link to={createPageUrl('BrandKit')} onClick={() => setMobileMenuOpen(false)}>
+              <Button variant="ghost" className="w-full justify-start text-slate-300 hover:text-white hover:bg-slate-800">
+                <Sparkles className="w-4 h-4 mr-2" />
+                Brand Kit
               </Button>
             </Link>
             <Link to={createPageUrl('CreateBusiness')} onClick={() => setMobileMenuOpen(false)}>
