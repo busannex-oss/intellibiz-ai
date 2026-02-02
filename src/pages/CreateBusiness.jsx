@@ -189,24 +189,6 @@ export default function CreateBusiness() {
                 onPrev={handlePrev}
               />
             )}
-            {currentStep === 10 && (
-              <FinancialPlanningStep
-                key="step10"
-                project={project}
-                onUpdate={handleUpdate}
-                onNext={handleNext}
-                onPrev={handlePrev}
-              />
-            )}
-            {currentStep === 11 && (
-              <BusinessPlanCustomizationStep
-                key="step11"
-                project={project}
-                onUpdate={handleUpdate}
-                onNext={handleNext}
-                onPrev={handlePrev}
-              />
-            )}
           </AnimatePresence>
         </div>
       </div>
