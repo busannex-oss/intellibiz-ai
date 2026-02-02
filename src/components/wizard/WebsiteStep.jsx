@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, Sparkles, RefreshCw, ChevronRight, ChevronLeft, Pencil, Check, Eye, Code, Download, Play } from 'lucide-react';
+import { Loader2, Sparkles, RefreshCw, ChevronRight, ChevronLeft, Pencil, Check, Eye, Code, Download, Play, Save, Edit2, ExternalLink } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { base44 } from '@/api/base44Client';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
@@ -15,6 +16,8 @@ export default function WebsiteStep({ project, onUpdate, onNext, onPrev }) {
   const [editContent, setEditContent] = useState('');
   const [viewMode, setViewMode] = useState('preview');
   const [videoUrls, setVideoUrls] = useState(project?.video_urls || {});
+  const [selectedVideoDuration, setSelectedVideoDuration] = useState('30sec');
+  const [videoHosting, setVideoHosting] = useState('brandforge');
 
   const generateWebsite = async () => {
     setIsGenerating(true);
@@ -425,78 +428,140 @@ The video should be engaging, highlight key benefits, and end with a strong call
                 <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-4 text-center">See Us In Action</h2>
                 <p className="text-slate-600 mb-8 text-center max-w-2xl mx-auto">{website.video_commercial?.concept}</p>
 
-                {/* Video Duration Buttons - For Business Owner to Generate */}
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-8">
-                  <p className="text-sm text-amber-800 mb-4 font-medium">Generate commercials for your business:</p>
-                  <div className="flex justify-center gap-4 flex-wrap">
-                    {['30sec', '60sec', '90sec'].map((duration) => (
-                      <Button
-                        key={duration}
-                        onClick={() => generateCommercialVideo(duration)}
-                        disabled={isGeneratingVideo || (videoUrls[duration] && videoUrls[duration].url)}
-                        className="bg-violet-600 hover:bg-violet-700"
-                      >
-                        {isGeneratingVideo && !videoUrls[duration] ? (
-                          <>
-                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                            Generating {duration}...
-                          </>
-                        ) : (videoUrls[duration] && videoUrls[duration].url) ? (
-                          <>
-                            <Check className="w-4 h-4 mr-2" />
-                            {duration} Ready
-                          </>
-                        ) : (
-                          <>
-                            <Play className="w-4 h-4 mr-2" />
-                            Generate {duration}
-                          </>
-                        )}
-                      </Button>
-                    ))}
+                {/* Video Controls - Creator Section */}
+                <div className="bg-gradient-to-br from-violet-50 to-indigo-50 border border-violet-200 rounded-xl p-6 mb-8 max-w-4xl mx-auto">
+                  <p className="text-sm text-violet-900 mb-4 font-semibold">Video Configuration & Management</p>
+                  
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+                    <div>
+                      <label className="text-xs text-slate-600 mb-1 block">Duration</label>
+                      <Select value={selectedVideoDuration} onValueChange={setSelectedVideoDuration}>
+                        <SelectTrigger className="h-9">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="30sec">30 seconds</SelectItem>
+                          <SelectItem value="60sec">60 seconds</SelectItem>
+                          <SelectItem value="90sec">90 seconds</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <label className="text-xs text-slate-600 mb-1 block">Hosting</label>
+                      <Select value={videoHosting} onValueChange={setVideoHosting}>
+                        <SelectTrigger className="h-9">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="brandforge">BrandForge</SelectItem>
+                          <SelectItem value="youtube">YouTube</SelectItem>
+                          <SelectItem value="vimeo">Vimeo</SelectItem>
+                          <SelectItem value="wistia">Wistia</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <Button
+                      onClick={() => generateCommercialVideo(selectedVideoDuration)}
+                      disabled={isGeneratingVideo}
+                      className="bg-violet-600 hover:bg-violet-700 col-span-2"
+                      size="sm"
+                    >
+                      {isGeneratingVideo ? (
+                        <><Loader2 className="w-3 h-3 mr-2 animate-spin" />Generating...</>
+                      ) : (
+                        <><Play className="w-3 h-3 mr-2" />Generate Video</>
+                      )}
+                    </Button>
                   </div>
+
+                  {videoUrls[selectedVideoDuration]?.url && (
+                    <div className="flex gap-2 border-t border-violet-200 pt-4">
+                      <Button
+                        onClick={() => {
+                          const a = document.createElement('a');
+                          a.href = videoUrls[selectedVideoDuration].url;
+                          a.download = `${project.business_name}-${selectedVideoDuration}.jpg`;
+                          a.click();
+                          toast.success('Video thumbnail downloaded!');
+                        }}
+                        variant="outline"
+                        size="sm"
+                        className="flex-1"
+                      >
+                        <Download className="w-3 h-3 mr-2" />
+                        Download
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          onUpdate({ video_urls: videoUrls });
+                          toast.success('Video saved!');
+                        }}
+                        variant="outline"
+                        size="sm"
+                        className="flex-1"
+                      >
+                        <Save className="w-3 h-3 mr-2" />
+                        Save
+                      </Button>
+                      <Button
+                        onClick={() => {
+                          const urls = { ...videoUrls };
+                          delete urls[selectedVideoDuration];
+                          setVideoUrls(urls);
+                        }}
+                        variant="outline"
+                        size="sm"
+                        className="flex-1"
+                      >
+                        <Edit2 className="w-3 h-3 mr-2" />
+                        Regenerate
+                      </Button>
+                    </div>
+                  )}
+
+                  {videoHosting !== 'brandforge' && (
+                    <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200 text-xs text-blue-900">
+                      <ExternalLink className="w-3 h-3 inline mr-1" />
+                      Upload final video to {videoHosting} and embed in your website
+                    </div>
+                  )}
                 </div>
 
-                {/* Video Display for Website Viewers */}
-                <div className="max-w-4xl mx-auto space-y-6">
-                  {['30sec', '60sec', '90sec'].map((duration) => {
-                    const videoData = videoUrls[duration];
-                    return (
-                      <div key={duration} className="rounded-xl overflow-hidden border border-slate-200">
-                        <div className="bg-slate-900 aspect-video relative overflow-hidden flex items-center justify-center group">
-                          {videoData?.url ? (
-                            <>
-                              <img 
-                                src={videoData.url} 
-                                alt={`${duration} Commercial Preview`} 
-                                className="w-full h-full object-cover"
-                              />
-                              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-all flex items-center justify-center">
-                                <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/30 transition-all">
-                                  <Play className="w-8 h-8 text-white fill-white" />
-                                </div>
-                              </div>
-                            </>
-                          ) : (
-                            <div className="text-center text-slate-400 py-12">
-                              <p className="text-sm">Generate {duration} commercial to display preview</p>
-                            </div>
-                          )}
-                        </div>
-                        {videoData && (
-                          <div className="p-4 bg-white">
-                            <p className="text-sm font-semibold text-slate-800 mb-1">{videoData.title}</p>
-                            <p className="text-xs text-slate-600 line-clamp-2">{videoData.concept}</p>
+                {/* Single Video Display for Website */}
+                <div className="max-w-4xl mx-auto">
+                  {videoUrls[selectedVideoDuration]?.url ? (
+                    <div className="rounded-xl overflow-hidden border border-slate-200 shadow-lg">
+                      <div className="bg-slate-900 aspect-video relative overflow-hidden flex items-center justify-center group cursor-pointer">
+                        <img 
+                          src={videoUrls[selectedVideoDuration].url} 
+                          alt="Commercial Preview" 
+                          className="w-full h-full object-cover"
+                        />
+                        <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-all flex items-center justify-center">
+                          <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/30 group-hover:scale-110 transition-all">
+                            <Play className="w-10 h-10 text-white fill-white" />
                           </div>
-                        )}
+                        </div>
                       </div>
-                    );
-                  })}
-                </div>
-
-                <div className="mt-6 p-6 bg-slate-50 rounded-xl max-w-4xl mx-auto">
-                  <p className="text-sm text-slate-600 font-medium mb-2">Video Script:</p>
-                  <p className="text-sm text-slate-700 whitespace-pre-line">{website.video_commercial?.script}</p>
+                      <div className="p-5 bg-white">
+                        <div className="flex items-center justify-between mb-2">
+                          <p className="font-bold text-slate-900">{videoUrls[selectedVideoDuration].title}</p>
+                          <span className="text-sm text-slate-500">{selectedVideoDuration}</span>
+                        </div>
+                        <p className="text-sm text-slate-600">{videoUrls[selectedVideoDuration].concept}</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="aspect-video bg-slate-100 rounded-xl flex items-center justify-center text-slate-400">
+                      <div className="text-center">
+                        <Play className="w-16 h-16 mx-auto mb-3 opacity-30" />
+                        <p>No video generated yet</p>
+                        <p className="text-xs mt-1">Select duration and click Generate Video</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 

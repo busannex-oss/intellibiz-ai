@@ -386,7 +386,7 @@ export default function BusinessPlanDocument({ project }) {
         
         <div className="flex items-center gap-4 mb-8">
           <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-lg" style={{ backgroundColor: brandColor }}>04</div>
-          <h2 className="text-3xl font-bold text-slate-800">Financial Analysis & Projections</h2>
+          <h2 className="text-3xl font-bold text-slate-800">AI-Generated Financial Analysis</h2>
         </div>
         
         <div className="space-y-8">
