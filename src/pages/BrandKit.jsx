@@ -266,7 +266,7 @@ export default function BrandKit() {
                       {groupedAssets[type].map(asset => (
                         <div key={asset.id} className="group relative bg-slate-50 rounded-lg p-4 border border-slate-200 hover:border-violet-300 transition-colors">
                           {(asset.asset_type === 'logo' || asset.asset_type === 'image') && (
-                            <div className="aspect-square bg-white rounded-lg mb-3 flex items-center justify-center p-2">
+                            <div className="aspect-square bg-transparent rounded-lg mb-3 flex items-center justify-center p-2">
                               <img src={asset.file_url} alt={asset.name} className="max-w-full max-h-full object-contain" />
                             </div>
                           )}
