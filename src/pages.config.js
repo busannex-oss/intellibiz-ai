@@ -48,35 +48,35 @@
  * The mainPage value must match a key in the PAGES object exactly.
  */
 import Analytics from './pages/Analytics';
+import BrandKit from './pages/BrandKit';
 import BusinessReport from './pages/BusinessReport';
 import CreateBusiness from './pages/CreateBusiness';
+import CustomerFeedback from './pages/CustomerFeedback';
 import Dashboard from './pages/Dashboard';
 import Home from './pages/Home';
 import Omnichannel from './pages/Omnichannel';
+import Onboarding from './pages/Onboarding';
+import PerformanceReports from './pages/PerformanceReports';
 import PhoneSystem from './pages/PhoneSystem';
 import Tasks from './pages/Tasks';
 import WhiteLabel from './pages/WhiteLabel';
-import BrandKit from './pages/BrandKit';
-import CustomerFeedback from './pages/CustomerFeedback';
-import PerformanceReports from './pages/PerformanceReports';
-import Onboarding from './pages/Onboarding';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "Analytics": Analytics,
+    "BrandKit": BrandKit,
     "BusinessReport": BusinessReport,
     "CreateBusiness": CreateBusiness,
+    "CustomerFeedback": CustomerFeedback,
     "Dashboard": Dashboard,
     "Home": Home,
     "Omnichannel": Omnichannel,
+    "Onboarding": Onboarding,
+    "PerformanceReports": PerformanceReports,
     "PhoneSystem": PhoneSystem,
     "Tasks": Tasks,
     "WhiteLabel": WhiteLabel,
-    "BrandKit": BrandKit,
-    "CustomerFeedback": CustomerFeedback,
-    "PerformanceReports": PerformanceReports,
-    "Onboarding": Onboarding,
 }
 
 export const pagesConfig = {

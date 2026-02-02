@@ -17,7 +17,12 @@ import {
   Shield,
   ArrowRight,
   Radar,
-  Target
+  Target,
+  Facebook,
+  Twitter,
+  Instagram,
+  Linkedin,
+  Youtube
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -249,9 +254,36 @@ export default function Home() {
       </div>
       
       {/* Footer */}
-      <div className="border-t border-slate-800 py-8">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-slate-500 text-sm">© {new Date().getFullYear()} BrandForge. Premium AI Business Builder.</p>
+      <div className="border-t border-slate-800 py-12">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+            <div className="flex items-center gap-3">
+              <div className="w-64 h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-3xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-2xl shadow-amber-500/30">
+                <Zap className="w-32 h-32 md:w-36 md:h-36 lg:w-40 lg:h-40 text-white" />
+              </div>
+            </div>
+            
+            <div className="flex flex-col items-center md:items-end gap-6">
+              <div className="flex items-center gap-5">
+                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all">
+                  <Facebook className="w-6 h-6" />
+                </a>
+                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all">
+                  <Twitter className="w-6 h-6" />
+                </a>
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all">
+                  <Instagram className="w-6 h-6" />
+                </a>
+                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all">
+                  <Linkedin className="w-6 h-6" />
+                </a>
+                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all">
+                  <Youtube className="w-6 h-6" />
+                </a>
+              </div>
+              <p className="text-slate-500 text-sm">© {new Date().getFullYear()} BrandForge. Premium AI Business Builder.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
