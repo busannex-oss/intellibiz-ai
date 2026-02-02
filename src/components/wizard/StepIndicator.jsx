@@ -6,12 +6,14 @@ const steps = [
   { id: 1, name: 'Research', description: 'Analyze competitors' },
   { id: 2, name: 'Plan', description: 'Strategic planning' },
   { id: 3, name: 'Logo', description: 'Create your brand' },
-  { id: 4, name: 'Website', description: 'Build your presence' },
-  { id: 5, name: 'Social', description: 'Connect & grow' },
-  { id: 6, name: 'Omnichannel', description: 'Multi-channel comms' },
-  { id: 7, name: 'Resources', description: 'Tools & directories' },
-  { id: 8, name: 'Docs', description: 'Knowledge base' },
-  { id: 9, name: 'Newsletter', description: 'Build your list' },
+  { id: 4, name: 'Social', description: 'Connect & grow' },
+  { id: 5, name: 'Omnichannel', description: 'Multi-channel comms' },
+  { id: 6, name: 'Resources', description: 'Tools & directories' },
+  { id: 7, name: 'Docs', description: 'Knowledge base' },
+  { id: 8, name: 'Newsletter', description: 'Build your list' },
+  { id: 9, name: 'Website', description: 'Build your presence' },
+  { id: 10, name: 'Financials', description: 'Financial planning' },
+  { id: 11, name: 'Customize', description: 'Report options' },
 ];
 
 export default function StepIndicator({ currentStep, onStepClick }) {

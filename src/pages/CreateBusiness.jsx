@@ -14,6 +14,8 @@ import ResourcesStep from '@/components/wizard/ResourcesStep';
 import NewsletterStep from '@/components/wizard/NewsletterStep';
 import OmnichannelStep from '@/components/wizard/OmnichannelStep';
 import KnowledgeBaseStep from '@/components/wizard/KnowledgeBaseStep';
+import FinancialPlanningStep from '@/components/wizard/FinancialPlanningStep';
+import BusinessPlanCustomizationStep from '@/components/wizard/BusinessPlanCustomizationStep';
 import BusinessChatWidget from '@/components/chatbot/BusinessChatWidget';
 
 export default function CreateBusiness() {
@@ -66,7 +68,7 @@ export default function CreateBusiness() {
   };
 
   const handleNext = async () => {
-    const newStep = Math.min(currentStep + 1, 10);
+    const newStep = Math.min(currentStep + 1, 11);
     setCurrentStep(newStep);
     if (project?.id) {
       await updateProjectMutation.mutateAsync({ current_step: newStep });
@@ -174,12 +176,31 @@ export default function CreateBusiness() {
                 key="step8"
                 project={project}
                 onUpdate={handleUpdate}
+                onNext={handleNext}
                 onPrev={handlePrev}
               />
             )}
             {currentStep === 9 && (
               <WebsiteStep
                 key="step9"
+                project={project}
+                onUpdate={handleUpdate}
+                onNext={handleNext}
+                onPrev={handlePrev}
+              />
+            )}
+            {currentStep === 10 && (
+              <FinancialPlanningStep
+                key="step10"
+                project={project}
+                onUpdate={handleUpdate}
+                onNext={handleNext}
+                onPrev={handlePrev}
+              />
+            )}
+            {currentStep === 11 && (
+              <BusinessPlanCustomizationStep
+                key="step11"
                 project={project}
                 onUpdate={handleUpdate}
                 onNext={handleNext}
