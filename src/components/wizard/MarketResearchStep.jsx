@@ -402,14 +402,14 @@ Create:
           {/* UVP Card */}
           {project.unique_value_proposition && (
             <Card className="border-0 shadow-xl bg-gradient-to-r from-violet-50 to-indigo-50 overflow-hidden">
-              <CardContent className="p-6">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-violet-600 flex items-center justify-center flex-shrink-0">
-                    <Shield className="w-6 h-6 text-white" />
+              <CardContent className="p-4 md:p-6">
+                <div className="flex items-start gap-3 md:gap-4">
+                  <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-violet-600 flex items-center justify-center flex-shrink-0">
+                    <Shield className="w-5 h-5 md:w-6 md:h-6 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-slate-800 mb-1">Your Unique Value Proposition</h3>
-                    <p className="text-lg text-slate-700">{project.unique_value_proposition}</p>
+                    <h3 className="font-semibold text-sm md:text-base text-slate-800 mb-1">Your Unique Value Proposition</h3>
+                    <p className="text-sm md:text-base text-slate-700 break-words">{project.unique_value_proposition}</p>
                   </div>
                 </div>
               </CardContent>
@@ -459,30 +459,32 @@ Create:
                             <Badge variant="secondary">{competitor.market_share || 'N/A'}</Badge>
                           </div>
                           <div className="grid md:grid-cols-2 gap-4">
-                            <div>
-                              <p className="text-xs font-medium text-emerald-600 mb-2">STRENGTHS</p>
-                              <ul className="space-y-1">
-                                {competitor.strengths?.map((s, j) => (
-                                  <li key={j} className="text-sm text-slate-600 flex items-start gap-2">
-                                    <span className="text-emerald-500">+</span> {s}
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                            <div>
-                              <p className="text-xs font-medium text-red-600 mb-2">WEAKNESSES (Your Opportunities)</p>
-                              <ul className="space-y-1">
-                                {competitor.weaknesses?.map((w, j) => (
-                                  <li key={j} className="text-sm text-slate-600 flex items-start gap-2">
-                                    <span className="text-red-500">−</span> {w}
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
+                           <div>
+                             <p className="text-xs font-medium text-emerald-600 mb-2">STRENGTHS</p>
+                             <ul className="space-y-1">
+                               {competitor.strengths?.map((s, j) => (
+                                 <li key={j} className="text-xs md:text-sm text-slate-600 flex items-start gap-2 break-words">
+                                   <span className="text-emerald-500 flex-shrink-0">+</span> 
+                                   <span className="break-words">{s}</span>
+                                 </li>
+                               ))}
+                             </ul>
+                           </div>
+                           <div>
+                             <p className="text-xs font-medium text-red-600 mb-2">WEAKNESSES</p>
+                             <ul className="space-y-1">
+                               {competitor.weaknesses?.map((w, j) => (
+                                 <li key={j} className="text-xs md:text-sm text-slate-600 flex items-start gap-2 break-words">
+                                   <span className="text-red-500 flex-shrink-0">−</span> 
+                                   <span className="break-words">{w}</span>
+                                 </li>
+                               ))}
+                             </ul>
+                           </div>
                           </div>
-                          <div className="mt-3 pt-3 border-t flex gap-4 text-sm">
-                            <span><strong>Pricing:</strong> {competitor.pricing}</span>
-                            <span><strong>Position:</strong> {competitor.positioning}</span>
+                          <div className="mt-3 pt-3 border-t flex flex-col md:flex-row gap-2 md:gap-4 text-xs md:text-sm">
+                           <span className="break-words"><strong>Pricing:</strong> {competitor.pricing}</span>
+                           <span className="break-words"><strong>Position:</strong> {competitor.positioning}</span>
                           </div>
                         </CardContent>
                       </Card>
@@ -493,40 +495,40 @@ Create:
                 <TabsContent value="opportunities" className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <h4 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
-                        <Lightbulb className="w-5 h-5 text-amber-500" />
-                        Market Opportunities
-                      </h4>
-                      <div className="space-y-2">
-                        {research.opportunities?.map((opp, i) => (
-                          <div key={i} className="p-3 bg-emerald-50 rounded-lg border border-emerald-200">
-                            <p className="text-sm text-slate-700">{opp}</p>
-                          </div>
-                        ))}
-                      </div>
+                     <h4 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
+                       <Lightbulb className="w-5 h-5 text-amber-500" />
+                       Market Opportunities
+                     </h4>
+                     <div className="space-y-2">
+                       {research.opportunities?.map((opp, i) => (
+                         <div key={i} className="p-3 bg-emerald-50 rounded-lg border border-emerald-200">
+                           <p className="text-xs md:text-sm text-slate-700 break-words">{opp}</p>
+                         </div>
+                       ))}
+                     </div>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
-                        <Target className="w-5 h-5 text-violet-500" />
-                        Market Gaps to Fill
-                      </h4>
-                      <div className="space-y-2">
-                        {research.market_gaps?.map((gap, i) => (
-                          <div key={i} className="p-3 bg-violet-50 rounded-lg border border-violet-200">
-                            <p className="text-sm text-slate-700">{gap}</p>
-                          </div>
-                        ))}
-                      </div>
+                     <h4 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
+                       <Target className="w-5 h-5 text-violet-500" />
+                       Market Gaps
+                     </h4>
+                     <div className="space-y-2">
+                       {research.market_gaps?.map((gap, i) => (
+                         <div key={i} className="p-3 bg-violet-50 rounded-lg border border-violet-200">
+                           <p className="text-xs md:text-sm text-slate-700 break-words">{gap}</p>
+                         </div>
+                       ))}
+                     </div>
                     </div>
                   </div>
                   <div>
                     <h4 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
                       <AlertTriangle className="w-5 h-5 text-amber-500" />
-                      Customer Pain Points to Address
+                      Customer Pain Points
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {research.customer_pain_points?.map((pain, i) => (
-                        <Badge key={i} variant="outline" className="bg-amber-50 border-amber-200 text-amber-800">
+                        <Badge key={i} variant="outline" className="bg-amber-50 border-amber-200 text-amber-800 text-xs break-words">
                           {pain}
                         </Badge>
                       ))}
@@ -571,7 +573,7 @@ Create:
                     <h4 className="font-semibold text-slate-800 mb-3">Search Keywords</h4>
                     <div className="flex flex-wrap gap-2">
                       {research.keywords?.map((kw, i) => (
-                        <Badge key={i} className="bg-slate-100 text-slate-700 hover:bg-slate-200">
+                        <Badge key={i} className="bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs break-words">
                           {kw}
                         </Badge>
                       ))}
@@ -603,10 +605,10 @@ Create:
                   <Card className="border-0 bg-gradient-to-r from-violet-50 to-indigo-50">
                     <CardContent className="p-4">
                       <div className="flex items-start gap-3">
-                        <DollarSign className="w-5 h-5 text-violet-600 mt-0.5" />
+                        <DollarSign className="w-5 h-5 text-violet-600 mt-0.5 flex-shrink-0" />
                         <div>
-                          <p className="font-medium text-slate-800">AI Recommendation</p>
-                          <p className="text-slate-600">{research.pricing_insights?.recommendation}</p>
+                          <p className="font-medium text-sm md:text-base text-slate-800">AI Recommendation</p>
+                          <p className="text-xs md:text-sm text-slate-600 break-words">{research.pricing_insights?.recommendation}</p>
                         </div>
                       </div>
                     </CardContent>
@@ -620,24 +622,25 @@ Create:
                       Your Competitive Advantages
                     </h4>
                     <div className="grid md:grid-cols-2 gap-3">
-                      {project.competitive_advantages?.map((adv, i) => (
-                        <div key={i} className="p-4 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg border border-emerald-200">
-                          <p className="text-slate-700 flex items-start gap-2">
-                            <span className="text-emerald-600 font-bold">{i + 1}.</span> {adv}
-                          </p>
-                        </div>
-                      ))}
+                     {project.competitive_advantages?.map((adv, i) => (
+                       <div key={i} className="p-3 md:p-4 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-lg border border-emerald-200">
+                         <p className="text-xs md:text-sm text-slate-700 flex items-start gap-2 break-words">
+                           <span className="text-emerald-600 font-bold flex-shrink-0">{i + 1}.</span> 
+                           <span className="break-words">{adv}</span>
+                         </p>
+                       </div>
+                     ))}
                     </div>
                   </div>
                   <div>
                     <h4 className="font-semibold text-slate-800 mb-3">Differentiation Strategies</h4>
-                    <div className="space-y-2">
+                     <div className="space-y-2">
                       {research.differentiation_strategies?.map((strat, i) => (
                         <div key={i} className="p-3 bg-slate-50 rounded-lg flex items-start gap-3">
                           <div className="w-6 h-6 rounded-full bg-violet-600 text-white flex items-center justify-center text-xs font-bold flex-shrink-0">
                             {i + 1}
                           </div>
-                          <p className="text-slate-700">{strat}</p>
+                          <p className="text-xs md:text-sm text-slate-700 break-words">{strat}</p>
                         </div>
                       ))}
                     </div>
@@ -647,11 +650,11 @@ Create:
                       <h4 className="font-semibold text-slate-800 mb-3">Recommended Brand Personality</h4>
                       <div className="flex flex-wrap gap-2 mb-3">
                         {project.brand_personality.traits?.map((trait, i) => (
-                          <Badge key={i} className="bg-violet-100 text-violet-800">{trait}</Badge>
+                          <Badge key={i} className="bg-violet-100 text-violet-800 text-xs">{trait}</Badge>
                         ))}
                       </div>
-                      <p className="text-sm text-slate-600"><strong>Tone:</strong> {project.brand_personality.tone_of_voice}</p>
-                      <p className="text-sm text-slate-600"><strong>Visual Style:</strong> {project.brand_personality.visual_style}</p>
+                      <p className="text-xs md:text-sm text-slate-600 break-words"><strong>Tone:</strong> {project.brand_personality.tone_of_voice}</p>
+                      <p className="text-xs md:text-sm text-slate-600 break-words"><strong>Visual Style:</strong> {project.brand_personality.visual_style}</p>
                     </div>
                   )}
                   {project.brand_colors?.length > 0 && (
