@@ -51,26 +51,25 @@ export default function BrandingKitDocument({ project }) {
         className="min-h-[800px] flex flex-col justify-center items-center text-center p-12 relative"
         style={{ background: `linear-gradient(135deg, ${brandColor} 0%, ${secondaryColor} 100%)` }}
       >
-        <div className="absolute top-8 left-8 opacity-30">
+        <div className="logo absolute top-8 left-8 opacity-30 w-16 h-16">
           {project?.logo_url && (
             <img 
               src={project.logo_url} 
               alt="" 
-              className="w-16 h-16 object-contain filter drop-shadow-lg"
+              className="w-full h-full object-contain filter drop-shadow-lg"
               onError={(e) => e.target.style.display = 'none'}
             />
           )}
         </div>
         
         {project?.logo_url ? (
-          <div className="w-48 h-48 mb-8 rounded-3xl bg-white p-8 shadow-2xl flex items-center justify-center">
+          <div className="logo w-48 h-48 mb-8 rounded-3xl p-8 shadow-2xl">
             <img 
               src={project.logo_url} 
               alt={project.business_name} 
               className="max-w-full max-h-full object-contain"
               onError={(e) => {
                 e.target.style.display = 'none';
-                e.target.parentElement.classList.add('bg-white/10');
               }}
             />
           </div>
@@ -88,12 +87,12 @@ export default function BrandingKitDocument({ project }) {
           Version 1.0 • {format(new Date(), 'MMMM yyyy')}
         </p>
         
-        <div className="absolute bottom-8 right-8 opacity-20">
+        <div className="logo absolute bottom-8 right-8 opacity-20 w-12 h-12">
           {project?.logo_url && (
             <img 
               src={project.logo_url} 
               alt="" 
-              className="w-12 h-12 object-contain filter drop-shadow-lg"
+              className="w-full h-full object-contain filter drop-shadow-lg"
               onError={(e) => e.target.style.display = 'none'}
             />
           )}
@@ -104,7 +103,7 @@ export default function BrandingKitDocument({ project }) {
       <div className="p-12 border-b">
         <div className="flex items-center justify-between mb-8">
           {project?.logo_url && (
-            <div className="w-14 h-14 flex items-center justify-center p-2">
+            <div className="logo w-14 h-14 p-2">
               <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
             </div>
           )}
@@ -129,7 +128,7 @@ export default function BrandingKitDocument({ project }) {
       <div className="p-12 border-b">
         <div className="flex items-center justify-between mb-8">
           {project?.logo_url && (
-            <div className="w-14 h-14 flex items-center justify-center p-2">
+            <div className="logo w-14 h-14 p-2">
               <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
             </div>
           )}
@@ -195,7 +194,7 @@ export default function BrandingKitDocument({ project }) {
       <div className="p-12 border-b">
         <div className="flex items-center justify-between mb-8">
           {project?.logo_url && (
-            <div className="w-14 h-14 flex items-center justify-center p-2">
+            <div className="logo w-14 h-14 p-2">
               <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
             </div>
           )}
@@ -256,7 +255,7 @@ export default function BrandingKitDocument({ project }) {
       <div className="p-12 border-b">
         <div className="flex items-center justify-between mb-8">
           {project?.logo_url && (
-            <div className="w-14 h-14 flex items-center justify-center p-2">
+            <div className="logo w-14 h-14 p-2">
               <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
             </div>
           )}
@@ -309,7 +308,7 @@ export default function BrandingKitDocument({ project }) {
         <div className="p-12 border-b">
           <div className="flex items-center justify-between mb-8">
             {project?.logo_url && (
-              <div className="w-14 h-14 flex items-center justify-center p-2">
+              <div className="logo w-14 h-14 p-2">
                 <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
               </div>
             )}
@@ -345,7 +344,7 @@ export default function BrandingKitDocument({ project }) {
       <div className="p-12" style={{ backgroundColor: `${brandColor}10` }}>
         <div className="flex items-center justify-between">
           {project?.logo_url && (
-            <div className="w-20 h-20 flex items-center justify-center p-3">
+            <div className="logo w-20 h-20 p-3">
               <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
             </div>
           )}
