@@ -63,7 +63,7 @@ export default function BusinessPlanDocument({ project }) {
 
         <div className="relative z-10">
           {project?.logo_url ? (
-            <div className="w-56 h-56 mx-auto mb-12 rounded-3xl bg-transparent p-8 flex items-center justify-center">
+            <div className="logo w-56 h-56 mx-auto mb-12 rounded-3xl p-8">
               <img 
                 src={project.logo_url} 
                 alt={project.business_name}
@@ -97,7 +97,7 @@ export default function BusinessPlanDocument({ project }) {
       </div>
 
       {/* Table of Contents */}
-      <div className="p-12 border-b">
+      <div className="p-12 border-b page-break-after">
         {customization.custom_header?.company_name && (
           <div className="mb-8">
             <h3 className="text-lg font-bold text-slate-800">{customization.custom_header.company_name}</h3>
@@ -131,7 +131,7 @@ export default function BusinessPlanDocument({ project }) {
 
       {/* Executive Summary */}
       {shouldInclude('executive_summary') && (
-      <div className="p-12 border-b">
+      <div className="p-12 border-b page-break-after">
         <div className="mb-8">
           <p className="text-xs text-slate-400 uppercase tracking-widest">Executive Summary</p>
         </div>
@@ -184,7 +184,7 @@ export default function BusinessPlanDocument({ project }) {
 
       {/* Market Research */}
       {shouldInclude('market_research') && (
-      <div className="p-12 border-b">
+      <div className="p-12 border-b page-break-after">
         <div className="mb-8">
           <p className="text-xs text-slate-400 uppercase tracking-widest">Market Analysis</p>
         </div>
@@ -587,7 +587,7 @@ export default function BusinessPlanDocument({ project }) {
 
       {/* Operations */}
       {shouldInclude('operations') && (
-      <div className="p-12 border-b">
+      <div className="p-12 border-b page-break-after">
         <div className="mb-8">
           <p className="text-xs text-slate-400 uppercase tracking-widest">Operations</p>
         </div>
@@ -630,7 +630,7 @@ export default function BusinessPlanDocument({ project }) {
 
       {/* Risk Analysis */}
       {shouldInclude('risk_analysis') && (
-      <div className="p-12 border-b">
+      <div className="p-12 border-b page-break-after">
         <div className="mb-8">
           <p className="text-xs text-slate-400 uppercase tracking-widest">Risk Management</p>
         </div>

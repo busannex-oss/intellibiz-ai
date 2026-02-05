@@ -71,7 +71,7 @@ export default function BrandStyleGuideDocument({ project }) {
         
         <div className="relative z-10">
           {project?.logo_url ? (
-            <div className="w-56 h-56 mx-auto mb-12 rounded-3xl bg-transparent p-8 flex items-center justify-center">
+            <div className="logo w-56 h-56 mx-auto mb-12 rounded-3xl p-8">
               <img 
                 src={project.logo_url} 
                 alt={project.business_name} 
@@ -99,10 +99,10 @@ export default function BrandStyleGuideDocument({ project }) {
       </div>
 
       {/* Table of Contents */}
-      <div className="p-12 border-b">
+      <div className="p-12 border-b page-break-after">
         <div className="flex items-center justify-between mb-8">
           {project?.logo_url ? (
-            <div className="w-14 h-14 flex items-center justify-center p-2">
+            <div className="logo w-14 h-14 p-2">
               <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
             </div>
           ) : (
@@ -133,10 +133,10 @@ export default function BrandStyleGuideDocument({ project }) {
       </div>
 
       {/* Introduction */}
-      <div className="p-12 border-b">
+      <div className="p-12 border-b page-break-after">
         <div className="flex items-center justify-between mb-8">
           {project?.logo_url && (
-            <div className="w-14 h-14 flex items-center justify-center p-2">
+            <div className="logo w-14 h-14 p-2">
               <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
             </div>
           )}
@@ -190,10 +190,10 @@ export default function BrandStyleGuideDocument({ project }) {
       </div>
 
       {/* Logo & Visual Identity */}
-      <div className="p-12 border-b">
+      <div className="p-12 border-b page-break-after">
         <div className="flex items-center justify-between mb-8">
           {project?.logo_url && (
-            <div className="w-14 h-14 flex items-center justify-center p-2">
+            <div className="logo w-14 h-14 p-2">
               <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
             </div>
           )}
@@ -259,10 +259,10 @@ export default function BrandStyleGuideDocument({ project }) {
       </div>
 
       {/* Color Palette */}
-      <div className="p-12 border-b">
+      <div className="p-12 border-b page-break-after">
         <div className="flex items-center justify-between mb-8">
           {project?.logo_url && (
-            <div className="w-14 h-14 flex items-center justify-center p-2">
+            <div className="logo w-14 h-14 p-2">
               <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
             </div>
           )}
@@ -323,10 +323,10 @@ export default function BrandStyleGuideDocument({ project }) {
       </div>
 
       {/* Typography */}
-      <div className="p-12 border-b">
+      <div className="p-12 border-b page-break-after">
         <div className="flex items-center justify-between mb-8">
           {project?.logo_url && (
-            <div className="w-14 h-14 flex items-center justify-center p-2">
+            <div className="logo w-14 h-14 p-2">
               <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
             </div>
           )}
@@ -356,10 +356,10 @@ export default function BrandStyleGuideDocument({ project }) {
       </div>
 
       {/* Brand Personality */}
-      <div className="p-12 border-b">
+      <div className="p-12 border-b page-break-after">
         <div className="flex items-center justify-between mb-8">
           {project?.logo_url && (
-            <div className="w-14 h-14 flex items-center justify-center p-2">
+            <div className="logo w-14 h-14 p-2">
               <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
             </div>
           )}
@@ -388,10 +388,10 @@ export default function BrandStyleGuideDocument({ project }) {
       </div>
 
       {/* Do's & Don'ts */}
-      <div className="p-12 border-b">
+      <div className="p-12 border-b page-break-after">
         <div className="flex items-center justify-between mb-8">
           {project?.logo_url && (
-            <div className="w-14 h-14 flex items-center justify-center p-2">
+            <div className="logo w-14 h-14 p-2">
               <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
             </div>
           )}
@@ -446,7 +446,7 @@ export default function BrandStyleGuideDocument({ project }) {
       <div className="p-12" style={{ backgroundColor: `${brandColor}10` }}>
         <div className="flex items-center justify-between">
           {project?.logo_url && (
-            <div className="w-20 h-20 flex items-center justify-center p-3">
+            <div className="logo w-20 h-20 p-3">
               <img src={project.logo_url} alt="" className="max-w-full max-h-full object-contain" onError={(e) => e.target.style.display = 'none'} />
             </div>
           )}
