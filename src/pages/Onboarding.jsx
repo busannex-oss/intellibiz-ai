@@ -184,13 +184,17 @@ Provide a helpful, concise answer focused on onboarding and getting started with
             >
               <Card>
                 <CardHeader>
-                  <CardTitle>Follow These Steps to Build Your Brand</CardTitle>
-                  <p className="text-sm text-slate-600 mt-2">Choose your path: complete setup covers all aspects from research to launch, or focus on specific areas.</p>
+                  <CardTitle>Choose Your Path - 4 Simple Options</CardTitle>
+                  <p className="text-sm text-slate-600 mt-2">
+                    Each option is a streamlined workflow designed for speed and simplicity. 
+                    Select the path that fits your needs - you can always add more features later.
+                  </p>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid md:grid-cols-2 gap-4">
-                    {Object.entries(projectTypes).map(([key, type]) => {
+                    {Object.entries(projectTypes).map(([key, type], index) => {
                       const Icon = type.icon;
+                      const stepNumber = index + 1;
                       return (
                         <button
                           key={key}
@@ -202,8 +206,15 @@ Provide a helpful, concise answer focused on onboarding and getting started with
                           }`}
                         >
                           <div className="flex items-center gap-3 mb-3">
-                            <Icon className="w-6 h-6 text-violet-600" />
-                            <h3 className="font-bold text-slate-900">{type.label}</h3>
+                            <div className="w-8 h-8 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0">
+                              <span className="text-sm font-bold text-violet-700">{stepNumber}</span>
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2">
+                                <Icon className="w-5 h-5 text-violet-600" />
+                                <h3 className="font-bold text-slate-900 text-base">{type.label}</h3>
+                              </div>
+                            </div>
                           </div>
                           <p className="text-sm text-slate-600 mb-3">{type.desc}</p>
                           <div className="flex flex-wrap gap-2">
