@@ -310,20 +310,16 @@ ${project?.business_name} Team
         </div>
       </div>
 
-      {/* Report Content - Hidden References for PDF Generation */}
-      <div className="hidden">
-        <div ref={businessPlanRef}>
+      {/* Report Content */}
+      <div className="max-w-4xl mx-auto py-8 px-4 space-y-8">
+        {/* Business Plan */}
+        <div ref={businessPlanRef} className="bg-white shadow-xl rounded-lg overflow-hidden">
           <BusinessPlanDocument project={project} />
         </div>
-        <div ref={brandStyleGuideRef}>
+        
+        {/* Brand Style Guide */}
+        <div ref={brandStyleGuideRef} className="bg-white shadow-xl rounded-lg overflow-hidden mt-8">
           <BrandStyleGuideDocument project={project} />
-        </div>
-      </div>
-
-      {/* Report Content */}
-      <div className="max-w-4xl mx-auto py-8 px-4">
-        <div ref={reportRef} className="bg-white shadow-xl rounded-lg overflow-hidden">
-          <ReportDocument project={project} />
         </div>
       </div>
 
@@ -339,6 +335,10 @@ ${project?.business_name} Team
           * {
             -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
+          }
+          .page-break-after {
+            page-break-after: always;
+            break-after: page;
           }
         }
       `}</style>

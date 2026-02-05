@@ -283,7 +283,7 @@ export default function BusinessPlanDocument({ project }) {
       )}
 
       {/* Business Strategy */}
-      {shouldInclude('business_strategy') && (
+      {shouldInclude('business_strategy') && project?.business_plan && (
       <div className="p-12 border-b page-break-after">
         <div className="mb-8">
           <p className="text-xs text-slate-400 uppercase tracking-widest font-medium">Strategy</p>
@@ -294,7 +294,7 @@ export default function BusinessPlanDocument({ project }) {
           <h2 className="text-4xl font-bold text-slate-900 tracking-tight leading-tight">Business Strategy & Objectives</h2>
         </div>
 
-        {project?.business_plan ? (
+        {project?.business_plan && (
           <div className="space-y-8">
             {project.business_plan.mission && (
               <div className="p-8 rounded-2xl border-l-4 shadow-sm" style={{ borderColor: brandColor, backgroundColor: `${brandColor}08` }}>
@@ -371,8 +371,6 @@ export default function BusinessPlanDocument({ project }) {
               </div>
             )}
           </div>
-        ) : (
-          <p className="text-slate-500 italic text-base">Business strategy not yet generated.</p>
         )}
       </div>
       )}
