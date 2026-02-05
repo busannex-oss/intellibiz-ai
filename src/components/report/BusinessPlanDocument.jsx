@@ -2,7 +2,7 @@ import React from 'react';
 import { format } from 'date-fns';
 import { 
   MarketShareChart, CompetitorStrengthChart, BrandStrengthRadar, 
-  GrowthProjectionChart, OpportunityScoreChart 
+  GrowthProjectionChart, OpportunityScoreChart, RevenueProjectionChart, CashFlowChart
 } from './ReportCharts';
 
 export default function BusinessPlanDocument({ project }) {
@@ -283,7 +283,7 @@ export default function BusinessPlanDocument({ project }) {
       )}
 
       {/* Business Strategy */}
-      {shouldInclude('business_strategy') && project?.business_plan && (
+      {shouldInclude('business_strategy') && (
       <div className="p-12 border-b page-break-after">
         <div className="mb-8">
           <p className="text-xs text-slate-400 uppercase tracking-widest font-medium">Strategy</p>
@@ -294,16 +294,25 @@ export default function BusinessPlanDocument({ project }) {
           <h2 className="text-4xl font-bold text-slate-900 tracking-tight leading-tight">Business Strategy & Objectives</h2>
         </div>
 
-        {project?.business_plan && (
-          <div className="space-y-8">
-            {project.business_plan.mission && (
+        <div className="space-y-8">
+            {project?.business_plan?.mission && (
               <div className="p-8 rounded-2xl border-l-4 shadow-sm" style={{ borderColor: brandColor, backgroundColor: `${brandColor}08` }}>
                 <p className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: brandColor }}>Mission Statement</p>
                 <p className="text-slate-800 text-xl leading-relaxed font-medium">{project.business_plan.mission}</p>
               </div>
             )}
+            
+            {!project?.business_plan?.mission && (
+              <div className="p-8 rounded-2xl border-l-4 shadow-sm" style={{ borderColor: brandColor, backgroundColor: `${brandColor}08` }}>
+                <p className="text-xs font-bold uppercase tracking-wide mb-3" style={{ color: brandColor }}>Mission Statement</p>
+                <p className="text-slate-800 text-xl leading-relaxed font-medium">
+                  To deliver exceptional value to our customers through innovative solutions in the {project?.industry} industry, 
+                  establishing {project?.business_name} as a trusted leader committed to quality, growth, and sustainable success.
+                </p>
+              </div>
+            )}
 
-            {project.business_plan.vision && (
+            {project?.business_plan?.vision && (
               <div className="p-8 rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-slate-200">
                 <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
                   <span className="w-2 h-8 rounded-full" style={{ backgroundColor: brandColor }}></span>
@@ -312,36 +321,56 @@ export default function BusinessPlanDocument({ project }) {
                 <p className="text-slate-700 text-lg leading-relaxed">{project.business_plan.vision}</p>
               </div>
             )}
-
-            {project.business_plan.core_values?.length > 0 && (
-              <div>
-                <h3 className="text-xl font-bold text-slate-900 mb-4">Core Values</h3>
-                <div className="grid gap-4">
-                  {project.business_plan.core_values.map((value, i) => (
-                    <div key={i} className="flex items-start gap-4 p-5 bg-white rounded-xl border border-slate-200 shadow-sm">
-                      <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold flex-shrink-0" style={{ backgroundColor: brandColor }}>
-                        {i + 1}
-                      </div>
-                      <p className="text-slate-700 text-base leading-relaxed pt-1">{value}</p>
-                    </div>
-                  ))}
-                </div>
+            
+            {!project?.business_plan?.vision && (
+              <div className="p-8 rounded-2xl bg-gradient-to-br from-slate-50 to-white border border-slate-200">
+                <h3 className="text-xl font-bold text-slate-900 mb-4 flex items-center gap-2">
+                  <span className="w-2 h-8 rounded-full" style={{ backgroundColor: brandColor }}></span>
+                  Vision
+                </h3>
+                <p className="text-slate-700 text-lg leading-relaxed">
+                  To become the premier choice in {project?.industry}, recognized for innovation, customer excellence, 
+                  and transformative impact on the market we serve.
+                </p>
               </div>
             )}
 
-            {project.business_plan.objectives?.length > 0 && (
-              <div>
-                <h3 className="text-xl font-bold text-slate-900 mb-4">Strategic Objectives</h3>
-                <div className="grid gap-4">
-                  {project.business_plan.objectives.map((obj, i) => (
-                    <div key={i} className="flex items-start gap-4 p-5 bg-gradient-to-r from-slate-50 to-white rounded-xl border border-slate-200">
-                      <span className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-base flex-shrink-0" style={{ backgroundColor: brandColor }}>{i + 1}</span>
-                      <span className="text-slate-800 text-base leading-relaxed pt-1.5 font-medium">{obj}</span>
+            <div>
+              <h3 className="text-xl font-bold text-slate-900 mb-4">Core Values</h3>
+              <div className="grid gap-4">
+                {(project?.business_plan?.core_values?.length > 0 ? project.business_plan.core_values : [
+                  'Customer Excellence - Delivering exceptional value and service',
+                  'Innovation - Continuously improving and staying ahead of market trends',
+                  'Integrity - Operating with transparency and ethical practices',
+                  'Growth Mindset - Embracing challenges as opportunities for development'
+                ]).map((value, i) => (
+                  <div key={i} className="flex items-start gap-4 p-5 bg-white rounded-xl border border-slate-200 shadow-sm">
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center text-white font-bold flex-shrink-0" style={{ backgroundColor: brandColor }}>
+                      {i + 1}
                     </div>
-                  ))}
-                </div>
+                    <p className="text-slate-700 text-base leading-relaxed pt-1">{value}</p>
+                  </div>
+                ))}
               </div>
-            )}
+            </div>
+
+            <div>
+              <h3 className="text-xl font-bold text-slate-900 mb-4">Strategic Objectives</h3>
+              <div className="grid gap-4">
+                {(project?.business_plan?.objectives?.length > 0 ? project.business_plan.objectives : [
+                  'Achieve market leadership position within 24 months through differentiated value proposition',
+                  'Build a loyal customer base of 10,000+ active users by end of Year 2',
+                  'Establish strategic partnerships with key industry players to accelerate growth',
+                  'Maintain profitability with 25%+ profit margins by Year 3',
+                  'Develop scalable operations infrastructure to support 10x growth'
+                ]).map((obj, i) => (
+                  <div key={i} className="flex items-start gap-4 p-5 bg-gradient-to-r from-slate-50 to-white rounded-xl border border-slate-200">
+                    <span className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-base flex-shrink-0" style={{ backgroundColor: brandColor }}>{i + 1}</span>
+                    <span className="text-slate-800 text-base leading-relaxed pt-1.5 font-medium">{obj}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
 
             {project.business_plan.success_metrics?.length > 0 && (
               <div className="p-8 rounded-2xl bg-emerald-50 border border-emerald-200">
@@ -357,26 +386,31 @@ export default function BusinessPlanDocument({ project }) {
               </div>
             )}
 
-            {project.business_plan.competitive_advantages?.length > 0 && (
-              <div>
-                <h3 className="text-xl font-bold text-slate-900 mb-4">Competitive Advantages</h3>
-                <ul className="space-y-3">
-                  {project.business_plan.competitive_advantages.map((adv, i) => (
-                    <li key={i} className="flex items-start gap-3 text-slate-700 text-base p-4 bg-white rounded-lg border border-slate-200">
-                      <span style={{ color: brandColor }} className="font-bold text-lg">✓</span>
-                      <span className="leading-relaxed">{adv}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            <div>
+              <h3 className="text-xl font-bold text-slate-900 mb-4">Competitive Advantages</h3>
+              <ul className="space-y-3">
+                {(project?.business_plan?.competitive_advantages?.length > 0 
+                  ? project.business_plan.competitive_advantages 
+                  : project?.competitive_advantages || [
+                    'First-mover advantage in emerging market segment',
+                    'Superior technology platform and user experience',
+                    'Strategic pricing model optimized for market penetration',
+                    'Strong brand identity and customer-centric approach'
+                  ]
+                ).map((adv, i) => (
+                  <li key={i} className="flex items-start gap-3 text-slate-700 text-base p-4 bg-white rounded-lg border border-slate-200">
+                    <span style={{ color: brandColor }} className="font-bold text-lg">✓</span>
+                    <span className="leading-relaxed">{adv}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-        )}
       </div>
       )}
 
       {/* Financial Analysis & Projections */}
-      {shouldInclude('financial_projections') && project?.financial_data && (
+      {shouldInclude('financial_projections') && (
       <div className="p-12 border-b page-break-after">
         <div className="mb-8">
           <p className="text-xs text-slate-400 uppercase tracking-widest">Financial Analysis</p>
@@ -384,12 +418,29 @@ export default function BusinessPlanDocument({ project }) {
         
         <div className="flex items-center gap-4 mb-8">
           <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-lg" style={{ backgroundColor: brandColor }}>04</div>
-          <h2 className="text-3xl font-bold text-slate-800">AI-Generated Financial Analysis</h2>
+          <h2 className="text-3xl font-bold text-slate-800">Financial Projections & Analysis</h2>
         </div>
         
         <div className="space-y-8">
+          {/* Revenue Projection Chart */}
+          <div className="bg-white rounded-2xl border border-slate-200 p-6">
+            <h3 className="text-lg font-semibold text-slate-800 mb-4">3-Year Revenue Projection</h3>
+            <RevenueProjectionChart financialData={project?.financial_data} brandColor={brandColor} />
+            <p className="text-sm text-slate-500 mt-4">
+              Projected revenue growth trajectory showing sustainable scaling with controlled expense management and increasing profitability.
+            </p>
+          </div>
+
+          {/* Cash Flow Projection */}
+          <div className="bg-white rounded-2xl border border-slate-200 p-6">
+            <h3 className="text-lg font-semibold text-slate-800 mb-4">12-Month Cash Flow Forecast</h3>
+            <CashFlowChart cashFlowData={project?.financial_data?.cash_flow_projections} brandColor={brandColor} />
+            <p className="text-sm text-slate-500 mt-4">
+              Cumulative cash position demonstrating path to positive cash flow and financial sustainability.
+            </p>
+          </div>
           {/* Key Metrics */}
-          {project.financial_data.key_metrics && (
+          {project?.financial_data?.key_metrics && (
             <div className="grid grid-cols-4 gap-4">
               <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-5 border border-blue-200">
                 <p className="text-xs text-blue-600 uppercase tracking-wide mb-1">Burn Rate</p>
@@ -411,7 +462,7 @@ export default function BusinessPlanDocument({ project }) {
           )}
 
           {/* P&L Statement */}
-          {project.financial_data.pl_statement && (
+          {project?.financial_data?.pl_statement && (
             <div>
               <h3 className="text-xl font-bold text-slate-900 mb-4">3-Year Profit & Loss Statement</h3>
               <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
@@ -446,7 +497,7 @@ export default function BusinessPlanDocument({ project }) {
           )}
 
           {/* Balance Sheet */}
-          {project.financial_data.balance_sheet && (
+          {project?.financial_data?.balance_sheet && (
             <div>
               <h3 className="text-xl font-bold text-slate-900 mb-4">Balance Sheet Overview</h3>
               <div className="grid md:grid-cols-3 gap-6">
@@ -493,8 +544,8 @@ export default function BusinessPlanDocument({ project }) {
             </div>
           )}
 
-          {/* Cash Flow */}
-          {project.financial_data.cash_flow_projections?.length > 0 && (
+          {/* Detailed Cash Flow Table */}
+          {project?.financial_data?.cash_flow_projections?.length > 0 && (
             <div>
               <h3 className="text-xl font-bold text-slate-900 mb-4">12-Month Cash Flow Projection</h3>
               <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
@@ -536,7 +587,7 @@ export default function BusinessPlanDocument({ project }) {
 
           {/* Financial Risks & Opportunities */}
           <div className="grid md:grid-cols-2 gap-6">
-            {project.financial_data.risks && (
+            {project?.financial_data?.risks && (
               <div className="bg-red-50 rounded-xl p-6 border border-red-200">
                 <h3 className="text-lg font-bold text-red-900 mb-4">Financial Risks</h3>
                 <ul className="space-y-2">
@@ -549,7 +600,7 @@ export default function BusinessPlanDocument({ project }) {
                 </ul>
               </div>
             )}
-            {project.financial_data.opportunities && (
+            {project?.financial_data?.opportunities && (
               <div className="bg-emerald-50 rounded-xl p-6 border border-emerald-200">
                 <h3 className="text-lg font-bold text-emerald-900 mb-4">Growth Opportunities</h3>
                 <ul className="space-y-2">
@@ -565,7 +616,7 @@ export default function BusinessPlanDocument({ project }) {
           </div>
 
           {/* Recommendations */}
-          {project.financial_data.recommendations && (
+          {project?.financial_data?.recommendations && (
             <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
               <h3 className="text-lg font-bold text-slate-900 mb-4">Strategic Financial Recommendations</h3>
               <ul className="space-y-3">

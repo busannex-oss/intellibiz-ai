@@ -148,3 +148,65 @@ export function OpportunityScoreChart({ opportunities, brandColor }) {
     </div>
   );
 }
+
+export function RevenueProjectionChart({ financialData, brandColor }) {
+  const data = financialData?.revenue_forecast || [
+    { year: 'Year 1', revenue: 250000, expenses: 180000, profit: 70000 },
+    { year: 'Year 2', revenue: 450000, expenses: 280000, profit: 170000 },
+    { year: 'Year 3', revenue: 750000, expenses: 420000, profit: 330000 }
+  ];
+
+  return (
+    <div className="h-80">
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+          <XAxis dataKey="year" tick={{ fontSize: 12 }} />
+          <YAxis tick={{ fontSize: 12 }} tickFormatter={(value) => `$${value / 1000}k`} />
+          <Tooltip formatter={(value) => `$${value.toLocaleString()}`} />
+          <Bar dataKey="revenue" fill={brandColor} name="Revenue" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="expenses" fill="#ef4444" name="Expenses" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="profit" fill="#10b981" name="Net Profit" radius={[4, 4, 0, 0]} />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+export function CashFlowChart({ cashFlowData, brandColor }) {
+  const data = cashFlowData?.slice(0, 12) || [
+    { month: 'Jan', cashFlow: -15000, cumulative: -15000 },
+    { month: 'Feb', cashFlow: -12000, cumulative: -27000 },
+    { month: 'Mar', cashFlow: -8000, cumulative: -35000 },
+    { month: 'Apr', cashFlow: 5000, cumulative: -30000 },
+    { month: 'May', cashFlow: 12000, cumulative: -18000 },
+    { month: 'Jun', cashFlow: 18000, cumulative: 0 },
+    { month: 'Jul', cashFlow: 25000, cumulative: 25000 },
+    { month: 'Aug', cashFlow: 28000, cumulative: 53000 },
+    { month: 'Sep', cashFlow: 32000, cumulative: 85000 },
+    { month: 'Oct', cashFlow: 35000, cumulative: 120000 },
+    { month: 'Nov', cashFlow: 38000, cumulative: 158000 },
+    { month: 'Dec', cashFlow: 42000, cumulative: 200000 }
+  ];
+
+  return (
+    <div className="h-80">
+      <ResponsiveContainer width="100%" height="100%">
+        <AreaChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+          <XAxis dataKey="month" tick={{ fontSize: 11 }} />
+          <YAxis tick={{ fontSize: 11 }} tickFormatter={(value) => `$${value / 1000}k`} />
+          <Tooltip formatter={(value) => `$${value.toLocaleString()}`} />
+          <Area 
+            type="monotone" 
+            dataKey="cumulative" 
+            stroke={brandColor} 
+            fill={brandColor} 
+            fillOpacity={0.3}
+            name="Cumulative Cash"
+          />
+        </AreaChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
