@@ -1,0 +1,14 @@
+/* Global styles for logos - transparent background */
+.logo,
+.logo img,
+[class*="logo"] img {
+  background: transparent !important;
+}
+
+/* Ensure logo containers don't add backgrounds */
+.logo {
+  background: transparent !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
