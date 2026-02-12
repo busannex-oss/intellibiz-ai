@@ -61,6 +61,7 @@ import PhoneSystem from './pages/PhoneSystem';
 import Tasks from './pages/Tasks';
 import VideoCreation from './pages/VideoCreation';
 import WhiteLabel from './pages/WhiteLabel';
+import ErrorLogs from './pages/ErrorLogs';
 import __Layout from './Layout.jsx';
 
 
@@ -79,6 +80,7 @@ export const PAGES = {
     "Tasks": Tasks,
     "VideoCreation": VideoCreation,
     "WhiteLabel": WhiteLabel,
+    "ErrorLogs": ErrorLogs,
 }
 
 export const pagesConfig = {

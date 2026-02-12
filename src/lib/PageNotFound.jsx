@@ -1,6 +1,7 @@
 import { useLocation } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 
 export default function PageNotFound({}) {
@@ -18,6 +19,28 @@ export default function PageNotFound({}) {
             }
         }
     });
+
+    // Log 404 error to database
+    useEffect(() => {
+        const logError = async () => {
+            try {
+                await base44.entities.ErrorLog.create({
+                    error_type: "404",
+                    url: window.location.href,
+                    referrer: document.referrer || "direct",
+                    user_agent: navigator.userAgent,
+                    error_message: `Page not found: ${pageName}`,
+                    user_email: authData?.user?.email || "anonymous"
+                });
+            } catch (err) {
+                console.error("Failed to log 404 error:", err);
+            }
+        };
+
+        if (isFetched) {
+            logError();
+        }
+    }, [pageName, isFetched, authData]);
     
     return (
         <div className="min-h-screen flex items-center justify-center p-6 bg-slate-50">
