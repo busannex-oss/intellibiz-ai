@@ -53,6 +53,7 @@ import BusinessReport from './pages/BusinessReport';
 import CreateBusiness from './pages/CreateBusiness';
 import CustomerFeedback from './pages/CustomerFeedback';
 import Dashboard from './pages/Dashboard';
+import ErrorLogs from './pages/ErrorLogs';
 import Home from './pages/Home';
 import Omnichannel from './pages/Omnichannel';
 import Onboarding from './pages/Onboarding';
@@ -61,7 +62,6 @@ import PhoneSystem from './pages/PhoneSystem';
 import Tasks from './pages/Tasks';
 import VideoCreation from './pages/VideoCreation';
 import WhiteLabel from './pages/WhiteLabel';
-import ErrorLogs from './pages/ErrorLogs';
 import __Layout from './Layout.jsx';
 
 
@@ -72,6 +72,7 @@ export const PAGES = {
     "CreateBusiness": CreateBusiness,
     "CustomerFeedback": CustomerFeedback,
     "Dashboard": Dashboard,
+    "ErrorLogs": ErrorLogs,
     "Home": Home,
     "Omnichannel": Omnichannel,
     "Onboarding": Onboarding,
@@ -80,7 +81,6 @@ export const PAGES = {
     "Tasks": Tasks,
     "VideoCreation": VideoCreation,
     "WhiteLabel": WhiteLabel,
-    "ErrorLogs": ErrorLogs,
 }
 
 export const pagesConfig = {

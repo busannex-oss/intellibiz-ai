@@ -7,8 +7,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Sparkles, 
   Briefcase, 
@@ -25,7 +26,15 @@ import {
   FileDown,
   BookText,
   Loader2,
-  Zap
+  Zap,
+  TrendingUp,
+  DollarSign,
+  Package,
+  Activity,
+  PieChart,
+  BarChart3,
+  Target,
+  Image as ImageIcon
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -37,6 +46,7 @@ import { toast } from 'sonner';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import BrandingKitDocument from '@/components/report/BrandingKitDocument';
+import { PieChart as RechartsPie, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, LineChart, Line } from 'recharts';
 
 export default function Dashboard() {
   const queryClient = useQueryClient();
@@ -124,6 +134,90 @@ export default function Dashboard() {
     return steps;
   };
 
+  // Analytics calculations
+  const getProjectStats = () => {
+    const total = projects.length;
+    const completed = projects.filter(p => p.status === 'completed').length;
+    const inProgress = projects.filter(p => p.status === 'in_progress').length;
+    const draft = projects.filter(p => p.status === 'draft').length;
+    
+    return { total, completed, inProgress, draft };
+  };
+
+  const getFinancialSummary = () => {
+    let totalRevenue = 0;
+    let totalStartupCosts = 0;
+    let totalFunding = 0;
+    
+    projects.forEach(project => {
+      if (project.financial_data?.revenue_streams) {
+        totalRevenue += project.financial_data.revenue_streams.reduce((sum, s) => sum + (s.year1_revenue || 0), 0);
+      }
+      if (project.financial_data?.startup_costs) {
+        totalStartupCosts += Object.values(project.financial_data.startup_costs).reduce((sum, v) => sum + (v || 0), 0);
+      }
+      if (project.financial_data?.funding_rounds) {
+        totalFunding += project.financial_data.funding_rounds.reduce((sum, r) => sum + (r.amount || 0), 0);
+      }
+    });
+    
+    return { totalRevenue, totalStartupCosts, totalFunding };
+  };
+
+  const getRecentActivities = () => {
+    const activities = [];
+    
+    projects.forEach(project => {
+      if (project.logo_url) {
+        activities.push({
+          id: `${project.id}-logo`,
+          type: 'logo',
+          project: project.business_name,
+          date: project.updated_date,
+          icon: Wand2,
+          color: 'text-purple-400'
+        });
+      }
+      if (project.business_plan) {
+        activities.push({
+          id: `${project.id}-plan`,
+          type: 'business_plan',
+          project: project.business_name,
+          date: project.updated_date,
+          icon: FileBarChart,
+          color: 'text-blue-400'
+        });
+      }
+      if (project.website_content) {
+        activities.push({
+          id: `${project.id}-website`,
+          type: 'website',
+          project: project.business_name,
+          date: project.updated_date,
+          icon: Globe2,
+          color: 'text-green-400'
+        });
+      }
+    });
+    
+    return activities.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
+  };
+
+  const stats = getProjectStats();
+  const financials = getFinancialSummary();
+  const recentActivities = getRecentActivities();
+
+  const statusData = [
+    { name: 'Completed', value: stats.completed, color: '#10b981' },
+    { name: 'In Progress', value: stats.inProgress, color: '#f59e0b' },
+    { name: 'Draft', value: stats.draft, color: '#64748b' }
+  ];
+
+  const completionData = projects.map(p => ({
+    name: p.business_name.substring(0, 15),
+    completion: (getStepProgress(p).filter(s => s.done).length / 5) * 100
+  }));
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4 md:p-8">
       {/* Hidden branding kit renderer */}
@@ -137,10 +231,10 @@ export default function Dashboard() {
       
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-white tracking-[-0.02em]">My Projects</h1>
-            <p className="text-slate-400 mt-2 leading-[1.6] tracking-[-0.011em]">Manage your business brands and assets</p>
+            <h1 className="text-3xl md:text-4xl font-bold text-white tracking-[-0.02em]">Dashboard</h1>
+            <p className="text-slate-400 mt-2 leading-[1.6] tracking-[-0.011em]">Overview of your business projects and performance</p>
           </div>
           <Link to={createPageUrl('CreateBusiness')}>
             <Button className="h-14 px-8 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-xl shadow-amber-500/20 font-semibold">
@@ -150,7 +244,172 @@ export default function Dashboard() {
           </Link>
         </div>
 
-        {/* Projects Grid */}
+        {projects.length > 0 && (
+          <>
+            {/* Stats Overview */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+              <Card className="border-0 bg-gradient-to-br from-blue-500/10 to-blue-600/10 border border-blue-500/20">
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center">
+                      <Package className="w-6 h-6 text-blue-400" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-slate-400">Total Projects</p>
+                      <p className="text-2xl font-bold text-white">{stats.total}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 bg-gradient-to-br from-emerald-500/10 to-emerald-600/10 border border-emerald-500/20">
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center">
+                      <Target className="w-6 h-6 text-emerald-400" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-slate-400">Completed</p>
+                      <p className="text-2xl font-bold text-white">{stats.completed}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 bg-gradient-to-br from-purple-500/10 to-purple-600/10 border border-purple-500/20">
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                      <DollarSign className="w-6 h-6 text-purple-400" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-slate-400">Year 1 Revenue</p>
+                      <p className="text-2xl font-bold text-white">${(financials.totalRevenue / 1000).toFixed(0)}k</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 bg-gradient-to-br from-amber-500/10 to-amber-600/10 border border-amber-500/20">
+                <CardContent className="p-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center">
+                      <TrendingUp className="w-6 h-6 text-amber-400" />
+                    </div>
+                    <div>
+                      <p className="text-sm text-slate-400">Total Funding</p>
+                      <p className="text-2xl font-bold text-white">${(financials.totalFunding / 1000).toFixed(0)}k</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Charts and Activities */}
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
+              {/* Project Status Chart */}
+              <Card className="border-0 bg-slate-800/50 backdrop-blur-sm border border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <PieChart className="w-5 h-5 text-amber-400" />
+                    Project Status
+                  </CardTitle>
+                  <CardDescription className="text-slate-400">Distribution by completion</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={200}>
+                    <RechartsPie>
+                      <Pie
+                        data={statusData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={50}
+                        outerRadius={80}
+                        paddingAngle={5}
+                        dataKey="value"
+                      >
+                        {statusData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip 
+                        contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px' }}
+                        labelStyle={{ color: '#fff' }}
+                      />
+                    </RechartsPie>
+                  </ResponsiveContainer>
+                  <div className="flex justify-center gap-4 mt-4">
+                    {statusData.map((item) => (
+                      <div key={item.name} className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full" style={{ backgroundColor: item.color }} />
+                        <span className="text-sm text-slate-400">{item.name}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Completion Progress */}
+              <Card className="border-0 bg-slate-800/50 backdrop-blur-sm border border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <BarChart3 className="w-5 h-5 text-blue-400" />
+                    Completion Rate
+                  </CardTitle>
+                  <CardDescription className="text-slate-400">Project build progress</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={200}>
+                    <BarChart data={completionData}>
+                      <XAxis dataKey="name" stroke="#64748b" style={{ fontSize: '12px' }} />
+                      <YAxis stroke="#64748b" style={{ fontSize: '12px' }} />
+                      <Tooltip 
+                        contentStyle={{ backgroundColor: '#1e293b', border: '1px solid #334155', borderRadius: '8px' }}
+                        labelStyle={{ color: '#fff' }}
+                      />
+                      <Bar dataKey="completion" fill="#3b82f6" radius={[8, 8, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </CardContent>
+              </Card>
+
+              {/* Recent Activity */}
+              <Card className="border-0 bg-slate-800/50 backdrop-blur-sm border border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <Activity className="w-5 h-5 text-emerald-400" />
+                    Recent Activity
+                  </CardTitle>
+                  <CardDescription className="text-slate-400">Latest updates and assets</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {recentActivities.length > 0 ? recentActivities.map((activity) => (
+                      <div key={activity.id} className="flex items-center gap-3 p-3 rounded-lg bg-slate-700/30 hover:bg-slate-700/50 transition-colors">
+                        <div className={`w-8 h-8 rounded-lg bg-slate-700 flex items-center justify-center ${activity.color}`}>
+                          <activity.icon className="w-4 h-4" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-white truncate">{activity.project}</p>
+                          <p className="text-xs text-slate-400 capitalize">{activity.type.replace('_', ' ')}</p>
+                        </div>
+                        <span className="text-xs text-slate-500">{format(new Date(activity.date), 'MMM d')}</span>
+                      </div>
+                    )) : (
+                      <p className="text-sm text-slate-400 text-center py-8">No recent activity</p>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </>
+        )}
+
+        {/* Projects Section */}
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-white mb-4">Your Projects</h2>
+        </div>
+
         {isLoading ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map((i) => (
