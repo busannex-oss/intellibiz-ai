@@ -21,83 +21,192 @@ export default function BusinessPlanStep({ project, onUpdate, onNext, onPrev }) 
     const uvp = project?.unique_value_proposition;
     const advantages = project?.competitive_advantages;
 
+    // Generate comprehensive business plan with investor-ready professional structure
     const response = await base44.integrations.Core.InvokeLLM({
-      prompt: `Create a comprehensive, competition-beating business plan based on market research:
-        
+      prompt: `You are creating an INVESTOR-READY, PROFESSIONAL business plan that matches the quality and depth of PrometAI and top-tier business plan software.
+
+=== BUSINESS INFORMATION ===
 Business Name: ${project.business_name}
 Industry: ${project.industry}
 Description: ${project.description}
 Target Audience: ${project.target_audience || 'General consumers'}
 Location: ${project.location || 'United States'}
 
-=== MARKET RESEARCH INSIGHTS ===
+=== MARKET INTELLIGENCE ===
 Market Size: ${marketResearch?.market_size || 'Not available'}
 Growth Trends: ${marketResearch?.growth_trends || 'Not available'}
 Industry Overview: ${marketResearch?.industry_overview || 'Not available'}
 
-=== COMPETITOR ANALYSIS ===
+Competitors Analyzed:
 ${marketResearch?.competitors?.map(c => `
-Competitor: ${c.name}
-- Weaknesses to exploit: ${c.weaknesses?.join(', ')}
-- Their pricing: ${c.pricing}
+  • ${c.name}
+    - Strengths: ${c.strengths?.join(', ') || 'N/A'}
+    - Weaknesses: ${c.weaknesses?.join(', ') || 'N/A'}
+    - Pricing: ${c.pricing || 'N/A'}
+    - Market Position: ${c.market_share || 'N/A'}
 `).join('\n') || 'No competitor data'}
 
-=== MARKET OPPORTUNITIES ===
-${marketResearch?.opportunities?.join('\n- ') || 'Not available'}
+Market Opportunities: ${marketResearch?.opportunities?.join(', ') || 'Not available'}
+Market Gaps: ${marketResearch?.market_gaps?.join(', ') || 'Not available'}
+Customer Pain Points: ${marketResearch?.customer_pain_points?.join(', ') || 'Not available'}
+Keywords: ${marketResearch?.keywords?.join(', ') || 'Not available'}
 
-=== MARKET GAPS TO FILL ===
-${marketResearch?.market_gaps?.join('\n- ') || 'Not available'}
+Value Proposition: ${uvp || 'Not defined'}
+Competitive Advantages: ${advantages?.join(', ') || 'Not defined'}
 
-=== CUSTOMER PAIN POINTS ===
-${marketResearch?.customer_pain_points?.join('\n- ') || 'Not available'}
+Pricing Analysis:
+- Low-end: ${marketResearch?.pricing_insights?.low_end || 'N/A'}
+- Mid-range: ${marketResearch?.pricing_insights?.mid_range || 'N/A'}  
+- Premium: ${marketResearch?.pricing_insights?.premium || 'N/A'}
+- Recommendation: ${marketResearch?.pricing_insights?.recommendation || 'N/A'}
 
-=== YOUR UNIQUE VALUE PROPOSITION ===
-${uvp || 'Not defined'}
+=== REQUIRED STRUCTURE (following PrometAI standard) ===
 
-=== YOUR COMPETITIVE ADVANTAGES ===
-${advantages?.join('\n- ') || 'Not defined'}
+Create a comprehensive, investor-ready business plan with the following sections. Each section must be detailed, data-driven, and professionally written:
 
-=== PRICING INSIGHTS ===
-Low-end: ${marketResearch?.pricing_insights?.low_end || 'N/A'}
-Mid-range: ${marketResearch?.pricing_insights?.mid_range || 'N/A'}
-Premium: ${marketResearch?.pricing_insights?.premium || 'N/A'}
-Recommendation: ${marketResearch?.pricing_insights?.recommendation || 'N/A'}
+1. **EXECUTIVE SUMMARY** (2-3 pages)
+   - Company overview and mission
+   - Problem statement and solution
+   - Target market snapshot
+   - Unique value proposition
+   - Competitive advantage summary
+   - Financial highlights (3-5 year projections)
+   - Funding requirements (if applicable)
+   - Key success factors
 
-=== TARGET KEYWORDS ===
-${marketResearch?.keywords?.join(', ') || 'Not available'}
+2. **COMPANY DESCRIPTION** (2-3 pages)
+   - Detailed business background
+   - Legal structure and ownership
+   - Location and facilities
+   - Mission statement
+   - Vision statement (5-10 year outlook)
+   - Core values (3-5 principles)
+   - Key milestones and achievements
+   - Strategic partnerships
 
-Generate a STRATEGIC business plan that:
-1. Directly addresses competitor weaknesses
-2. Fills identified market gaps
-3. Solves customer pain points
-4. Leverages your unique advantages
-5. Includes specific strategies to outperform each competitor
+3. **MARKET ANALYSIS** (4-5 pages)
+   - Industry overview and trends
+   - Market size and growth projections
+   - Target market segmentation
+   - Customer demographics and psychographics
+   - Customer needs and pain points
+   - Buying behavior patterns
+   - Market positioning map
+   - Regulatory environment
 
-Sections needed:
-1. Executive Summary (emphasize competitive differentiation)
-2. Company Description (highlight unique positioning)
-3. Market Analysis (reference the research data)
-4. Products/Services (designed to beat competitors)
-5. Marketing Strategy (target competitor weaknesses, use keywords)
-6. Operations Plan (optimized for efficiency)
-7. Financial Projections (realistic based on market data)
-8. Competitive Battle Plan (specific tactics vs each competitor)
-9. Key Success Factors
+4. **COMPETITIVE ANALYSIS** (3-4 pages)
+   - Detailed competitor profiles (top 5-7)
+   - Competitive comparison matrix
+   - Market share analysis
+   - Competitive advantages and disadvantages
+   - Barriers to entry
+   - Strategic positioning
+   - Differentiation strategy
 
-Be specific, actionable, and show exactly how this business will OUTPERFORM competitors. Format nicely with markdown.`,
+5. **ORGANIZATION & MANAGEMENT** (2-3 pages)
+   - Organizational structure chart
+   - Management team profiles
+   - Key personnel and roles
+   - Board of directors/advisors
+   - Staffing plan
+   - Human resources strategy
+   - Company culture and values
+   - Compensation structure
+
+6. **PRODUCTS & SERVICES** (3-4 pages)
+   - Detailed product/service descriptions
+   - Features and benefits analysis
+   - Product lifecycle
+   - Intellectual property and proprietary technology
+   - Research & development plans
+   - Future product roadmap
+   - Pricing strategy
+   - Supplier and vendor relationships
+
+7. **MARKETING & SALES STRATEGY** (4-5 pages)
+   - Marketing strategy overview
+   - Brand positioning
+   - Customer acquisition strategy
+   - Marketing channels and tactics
+   - Sales process and methodology
+   - Sales team structure
+   - Pricing and promotion strategies
+   - Customer retention and loyalty programs
+   - Marketing budget and ROI projections
+
+8. **OPERATIONS PLAN** (3-4 pages)
+   - Production/delivery process
+   - Facilities and equipment
+   - Technology and systems
+   - Supply chain management
+   - Quality control procedures
+   - Inventory management
+   - Key operational milestones
+   - Scalability plans
+
+9. **FINANCIAL PROJECTIONS** (4-5 pages)
+   - Revenue model
+   - 5-year financial forecasts:
+     * Income statements
+     * Cash flow projections
+     * Balance sheets
+     * Break-even analysis
+   - Key financial ratios
+   - Assumptions and justifications
+   - Funding requirements
+   - Use of funds
+   - Exit strategy
+
+10. **RISK ANALYSIS** (2-3 pages)
+    - Market risks
+    - Competitive risks
+    - Financial risks
+    - Operational risks
+    - Regulatory and legal risks
+    - Mitigation strategies
+    - Contingency plans
+
+11. **IMPLEMENTATION TIMELINE** (1-2 pages)
+    - 12-18 month detailed roadmap
+    - Key milestones and deliverables
+    - Resource allocation
+    - Success metrics and KPIs
+
+12. **APPENDIX**
+    - Supporting documents
+    - Market research data
+    - Product specifications
+    - Legal documents
+    - Financial calculations
+
+=== QUALITY REQUIREMENTS ===
+- Write at a professional MBA-level
+- Use specific data and numbers (not vague statements)
+- Include industry benchmarks and comparisons
+- Provide actionable strategies and tactics
+- Make it investor-ready with clear ROI
+- Use professional business language
+- Include specific timeframes and milestones
+- Back all claims with market research data
+- Format beautifully with markdown headers, lists, tables
+
+Generate a COMPLETE, DETAILED business plan that would impress any investor or bank. Make it comprehensive and professional.`,
       response_json_schema: {
         type: "object",
         properties: {
-          executive_summary: { type: "string" },
-          company_description: { type: "string" },
-          market_analysis: { type: "string" },
-          products_services: { type: "string" },
-          marketing_strategy: { type: "string" },
-          operations_plan: { type: "string" },
-          financial_projections: { type: "string" },
-          competitive_battle_plan: { type: "string" },
-          key_success_factors: { type: "string" },
-          full_plan_markdown: { type: "string" }
+          executive_summary: { type: "string", description: "Comprehensive executive summary (2-3 pages worth)" },
+          company_description: { type: "string", description: "Detailed company overview with mission, vision, values" },
+          market_analysis: { type: "string", description: "In-depth market analysis with data and trends" },
+          competitive_analysis: { type: "string", description: "Detailed competitor analysis with comparison matrix" },
+          organization_management: { type: "string", description: "Org structure, management team, staffing plan" },
+          products_services: { type: "string", description: "Detailed product/service descriptions with lifecycle" },
+          marketing_sales_strategy: { type: "string", description: "Comprehensive marketing and sales plan" },
+          operations_plan: { type: "string", description: "Detailed operations and logistics plan" },
+          financial_projections: { type: "string", description: "5-year financial forecasts with assumptions" },
+          risk_analysis: { type: "string", description: "Risk assessment and mitigation strategies" },
+          implementation_timeline: { type: "string", description: "12-18 month roadmap with milestones" },
+          appendix_notes: { type: "string", description: "Supporting documentation notes" },
+          full_plan_markdown: { type: "string", description: "Complete formatted business plan" }
         }
       }
     });
