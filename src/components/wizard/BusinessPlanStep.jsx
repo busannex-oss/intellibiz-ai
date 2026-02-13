@@ -212,10 +212,7 @@ Generate a COMPLETE, DETAILED business plan that would impress any investor or b
     });
     
     await onUpdate({
-      business_plan: {
-        ...response,
-        ...strategyResponse
-      },
+      business_plan: response,
       current_step: Math.max(project.current_step || 1, 2)
     });
     
@@ -368,12 +365,16 @@ Generate a COMPLETE, DETAILED business plan that would impress any investor or b
                 />
               ) : (
                 <Tabs defaultValue="full" className="w-full">
-                  <TabsList className="mb-4 bg-slate-100">
+                  <TabsList className="mb-4 bg-slate-100 flex-wrap">
                     <TabsTrigger value="full">Full Plan</TabsTrigger>
-                    <TabsTrigger value="executive">Executive Summary</TabsTrigger>
-                    <TabsTrigger value="battle">Battle Plan</TabsTrigger>
+                    <TabsTrigger value="executive">Executive</TabsTrigger>
+                    <TabsTrigger value="market">Market Analysis</TabsTrigger>
+                    <TabsTrigger value="competitive">Competition</TabsTrigger>
+                    <TabsTrigger value="products">Products</TabsTrigger>
                     <TabsTrigger value="marketing">Marketing</TabsTrigger>
-                    <TabsTrigger value="financial">Financial</TabsTrigger>
+                    <TabsTrigger value="operations">Operations</TabsTrigger>
+                    <TabsTrigger value="financial">Financials</TabsTrigger>
+                    <TabsTrigger value="risks">Risks</TabsTrigger>
                   </TabsList>
                   <TabsContent value="full" className="prose prose-slate max-w-none">
                     <ReactMarkdown>{businessPlan.full_plan_markdown}</ReactMarkdown>
@@ -381,17 +382,26 @@ Generate a COMPLETE, DETAILED business plan that would impress any investor or b
                   <TabsContent value="executive" className="prose prose-slate max-w-none">
                     <ReactMarkdown>{businessPlan.executive_summary}</ReactMarkdown>
                   </TabsContent>
-                  <TabsContent value="battle" className="prose prose-slate max-w-none">
-                    <div className="not-prose mb-4 p-4 bg-gradient-to-r from-red-50 to-orange-50 rounded-lg border border-red-200">
-                      <p className="text-sm text-red-800 font-medium">🎯 Competitive Battle Plan - Strategies to outperform each competitor</p>
-                    </div>
-                    <ReactMarkdown>{businessPlan.competitive_battle_plan}</ReactMarkdown>
+                  <TabsContent value="market" className="prose prose-slate max-w-none">
+                    <ReactMarkdown>{businessPlan.market_analysis}</ReactMarkdown>
+                  </TabsContent>
+                  <TabsContent value="competitive" className="prose prose-slate max-w-none">
+                    <ReactMarkdown>{businessPlan.competitive_analysis}</ReactMarkdown>
+                  </TabsContent>
+                  <TabsContent value="products" className="prose prose-slate max-w-none">
+                    <ReactMarkdown>{businessPlan.products_services}</ReactMarkdown>
                   </TabsContent>
                   <TabsContent value="marketing" className="prose prose-slate max-w-none">
-                    <ReactMarkdown>{businessPlan.marketing_strategy}</ReactMarkdown>
+                    <ReactMarkdown>{businessPlan.marketing_sales_strategy}</ReactMarkdown>
+                  </TabsContent>
+                  <TabsContent value="operations" className="prose prose-slate max-w-none">
+                    <ReactMarkdown>{businessPlan.operations_plan}</ReactMarkdown>
                   </TabsContent>
                   <TabsContent value="financial" className="prose prose-slate max-w-none">
                     <ReactMarkdown>{businessPlan.financial_projections}</ReactMarkdown>
+                  </TabsContent>
+                  <TabsContent value="risks" className="prose prose-slate max-w-none">
+                    <ReactMarkdown>{businessPlan.risk_analysis}</ReactMarkdown>
                   </TabsContent>
                 </Tabs>
               )}
