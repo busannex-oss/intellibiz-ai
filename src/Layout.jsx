@@ -94,6 +94,12 @@ export default function Layout({ children }) {
                   Pitch Deck
                 </Button>
               </Link>
+              <Link to={createPageUrl('ContentStrategy')}>
+                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Content Strategy
+                </Button>
+              </Link>
               <Link to={createPageUrl('ErrorLogs')}>
                 <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
                   <Sparkles className="w-4 h-4 mr-2" />

@@ -63,6 +63,7 @@ import Tasks from './pages/Tasks';
 import VideoCreation from './pages/VideoCreation';
 import WhiteLabel from './pages/WhiteLabel';
 import PitchDeck from './pages/PitchDeck';
+import ContentStrategy from './pages/ContentStrategy';
 import __Layout from './Layout.jsx';
 
 
@@ -83,6 +84,7 @@ export const PAGES = {
     "VideoCreation": VideoCreation,
     "WhiteLabel": WhiteLabel,
     "PitchDeck": PitchDeck,
+    "ContentStrategy": ContentStrategy,
 }
 
 export const pagesConfig = {
