@@ -20,41 +20,6 @@ export default function BusinessPlanStep({ project, onUpdate, onNext, onPrev }) 
     const marketResearch = project?.market_research;
     const uvp = project?.unique_value_proposition;
     const advantages = project?.competitive_advantages;
-    
-    // Generate Business Strategy & Objectives
-    const strategyResponse = await base44.integrations.Core.InvokeLLM({
-      prompt: `Based on the following business information, generate a comprehensive Business Strategy & Objectives section:
-
-Business Name: ${project.business_name}
-Industry: ${project.industry}
-Description: ${project.description}
-Target Audience: ${project.target_audience || 'General consumers'}
-Unique Value Proposition: ${uvp || 'Not defined'}
-Competitive Advantages: ${advantages?.join(', ') || 'Not defined'}
-
-Market Opportunities: ${marketResearch?.opportunities?.join(', ') || 'Not available'}
-Market Gaps: ${marketResearch?.market_gaps?.join(', ') || 'Not available'}
-
-Generate:
-1. Mission Statement - A clear, inspiring statement of the company's purpose
-2. Vision Statement - Where the company aims to be in 5-10 years
-3. Core Values - 3-5 fundamental principles that guide the business
-4. Strategic Objectives - 5-7 specific, measurable objectives for the next 1-3 years
-5. Key Success Metrics - How success will be measured
-
-Make it compelling, specific, and aligned with the market opportunities.`,
-      response_json_schema: {
-        type: "object",
-        properties: {
-          mission: { type: "string" },
-          vision: { type: "string" },
-          core_values: { type: "array", items: { type: "string" } },
-          objectives: { type: "array", items: { type: "string" } },
-          success_metrics: { type: "array", items: { type: "string" } },
-          competitive_advantages: { type: "array", items: { type: "string" } }
-        }
-      }
-    });
 
     const response = await base44.integrations.Core.InvokeLLM({
       prompt: `Create a comprehensive, competition-beating business plan based on market research:
