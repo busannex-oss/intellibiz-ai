@@ -62,6 +62,7 @@ import PhoneSystem from './pages/PhoneSystem';
 import Tasks from './pages/Tasks';
 import VideoCreation from './pages/VideoCreation';
 import WhiteLabel from './pages/WhiteLabel';
+import PitchDeck from './pages/PitchDeck';
 import __Layout from './Layout.jsx';
 
 
@@ -81,6 +82,7 @@ export const PAGES = {
     "Tasks": Tasks,
     "VideoCreation": VideoCreation,
     "WhiteLabel": WhiteLabel,
+    "PitchDeck": PitchDeck,
 }
 
 export const pagesConfig = {

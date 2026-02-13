@@ -88,6 +88,12 @@ export default function Layout({ children }) {
                   Videos
                 </Button>
               </Link>
+              <Link to={createPageUrl('PitchDeck')}>
+                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
+                  <Sparkles className="w-4 h-4 mr-2" />
+                  Pitch Deck
+                </Button>
+              </Link>
               <Link to={createPageUrl('ErrorLogs')}>
                 <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
                   <Sparkles className="w-4 h-4 mr-2" />
