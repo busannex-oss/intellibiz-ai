@@ -101,8 +101,8 @@ export default function OmnichannelStep({ project, onUpdate, onNext, onPrev }) {
               <Globe className="w-8 h-8" />
             </div>
             <div>
-              <h2 className="text-3xl font-bold">Omnichannel Communication</h2>
-              <p className="opacity-90">Connect with customers everywhere they are</p>
+              <h2 className="text-3xl font-bold">AI-Powered Omnichannel</h2>
+              <p className="opacity-90">AI-driven unified communication across all channels</p>
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4 mt-6">
@@ -165,9 +165,9 @@ export default function OmnichannelStep({ project, onUpdate, onNext, onPrev }) {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Bot className="w-5 h-5 text-violet-600" />
-              AI Assistant Settings
+              AI-Powered Assistant
             </CardTitle>
-            <CardDescription>Configure your AI-powered customer support</CardDescription>
+            <CardDescription>Advanced AI handles customer conversations intelligently</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center justify-between p-4 bg-violet-50 rounded-xl">
