@@ -38,7 +38,8 @@ import {
   Phone,
   Palette,
   Settings,
-  Video
+  Video,
+  Search
 } from 'lucide-react';
 import {
   DropdownMenu,
