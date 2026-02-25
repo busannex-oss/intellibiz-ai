@@ -9,13 +9,15 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { Shield, Users, Trash2, UserPlus, Settings, Activity, AlertTriangle } from 'lucide-react';
+import { Shield, Users, Trash2, UserPlus, Settings, Activity, AlertTriangle, Key, Mail } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AdminDashboard() {
   const [currentUser, setCurrentUser] = useState(null);
   const [newUserEmail, setNewUserEmail] = useState('');
   const [newUserRole, setNewUserRole] = useState('user');
+  const [resetPasswordEmail, setResetPasswordEmail] = useState('');
+  const [showResetDialog, setShowResetDialog] = useState(false);
   const queryClient = useQueryClient();
 
   // Fetch current user
@@ -152,6 +154,17 @@ export default function AdminDashboard() {
     });
   };
 
+  const handleResetPassword = async (email) => {
+    try {
+      await base44.auth.resetPassword(email);
+      toast.success(`Password reset email sent to ${email}`);
+      setShowResetDialog(false);
+      setResetPasswordEmail('');
+    } catch (error) {
+      toast.error('Failed to send password reset email');
+    }
+  };
+
   if (!isAdmin) {
     return (
       <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
@@ -183,13 +196,14 @@ export default function AdminDashboard() {
             <p className="text-slate-400 mt-1">User management and permissions</p>
           </div>
           {isSuperAdmin && (
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button className="bg-blue-600 hover:bg-blue-700">
-                  <UserPlus className="w-4 h-4 mr-2" />
-                  Invite User
-                </Button>
-              </DialogTrigger>
+            <div className="flex gap-2">
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="bg-blue-600 hover:bg-blue-700">
+                    <UserPlus className="w-4 h-4 mr-2" />
+                    Invite User
+                  </Button>
+                </DialogTrigger>
               <DialogContent className="bg-slate-800 border-slate-700">
                 <DialogHeader>
                   <DialogTitle className="text-white">Invite New User</DialogTitle>
@@ -224,6 +238,41 @@ export default function AdminDashboard() {
                 </div>
               </DialogContent>
             </Dialog>
+            
+            <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
+              <DialogTrigger asChild>
+                <Button variant="outline" className="border-slate-700 text-white hover:bg-slate-800">
+                  <Key className="w-4 h-4 mr-2" />
+                  Reset Password
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="bg-slate-800 border-slate-700">
+                <DialogHeader>
+                  <DialogTitle className="text-white">Reset User Password</DialogTitle>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <div>
+                    <Label className="text-white">User Email</Label>
+                    <Input
+                      type="email"
+                      value={resetPasswordEmail}
+                      onChange={(e) => setResetPasswordEmail(e.target.value)}
+                      placeholder="user@example.com"
+                      className="bg-slate-900 border-slate-700 text-white"
+                    />
+                  </div>
+                  <Button 
+                    onClick={() => handleResetPassword(resetPasswordEmail)} 
+                    className="w-full"
+                    disabled={!resetPasswordEmail}
+                  >
+                    <Mail className="w-4 h-4 mr-2" />
+                    Send Reset Link
+                  </Button>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
           )}
         </div>
 
@@ -333,15 +382,27 @@ export default function AdminDashboard() {
                             <SelectContent className="bg-slate-800 border-slate-700">
                               <SelectItem value="user">User</SelectItem>
                               <SelectItem value="admin">Admin</SelectItem>
+                              <SelectItem value="super_admin">Super Admin</SelectItem>
                             </SelectContent>
                           </Select>
                           <Button
                             size="sm"
                             variant="outline"
                             onClick={() => handleToggleActive(user)}
-                            className="border-slate-600"
+                            className="border-slate-600 text-white"
                           >
                             {user.is_active === false ? 'Activate' : 'Deactivate'}
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => {
+                              setResetPasswordEmail(user.email);
+                              setShowResetDialog(true);
+                            }}
+                            className="border-slate-600 text-white"
+                          >
+                            <Key className="w-4 h-4" />
                           </Button>
                           <Button
                             size="sm"
