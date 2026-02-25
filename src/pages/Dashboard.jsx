@@ -471,7 +471,7 @@ export default function Dashboard() {
         )}
 
         {/* Quick Actions */}
-        <div className="grid md:grid-cols-6 gap-4 mb-8">
+        <div className="grid md:grid-cols-7 gap-4 mb-8">
           <Link to={createPageUrl('Resources')}>
             <Card className="border-0 bg-gradient-to-br from-purple-500/10 to-purple-600/10 border border-purple-500/20 hover:border-purple-500/40 transition-all cursor-pointer h-full">
               <CardContent className="p-5">
@@ -523,6 +523,15 @@ export default function Dashboard() {
                 <Search className="w-9 h-9 text-teal-400 mb-2" />
                 <h3 className="font-semibold text-white text-sm mb-0.5">SEO Tools</h3>
                 <p className="text-xs text-slate-400">Optimize rankings</p>
+              </CardContent>
+            </Card>
+          </Link>
+          <Link to={createPageUrl('CustomerJourney')}>
+            <Card className="border-0 bg-gradient-to-br from-violet-500/10 to-violet-600/10 border border-violet-500/20 hover:border-violet-500/40 transition-all cursor-pointer h-full">
+              <CardContent className="p-5">
+                <Map className="w-9 h-9 text-violet-400 mb-2" />
+                <h3 className="font-semibold text-white text-sm mb-0.5">Journey Map</h3>
+                <p className="text-xs text-slate-400">Customer flow</p>
               </CardContent>
             </Card>
           </Link>
