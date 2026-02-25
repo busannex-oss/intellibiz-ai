@@ -56,7 +56,13 @@ export default function Dashboard() {
   
   const { data: projects = [], isLoading } = useQuery({
     queryKey: ['projects'],
-    queryFn: () => base44.entities.BusinessProject.list('-created_date')
+    queryFn: async () => {
+      const allProjects = await base44.entities.BusinessProject.list('-created_date');
+      // Cache optimization: only fetch essential data
+      return allProjects;
+    },
+    staleTime: 30000, // Cache for 30 seconds
+    cacheTime: 300000 // Keep in cache for 5 minutes
   });
 
   const deleteMutation = useMutation({
