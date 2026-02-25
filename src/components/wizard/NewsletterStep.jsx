@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ChevronLeft, Mail, Users, Share2, Trash2, Plus, CheckCircle, AlertCircle, Copy, ExternalLink, Palette, ArrowRight } from 'lucide-react';
+import { ChevronLeft, Mail, Users, Share2, Trash2, Plus, CheckCircle, AlertCircle, Copy, ExternalLink, Palette, ArrowRight, Download } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
@@ -84,6 +84,30 @@ export default function NewsletterStep({ project, onUpdate, onNext, onPrev }) {
   const copyEmbedCode = () => {
     navigator.clipboard.writeText(embedCode);
     toast.success('Embed code copied!');
+  };
+
+  const exportSubscribers = () => {
+    const csvContent = [
+      ['Email', 'Name', 'Source', 'Opted In', 'Created Date'],
+      ...subscribers.map(s => [
+        s.email,
+        s.name || '',
+        s.source,
+        s.opted_in ? 'Yes' : 'No',
+        new Date(s.created_date).toLocaleDateString()
+      ])
+    ].map(row => row.join(',')).join('\n');
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${project?.business_name || 'subscribers'}-list.csv`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
+    toast.success('Subscriber list exported!');
   };
 
   const optedInCount = subscribers.filter(s => s.opted_in).length;
@@ -279,10 +303,24 @@ export default function NewsletterStep({ project, onUpdate, onNext, onPrev }) {
       {/* Subscriber List */}
       <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
         <CardHeader>
-          <CardTitle className="text-lg">Subscriber List</CardTitle>
-          <CardDescription>
-            Manage your subscribers and their opt-in status
-          </CardDescription>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle className="text-lg">Subscriber List</CardTitle>
+              <CardDescription>
+                Manage your subscribers and their opt-in status
+              </CardDescription>
+            </div>
+            {subscribers.length > 0 && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={exportSubscribers}
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Export CSV
+              </Button>
+            )}
+          </div>
         </CardHeader>
         <CardContent>
           {subscribers.length > 0 ? (

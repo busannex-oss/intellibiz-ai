@@ -138,13 +138,13 @@ Target Audience: ${formData.target_audience}
 Competitors analyzed: ${competitorAnalysis.competitors?.map(c => c.name).join(', ')}
 
 Identify:
-1. Customer pain points not being addressed by competitors
+1. Customer pain points not being addressed by competitors (MUST include: failures with traditional financial literacy education, lack of practical money management tools, inadequate financial planning resources)
 2. Market gaps and unmet needs
 3. Opportunities for differentiation
 4. Potential threats to be aware of
 5. Keywords customers search for
 6. Pricing insights and recommendations
- 7. Target demographic details including: age range, income level, education level, region/location, languages spoken, gender distribution, marital status distribution, household size, occupation types, buying behaviors, preferences, and psychographic profile`,
+7. Target demographic details including: age range, income level, education level, region/location, languages spoken, gender distribution, marital status distribution, household size, occupation types, buying behaviors, preferences, and psychographic profile`,
       add_context_from_internet: true,
       response_json_schema: {
         type: "object",
@@ -292,10 +292,10 @@ Create:
           AI-Powered Market Intelligence
         </div>
         <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-violet-700 to-indigo-700 bg-clip-text text-transparent">
-          Competitive Market Research
+          AI-Powered Market Research
         </h2>
         <p className="text-slate-500 text-lg max-w-2xl mx-auto">
-          Our AI analyzes your industry, competitors, and market opportunities to build a brand that outperforms
+          Advanced AI analyzes your industry, competitors, and market opportunities to build a winning strategy
         </p>
       </div>
 

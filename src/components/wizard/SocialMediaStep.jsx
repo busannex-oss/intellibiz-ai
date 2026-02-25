@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import { Loader2, Sparkles, RefreshCw, ChevronRight, ChevronLeft, Download, Image as ImageIcon } from 'lucide-react';
+import { Loader2, Sparkles, RefreshCw, ChevronRight, ChevronLeft, Download, Image as ImageIcon, Trash2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { motion } from 'framer-motion';
 
@@ -18,12 +18,23 @@ const PLATFORMS = [
   { id: 'threads', name: 'Threads', headerSize: 'N/A', profileSize: '320x320', icon: '🧵', recommended: false },
 ];
 
+// Add delete asset function
+const deleteAsset = async (platformId) => {
+  const updatedAssets = (project?.social_media_assets || []).filter(a => a.platform !== platformId);
+  await onUpdate({ social_media_assets: updatedAssets });
+};
+
 export default function SocialMediaStep({ project, onUpdate, onNext, onPrev }) {
   const [selectedPlatforms, setSelectedPlatforms] = useState(
     project?.selected_platforms || ['facebook', 'instagram', 'twitter', 'linkedin']
   );
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatingPlatform, setGeneratingPlatform] = useState(null);
+
+  const deleteAsset = async (platformId) => {
+    const updatedAssets = (project?.social_media_assets || []).filter(a => a.platform !== platformId);
+    await onUpdate({ social_media_assets: updatedAssets });
+  };
 
   const togglePlatform = (platformId) => {
     setSelectedPlatforms(prev =>
@@ -80,10 +91,18 @@ DESIGN REQUIREMENTS:
 
 OUTPUT: A cohesive brand header that maintains consistency across all platforms.`;
 
-    const headerResponse = await base44.integrations.Core.GenerateImage({
+    let headerResponse = await base44.integrations.Core.GenerateImage({
       prompt: headerPrompt,
       existing_image_urls: project?.logo_url ? [project.logo_url] : undefined
     });
+
+    // Optimize header for transparent background and professional display
+    const optimizedHeader = await base44.functions.invoke('optimizeImage', {
+      imageUrl: headerResponse.url,
+      transparent: true,
+      upscale: true
+    });
+    headerResponse = { url: optimizedHeader.data.optimized_url };
 
     // Generate profile image with brand consistency
     const profilePrompt = `Create a professional ${platform.name} profile picture for "${project.business_name}".
@@ -113,10 +132,18 @@ ${brandPersonality?.traits?.join(', ') || 'Professional, innovative'}
 
 OUTPUT: A profile image that clearly represents the brand with logo and brand colors.`;
 
-    const profileResponse = await base44.integrations.Core.GenerateImage({
+    let profileResponse = await base44.integrations.Core.GenerateImage({
       prompt: profilePrompt,
       existing_image_urls: project?.logo_url ? [project.logo_url] : undefined
     });
+
+    // Optimize profile for transparent background and professional display
+    const optimizedProfile = await base44.functions.invoke('optimizeImage', {
+      imageUrl: profileResponse.url,
+      transparent: true,
+      upscale: true
+    });
+    profileResponse = { url: optimizedProfile.data.optimized_url };
 
     const existingAssets = project?.social_media_assets || [];
     const updatedAssets = existingAssets.filter(a => a.platform !== platformId);
@@ -230,15 +257,25 @@ OUTPUT: A profile image that clearly represents the brand with logo and brand co
                     <CardTitle className="text-lg">{platform.name}</CardTitle>
                   </div>
                   {asset && (
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => generateAssets(platformId)}
-                      disabled={generatingPlatform === platformId}
-                    >
-                      <RefreshCw className={`w-4 h-4 mr-1 ${generatingPlatform === platformId ? 'animate-spin' : ''}`} />
-                      Regenerate
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => generateAssets(platformId)}
+                        disabled={generatingPlatform === platformId}
+                      >
+                        <RefreshCw className={`w-4 h-4 mr-1 ${generatingPlatform === platformId ? 'animate-spin' : ''}`} />
+                        Regenerate
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => deleteAsset(platformId)}
+                        className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
+                    </div>
                   )}
                 </div>
               </CardHeader>

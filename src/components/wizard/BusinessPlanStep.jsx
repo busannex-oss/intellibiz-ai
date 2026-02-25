@@ -244,10 +244,10 @@ Generate a COMPLETE, DETAILED business plan that would impress any investor or b
     >
       <div className="text-center space-y-3">
         <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-violet-700 to-indigo-700 bg-clip-text text-transparent">
-          Strategic Business Plan
+          AI-Powered 30-Year Business Plan
         </h2>
         <p className="text-slate-500 text-lg max-w-2xl mx-auto">
-          AI creates a competition-beating plan based on your market research
+          Advanced AI creates investor-ready 30-year strategic plan based on market research
         </p>
       </div>
 
