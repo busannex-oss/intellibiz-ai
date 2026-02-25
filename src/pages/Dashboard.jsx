@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
@@ -9,6 +9,8 @@ import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import WelcomeTour from '@/components/onboarding/WelcomeTour';
+import OnboardingChecklist from '@/components/onboarding/OnboardingChecklist';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Sparkles, 
@@ -58,7 +60,13 @@ export default function Dashboard() {
   const [generatingKit, setGeneratingKit] = useState(null);
   const brandingKitRef = useRef(null);
   const [brandingKitProject, setBrandingKitProject] = useState(null);
+  const [showWelcomeTour, setShowWelcomeTour] = useState(false);
   
+  const { data: user } = useQuery({
+    queryKey: ['currentUser'],
+    queryFn: () => base44.auth.me()
+  });
+
   const { data: projects = [], isLoading } = useQuery({
     queryKey: ['projects'],
     queryFn: async () => {
@@ -76,6 +84,26 @@ export default function Dashboard() {
       queryClient.invalidateQueries(['projects']);
     }
   });
+
+  const updateOnboardingMutation = useMutation({
+    mutationFn: async (data) => {
+      await base44.auth.updateMe(data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['currentUser']);
+    }
+  });
+
+  useEffect(() => {
+    if (user && !user.onboarding_completed && projects.length === 0) {
+      setShowWelcomeTour(true);
+    }
+  }, [user, projects]);
+
+  const handleTourComplete = () => {
+    setShowWelcomeTour(false);
+    updateOnboardingMutation.mutate({ onboarding_completed: true });
+  };
 
   const downloadBrandingKit = async (project) => {
     setGeneratingKit(project.id);
@@ -231,6 +259,12 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4 md:p-8">
+      <WelcomeTour 
+        open={showWelcomeTour} 
+        onClose={() => setShowWelcomeTour(false)}
+        onComplete={handleTourComplete}
+      />
+      
       {/* Hidden branding kit renderer */}
       {brandingKitProject && (
         <div className="fixed left-[-9999px] top-0">
@@ -247,13 +281,33 @@ export default function Dashboard() {
             <h1 className="text-3xl md:text-4xl font-bold text-white tracking-[-0.02em]">Dashboard</h1>
             <p className="text-slate-400 mt-2 leading-[1.6] tracking-[-0.011em]">Overview of your business projects and performance</p>
           </div>
-          <Link to={createPageUrl('CreateBusiness')}>
-            <Button className="h-14 px-8 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-xl shadow-amber-500/20 font-semibold">
-              <Sparkles className="w-5 h-5 mr-2" />
-              New Business
+          <div className="flex gap-2">
+            <Button 
+              variant="outline" 
+              onClick={() => setShowWelcomeTour(true)}
+              className="border-slate-700 text-white hover:bg-slate-800"
+            >
+              <Sparkles className="w-4 h-4 mr-2" />
+              View Tour
             </Button>
-          </Link>
+            <Link to={createPageUrl('CreateBusiness')}>
+              <Button className="h-14 px-8 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-xl shadow-amber-500/20 font-semibold">
+                <Sparkles className="w-5 h-5 mr-2" />
+                New Business
+              </Button>
+            </Link>
+          </div>
         </div>
+
+        {/* Onboarding Checklist - Show for users who haven't completed onboarding */}
+        {user && !user.onboarding_completed && (
+          <div className="mb-8">
+            <OnboardingChecklist 
+              checklist={user.onboarding_checklist || {}}
+              projects={projects}
+            />
+          </div>
+        )}
 
         {projects.length > 0 && (
           <>
