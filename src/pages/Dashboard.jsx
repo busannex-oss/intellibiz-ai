@@ -462,6 +462,15 @@ export default function Dashboard() {
               </CardContent>
             </Card>
           </Link>
+          <Link to={createPageUrl('SEOTools')}>
+            <Card className="border-0 bg-gradient-to-br from-teal-500/10 to-teal-600/10 border border-teal-500/20 hover:border-teal-500/40 transition-all cursor-pointer h-full">
+              <CardContent className="p-5">
+                <Search className="w-9 h-9 text-teal-400 mb-2" />
+                <h3 className="font-semibold text-white text-sm mb-0.5">SEO Tools</h3>
+                <p className="text-xs text-slate-400">Optimize rankings</p>
+              </CardContent>
+            </Card>
+          </Link>
           <Link to={createPageUrl('AccountSettings')}>
             <Card className="border-0 bg-gradient-to-br from-emerald-500/10 to-emerald-600/10 border border-emerald-500/20 hover:border-emerald-500/40 transition-all cursor-pointer h-full">
               <CardContent className="p-5">

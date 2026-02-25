@@ -12,6 +12,7 @@ import UnifiedInbox from '@/components/omnichannel/UnifiedInbox';
 import ChannelSetup from '@/components/omnichannel/ChannelSetup';
 import OmnichannelAnalytics from '@/components/omnichannel/OmnichannelAnalytics';
 import ChatWidget from '@/components/omnichannel/ChatWidget';
+import AIChatbot from '@/components/chatbot/AIChatbot';
 
 export default function Omnichannel() {
   const [searchParams] = useSearchParams();
@@ -55,6 +56,29 @@ export default function Omnichannel() {
     }
   };
 
+  const handleEscalation = (escalationData) => {
+    // Create a conversation entry for human agent
+    const newConversation = {
+      project_id: projectId,
+      channel: 'website_chat',
+      contact: {
+        name: 'Website Visitor',
+        channel_id: 'chatbot_' + Date.now()
+      },
+      status: 'open',
+      priority: escalationData.urgency === 'high' ? 'urgent' : 'high',
+      last_message: escalationData.customer_message,
+      last_message_at: new Date().toISOString(),
+      ai_summary: escalationData.reason,
+      messages: escalationData.conversation_history || []
+    };
+    
+    // Save to database
+    base44.entities.Conversation.create(newConversation).then(() => {
+      setActiveTab('inbox');
+    });
+  };
+
   if (isLoading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
@@ -65,6 +89,11 @@ export default function Omnichannel() {
 
   return (
     <div className="min-h-screen bg-slate-50">
+      <AIChatbot 
+        project={project}
+        personality={config?.channels?.website_chat?.ai_personality || 'friendly and professional'}
+        onEscalate={handleEscalation}
+      />
       {/* Header */}
       <div className="bg-white border-b sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 py-4">
