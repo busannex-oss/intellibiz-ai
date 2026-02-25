@@ -3,13 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
-import { 
-  Zap as LogoIcon, 
-  FileBarChart, 
-  Wand2, 
-  Globe2, 
-  Megaphone, 
-  Headphones, 
+import {
+  Zap as LogoIcon,
+  FileBarChart,
+  Wand2,
+  Globe2,
+  Megaphone,
+  Headphones,
   Mail,
   ChevronRight,
   Rocket,
@@ -22,48 +22,48 @@ import {
   Twitter,
   Instagram,
   Linkedin,
-  Youtube
-} from 'lucide-react';
+  Youtube } from
+'lucide-react';
 import { motion } from 'framer-motion';
 
 const features = [
-  {
-    icon: Radar,
-    title: 'Market Research',
-    description: 'AI analyzes competitors, market gaps, and opportunities to position you for success',
-    color: 'from-cyan-500 to-blue-500'
-  },
-  {
-    icon: FileBarChart,
-    title: 'Strategic Business Plan',
-    description: 'Competition-beating plans that exploit competitor weaknesses',
-    color: 'from-violet-500 to-purple-500'
-  },
-  {
-    icon: Wand2,
-    title: 'Differentiated Brand',
-    description: 'Logos and colors strategically designed to stand out from competitors',
-    color: 'from-pink-500 to-rose-500'
-  },
-  {
-    icon: Globe2,
-    title: 'Conversion Website',
-    description: 'SEO-optimized content targeting keywords your competitors miss',
-    color: 'from-blue-500 to-cyan-500'
-  },
-  {
-    icon: Megaphone,
-    title: 'Social Media',
-    description: 'Branded assets designed to capture market attention',
-    color: 'from-orange-500 to-amber-500'
-  },
-  {
-    icon: Headphones,
-    title: 'Business Resources',
-    description: 'AI phone services and directories for rapid market presence',
-    color: 'from-emerald-500 to-green-500'
-  }
-];
+{
+  icon: Radar,
+  title: 'Market Research',
+  description: 'AI analyzes competitors, market gaps, and opportunities to position you for success',
+  color: 'from-cyan-500 to-blue-500'
+},
+{
+  icon: FileBarChart,
+  title: 'Strategic Business Plan',
+  description: 'Competition-beating plans that exploit competitor weaknesses',
+  color: 'from-violet-500 to-purple-500'
+},
+{
+  icon: Wand2,
+  title: 'Differentiated Brand',
+  description: 'Logos and colors strategically designed to stand out from competitors',
+  color: 'from-pink-500 to-rose-500'
+},
+{
+  icon: Globe2,
+  title: 'Conversion Website',
+  description: 'SEO-optimized content targeting keywords your competitors miss',
+  color: 'from-blue-500 to-cyan-500'
+},
+{
+  icon: Megaphone,
+  title: 'Social Media',
+  description: 'Branded assets designed to capture market attention',
+  color: 'from-orange-500 to-amber-500'
+},
+{
+  icon: Headphones,
+  title: 'Business Resources',
+  description: 'AI phone services and directories for rapid market presence',
+  color: 'from-emerald-500 to-green-500'
+}];
+
 
 export default function Home() {
   return (
@@ -80,8 +80,8 @@ export default function Home() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-center max-w-4xl mx-auto"
-          >
+            className="text-center max-w-4xl mx-auto">
+
             <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm font-medium mb-8">
               <Zap className="w-4 h-4" />
               AI-Powered Business Builder
@@ -122,8 +122,8 @@ export default function Home() {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
-        >
+          className="text-center mb-16">
+
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-[-0.02em]">
             Everything You Need to Launch
           </h2>
@@ -133,14 +133,14 @@ export default function Home() {
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature, index) => (
-            <motion.div
-              key={feature.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-            >
+          {features.map((feature, index) =>
+          <motion.div
+            key={feature.title}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: index * 0.1 }}>
+
               <Card className="group border border-slate-700/50 bg-gradient-to-br from-slate-800/80 to-slate-800/40 backdrop-blur-sm h-full overflow-hidden hover:border-slate-600 transition-all duration-300">
                 <CardContent className="p-8">
                   <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
@@ -151,7 +151,7 @@ export default function Home() {
                 </CardContent>
               </Card>
             </motion.div>
-          ))}
+          )}
         </div>
       </div>
 
@@ -169,24 +169,24 @@ export default function Home() {
           
           <div className="grid md:grid-cols-4 gap-8">
             {[
-              { step: '01', title: 'Describe Your Idea', desc: 'Tell us about your business' },
-              { step: '02', title: 'AI Researches Market', desc: 'Analyzes competitors & gaps' },
-              { step: '03', title: 'Strategic Creation', desc: 'Brand built to outperform' },
-              { step: '04', title: 'Launch & Dominate', desc: 'Enter market with advantage' }
-            ].map((item, i) => (
-              <motion.div
-                key={item.step}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.2 }}
-                className="text-center"
-              >
+            { step: '01', title: 'Describe Your Idea', desc: 'Tell us about your business' },
+            { step: '02', title: 'AI Researches Market', desc: 'Analyzes competitors & gaps' },
+            { step: '03', title: 'Strategic Creation', desc: 'Brand built to outperform' },
+            { step: '04', title: 'Launch & Dominate', desc: 'Enter market with advantage' }].
+            map((item, i) =>
+            <motion.div
+              key={item.step}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.2 }}
+              className="text-center">
+
                 <div className="text-7xl font-extrabold bg-gradient-to-b from-amber-500/30 to-transparent bg-clip-text text-transparent mb-4 tracking-[-0.03em]">{item.step}</div>
                 <h3 className="text-xl font-semibold text-white mb-2 tracking-[-0.02em]">{item.title}</h3>
                 <p className="text-slate-400 leading-[1.6] tracking-[-0.011em]">{item.desc}</p>
               </motion.div>
-            ))}
+            )}
           </div>
         </div>
       </div>
@@ -200,12 +200,12 @@ export default function Home() {
             </h2>
             <div className="space-y-6">
               {[
-                { icon: Target, title: 'Competitor Intelligence', desc: 'AI analyzes real competitors to find exploitable weaknesses' },
-                { icon: Zap, title: 'Strategic Differentiation', desc: 'Every asset designed to fill market gaps' },
-                { icon: Shield, title: 'Data-Driven Decisions', desc: 'Brand colors, messaging, and positioning backed by research' },
-                { icon: LogoIcon, title: 'Conversion Optimized', desc: 'Content targets keywords and pain points competitors miss' }
-              ].map((benefit) => (
-                <div key={benefit.title} className="flex gap-4">
+              { icon: Target, title: 'Competitor Intelligence', desc: 'AI analyzes real competitors to find exploitable weaknesses' },
+              { icon: Zap, title: 'Strategic Differentiation', desc: 'Every asset designed to fill market gaps' },
+              { icon: Shield, title: 'Data-Driven Decisions', desc: 'Brand colors, messaging, and positioning backed by research' },
+              { icon: LogoIcon, title: 'Conversion Optimized', desc: 'Content targets keywords and pain points competitors miss' }].
+              map((benefit) =>
+              <div key={benefit.title} className="flex gap-4">
                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 border border-amber-500/30 flex items-center justify-center flex-shrink-0">
                     <benefit.icon className="w-6 h-6 text-amber-400" />
                   </div>
@@ -214,20 +214,20 @@ export default function Home() {
                     <p className="text-slate-400 leading-[1.6] tracking-[-0.011em]">{benefit.desc}</p>
                   </div>
                 </div>
-              ))}
+              )}
             </div>
           </div>
           <div className="relative">
-            <div className="aspect-square bg-gradient-to-br from-slate-800 to-slate-800/50 rounded-3xl border border-slate-700/50 flex items-center justify-center overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-orange-500/5" />
-              <div className="text-center p-8 relative z-10">
-                <div className="w-28 h-28 rounded-3xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center mx-auto mb-6 shadow-2xl shadow-amber-500/30">
-                  <Rocket className="w-14 h-14 text-white" />
-                </div>
-                <p className="text-2xl font-bold text-white">Ready to Launch?</p>
-                <p className="text-slate-400 mt-2">Your business awaits</p>
-              </div>
-            </div>
+            
+
+
+
+
+
+
+
+
+
           </div>
         </div>
       </div>
@@ -258,45 +258,45 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="flex items-center gap-3">
-              <div className="w-32 h-32 rounded-3xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-2xl shadow-amber-500/30">
-                <Zap className="w-16 h-16 text-white" />
-              </div>
+              
+
+
             </div>
             
-            <div className="flex flex-col items-center md:items-end gap-6">
-              <div className="flex items-center gap-5">
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all">
-                  <Facebook className="w-6 h-6" />
-                </a>
-                <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all">
-                  <Twitter className="w-6 h-6" />
-                </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all">
-                  <Instagram className="w-6 h-6" />
-                </a>
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all">
-                  <Linkedin className="w-6 h-6" />
-                </a>
-                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all">
-                  <Youtube className="w-6 h-6" />
-                </a>
-              </div>
-              <div className="flex flex-wrap justify-center md:justify-end gap-4 text-sm text-slate-400">
-                <Link to={createPageUrl('InvestorInfo')} className="hover:text-white transition-colors">
-                  Investor Information
-                </Link>
-                <Link to={createPageUrl('PrivacyPolicy')} className="hover:text-white transition-colors">
-                  Privacy Policy
-                </Link>
-                <Link to={createPageUrl('Disclaimer')} className="hover:text-white transition-colors">
-                  Disclaimer
-                </Link>
-              </div>
-              <p className="text-slate-500 text-sm">© {new Date().getFullYear()} BrandForge. Premium AI Business Builder.</p>
-            </div>
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           </div>
         </div>
       </div>
-    </div>
-  );
+    </div>);
+
 }
