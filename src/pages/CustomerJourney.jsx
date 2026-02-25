@@ -68,7 +68,10 @@ export default function CustomerJourney() {
 
   const { data: project } = useQuery({
     queryKey: ['project', projectId],
-    queryFn: () => base44.entities.BusinessProject.get(projectId),
+    queryFn: async () => {
+      const projects = await base44.entities.BusinessProject.filter({ id: projectId });
+      return projects[0];
+    },
     enabled: !!projectId
   });
 

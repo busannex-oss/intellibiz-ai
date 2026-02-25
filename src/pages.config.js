@@ -76,6 +76,7 @@ import SEOTools from './pages/SEOTools';
 import Tasks from './pages/Tasks';
 import VideoCreation from './pages/VideoCreation';
 import WhiteLabel from './pages/WhiteLabel';
+import PlatformVideo from './pages/PlatformVideo';
 import __Layout from './Layout.jsx';
 
 
@@ -109,6 +110,7 @@ export const PAGES = {
     "Tasks": Tasks,
     "VideoCreation": VideoCreation,
     "WhiteLabel": WhiteLabel,
+    "PlatformVideo": PlatformVideo,
 }
 
 export const pagesConfig = {
