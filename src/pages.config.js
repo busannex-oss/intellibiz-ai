@@ -47,62 +47,64 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
+import AccountSettings from './pages/AccountSettings';
+import AdminDashboard from './pages/AdminDashboard';
 import Analytics from './pages/Analytics';
 import BrandKit from './pages/BrandKit';
 import BusinessReport from './pages/BusinessReport';
+import ColorThemes from './pages/ColorThemes';
 import ContentStrategy from './pages/ContentStrategy';
 import CreateBusiness from './pages/CreateBusiness';
 import CustomerFeedback from './pages/CustomerFeedback';
 import Dashboard from './pages/Dashboard';
+import Disclaimer from './pages/Disclaimer';
 import ErrorLogs from './pages/ErrorLogs';
 import Home from './pages/Home';
+import InvestorInfo from './pages/InvestorInfo';
+import KnowledgeBase from './pages/KnowledgeBase';
 import Omnichannel from './pages/Omnichannel';
 import Onboarding from './pages/Onboarding';
 import PerformanceReports from './pages/PerformanceReports';
+import PhoneIntegrations from './pages/PhoneIntegrations';
 import PhoneSystem from './pages/PhoneSystem';
 import PitchDeck from './pages/PitchDeck';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import Resources from './pages/Resources';
 import Tasks from './pages/Tasks';
 import VideoCreation from './pages/VideoCreation';
 import WhiteLabel from './pages/WhiteLabel';
-import AdminDashboard from './pages/AdminDashboard';
-import AccountSettings from './pages/AccountSettings';
-import Resources from './pages/Resources';
-import InvestorInfo from './pages/InvestorInfo';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import Disclaimer from './pages/Disclaimer';
-import PhoneIntegrations from './pages/PhoneIntegrations';
-import KnowledgeBase from './pages/KnowledgeBase';
-import ColorThemes from './pages/ColorThemes';
+import Advertising from './pages/Advertising';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
+    "AccountSettings": AccountSettings,
+    "AdminDashboard": AdminDashboard,
     "Analytics": Analytics,
     "BrandKit": BrandKit,
     "BusinessReport": BusinessReport,
+    "ColorThemes": ColorThemes,
     "ContentStrategy": ContentStrategy,
     "CreateBusiness": CreateBusiness,
     "CustomerFeedback": CustomerFeedback,
     "Dashboard": Dashboard,
+    "Disclaimer": Disclaimer,
     "ErrorLogs": ErrorLogs,
     "Home": Home,
+    "InvestorInfo": InvestorInfo,
+    "KnowledgeBase": KnowledgeBase,
     "Omnichannel": Omnichannel,
     "Onboarding": Onboarding,
     "PerformanceReports": PerformanceReports,
+    "PhoneIntegrations": PhoneIntegrations,
     "PhoneSystem": PhoneSystem,
     "PitchDeck": PitchDeck,
+    "PrivacyPolicy": PrivacyPolicy,
+    "Resources": Resources,
     "Tasks": Tasks,
     "VideoCreation": VideoCreation,
     "WhiteLabel": WhiteLabel,
-    "AdminDashboard": AdminDashboard,
-    "AccountSettings": AccountSettings,
-    "Resources": Resources,
-    "InvestorInfo": InvestorInfo,
-    "PrivacyPolicy": PrivacyPolicy,
-    "Disclaimer": Disclaimer,
-    "PhoneIntegrations": PhoneIntegrations,
-    "KnowledgeBase": KnowledgeBase,
-    "ColorThemes": ColorThemes,
+    "Advertising": Advertising,
 }
 
 export const pagesConfig = {

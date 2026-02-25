@@ -415,13 +415,22 @@ export default function Dashboard() {
         )}
 
         {/* Quick Actions */}
-        <div className="grid md:grid-cols-4 gap-4 mb-8">
+        <div className="grid md:grid-cols-5 gap-4 mb-8">
           <Link to={createPageUrl('Resources')}>
             <Card className="border-0 bg-gradient-to-br from-purple-500/10 to-purple-600/10 border border-purple-500/20 hover:border-purple-500/40 transition-all cursor-pointer">
               <CardContent className="p-6">
                 <Phone className="w-10 h-10 text-purple-400 mb-3" />
                 <h3 className="font-semibold text-white mb-1">Phone Services</h3>
                 <p className="text-sm text-slate-400">RingCentral & Dialpad</p>
+              </CardContent>
+            </Card>
+          </Link>
+          <Link to={createPageUrl('Advertising')}>
+            <Card className="border-0 bg-gradient-to-br from-orange-500/10 to-orange-600/10 border border-orange-500/20 hover:border-orange-500/40 transition-all cursor-pointer">
+              <CardContent className="p-6">
+                <Megaphone className="w-10 h-10 text-orange-400 mb-3" />
+                <h3 className="font-semibold text-white mb-1">Advertising</h3>
+                <p className="text-sm text-slate-400">Adwizar.ai campaigns</p>
               </CardContent>
             </Card>
           </Link>

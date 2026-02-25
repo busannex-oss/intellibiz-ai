@@ -10,10 +10,8 @@ import BusinessPlanStep from '@/components/wizard/BusinessPlanStep';
 import LogoStep from '@/components/wizard/LogoStep';
 import WebsiteStep from '@/components/wizard/WebsiteStep';
 import SocialMediaStep from '@/components/wizard/SocialMediaStep';
-import ResourcesStep from '@/components/wizard/ResourcesStep';
 import NewsletterStep from '@/components/wizard/NewsletterStep';
 import OmnichannelStep from '@/components/wizard/OmnichannelStep';
-import KnowledgeBaseStep from '@/components/wizard/KnowledgeBaseStep';
 
 import BusinessChatWidget from '@/components/chatbot/BusinessChatWidget';
 
@@ -67,7 +65,7 @@ export default function CreateBusiness() {
   };
 
   const handleNext = async () => {
-    const newStep = Math.min(currentStep + 1, 9);
+    const newStep = Math.min(currentStep + 1, 7);
     setCurrentStep(newStep);
     if (project?.id) {
       await updateProjectMutation.mutateAsync({ current_step: newStep });
@@ -153,35 +151,17 @@ export default function CreateBusiness() {
               />
             )}
             {currentStep === 6 && (
-              <ResourcesStep
+              <NewsletterStep
                 key="step6"
                 project={project}
-                projectId={projectId}
+                onUpdate={handleUpdate}
                 onNext={handleNext}
                 onPrev={handlePrev}
               />
             )}
             {currentStep === 7 && (
-              <KnowledgeBaseStep
-                key="step7"
-                project={project}
-                onUpdate={handleUpdate}
-                onNext={handleNext}
-                onBack={handlePrev}
-              />
-            )}
-            {currentStep === 8 && (
-              <NewsletterStep
-                key="step8"
-                project={project}
-                onUpdate={handleUpdate}
-                onNext={handleNext}
-                onPrev={handlePrev}
-              />
-            )}
-            {currentStep === 9 && (
               <WebsiteStep
-                key="step9"
+                key="step7"
                 project={project}
                 onUpdate={handleUpdate}
                 onNext={handleNext}
