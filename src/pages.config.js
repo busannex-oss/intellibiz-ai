@@ -50,6 +50,7 @@
 import Analytics from './pages/Analytics';
 import BrandKit from './pages/BrandKit';
 import BusinessReport from './pages/BusinessReport';
+import ContentStrategy from './pages/ContentStrategy';
 import CreateBusiness from './pages/CreateBusiness';
 import CustomerFeedback from './pages/CustomerFeedback';
 import Dashboard from './pages/Dashboard';
@@ -59,11 +60,11 @@ import Omnichannel from './pages/Omnichannel';
 import Onboarding from './pages/Onboarding';
 import PerformanceReports from './pages/PerformanceReports';
 import PhoneSystem from './pages/PhoneSystem';
+import PitchDeck from './pages/PitchDeck';
 import Tasks from './pages/Tasks';
 import VideoCreation from './pages/VideoCreation';
 import WhiteLabel from './pages/WhiteLabel';
-import PitchDeck from './pages/PitchDeck';
-import ContentStrategy from './pages/ContentStrategy';
+import AdminDashboard from './pages/AdminDashboard';
 import __Layout from './Layout.jsx';
 
 
@@ -71,6 +72,7 @@ export const PAGES = {
     "Analytics": Analytics,
     "BrandKit": BrandKit,
     "BusinessReport": BusinessReport,
+    "ContentStrategy": ContentStrategy,
     "CreateBusiness": CreateBusiness,
     "CustomerFeedback": CustomerFeedback,
     "Dashboard": Dashboard,
@@ -80,11 +82,11 @@ export const PAGES = {
     "Onboarding": Onboarding,
     "PerformanceReports": PerformanceReports,
     "PhoneSystem": PhoneSystem,
+    "PitchDeck": PitchDeck,
     "Tasks": Tasks,
     "VideoCreation": VideoCreation,
     "WhiteLabel": WhiteLabel,
-    "PitchDeck": PitchDeck,
-    "ContentStrategy": ContentStrategy,
+    "AdminDashboard": AdminDashboard,
 }
 
 export const pagesConfig = {

@@ -51,71 +51,23 @@ export default function Layout({ children }) {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-3">
+            <div className="hidden md:flex items-center gap-2">
               <Link to={createPageUrl('Dashboard')}>
                 <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
                   <LayoutGrid className="w-4 h-4 mr-2" />
                   Dashboard
                 </Button>
               </Link>
-              <Link to={createPageUrl('Tasks')}>
-                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
-                  <Zap className="w-4 h-4 mr-2" />
-                  Tasks
-                </Button>
-              </Link>
-              <Link to={createPageUrl('BrandKit')}>
-                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  Brand Kit
-                </Button>
-              </Link>
-              <Link to={createPageUrl('CustomerFeedback')}>
-                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  Feedback
-                </Button>
-              </Link>
-              <Link to={createPageUrl('PerformanceReports')}>
-                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  Reports
-                </Button>
-              </Link>
-              <Link to={createPageUrl('VideoCreation')}>
-                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  Videos
-                </Button>
-              </Link>
-              <Link to={createPageUrl('PitchDeck')}>
-                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  Pitch Deck
-                </Button>
-              </Link>
-              <Link to={createPageUrl('ContentStrategy')}>
-                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  Content Strategy
-                </Button>
-              </Link>
-              <Link to={createPageUrl('ErrorLogs')}>
-                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  Error Logs
-                </Button>
-              </Link>
               <Link to={createPageUrl('CreateBusiness')}>
                 <Button className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-lg shadow-amber-500/20">
                   <Sparkles className="w-4 h-4 mr-2" />
-                  New Business
+                  New Project
                 </Button>
               </Link>
-              <Link to={createPageUrl('WhiteLabel')}>
+              <Link to={createPageUrl('AdminDashboard')}>
                 <Button variant="outline" className="border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white">
                   <Crown className="w-4 h-4 mr-2" />
-                  White Label
+                  Admin
                 </Button>
               </Link>
             </div>
@@ -139,28 +91,16 @@ export default function Layout({ children }) {
                 Dashboard
               </Button>
             </Link>
-            <Link to={createPageUrl('Tasks')} onClick={() => setMobileMenuOpen(false)}>
-              <Button variant="ghost" className="w-full justify-start text-slate-300 hover:text-white hover:bg-slate-800">
-                <Zap className="w-4 h-4 mr-2" />
-                Tasks
-              </Button>
-            </Link>
-            <Link to={createPageUrl('BrandKit')} onClick={() => setMobileMenuOpen(false)}>
-              <Button variant="ghost" className="w-full justify-start text-slate-300 hover:text-white hover:bg-slate-800">
-                <Sparkles className="w-4 h-4 mr-2" />
-                Brand Kit
-              </Button>
-            </Link>
             <Link to={createPageUrl('CreateBusiness')} onClick={() => setMobileMenuOpen(false)}>
               <Button className="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white">
                 <Sparkles className="w-4 h-4 mr-2" />
-                New Business
+                New Project
               </Button>
             </Link>
-            <Link to={createPageUrl('WhiteLabel')} onClick={() => setMobileMenuOpen(false)}>
+            <Link to={createPageUrl('AdminDashboard')} onClick={() => setMobileMenuOpen(false)}>
               <Button variant="outline" className="w-full border-slate-700 text-slate-300">
                 <Crown className="w-4 h-4 mr-2" />
-                White Label
+                Admin
               </Button>
             </Link>
           </div>
