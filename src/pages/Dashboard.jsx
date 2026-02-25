@@ -34,7 +34,10 @@ import {
   PieChart,
   BarChart3,
   Target,
-  Image as ImageIcon
+  Image as ImageIcon,
+  Phone,
+  Palette,
+  Settings
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -410,6 +413,46 @@ export default function Dashboard() {
             </div>
           </>
         )}
+
+        {/* Quick Actions */}
+        <div className="grid md:grid-cols-4 gap-4 mb-8">
+          <Link to={createPageUrl('Resources')}>
+            <Card className="border-0 bg-gradient-to-br from-purple-500/10 to-purple-600/10 border border-purple-500/20 hover:border-purple-500/40 transition-all cursor-pointer">
+              <CardContent className="p-6">
+                <Phone className="w-10 h-10 text-purple-400 mb-3" />
+                <h3 className="font-semibold text-white mb-1">Phone Services</h3>
+                <p className="text-sm text-slate-400">RingCentral & Dialpad</p>
+              </CardContent>
+            </Card>
+          </Link>
+          <Link to={createPageUrl('KnowledgeBase')}>
+            <Card className="border-0 bg-gradient-to-br from-blue-500/10 to-blue-600/10 border border-blue-500/20 hover:border-blue-500/40 transition-all cursor-pointer">
+              <CardContent className="p-6">
+                <BookText className="w-10 h-10 text-blue-400 mb-3" />
+                <h3 className="font-semibold text-white mb-1">Knowledge Base</h3>
+                <p className="text-sm text-slate-400">Help & Documentation</p>
+              </CardContent>
+            </Card>
+          </Link>
+          <Link to={createPageUrl('ColorThemes')}>
+            <Card className="border-0 bg-gradient-to-br from-pink-500/10 to-pink-600/10 border border-pink-500/20 hover:border-pink-500/40 transition-all cursor-pointer">
+              <CardContent className="p-6">
+                <Palette className="w-10 h-10 text-pink-400 mb-3" />
+                <h3 className="font-semibold text-white mb-1">Color Themes</h3>
+                <p className="text-sm text-slate-400">Customize appearance</p>
+              </CardContent>
+            </Card>
+          </Link>
+          <Link to={createPageUrl('AccountSettings')}>
+            <Card className="border-0 bg-gradient-to-br from-emerald-500/10 to-emerald-600/10 border border-emerald-500/20 hover:border-emerald-500/40 transition-all cursor-pointer">
+              <CardContent className="p-6">
+                <Settings className="w-10 h-10 text-emerald-400 mb-3" />
+                <h3 className="font-semibold text-white mb-1">Settings</h3>
+                <p className="text-sm text-slate-400">Account & Integrations</p>
+              </CardContent>
+            </Card>
+          </Link>
+        </div>
 
         {/* Projects Section */}
         <div className="mb-6">

@@ -36,18 +36,23 @@ const DIRECTORIES = [
 ];
 
 export default function Resources() {
-  const [searchParams] = useSearchParams();
-  const projectId = searchParams.get('projectId');
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4 md:p-8">
       <div className="max-w-7xl mx-auto space-y-8">
         <div>
-          <h1 className="text-3xl md:text-4xl font-bold text-white flex items-center gap-3">
-            <Sparkles className="w-8 h-8 text-purple-500" />
-            Business Resources
-          </h1>
-          <p className="text-slate-400 mt-2">Essential tools and directories for your business</p>
+          <div>
+            <h1 className="text-3xl md:text-4xl font-bold text-white flex items-center gap-3">
+              <Sparkles className="w-8 h-8 text-purple-500" />
+              Business Resources
+            </h1>
+            <p className="text-slate-400 mt-2">Essential tools and directories for your business</p>
+          </div>
+          <Link to={createPageUrl('PhoneIntegrations')}>
+            <Button className="bg-purple-600 hover:bg-purple-700">
+              <Phone className="w-4 h-4 mr-2" />
+              Configure Phone APIs
+            </Button>
+          </Link>
         </div>
 
         <Tabs defaultValue="phone" className="w-full">

@@ -70,6 +70,9 @@ import Resources from './pages/Resources';
 import InvestorInfo from './pages/InvestorInfo';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import Disclaimer from './pages/Disclaimer';
+import PhoneIntegrations from './pages/PhoneIntegrations';
+import KnowledgeBase from './pages/KnowledgeBase';
+import ColorThemes from './pages/ColorThemes';
 import __Layout from './Layout.jsx';
 
 
@@ -97,6 +100,9 @@ export const PAGES = {
     "InvestorInfo": InvestorInfo,
     "PrivacyPolicy": PrivacyPolicy,
     "Disclaimer": Disclaimer,
+    "PhoneIntegrations": PhoneIntegrations,
+    "KnowledgeBase": KnowledgeBase,
+    "ColorThemes": ColorThemes,
 }
 
 export const pagesConfig = {
