@@ -57,6 +57,7 @@ import ColorThemes from './pages/ColorThemes';
 import ContentStrategy from './pages/ContentStrategy';
 import CreateBusiness from './pages/CreateBusiness';
 import CustomerFeedback from './pages/CustomerFeedback';
+import CustomerJourney from './pages/CustomerJourney';
 import Dashboard from './pages/Dashboard';
 import Disclaimer from './pages/Disclaimer';
 import ErrorLogs from './pages/ErrorLogs';
@@ -71,11 +72,10 @@ import PhoneSystem from './pages/PhoneSystem';
 import PitchDeck from './pages/PitchDeck';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import Resources from './pages/Resources';
+import SEOTools from './pages/SEOTools';
 import Tasks from './pages/Tasks';
 import VideoCreation from './pages/VideoCreation';
 import WhiteLabel from './pages/WhiteLabel';
-import SEOTools from './pages/SEOTools';
-import CustomerJourney from './pages/CustomerJourney';
 import __Layout from './Layout.jsx';
 
 
@@ -90,6 +90,7 @@ export const PAGES = {
     "ContentStrategy": ContentStrategy,
     "CreateBusiness": CreateBusiness,
     "CustomerFeedback": CustomerFeedback,
+    "CustomerJourney": CustomerJourney,
     "Dashboard": Dashboard,
     "Disclaimer": Disclaimer,
     "ErrorLogs": ErrorLogs,
@@ -104,11 +105,10 @@ export const PAGES = {
     "PitchDeck": PitchDeck,
     "PrivacyPolicy": PrivacyPolicy,
     "Resources": Resources,
+    "SEOTools": SEOTools,
     "Tasks": Tasks,
     "VideoCreation": VideoCreation,
     "WhiteLabel": WhiteLabel,
-    "SEOTools": SEOTools,
-    "CustomerJourney": CustomerJourney,
 }
 
 export const pagesConfig = {

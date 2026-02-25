@@ -21,8 +21,8 @@ export default function VideoCreation() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [selectedDuration, setSelectedDuration] = useState('30');
   const [selectedStyle, setSelectedStyle] = useState('professional');
-  const [customPrompt, setCustomPrompt] = useState('');
   const [activeProvider, setActiveProvider] = useState('sora');
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   const { data: project } = useQuery({
     queryKey: ['project', projectId],
@@ -47,16 +47,33 @@ export default function VideoCreation() {
     setIsGenerating(true);
     
     try {
-      const videoPrompt = `${customPrompt || ''}
+      const marketData = project.market_research;
+      const websiteContent = project.website_content;
       
+      const videoPrompt = `Create a compelling ${selectedDuration}-second commercial video in ${selectedStyle} style for:
+
 Business: ${project.business_name}
 Industry: ${project.industry}
 Description: ${project.description}
-UVP: ${project.unique_value_proposition}
-Duration: ${selectedDuration} seconds
-Style: ${selectedStyle}
 
-Create a compelling commercial video that showcases the business value proposition, highlights key benefits, and ends with a strong call-to-action.`;
+Value Proposition: ${project.unique_value_proposition}
+
+Target Audience: ${project.target_audience || marketData?.target_demographics?.primary_audience || 'General consumers'}
+
+Key Benefits:
+${project.competitive_advantages?.slice(0, 3).map(adv => `- ${adv}`).join('\n') || '- Premium quality\n- Expert service\n- Customer satisfaction'}
+
+Brand Personality: ${project.brand_personality?.traits?.join(', ') || 'Professional, trustworthy, innovative'}
+
+${websiteContent?.hero?.cta_text ? `Call to Action: ${websiteContent.hero.cta_text}` : 'Call to Action: Get Started Today'}
+
+Create a dynamic, engaging video that:
+1. Opens with a compelling hook related to the target audience's pain points
+2. Showcases the unique value proposition visually
+3. Highlights 2-3 key benefits with dynamic visuals
+4. Ends with a strong call-to-action
+
+Style: ${selectedStyle} - ensure smooth transitions, professional quality, and brand-appropriate aesthetics.`;
 
       const response = await base44.functions.invoke('generateVideoWithFallback', {
         prompt: videoPrompt,
@@ -119,80 +136,102 @@ Create a compelling commercial video that showcases the business value propositi
         {/* Video Generator */}
         <Card className="border-0 shadow-xl bg-white">
           <CardHeader>
-            <CardTitle className="text-xl">Create Commercial Video</CardTitle>
+            <CardTitle className="text-xl flex items-center justify-between">
+              <span>Create Commercial Video</span>
+              <Badge className="bg-purple-500/20 text-purple-700">AI-Powered</Badge>
+            </CardTitle>
+            <p className="text-sm text-slate-600 mt-2">
+              Video will be automatically generated using your business information, branding, and target audience insights.
+            </p>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="grid md:grid-cols-3 gap-4">
-              <div>
-                <Label>Duration (seconds)</Label>
-                <Select value={selectedDuration} onValueChange={setSelectedDuration}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="15">15 seconds</SelectItem>
-                    <SelectItem value="30">30 seconds</SelectItem>
-                    <SelectItem value="60">60 seconds</SelectItem>
-                    <SelectItem value="90">90 seconds</SelectItem>
-                  </SelectContent>
-                </Select>
+            {/* Business Info Preview */}
+            {project && (
+              <div className="p-4 bg-slate-50 rounded-lg border border-slate-200 space-y-2">
+                <p className="text-sm font-medium text-slate-700">Using business data:</p>
+                <div className="grid md:grid-cols-2 gap-2 text-xs text-slate-600">
+                  <div>✓ {project.business_name}</div>
+                  <div>✓ {project.industry}</div>
+                  <div>✓ Target audience: {project.target_audience || 'General'}</div>
+                  <div>✓ {project.competitive_advantages?.length || 0} competitive advantages</div>
+                </div>
               </div>
-              <div>
-                <Label>Video Style</Label>
-                <Select value={selectedStyle} onValueChange={setSelectedStyle}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="professional">Professional</SelectItem>
-                    <SelectItem value="modern">Modern & Dynamic</SelectItem>
-                    <SelectItem value="elegant">Elegant & Sophisticated</SelectItem>
-                    <SelectItem value="energetic">Energetic & Bold</SelectItem>
-                    <SelectItem value="minimal">Minimal & Clean</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div>
-                <Label>Preferred Provider</Label>
-                <Select value={activeProvider} onValueChange={setActiveProvider}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="sora">Sora (OpenAI)</SelectItem>
-                    <SelectItem value="veo">Veo (Google)</SelectItem>
-                    <SelectItem value="runway">Runway ML</SelectItem>
-                    <SelectItem value="pika">PIKA</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+            )}
+
+            {/* Primary Control - Duration */}
+            <div>
+              <Label className="text-base font-semibold">Video Duration</Label>
+              <Select value={selectedDuration} onValueChange={setSelectedDuration}>
+                <SelectTrigger className="h-12 text-base">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="15">15 seconds - Quick teaser</SelectItem>
+                  <SelectItem value="30">30 seconds - Standard commercial</SelectItem>
+                  <SelectItem value="60">60 seconds - Detailed showcase</SelectItem>
+                  <SelectItem value="90">90 seconds - Full presentation</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
-            <div>
-              <Label>Custom Instructions (Optional)</Label>
-              <Textarea
-                value={customPrompt}
-                onChange={(e) => setCustomPrompt(e.target.value)}
-                placeholder="Add specific scenes, transitions, or messaging you want..."
-                rows={4}
-                className="resize-none"
-              />
-            </div>
+            {/* Advanced Settings Toggle */}
+            <Button
+              variant="outline"
+              onClick={() => setShowAdvanced(!showAdvanced)}
+              className="w-full"
+            >
+              {showAdvanced ? 'Hide' : 'Show'} Advanced Settings
+            </Button>
+
+            {/* Advanced Settings */}
+            {showAdvanced && (
+              <div className="grid md:grid-cols-2 gap-4 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                <div>
+                  <Label>Video Style</Label>
+                  <Select value={selectedStyle} onValueChange={setSelectedStyle}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="professional">Professional</SelectItem>
+                      <SelectItem value="modern">Modern & Dynamic</SelectItem>
+                      <SelectItem value="elegant">Elegant & Sophisticated</SelectItem>
+                      <SelectItem value="energetic">Energetic & Bold</SelectItem>
+                      <SelectItem value="minimal">Minimal & Clean</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Preferred Provider</Label>
+                  <Select value={activeProvider} onValueChange={setActiveProvider}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="sora">Sora (OpenAI)</SelectItem>
+                      <SelectItem value="veo">Veo (Google)</SelectItem>
+                      <SelectItem value="runway">Runway ML</SelectItem>
+                      <SelectItem value="pika">PIKA</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            )}
 
             <Button
               onClick={generateCommercial}
-              disabled={isGenerating}
+              disabled={isGenerating || !project}
               className="w-full h-14 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700"
             >
               {isGenerating ? (
                 <>
                   <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Generating Video with AI Fallback...
+                  Generating {selectedDuration}s Video...
                 </>
               ) : (
                 <>
                   <Sparkles className="w-5 h-5 mr-2" />
-                  Generate Commercial Video
+                  Generate {selectedDuration}-Second Commercial
                 </>
               )}
             </Button>
