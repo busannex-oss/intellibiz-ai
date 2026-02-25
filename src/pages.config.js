@@ -49,6 +49,7 @@
  */
 import AccountSettings from './pages/AccountSettings';
 import AdminDashboard from './pages/AdminDashboard';
+import Advertising from './pages/Advertising';
 import Analytics from './pages/Analytics';
 import BrandKit from './pages/BrandKit';
 import BusinessReport from './pages/BusinessReport';
@@ -73,13 +74,14 @@ import Resources from './pages/Resources';
 import Tasks from './pages/Tasks';
 import VideoCreation from './pages/VideoCreation';
 import WhiteLabel from './pages/WhiteLabel';
-import Advertising from './pages/Advertising';
+import SEOTools from './pages/SEOTools';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "AccountSettings": AccountSettings,
     "AdminDashboard": AdminDashboard,
+    "Advertising": Advertising,
     "Analytics": Analytics,
     "BrandKit": BrandKit,
     "BusinessReport": BusinessReport,
@@ -104,7 +106,7 @@ export const PAGES = {
     "Tasks": Tasks,
     "VideoCreation": VideoCreation,
     "WhiteLabel": WhiteLabel,
-    "Advertising": Advertising,
+    "SEOTools": SEOTools,
 }
 
 export const pagesConfig = {

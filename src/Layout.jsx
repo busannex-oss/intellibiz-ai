@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Button } from "@/components/ui/button";
-import { Zap, LayoutGrid, Sparkles, Menu, X, Crown, Settings } from 'lucide-react';
+import { Zap, LayoutGrid, Sparkles, Menu, X, Crown, Settings, Search } from 'lucide-react';
 import { useState } from 'react';
 
 export default function Layout({ children }) {
@@ -78,6 +78,12 @@ export default function Layout({ children }) {
                 <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
                   <Sparkles className="w-4 h-4 mr-2" />
                   Resources
+                </Button>
+              </Link>
+              <Link to={createPageUrl('SEOTools')}>
+                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
+                  <Search className="w-4 h-4 mr-2" />
+                  SEO Tools
                 </Button>
               </Link>
               <Link to={createPageUrl('AccountSettings')}>
