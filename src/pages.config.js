@@ -65,6 +65,11 @@ import Tasks from './pages/Tasks';
 import VideoCreation from './pages/VideoCreation';
 import WhiteLabel from './pages/WhiteLabel';
 import AdminDashboard from './pages/AdminDashboard';
+import AccountSettings from './pages/AccountSettings';
+import Resources from './pages/Resources';
+import InvestorInfo from './pages/InvestorInfo';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import Disclaimer from './pages/Disclaimer';
 import __Layout from './Layout.jsx';
 
 
@@ -87,6 +92,11 @@ export const PAGES = {
     "VideoCreation": VideoCreation,
     "WhiteLabel": WhiteLabel,
     "AdminDashboard": AdminDashboard,
+    "AccountSettings": AccountSettings,
+    "Resources": Resources,
+    "InvestorInfo": InvestorInfo,
+    "PrivacyPolicy": PrivacyPolicy,
+    "Disclaimer": Disclaimer,
 }
 
 export const pagesConfig = {

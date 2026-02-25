@@ -11,52 +11,20 @@ import { base44 } from '@/api/base44Client';
 
 const PHONE_SERVICES = [
   {
-    name: 'Google Voice',
-    url: 'https://voice.google.com',
-    description: 'Free phone number with voicemail and text, integrates with Google Workspace',
-    pricing: 'Free (personal) / $10-30/mo (business)',
-    features: ['Free personal use', 'Call forwarding', 'Voicemail transcription'],
-    rating: 4.5
-  },
-  {
-    name: 'OpenPhone',
-    url: 'https://www.openphone.com',
-    description: 'Modern business phone system with AI-powered features',
-    pricing: 'From $15/user/mo',
-    features: ['AI call summaries', 'Team inbox', 'CRM integration'],
-    rating: 4.8
-  },
-  {
-    name: 'Grasshopper',
-    url: 'https://grasshopper.com',
-    description: 'Virtual phone system designed for small businesses',
-    pricing: 'From $26/mo',
-    features: ['Professional greetings', 'Extensions', 'Mobile app'],
-    rating: 4.3
-  },
-  {
     name: 'RingCentral',
     url: 'https://www.ringcentral.com',
-    description: 'Enterprise-grade communication platform with AI',
+    description: 'Enterprise-grade unified communications platform with AI-powered features, video meetings, and advanced analytics',
     pricing: 'From $20/user/mo',
-    features: ['Video meetings', 'Team messaging', 'Analytics'],
-    rating: 4.4
+    features: ['AI-powered insights', 'Video meetings', 'Team messaging', 'Advanced analytics', 'CRM integrations'],
+    rating: 4.7
   },
   {
     name: 'Dialpad',
     url: 'https://www.dialpad.com',
-    description: 'AI-powered cloud communications',
+    description: 'Modern cloud communications with real-time AI transcription, voice intelligence, and seamless integrations',
     pricing: 'From $15/user/mo',
-    features: ['Real-time transcription', 'AI coaching', 'Integrations'],
+    features: ['Real-time transcription', 'Voice intelligence', 'AI coaching', 'Call recording', 'Multi-platform support'],
     rating: 4.6
-  },
-  {
-    name: 'Sideline',
-    url: 'https://www.sideline.com',
-    description: 'Second phone number app for separating work and personal calls',
-    pricing: '$9.99/mo',
-    features: ['Separate number', 'Auto-reply', 'Team features'],
-    rating: 4.2
   }
 ];
 

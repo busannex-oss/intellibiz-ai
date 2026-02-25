@@ -258,8 +258,8 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="flex items-center gap-3">
-              <div className="w-64 h-64 md:w-72 md:h-72 lg:w-80 lg:h-80 rounded-3xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-2xl shadow-amber-500/30">
-                <Zap className="w-32 h-32 md:w-36 md:h-36 lg:w-40 lg:h-40 text-white" />
+              <div className="w-32 h-32 rounded-3xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-2xl shadow-amber-500/30">
+                <Zap className="w-16 h-16 text-white" />
               </div>
             </div>
             
@@ -280,6 +280,17 @@ export default function Home() {
                 <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="w-12 h-12 rounded-xl bg-slate-800 hover:bg-slate-700 flex items-center justify-center text-slate-400 hover:text-white transition-all">
                   <Youtube className="w-6 h-6" />
                 </a>
+              </div>
+              <div className="flex flex-wrap justify-center md:justify-end gap-4 text-sm text-slate-400">
+                <Link to={createPageUrl('InvestorInfo')} className="hover:text-white transition-colors">
+                  Investor Information
+                </Link>
+                <Link to={createPageUrl('PrivacyPolicy')} className="hover:text-white transition-colors">
+                  Privacy Policy
+                </Link>
+                <Link to={createPageUrl('Disclaimer')} className="hover:text-white transition-colors">
+                  Disclaimer
+                </Link>
               </div>
               <p className="text-slate-500 text-sm">© {new Date().getFullYear()} BrandForge. Premium AI Business Builder.</p>
             </div>
