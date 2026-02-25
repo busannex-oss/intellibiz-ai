@@ -70,13 +70,13 @@ import PerformanceReports from './pages/PerformanceReports';
 import PhoneIntegrations from './pages/PhoneIntegrations';
 import PhoneSystem from './pages/PhoneSystem';
 import PitchDeck from './pages/PitchDeck';
+import PlatformVideo from './pages/PlatformVideo';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import Resources from './pages/Resources';
 import SEOTools from './pages/SEOTools';
 import Tasks from './pages/Tasks';
 import VideoCreation from './pages/VideoCreation';
 import WhiteLabel from './pages/WhiteLabel';
-import PlatformVideo from './pages/PlatformVideo';
 import __Layout from './Layout.jsx';
 
 
@@ -104,13 +104,13 @@ export const PAGES = {
     "PhoneIntegrations": PhoneIntegrations,
     "PhoneSystem": PhoneSystem,
     "PitchDeck": PitchDeck,
+    "PlatformVideo": PlatformVideo,
     "PrivacyPolicy": PrivacyPolicy,
     "Resources": Resources,
     "SEOTools": SEOTools,
     "Tasks": Tasks,
     "VideoCreation": VideoCreation,
     "WhiteLabel": WhiteLabel,
-    "PlatformVideo": PlatformVideo,
 }
 
 export const pagesConfig = {

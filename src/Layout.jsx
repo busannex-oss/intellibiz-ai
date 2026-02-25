@@ -80,18 +80,6 @@ export default function Layout({ children }) {
                   Resources
                 </Button>
               </Link>
-              <Link to={createPageUrl('SEOTools')}>
-                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
-                  <Search className="w-4 h-4 mr-2" />
-                  SEO Tools
-                </Button>
-              </Link>
-              <Link to={createPageUrl('CustomerJourney')}>
-                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
-                  <Map className="w-4 h-4 mr-2" />
-                  Journey Map
-                </Button>
-              </Link>
               <Link to={createPageUrl('AccountSettings')}>
                 <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
                   <Settings className="w-4 h-4 mr-2" />
