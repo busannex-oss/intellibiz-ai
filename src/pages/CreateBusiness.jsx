@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { AnimatePresence } from 'framer-motion';
+import { Sparkles } from 'lucide-react';
 
 import StepIndicator from '@/components/wizard/StepIndicator';
 import MarketResearchStep from '@/components/wizard/MarketResearchStep';
@@ -84,20 +85,28 @@ export default function CreateBusiness() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-violet-50/30 to-indigo-50/50 flex items-center justify-center">
-        <div className="w-8 h-8 border-4 border-violet-600 border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
+          <p className="text-slate-400 font-medium">Loading your project...</p>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-violet-50/30 to-indigo-50/50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
-        <div className="text-center mb-4">
-          <h1 className="text-2xl md:text-3xl font-bold text-slate-900">
+        <div className="text-center mb-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-sm font-medium mb-4">
+            <Sparkles className="w-4 h-4" />
+            AI-Powered Business Builder
+          </div>
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
             {project?.business_name ? `Building: ${project.business_name}` : 'Create Your Business'}
           </h1>
+          <p className="text-slate-400">Follow the streamlined 7-step process to launch your brand</p>
         </div>
 
         {/* Step Indicator */}

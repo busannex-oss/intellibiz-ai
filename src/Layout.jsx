@@ -18,6 +18,7 @@ export default function Layout({ children }) {
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
           letter-spacing: -0.011em;
+          background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
         }
         
         h1, h2, h3, h4, h5, h6 {
@@ -31,11 +32,20 @@ export default function Layout({ children }) {
           letter-spacing: -0.011em;
         }
 
-        .logo {
+        .logo, .logo img, [class*="logo"] img {
           background: transparent !important;
           display: flex;
           align-items: center;
           justify-content: center;
+        }
+
+        .card-hover {
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card-hover:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
         }
       `}</style>
       {/* Navigation */}

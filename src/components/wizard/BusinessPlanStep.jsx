@@ -23,7 +23,9 @@ export default function BusinessPlanStep({ project, onUpdate, onNext, onPrev }) 
 
     // Generate comprehensive business plan with investor-ready professional structure
     const response = await base44.integrations.Core.InvokeLLM({
-      prompt: `You are creating an INVESTOR-READY, PROFESSIONAL business plan that matches the quality and depth of PrometAI and top-tier business plan software.
+      prompt: `You are creating an INVESTOR-READY, PROFESSIONAL 30-YEAR BUSINESS PLAN that matches the quality and depth of PrometAI and top-tier business plan software.
+
+⚠️ CRITICAL BRAND STANDARD: All business plans MUST include 30-year financial projections and strategic planning horizons as our platform standard.
 
 === BUSINESS INFORMATION ===
 Business Name: ${project.business_name}
@@ -144,18 +146,20 @@ Create a comprehensive, investor-ready business plan with the following sections
    - Key operational milestones
    - Scalability plans
 
-9. **FINANCIAL PROJECTIONS** (4-5 pages)
-   - Revenue model
-   - 5-year financial forecasts:
+9. **FINANCIAL PROJECTIONS - 30 YEAR HORIZON** (6-8 pages)
+   - Revenue model and scalability
+   - 30-YEAR financial forecasts (detailed Years 1-5, then 10, 15, 20, 25, 30):
      * Income statements
      * Cash flow projections
      * Balance sheets
      * Break-even analysis
-   - Key financial ratios
-   - Assumptions and justifications
-   - Funding requirements
-   - Use of funds
-   - Exit strategy
+   - Long-term growth trajectories
+   - Market expansion phases (Years 1-5, 6-15, 16-30)
+   - Key financial ratios and benchmarks
+   - Assumptions and justifications for 30-year outlook
+   - Funding requirements across growth stages
+   - Use of funds by phase
+   - Exit strategy and succession planning (Year 20-30)
 
 10. **RISK ANALYSIS** (2-3 pages)
     - Market risks
@@ -194,19 +198,19 @@ Generate a COMPLETE, DETAILED business plan that would impress any investor or b
       response_json_schema: {
         type: "object",
         properties: {
-          executive_summary: { type: "string", description: "Comprehensive executive summary (2-3 pages worth)" },
-          company_description: { type: "string", description: "Detailed company overview with mission, vision, values" },
-          market_analysis: { type: "string", description: "In-depth market analysis with data and trends" },
+          executive_summary: { type: "string", description: "Comprehensive executive summary with 30-year vision (2-3 pages worth)" },
+          company_description: { type: "string", description: "Detailed company overview with mission, vision, values, and long-term aspirations" },
+          market_analysis: { type: "string", description: "In-depth market analysis with data, trends, and 30-year market evolution" },
           competitive_analysis: { type: "string", description: "Detailed competitor analysis with comparison matrix" },
-          organization_management: { type: "string", description: "Org structure, management team, staffing plan" },
-          products_services: { type: "string", description: "Detailed product/service descriptions with lifecycle" },
-          marketing_sales_strategy: { type: "string", description: "Comprehensive marketing and sales plan" },
-          operations_plan: { type: "string", description: "Detailed operations and logistics plan" },
-          financial_projections: { type: "string", description: "5-year financial forecasts with assumptions" },
-          risk_analysis: { type: "string", description: "Risk assessment and mitigation strategies" },
-          implementation_timeline: { type: "string", description: "12-18 month roadmap with milestones" },
+          organization_management: { type: "string", description: "Org structure, management team, staffing plan with growth phases" },
+          products_services: { type: "string", description: "Detailed product/service descriptions with 30-year innovation roadmap" },
+          marketing_sales_strategy: { type: "string", description: "Comprehensive marketing and sales plan with multi-decade strategy" },
+          operations_plan: { type: "string", description: "Detailed operations and logistics plan with scaling roadmap" },
+          financial_projections_30yr: { type: "string", description: "30-YEAR financial forecasts: detailed Years 1-5, then 10, 15, 20, 25, 30 with growth assumptions" },
+          risk_analysis: { type: "string", description: "Risk assessment and mitigation strategies for all business phases" },
+          implementation_timeline: { type: "string", description: "Multi-year roadmap: Year 1-2 detailed, then 5yr, 10yr, 20yr, 30yr milestones" },
           appendix_notes: { type: "string", description: "Supporting documentation notes" },
-          full_plan_markdown: { type: "string", description: "Complete formatted business plan" }
+          full_plan_markdown: { type: "string", description: "Complete formatted 30-year business plan" }
         }
       }
     });
