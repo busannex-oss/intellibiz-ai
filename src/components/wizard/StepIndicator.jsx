@@ -17,7 +17,7 @@ export default function StepIndicator({ currentStep, onStepClick }) {
     <div className="w-full py-6">
       <div className="hidden lg:flex items-center justify-between max-w-5xl mx-auto px-4">
         {steps.map((step, index) => (
-          <React.Fragment key={step.id}>
+          <div key={step.id} className="flex items-center">
             <button
               onClick={() => step.id <= currentStep && onStepClick?.(step.id)}
               disabled={step.id > currentStep}
@@ -53,14 +53,13 @@ export default function StepIndicator({ currentStep, onStepClick }) {
             </button>
             {index < steps.length - 1 && (
               <div
-                key={`connector-${step.id}`}
                 className={cn(
                   "flex-1 h-0.5 mx-1 transition-all duration-500",
                   step.id < currentStep ? "bg-emerald-400" : "bg-slate-200"
                 )}
               />
             )}
-          </React.Fragment>
+          </div>
         ))}
       </div>
       
