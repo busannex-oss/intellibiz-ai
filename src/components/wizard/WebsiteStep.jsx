@@ -422,85 +422,26 @@ The video should be engaging, highlight key benefits, and end with a strong call
                 </div>
               </div>
 
-              {/* Video Commercial Preview */}
-              <div className="p-12 md:p-16 bg-white">
-                <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-4 text-center">See Us In Action</h2>
-                <p className="text-slate-600 mb-8 text-center max-w-2xl mx-auto">{website.video_commercial?.concept}</p>
-
-                {/* Video Duration Buttons - For Business Owner to Generate */}
-                <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mb-8">
-                  <p className="text-sm text-amber-800 mb-4 font-medium">Generate commercials for your business:</p>
-                  <div className="flex justify-center gap-4 flex-wrap">
-                    {['30sec', '60sec', '90sec'].map((duration) => (
-                      <Button
-                        key={duration}
-                        onClick={() => generateCommercialVideo(duration)}
-                        disabled={isGeneratingVideo || (videoUrls[duration] && videoUrls[duration].url)}
-                        className="bg-violet-600 hover:bg-violet-700"
-                      >
-                        {isGeneratingVideo && !videoUrls[duration] ? (
-                          <>
-                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                            Generating {duration}...
-                          </>
-                        ) : (videoUrls[duration] && videoUrls[duration].url) ? (
-                          <>
-                            <Check className="w-4 h-4 mr-2" />
-                            {duration} Ready
-                          </>
-                        ) : (
-                          <>
-                            <Play className="w-4 h-4 mr-2" />
-                            Generate {duration}
-                          </>
-                        )}
-                      </Button>
-                    ))}
+              {/* Video Commercial Preview - Only Selected Video */}
+              {project?.selected_commercial_video && project?.commercial_videos?.[project.selected_commercial_video] && (
+                <div className="p-12 md:p-16 bg-slate-900">
+                  <h2 className="text-2xl md:text-3xl font-bold text-white mb-8 text-center">See Us In Action</h2>
+                  <div className="max-w-5xl mx-auto">
+                    <div className="aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl relative group">
+                      <img
+                        src={project.commercial_videos[project.selected_commercial_video].thumbnail_url || project.commercial_videos[project.selected_commercial_video].url}
+                        alt="Commercial Video"
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all flex items-center justify-center cursor-pointer">
+                        <div className="w-20 h-20 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform">
+                          <Play className="w-10 h-10 text-white fill-white ml-1" />
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
-
-                {/* Video Display for Website Viewers */}
-                <div className="max-w-4xl mx-auto space-y-6">
-                  {['30sec', '60sec', '90sec'].map((duration) => {
-                    const videoData = videoUrls[duration];
-                    return (
-                      <div key={duration} className="rounded-xl overflow-hidden border border-slate-200">
-                        <div className="bg-slate-900 aspect-video relative overflow-hidden flex items-center justify-center group">
-                          {videoData?.url ? (
-                            <>
-                              <img 
-                                src={videoData.url} 
-                                alt={`${duration} Commercial Preview`} 
-                                className="w-full h-full object-cover"
-                              />
-                              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-all flex items-center justify-center">
-                                <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/30 transition-all">
-                                  <Play className="w-8 h-8 text-white fill-white" />
-                                </div>
-                              </div>
-                            </>
-                          ) : (
-                            <div className="text-center text-slate-400 py-12">
-                              <p className="text-sm">Generate {duration} commercial to display preview</p>
-                            </div>
-                          )}
-                        </div>
-                        {videoData && (
-                          <div className="p-4 bg-white">
-                            <p className="text-sm font-semibold text-slate-800 mb-1">{videoData.title}</p>
-                            <p className="text-xs text-slate-600 line-clamp-2">{videoData.concept}</p>
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <div className="mt-6 p-6 bg-slate-50 rounded-xl max-w-4xl mx-auto">
-                  <p className="text-sm text-slate-600 font-medium mb-2">Video Script:</p>
-                  <p className="text-sm text-slate-700 whitespace-pre-line">{website.video_commercial?.script}</p>
-                </div>
-              </div>
+              )}
 
               {/* CEO Message Preview */}
               {website.ceo_message && (

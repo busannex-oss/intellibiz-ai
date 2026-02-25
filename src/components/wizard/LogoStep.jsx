@@ -37,19 +37,22 @@ export default function LogoStep({ project, onUpdate, onNext, onPrev }) {
       
       const basePrompt = `MANDATORY: Create ONE professional logo icon with TRANSPARENT BACKGROUND (PNG with alpha channel) for "${project.business_name}".
 
-⚠️ CRITICAL - TRANSPARENT BACKGROUND REQUIREMENTS:
+⚠️ CRITICAL - TRANSPARENT BACKGROUND REQUIREMENTS (BRAND STANDARD):
 - MUST BE TRANSPARENT BACKGROUND - NO EXCEPTIONS
 - NO white background, NO black background, NO solid color backgrounds
 - PNG format with alpha channel transparency
 - All pixels outside the logo MUST BE 100% transparent
 - Logo should be clearly visible when placed on ANY background color
-- Include appropriate whitespace/padding around the logo (20% of canvas)
+- Automatically trim and crop all excess space around the logo
+- Include appropriate whitespace/padding around the logo (15% of canvas)
 
-📐 COMPOSITION & SPACING:
-- Logo should occupy 60-70% of canvas (leaving 15-20% breathing room on all sides)
-- Centered positioning
-- Zoom in to show design details clearly
-- Professional spacing that follows logo design standards
+📐 COMPOSITION & SPACING (BRAND STANDARD):
+- Logo should be TRIMMED and CROPPED to remove all excess transparent space
+- Logo design should occupy 70-80% of canvas after trimming (leaving 10-15% breathing room on all sides)
+- Centered positioning with perfect balance
+- Zoom in to show design details clearly at optimal scale
+- Professional spacing that follows industry logo design standards
+- Clean edges with smooth anti-aliasing
 
 🎨 DESIGN STYLE:
 Industry: ${project.industry}

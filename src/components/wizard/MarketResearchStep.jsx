@@ -144,7 +144,7 @@ Identify:
 4. Potential threats to be aware of
 5. Keywords customers search for
 6. Pricing insights and recommendations
-7. Target demographic details (age, income, behavior, preferences)`,
+ 7. Target demographic details including: age range, income level, education level, region/location, languages spoken, gender distribution, marital status distribution, household size, occupation types, buying behaviors, preferences, and psychographic profile`,
       add_context_from_internet: true,
       response_json_schema: {
         type: "object",
@@ -168,8 +168,18 @@ Identify:
             properties: {
               age_range: { type: "string" },
               income_level: { type: "string" },
+              education_level: { type: "string" },
+              region: { type: "string" },
+              location_type: { type: "string" },
+              primary_language: { type: "string" },
+              secondary_languages: { type: "array", items: { type: "string" } },
+              gender_distribution: { type: "string" },
+              marital_status_distribution: { type: "string" },
+              household_size: { type: "string" },
+              occupation_types: { type: "array", items: { type: "string" } },
               behaviors: { type: "array", items: { type: "string" } },
-              preferences: { type: "array", items: { type: "string" } }
+              preferences: { type: "array", items: { type: "string" } },
+              psychographic_profile: { type: "string" }
             }
           }
         }
@@ -537,38 +547,107 @@ Create:
                 </TabsContent>
 
                 <TabsContent value="audience" className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
+                  <div className="grid md:grid-cols-3 gap-4">
                     <Card className="border shadow-sm">
                       <CardHeader className="pb-2">
-                        <CardTitle className="text-lg">Target Demographics</CardTitle>
+                        <CardTitle className="text-sm">Demographics</CardTitle>
                       </CardHeader>
-                      <CardContent className="space-y-3">
-                        <div className="flex justify-between">
+                      <CardContent className="space-y-2">
+                        <div className="flex justify-between text-sm">
                           <span className="text-slate-500">Age Range</span>
                           <span className="font-medium">{research.target_demographics?.age_range}</span>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-slate-500">Income Level</span>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-slate-500">Income</span>
                           <span className="font-medium">{research.target_demographics?.income_level}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-slate-500">Education</span>
+                          <span className="font-medium">{research.target_demographics?.education_level}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-slate-500">Gender</span>
+                          <span className="font-medium">{research.target_demographics?.gender_distribution}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-slate-500">Marital Status</span>
+                          <span className="font-medium">{research.target_demographics?.marital_status_distribution}</span>
                         </div>
                       </CardContent>
                     </Card>
                     <Card className="border shadow-sm">
                       <CardHeader className="pb-2">
-                        <CardTitle className="text-lg">Behaviors & Preferences</CardTitle>
+                        <CardTitle className="text-sm">Geographic</CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-slate-500">Region</span>
+                          <span className="font-medium">{research.target_demographics?.region}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-slate-500">Location Type</span>
+                          <span className="font-medium">{research.target_demographics?.location_type}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-slate-500">Primary Language</span>
+                          <span className="font-medium">{research.target_demographics?.primary_language}</span>
+                        </div>
+                        <div className="flex justify-between text-sm">
+                          <span className="text-slate-500">Household Size</span>
+                          <span className="font-medium">{research.target_demographics?.household_size}</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                    <Card className="border shadow-sm">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-sm">Occupations</CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="flex flex-wrap gap-2">
-                          {research.target_demographics?.behaviors?.map((b, i) => (
-                            <Badge key={i} variant="secondary">{b}</Badge>
-                          ))}
-                          {research.target_demographics?.preferences?.map((p, i) => (
-                            <Badge key={i} variant="outline">{p}</Badge>
+                          {research.target_demographics?.occupation_types?.map((occ, i) => (
+                            <Badge key={i} variant="secondary" className="text-xs">{occ}</Badge>
                           ))}
                         </div>
                       </CardContent>
                     </Card>
                   </div>
+                  
+                  <Card className="border shadow-sm">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-sm">Psychographic Profile</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-slate-600">{research.target_demographics?.psychographic_profile}</p>
+                    </CardContent>
+                  </Card>
+
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <Card className="border shadow-sm">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-sm">Behaviors</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex flex-wrap gap-2">
+                          {research.target_demographics?.behaviors?.map((b, i) => (
+                            <Badge key={i} variant="secondary" className="text-xs">{b}</Badge>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                    <Card className="border shadow-sm">
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-sm">Preferences</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex flex-wrap gap-2">
+                          {research.target_demographics?.preferences?.map((p, i) => (
+                            <Badge key={i} variant="outline" className="text-xs">{p}</Badge>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+
                   <div>
                     <h4 className="font-semibold text-slate-800 mb-3">Search Keywords</h4>
                     <div className="flex flex-wrap gap-2">
