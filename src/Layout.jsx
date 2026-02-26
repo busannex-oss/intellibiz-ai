@@ -72,9 +72,19 @@ export default function Layout({ children }) {
                   New Project
                 </Button>
               </Link>
+              <Link to={createPageUrl('Resources')}>
+                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
+                  Resources
+                </Button>
+              </Link>
+              <Link to={createPageUrl('WhiteLabel')}>
+                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
+                  <Crown className="w-4 h-4 mr-2" />
+                  White Label
+                </Button>
+              </Link>
               <Link to={createPageUrl('AdminDashboard')}>
                 <Button variant="outline" className="border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white">
-                  <Crown className="w-4 h-4 mr-2" />
                   Admin
                 </Button>
               </Link>

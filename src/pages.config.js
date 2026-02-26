@@ -75,6 +75,8 @@ import Resources from './pages/Resources';
 import SEOTools from './pages/SEOTools';
 import Tasks from './pages/Tasks';
 import VideoCreation from './pages/VideoCreation';
+import WhiteLabel from './pages/WhiteLabel';
+import InvestorInfo from './pages/InvestorInfo';
 import __Layout from './Layout.jsx';
 
 
@@ -107,6 +109,8 @@ export const PAGES = {
     "SEOTools": SEOTools,
     "Tasks": Tasks,
     "VideoCreation": VideoCreation,
+    "WhiteLabel": WhiteLabel,
+    "InvestorInfo": InvestorInfo,
 }
 
 export const pagesConfig = {
