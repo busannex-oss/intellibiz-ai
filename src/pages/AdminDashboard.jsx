@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,7 +9,8 @@ import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { Shield, Users, Trash2, UserPlus, Settings, Activity, AlertTriangle, Key, Mail } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Shield, Users, Trash2, UserPlus, Settings, Activity, AlertTriangle, Key, Mail, Globe, Save } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AdminDashboard() {
@@ -19,6 +20,18 @@ export default function AdminDashboard() {
   const [resetPasswordEmail, setResetPasswordEmail] = useState('');
   const [showResetDialog, setShowResetDialog] = useState(false);
   const queryClient = useQueryClient();
+
+  // App Settings State
+  const [socialMedia, setSocialMedia] = useState({
+    facebook: '',
+    twitter: '',
+    instagram: '',
+    linkedin: '',
+    youtube: '',
+    tiktok: ''
+  });
+  const [copyrightText, setCopyrightText] = useState('');
+  const [showSocialIcons, setShowSocialIcons] = useState(true);
 
   // Fetch current user
   useQuery({
@@ -34,6 +47,22 @@ export default function AdminDashboard() {
   const { data: users = [], isLoading } = useQuery({
     queryKey: ['allUsers'],
     queryFn: () => base44.entities.User.list('-created_date')
+  });
+
+  // Fetch App Settings
+  const { data: appSettings } = useQuery({
+    queryKey: ['appSettings'],
+    queryFn: async () => {
+      const settings = await base44.entities.AppSettings.list();
+      if (settings && settings.length > 0) {
+        const s = settings[0];
+        setSocialMedia(s.social_media || {});
+        setCopyrightText(s.footer_content?.copyright_text || '');
+        setShowSocialIcons(s.footer_content?.show_social_icons !== false);
+        return s;
+      }
+      return null;
+    },
   });
 
   // Check if current user is super admin - check both top-level role and data.role
@@ -83,6 +112,34 @@ export default function AdminDashboard() {
       toast.error('Failed to delete user: ' + error.message);
     }
   });
+
+  // Save App Settings Mutation
+  const saveSettingsMutation = useMutation({
+    mutationFn: async (settingsData) => {
+      if (appSettings?.id) {
+        return await base44.entities.AppSettings.update(appSettings.id, settingsData);
+      } else {
+        return await base44.entities.AppSettings.create(settingsData);
+      }
+    },
+    onSuccess: () => {
+      toast.success("Settings saved successfully");
+      queryClient.invalidateQueries({ queryKey: ['appSettings'] });
+    },
+    onError: (error) => {
+      toast.error(`Failed to save settings: ${error.message}`);
+    },
+  });
+
+  const handleSaveSettings = () => {
+    saveSettingsMutation.mutate({
+      social_media: socialMedia,
+      footer_content: {
+        copyright_text: copyrightText,
+        show_social_icons: showSocialIcons
+      }
+    });
+  };
 
   const handleInviteUser = () => {
     if (!newUserEmail) {
@@ -193,87 +250,8 @@ export default function AdminDashboard() {
               <Shield className="w-8 h-8 text-blue-500" />
               Admin Dashboard
             </h1>
-            <p className="text-slate-400 mt-1">User management and permissions</p>
+            <p className="text-slate-400 mt-1">Manage users, settings, and app configuration</p>
           </div>
-          {isSuperAdmin && (
-            <div className="flex gap-2">
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button className="bg-blue-600 hover:bg-blue-700">
-                    <UserPlus className="w-4 h-4 mr-2" />
-                    Invite User
-                  </Button>
-                </DialogTrigger>
-              <DialogContent className="bg-slate-800 border-slate-700">
-                <DialogHeader>
-                  <DialogTitle className="text-white">Invite New User</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <div>
-                    <Label className="text-white">Email Address</Label>
-                    <Input
-                      type="email"
-                      value={newUserEmail}
-                      onChange={(e) => setNewUserEmail(e.target.value)}
-                      placeholder="user@example.com"
-                      className="bg-slate-900 border-slate-700 text-white"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-white">Role</Label>
-                    <Select value={newUserRole} onValueChange={setNewUserRole}>
-                      <SelectTrigger className="bg-slate-900 border-slate-700 text-white">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent className="bg-slate-800 border-slate-700">
-                        <SelectItem value="user">User</SelectItem>
-                        <SelectItem value="admin">Admin</SelectItem>
-                        {isSuperAdmin && <SelectItem value="super_admin">Super Admin</SelectItem>}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <Button onClick={handleInviteUser} className="w-full" disabled={inviteUserMutation.isPending}>
-                    {inviteUserMutation.isPending ? 'Inviting...' : 'Send Invitation'}
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
-            
-            <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
-              <DialogTrigger asChild>
-                <Button variant="outline" className="border-slate-700 text-white hover:bg-slate-800">
-                  <Key className="w-4 h-4 mr-2" />
-                  Reset Password
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="bg-slate-800 border-slate-700">
-                <DialogHeader>
-                  <DialogTitle className="text-white">Reset User Password</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <div>
-                    <Label className="text-white">User Email</Label>
-                    <Input
-                      type="email"
-                      value={resetPasswordEmail}
-                      onChange={(e) => setResetPasswordEmail(e.target.value)}
-                      placeholder="user@example.com"
-                      className="bg-slate-900 border-slate-700 text-white"
-                    />
-                  </div>
-                  <Button 
-                    onClick={() => handleResetPassword(resetPasswordEmail)} 
-                    className="w-full"
-                    disabled={!resetPasswordEmail}
-                  >
-                    <Mail className="w-4 h-4 mr-2" />
-                    Send Reset Link
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
-          </div>
-          )}
         </div>
 
         {/* Stats */}
@@ -324,106 +302,319 @@ export default function AdminDashboard() {
           </Card>
         </div>
 
-        {/* Users Table */}
-        <Card className="border-0 bg-slate-800/50 border border-slate-700">
-          <CardHeader>
-            <CardTitle className="text-white">User Management</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {users.map(user => (
-                <div key={user.id} className="p-4 bg-slate-700/30 rounded-lg">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-white font-semibold">{user.full_name || 'No Name'}</h3>
-                        <Badge className={
-                          user.role === 'super_admin' ? 'bg-purple-500/20 text-purple-400 border-purple-500/30' :
-                          user.role === 'admin' ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' :
-                          'bg-slate-500/20 text-slate-400 border-slate-500/30'
-                        }>
-                          {user.role}
-                        </Badge>
-                        {user.is_active === false && (
-                          <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Inactive</Badge>
-                        )}
-                        {user.id === currentUser?.id && (
-                          <Badge className="bg-emerald-500/20 text-emerald-400">You</Badge>
-                        )}
-                      </div>
-                      <p className="text-sm text-slate-400 mb-3">{user.email}</p>
-                      
-                      {user.role !== 'super_admin' && isSuperAdmin && (
-                        <div className="space-y-2">
-                          <p className="text-xs text-slate-500 font-medium">Permissions:</p>
-                          <div className="flex flex-wrap gap-3">
-                            {['manage_users', 'manage_projects', 'manage_settings', 'view_analytics', 'manage_billing'].map(perm => (
-                              <div key={perm} className="flex items-center gap-2">
-                                <Switch
-                                  checked={user.permissions?.[perm] || false}
-                                  onCheckedChange={() => handleTogglePermission(user, perm)}
-                                  disabled={user.role === 'super_admin'}
-                                />
-                                <span className="text-xs text-slate-400 capitalize">{perm.replace(/_/g, ' ')}</span>
-                              </div>
-                            ))}
+        {/* Tabs */}
+        <Tabs defaultValue="users" className="w-full">
+          <TabsList className="bg-slate-800 border-slate-700 mb-6">
+            <TabsTrigger value="users" className="data-[state=active]:bg-slate-700">
+              <Users className="w-4 h-4 mr-2" />
+              Users
+            </TabsTrigger>
+            <TabsTrigger value="settings" className="data-[state=active]:bg-slate-700">
+              <Globe className="w-4 h-4 mr-2" />
+              App Settings
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Users Tab */}
+          <TabsContent value="users">
+            <Card className="border-0 bg-slate-800/50 border border-slate-700">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="text-white">User Management</CardTitle>
+                  {isSuperAdmin && (
+                    <div className="flex gap-2">
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button className="bg-blue-600 hover:bg-blue-700">
+                            <UserPlus className="w-4 h-4 mr-2" />
+                            Invite User
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="bg-slate-800 border-slate-700">
+                          <DialogHeader>
+                            <DialogTitle className="text-white">Invite New User</DialogTitle>
+                          </DialogHeader>
+                          <div className="space-y-4">
+                            <div>
+                              <Label className="text-white">Email Address</Label>
+                              <Input
+                                type="email"
+                                value={newUserEmail}
+                                onChange={(e) => setNewUserEmail(e.target.value)}
+                                placeholder="user@example.com"
+                                className="bg-slate-900 border-slate-700 text-white"
+                              />
+                            </div>
+                            <div>
+                              <Label className="text-white">Role</Label>
+                              <Select value={newUserRole} onValueChange={setNewUserRole}>
+                                <SelectTrigger className="bg-slate-900 border-slate-700 text-white">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent className="bg-slate-800 border-slate-700">
+                                  <SelectItem value="user">User</SelectItem>
+                                  <SelectItem value="admin">Admin</SelectItem>
+                                  {isSuperAdmin && <SelectItem value="super_admin">Super Admin</SelectItem>}
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <Button onClick={handleInviteUser} className="w-full" disabled={inviteUserMutation.isPending}>
+                              {inviteUserMutation.isPending ? 'Inviting...' : 'Send Invitation'}
+                            </Button>
                           </div>
-                        </div>
-                      )}
+                        </DialogContent>
+                      </Dialog>
+                      
+                      <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
+                        <DialogTrigger asChild>
+                          <Button variant="outline" className="border-slate-700 text-white hover:bg-slate-800">
+                            <Key className="w-4 h-4 mr-2" />
+                            Reset Password
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="bg-slate-800 border-slate-700">
+                          <DialogHeader>
+                            <DialogTitle className="text-white">Reset User Password</DialogTitle>
+                          </DialogHeader>
+                          <div className="space-y-4">
+                            <div>
+                              <Label className="text-white">User Email</Label>
+                              <Input
+                                type="email"
+                                value={resetPasswordEmail}
+                                onChange={(e) => setResetPasswordEmail(e.target.value)}
+                                placeholder="user@example.com"
+                                className="bg-slate-900 border-slate-700 text-white"
+                              />
+                            </div>
+                            <Button 
+                              onClick={() => handleResetPassword(resetPasswordEmail)} 
+                              className="w-full"
+                              disabled={!resetPasswordEmail}
+                            >
+                              <Mail className="w-4 h-4 mr-2" />
+                              Send Reset Link
+                            </Button>
+                          </div>
+                        </DialogContent>
+                      </Dialog>
                     </div>
-                    
-                    <div className="flex items-center gap-2">
-                      {isSuperAdmin && user.role !== 'super_admin' && (
-                        <>
-                          <Select value={user.role} onValueChange={(val) => handleChangeRole(user, val)}>
-                            <SelectTrigger className="w-32 bg-slate-900 border-slate-600 text-white text-xs">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent className="bg-slate-800 border-slate-700">
-                              <SelectItem value="user">User</SelectItem>
-                              <SelectItem value="admin">Admin</SelectItem>
-                              <SelectItem value="super_admin">Super Admin</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => handleToggleActive(user)}
-                            className="border-slate-600 text-white"
-                          >
-                            {user.is_active === false ? 'Activate' : 'Deactivate'}
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            onClick={() => {
-                              setResetPasswordEmail(user.email);
-                              setShowResetDialog(true);
-                            }}
-                            className="border-slate-600 text-white"
-                          >
-                            <Key className="w-4 h-4" />
-                          </Button>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => handleDeleteUser(user)}
-                            className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </>
-                      )}
-                      {user.role === 'super_admin' && (
-                        <Badge className="bg-purple-500/20 text-purple-400">Protected</Badge>
-                      )}
-                    </div>
-                  </div>
+                  )}
                 </div>
-              ))}
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {users.map(user => (
+                    <div key={user.id} className="p-4 bg-slate-700/30 rounded-lg">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h3 className="text-white font-semibold">{user.full_name || 'No Name'}</h3>
+                            <Badge className={
+                              user.role === 'super_admin' ? 'bg-purple-500/20 text-purple-400 border-purple-500/30' :
+                              user.role === 'admin' ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' :
+                              'bg-slate-500/20 text-slate-400 border-slate-500/30'
+                            }>
+                              {user.role}
+                            </Badge>
+                            {user.is_active === false && (
+                              <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Inactive</Badge>
+                            )}
+                            {user.id === currentUser?.id && (
+                              <Badge className="bg-emerald-500/20 text-emerald-400">You</Badge>
+                            )}
+                          </div>
+                          <p className="text-sm text-slate-400 mb-3">{user.email}</p>
+                          
+                          {user.role !== 'super_admin' && isSuperAdmin && (
+                            <div className="space-y-2">
+                              <p className="text-xs text-slate-500 font-medium">Permissions:</p>
+                              <div className="flex flex-wrap gap-3">
+                                {['manage_users', 'manage_projects', 'manage_settings', 'view_analytics', 'manage_billing'].map(perm => (
+                                  <div key={perm} className="flex items-center gap-2">
+                                    <Switch
+                                      checked={user.permissions?.[perm] || false}
+                                      onCheckedChange={() => handleTogglePermission(user, perm)}
+                                      disabled={user.role === 'super_admin'}
+                                    />
+                                    <span className="text-xs text-slate-400 capitalize">{perm.replace(/_/g, ' ')}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                        
+                        <div className="flex items-center gap-2">
+                          {isSuperAdmin && user.role !== 'super_admin' && (
+                            <>
+                              <Select value={user.role} onValueChange={(val) => handleChangeRole(user, val)}>
+                                <SelectTrigger className="w-32 bg-slate-900 border-slate-600 text-white text-xs">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent className="bg-slate-800 border-slate-700">
+                                  <SelectItem value="user">User</SelectItem>
+                                  <SelectItem value="admin">Admin</SelectItem>
+                                  <SelectItem value="super_admin">Super Admin</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => handleToggleActive(user)}
+                                className="border-slate-600 text-white"
+                              >
+                                {user.is_active === false ? 'Activate' : 'Deactivate'}
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                onClick={() => {
+                                  setResetPasswordEmail(user.email);
+                                  setShowResetDialog(true);
+                                }}
+                                className="border-slate-600 text-white"
+                              >
+                                <Key className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => handleDeleteUser(user)}
+                                className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </>
+                          )}
+                          {user.role === 'super_admin' && (
+                            <Badge className="bg-purple-500/20 text-purple-400">Protected</Badge>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* App Settings Tab */}
+          <TabsContent value="settings">
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Social Media Links */}
+              <Card className="border-0 bg-slate-800/50 backdrop-blur-sm border border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <Globe className="w-5 h-5 text-blue-400" />
+                    Social Media Links
+                  </CardTitle>
+                  <CardDescription className="text-slate-400">
+                    Configure social media links for the footer
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <Label className="text-slate-300">Facebook</Label>
+                    <Input
+                      placeholder="https://facebook.com/yourpage"
+                      value={socialMedia.facebook || ''}
+                      onChange={(e) => setSocialMedia({ ...socialMedia, facebook: e.target.value })}
+                      className="bg-slate-900/50 border-slate-700 text-white"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-slate-300">Twitter/X</Label>
+                    <Input
+                      placeholder="https://twitter.com/yourhandle"
+                      value={socialMedia.twitter || ''}
+                      onChange={(e) => setSocialMedia({ ...socialMedia, twitter: e.target.value })}
+                      className="bg-slate-900/50 border-slate-700 text-white"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-slate-300">Instagram</Label>
+                    <Input
+                      placeholder="https://instagram.com/yourprofile"
+                      value={socialMedia.instagram || ''}
+                      onChange={(e) => setSocialMedia({ ...socialMedia, instagram: e.target.value })}
+                      className="bg-slate-900/50 border-slate-700 text-white"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-slate-300">LinkedIn</Label>
+                    <Input
+                      placeholder="https://linkedin.com/company/yourcompany"
+                      value={socialMedia.linkedin || ''}
+                      onChange={(e) => setSocialMedia({ ...socialMedia, linkedin: e.target.value })}
+                      className="bg-slate-900/50 border-slate-700 text-white"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-slate-300">YouTube</Label>
+                    <Input
+                      placeholder="https://youtube.com/@yourchannel"
+                      value={socialMedia.youtube || ''}
+                      onChange={(e) => setSocialMedia({ ...socialMedia, youtube: e.target.value })}
+                      className="bg-slate-900/50 border-slate-700 text-white"
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-slate-300">TikTok</Label>
+                    <Input
+                      placeholder="https://tiktok.com/@yourprofile"
+                      value={socialMedia.tiktok || ''}
+                      onChange={(e) => setSocialMedia({ ...socialMedia, tiktok: e.target.value })}
+                      className="bg-slate-900/50 border-slate-700 text-white"
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Footer Settings */}
+              <Card className="border-0 bg-slate-800/50 backdrop-blur-sm border border-slate-700">
+                <CardHeader>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <Settings className="w-5 h-5 text-amber-400" />
+                    Footer Settings
+                  </CardTitle>
+                  <CardDescription className="text-slate-400">
+                    Customize footer appearance
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  <div>
+                    <Label className="text-slate-300">Copyright Text</Label>
+                    <Input
+                      placeholder="© 2026 BrandForge. All rights reserved."
+                      value={copyrightText}
+                      onChange={(e) => setCopyrightText(e.target.value)}
+                      className="bg-slate-900/50 border-slate-700 text-white"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <Label className="text-slate-300">Show Social Icons</Label>
+                      <p className="text-sm text-slate-500">Display social media icons in footer</p>
+                    </div>
+                    <Switch
+                      checked={showSocialIcons}
+                      onCheckedChange={setShowSocialIcons}
+                    />
+                  </div>
+                  <Button 
+                    onClick={handleSaveSettings}
+                    disabled={saveSettingsMutation.isPending}
+                    className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
+                  >
+                    <Save className="w-4 h-4 mr-2" />
+                    Save Settings
+                  </Button>
+                </CardContent>
+              </Card>
             </div>
-          </CardContent>
-        </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
