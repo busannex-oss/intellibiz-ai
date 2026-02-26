@@ -62,6 +62,7 @@ import Dashboard from './pages/Dashboard';
 import Disclaimer from './pages/Disclaimer';
 import ErrorLogs from './pages/ErrorLogs';
 import Home from './pages/Home';
+import InvestorInfo from './pages/InvestorInfo';
 import KnowledgeBase from './pages/KnowledgeBase';
 import Omnichannel from './pages/Omnichannel';
 import Onboarding from './pages/Onboarding';
@@ -76,7 +77,6 @@ import SEOTools from './pages/SEOTools';
 import Tasks from './pages/Tasks';
 import VideoCreation from './pages/VideoCreation';
 import WhiteLabel from './pages/WhiteLabel';
-import InvestorInfo from './pages/InvestorInfo';
 import __Layout from './Layout.jsx';
 
 
@@ -96,6 +96,7 @@ export const PAGES = {
     "Disclaimer": Disclaimer,
     "ErrorLogs": ErrorLogs,
     "Home": Home,
+    "InvestorInfo": InvestorInfo,
     "KnowledgeBase": KnowledgeBase,
     "Omnichannel": Omnichannel,
     "Onboarding": Onboarding,
@@ -110,7 +111,6 @@ export const PAGES = {
     "Tasks": Tasks,
     "VideoCreation": VideoCreation,
     "WhiteLabel": WhiteLabel,
-    "InvestorInfo": InvestorInfo,
 }
 
 export const pagesConfig = {

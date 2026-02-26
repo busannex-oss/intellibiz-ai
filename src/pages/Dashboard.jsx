@@ -252,8 +252,8 @@ export default function Dashboard() {
     { name: 'Draft', value: stats.draft, color: '#64748b' }
   ];
 
-  const completionData = projects.map(p => ({
-    name: p.business_name.substring(0, 15),
+  const completionData = (projects || []).map(p => ({
+    name: (p.business_name || 'Untitled').substring(0, 15),
     completion: (getStepProgress(p).filter(s => s.done).length / 5) * 100
   }));
 
