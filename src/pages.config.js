@@ -77,6 +77,9 @@ import SEOTools from './pages/SEOTools';
 import Tasks from './pages/Tasks';
 import VideoCreation from './pages/VideoCreation';
 import WhiteLabel from './pages/WhiteLabel';
+import TermsOfService from './pages/TermsOfService';
+import CookiePolicy from './pages/CookiePolicy';
+import HowItWorks from './pages/HowItWorks';
 import __Layout from './Layout.jsx';
 
 
@@ -111,6 +114,9 @@ export const PAGES = {
     "Tasks": Tasks,
     "VideoCreation": VideoCreation,
     "WhiteLabel": WhiteLabel,
+    "TermsOfService": TermsOfService,
+    "CookiePolicy": CookiePolicy,
+    "HowItWorks": HowItWorks,
 }
 
 export const pagesConfig = {

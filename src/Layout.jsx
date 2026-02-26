@@ -1,11 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Button } from "@/components/ui/button";
-import { Zap, LayoutGrid, Sparkles, Menu, X, Crown, Settings, Search, Map } from 'lucide-react';
-import { useState } from 'react';
+import { Zap, LayoutGrid, Sparkles, Menu, X, Crown, Settings, Search, Map, Facebook, Twitter, Instagram, Linkedin, Youtube } from 'lucide-react';
+import { base44 } from '@/api/base44Client';
 
 export default function Layout({ children }) {
+  const [settings, setSettings] = useState(null);
+
+  useEffect(() => {
+    const loadSettings = async () => {
+      try {
+        const data = await base44.entities.AppSettings.list();
+        if (data && data.length > 0) {
+          setSettings(data[0]);
+        }
+      } catch (error) {
+        console.log('Settings not loaded');
+      }
+    };
+    loadSettings();
+  }, []);
+
+  const socialIcons = {
+    facebook: { icon: Facebook, color: 'hover:text-blue-500' },
+    twitter: { icon: Twitter, color: 'hover:text-blue-400' },
+    instagram: { icon: Instagram, color: 'hover:text-pink-500' },
+    linkedin: { icon: Linkedin, color: 'hover:text-blue-600' },
+    youtube: { icon: Youtube, color: 'hover:text-red-500' }
+  };
+
   return (
     <div className="min-h-screen bg-slate-900 font-sans antialiased">
       <style>{`
@@ -106,22 +130,97 @@ export default function Layout({ children }) {
       <main>{children}</main>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800 py-8 mt-auto">
+      <footer className="border-t border-slate-800 py-12 mt-auto">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
-                <Zap className="w-4 h-4 text-white" />
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            {/* Brand Section */}
+            <div className="md:col-span-1">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
+                  <Zap className="w-5 h-5 text-white" />
+                </div>
+                <span className="font-bold text-xl text-white">BrandForge</span>
               </div>
-              <span className="text-slate-400 text-sm">© 2026 BrandForge. All rights reserved.</span>
+              <p className="text-slate-400 text-sm mb-4">
+                AI-powered platform to build, launch, and grow your business
+              </p>
+              {/* Social Media Icons */}
+              {settings?.footer_content?.show_social_icons !== false && settings?.social_media && (
+                <div className="flex items-center gap-3">
+                  {Object.entries(settings.social_media).map(([platform, url]) => {
+                    if (!url) return null;
+                    const IconData = socialIcons[platform];
+                    if (!IconData) return null;
+                    const Icon = IconData.icon;
+                    return (
+                      <a
+                        key={platform}
+                        href={url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`text-slate-400 ${IconData.color} transition-colors`}
+                      >
+                        <Icon className="w-5 h-5" />
+                      </a>
+                    );
+                  })}
+                </div>
+              )}
             </div>
-            <div className="flex items-center gap-6">
-              <Link to={createPageUrl('InvestorInfo')} className="text-slate-400 hover:text-white text-sm transition-colors">
-                Investor Info
-              </Link>
-              <Link to={createPageUrl('WhiteLabel')} className="text-slate-400 hover:text-white text-sm transition-colors">
-                White Label
-              </Link>
+
+            {/* Company Links */}
+            <div>
+              <h3 className="text-white font-semibold mb-4">Company</h3>
+              <div className="space-y-2">
+                <Link to={createPageUrl('HowItWorks')} className="block text-slate-400 hover:text-white text-sm transition-colors">
+                  How It Works
+                </Link>
+                <Link to={createPageUrl('InvestorInfo')} className="block text-slate-400 hover:text-white text-sm transition-colors">
+                  Investor Info
+                </Link>
+                <Link to={createPageUrl('WhiteLabel')} className="block text-slate-400 hover:text-white text-sm transition-colors">
+                  White Label
+                </Link>
+              </div>
+            </div>
+
+            {/* Resources Links */}
+            <div>
+              <h3 className="text-white font-semibold mb-4">Resources</h3>
+              <div className="space-y-2">
+                <Link to={createPageUrl('Resources')} className="block text-slate-400 hover:text-white text-sm transition-colors">
+                  Phone Services
+                </Link>
+                <Link to={createPageUrl('KnowledgeBase')} className="block text-slate-400 hover:text-white text-sm transition-colors">
+                  Knowledge Base
+                </Link>
+                <Link to={createPageUrl('Dashboard')} className="block text-slate-400 hover:text-white text-sm transition-colors">
+                  Dashboard
+                </Link>
+              </div>
+            </div>
+
+            {/* Legal Links */}
+            <div>
+              <h3 className="text-white font-semibold mb-4">Legal</h3>
+              <div className="space-y-2">
+                <Link to={createPageUrl('PrivacyPolicy')} className="block text-slate-400 hover:text-white text-sm transition-colors">
+                  Privacy Policy
+                </Link>
+                <Link to={createPageUrl('TermsOfService')} className="block text-slate-400 hover:text-white text-sm transition-colors">
+                  Terms of Service
+                </Link>
+                <Link to={createPageUrl('CookiePolicy')} className="block text-slate-400 hover:text-white text-sm transition-colors">
+                  Cookie Policy
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="border-t border-slate-800 pt-6">
+            <div className="text-center text-slate-400 text-sm">
+              {settings?.footer_content?.copyright_text || '© 2026 BrandForge. All rights reserved.'}
             </div>
           </div>
         </div>
