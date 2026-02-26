@@ -104,6 +104,28 @@ export default function Layout({ children }) {
 
       {/* Main Content */}
       <main>{children}</main>
+
+      {/* Footer */}
+      <footer className="border-t border-slate-800 py-8 mt-auto">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
+                <Zap className="w-4 h-4 text-white" />
+              </div>
+              <span className="text-slate-400 text-sm">© 2026 BrandForge. All rights reserved.</span>
+            </div>
+            <div className="flex items-center gap-6">
+              <Link to={createPageUrl('InvestorInfo')} className="text-slate-400 hover:text-white text-sm transition-colors">
+                Investor Info
+              </Link>
+              <Link to={createPageUrl('WhiteLabel')} className="text-slate-400 hover:text-white text-sm transition-colors">
+                White Label
+              </Link>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
