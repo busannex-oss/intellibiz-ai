@@ -6,8 +6,6 @@ import { Zap, LayoutGrid, Sparkles, Menu, X, Crown, Settings, Search, Map } from
 import { useState } from 'react';
 
 export default function Layout({ children }) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
   return (
     <div className="min-h-screen bg-slate-900 font-sans antialiased">
       <style>{`
@@ -74,18 +72,6 @@ export default function Layout({ children }) {
                   New Project
                 </Button>
               </Link>
-              <Link to={createPageUrl('Resources')}>
-                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
-                  <Sparkles className="w-4 h-4 mr-2" />
-                  Resources
-                </Button>
-              </Link>
-              <Link to={createPageUrl('AccountSettings')}>
-                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
-                  <Settings className="w-4 h-4 mr-2" />
-                  Settings
-                </Button>
-              </Link>
               <Link to={createPageUrl('AdminDashboard')}>
                 <Button variant="outline" className="border-slate-700 text-slate-300 hover:bg-slate-800 hover:text-white">
                   <Crown className="w-4 h-4 mr-2" />
@@ -95,38 +81,15 @@ export default function Layout({ children }) {
             </div>
 
             {/* Mobile Menu Button */}
-            <button
-              className="md:hidden p-2 text-slate-400 hover:text-white"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+            <Link to={createPageUrl('AdminDashboard')} className="md:hidden">
+              <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white">
+                <Crown className="w-5 h-5" />
+              </Button>
+            </Link>
           </div>
         </div>
 
-        {/* Mobile Menu */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-t border-slate-800 bg-slate-900 p-4 space-y-2">
-            <Link to={createPageUrl('Dashboard')} onClick={() => setMobileMenuOpen(false)}>
-              <Button variant="ghost" className="w-full justify-start text-slate-300 hover:text-white hover:bg-slate-800">
-                <LayoutGrid className="w-4 h-4 mr-2" />
-                Dashboard
-              </Button>
-            </Link>
-            <Link to={createPageUrl('CreateBusiness')} onClick={() => setMobileMenuOpen(false)}>
-              <Button className="w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white">
-                <Sparkles className="w-4 h-4 mr-2" />
-                New Project
-              </Button>
-            </Link>
-            <Link to={createPageUrl('AdminDashboard')} onClick={() => setMobileMenuOpen(false)}>
-              <Button variant="outline" className="w-full border-slate-700 text-slate-300">
-                <Crown className="w-4 h-4 mr-2" />
-                Admin
-              </Button>
-            </Link>
-          </div>
-        )}
+
       </nav>
 
       {/* Main Content */}
