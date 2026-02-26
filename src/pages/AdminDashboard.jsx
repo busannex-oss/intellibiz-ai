@@ -36,9 +36,9 @@ export default function AdminDashboard() {
     queryFn: () => base44.entities.User.list('-created_date')
   });
 
-  // Check if current user is super admin
-  const isSuperAdmin = currentUser?.role === 'super_admin';
-  const isAdmin = currentUser?.role === 'admin' || isSuperAdmin;
+  // Check if current user is super admin - check both top-level role and data.role
+  const isSuperAdmin = currentUser?.role === 'super_admin' || currentUser?.data?.role === 'super_admin';
+  const isAdmin = currentUser?.role === 'admin' || currentUser?.data?.role === 'admin' || isSuperAdmin;
 
   // Invite user mutation
   const inviteUserMutation = useMutation({
