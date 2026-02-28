@@ -174,14 +174,18 @@ export default function VideoCreation() {
             <Label className="text-sm font-semibold">Select Brand</Label>
             <Select value={selectedProjectId || ''} onValueChange={handleProjectSelect}>
               <SelectTrigger className="h-10 text-sm">
-                <SelectValue placeholder="Choose a brand..." />
+                <SelectValue placeholder={isLoadingProjects ? "Loading..." : "Choose a brand..."} />
               </SelectTrigger>
               <SelectContent>
-                {allProjects.map(proj => (
-                  <SelectItem key={proj.id} value={proj.id}>
-                    {proj.business_name}
-                  </SelectItem>
-                ))}
+                {allProjects.length > 0 ? (
+                  allProjects.map(proj => (
+                    <SelectItem key={proj.id} value={proj.id}>
+                      {proj.business_name}
+                    </SelectItem>
+                  ))
+                ) : (
+                  <div className="p-2 text-sm text-slate-500">No brands found</div>
+                )}
               </SelectContent>
             </Select>
           </div>
