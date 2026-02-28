@@ -7,6 +7,14 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
+import {
+  MarketSizeFunnel,
+  GrowthProjectionChart,
+  CompetitorRadar,
+  PainPointsChart,
+  MarketShareDonut,
+  DriversChart
+} from '@/components/wizard/MarketAnalysisCharts';
 import { 
   Loader2, 
   Sparkles, 
