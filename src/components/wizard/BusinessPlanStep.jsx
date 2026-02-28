@@ -414,6 +414,7 @@ Generate a COMPLETE, DETAILED business plan that would impress any investor or b
                           blockquote: ({ children }) => <blockquote className="border-l-4 border-violet-400 pl-4 my-4 bg-violet-50 py-2 rounded-r-lg text-slate-600 italic text-sm">{children}</blockquote>,
                         }}
                       >{content}</ReactMarkdown>
+                      </div>
                     </TabsContent>
                   ))}
                 </Tabs>
