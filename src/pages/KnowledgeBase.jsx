@@ -21,6 +21,7 @@ const CATEGORY_ICONS = {
 
 export default function KnowledgeBase() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [expandedId, setExpandedId] = useState(null);
   
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['knowledgebase'],
