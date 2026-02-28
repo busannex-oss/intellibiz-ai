@@ -546,6 +546,16 @@ The video should be engaging, highlight key benefits, and end with a strong call
 
               {/* Footer Preview */}
               <div className="p-8 bg-slate-900 text-center">
+                {project.logo_url && (
+                  <div className="flex justify-center mb-4">
+                    <img 
+                      src={project.logo_url} 
+                      alt="Logo" 
+                      className="h-16 object-contain"
+                      style={{ background: 'transparent' }}
+                    />
+                  </div>
+                )}
                 <p className="text-slate-400 mb-2">{website.footer?.tagline}</p>
                 <p className="text-sm text-slate-500">{website.footer?.copyright}</p>
               </div>
