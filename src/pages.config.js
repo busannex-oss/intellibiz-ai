@@ -55,6 +55,7 @@ import BrandKit from './pages/BrandKit';
 import BusinessReport from './pages/BusinessReport';
 import ColorThemes from './pages/ColorThemes';
 import ContentStrategy from './pages/ContentStrategy';
+import CookiePolicy from './pages/CookiePolicy';
 import CreateBusiness from './pages/CreateBusiness';
 import CustomerFeedback from './pages/CustomerFeedback';
 import CustomerJourney from './pages/CustomerJourney';
@@ -62,6 +63,7 @@ import Dashboard from './pages/Dashboard';
 import Disclaimer from './pages/Disclaimer';
 import ErrorLogs from './pages/ErrorLogs';
 import Home from './pages/Home';
+import HowItWorks from './pages/HowItWorks';
 import InvestorInfo from './pages/InvestorInfo';
 import KnowledgeBase from './pages/KnowledgeBase';
 import Omnichannel from './pages/Omnichannel';
@@ -75,11 +77,9 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import Resources from './pages/Resources';
 import SEOTools from './pages/SEOTools';
 import Tasks from './pages/Tasks';
+import TermsOfService from './pages/TermsOfService';
 import VideoCreation from './pages/VideoCreation';
 import WhiteLabel from './pages/WhiteLabel';
-import TermsOfService from './pages/TermsOfService';
-import CookiePolicy from './pages/CookiePolicy';
-import HowItWorks from './pages/HowItWorks';
 import __Layout from './Layout.jsx';
 
 
@@ -92,6 +92,7 @@ export const PAGES = {
     "BusinessReport": BusinessReport,
     "ColorThemes": ColorThemes,
     "ContentStrategy": ContentStrategy,
+    "CookiePolicy": CookiePolicy,
     "CreateBusiness": CreateBusiness,
     "CustomerFeedback": CustomerFeedback,
     "CustomerJourney": CustomerJourney,
@@ -99,6 +100,7 @@ export const PAGES = {
     "Disclaimer": Disclaimer,
     "ErrorLogs": ErrorLogs,
     "Home": Home,
+    "HowItWorks": HowItWorks,
     "InvestorInfo": InvestorInfo,
     "KnowledgeBase": KnowledgeBase,
     "Omnichannel": Omnichannel,
@@ -112,11 +114,9 @@ export const PAGES = {
     "Resources": Resources,
     "SEOTools": SEOTools,
     "Tasks": Tasks,
+    "TermsOfService": TermsOfService,
     "VideoCreation": VideoCreation,
     "WhiteLabel": WhiteLabel,
-    "TermsOfService": TermsOfService,
-    "CookiePolicy": CookiePolicy,
-    "HowItWorks": HowItWorks,
 }
 
 export const pagesConfig = {
