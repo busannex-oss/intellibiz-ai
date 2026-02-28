@@ -530,7 +530,7 @@ export default function Dashboard() {
           <Link to={createPageUrl('CustomerJourney')}>
             <Card className="border-0 bg-gradient-to-br from-violet-500/10 to-violet-600/10 border border-violet-500/20 hover:border-violet-500/40 transition-all cursor-pointer h-full">
               <CardContent className="p-5">
-                <Map className="w-9 h-9 text-violet-400 mb-2" />
+                <MapIcon className="w-9 h-9 text-violet-400 mb-2" />
                 <h3 className="font-semibold text-white text-sm mb-0.5">Journey Map</h3>
                 <p className="text-xs text-slate-400">Customer flow</p>
               </CardContent>
