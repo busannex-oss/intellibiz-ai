@@ -44,54 +44,61 @@ export default function VideoCreation() {
   const selectedCommercial = project?.selected_commercial_video;
 
   const generateCommercial = async () => {
+    if (!project) {
+      toast.error('Project data not loaded. Please try again.');
+      return;
+    }
+
     setIsGenerating(true);
-    
+
     try {
-      const marketData = project.market_research;
-      const websiteContent = project.website_content;
-      
+      const marketData = project.market_research || {};
+      const websiteContent = project.website_content || {};
+
       const videoPrompt = `Create a compelling ${selectedDuration}-second commercial video in ${selectedStyle} style for:
 
-Business: ${project.business_name}
-Industry: ${project.industry}
-Description: ${project.description}
+  Business: ${project.business_name}
+  Industry: ${project.industry}
+  Description: ${project.description}
 
-Value Proposition: ${project.unique_value_proposition}
+  Value Proposition: ${project.unique_value_proposition || 'Exceptional business solution'}
 
-Target Audience: ${project.target_audience || marketData?.target_demographics?.primary_audience || 'General consumers'}
+  Target Audience: ${project.target_audience || 'General consumers'}
 
-Key Benefits:
-${project.competitive_advantages?.slice(0, 3).map(adv => `- ${adv}`).join('\n') || '- Premium quality\n- Expert service\n- Customer satisfaction'}
+  Key Benefits:
+  ${project.competitive_advantages?.slice(0, 3).map(adv => `- ${adv}`).join('\n') || '- Premium quality\n- Expert service\n- Customer satisfaction'}
 
-Brand Personality: ${project.brand_personality?.traits?.join(', ') || 'Professional, trustworthy, innovative'}
+  Brand Personality: ${project.brand_personality?.traits?.join(', ') || 'Professional, trustworthy, innovative'}
 
-${websiteContent?.hero?.cta_text ? `Call to Action: ${websiteContent.hero.cta_text}` : 'Call to Action: Get Started Today'}
+  Call to Action: ${websiteContent.hero?.cta_text || 'Get Started Today'}
 
-Create a dynamic, engaging video that:
-1. Opens with a compelling hook related to the target audience's pain points
-2. Showcases the unique value proposition visually
-3. Highlights 2-3 key benefits with dynamic visuals
-4. Ends with a strong call-to-action
+  Create a dynamic, engaging ${selectedDuration}-second video that:
+  1. Opens with a compelling hook related to the target audience's pain points
+  2. Showcases the unique value proposition visually
+  3. Highlights 2-3 key benefits with dynamic visuals
+  4. Ends with a strong call-to-action
 
-Style: ${selectedStyle} - ensure smooth transitions, professional quality, and brand-appropriate aesthetics.`;
+  Style: ${selectedStyle} - ensure smooth transitions, professional quality, and brand-appropriate aesthetics.
+  Make sure the video is exactly ${selectedDuration} seconds.`;
 
       const response = await base44.functions.invoke('generateVideoWithFallback', {
         prompt: videoPrompt,
         duration: selectedDuration,
         aspect_ratio: '16:9',
-        style: selectedStyle
+        style: selectedStyle,
+        provider: activeProvider
       });
 
-      if (response.data.success) {
+      if (response?.data?.success) {
         const videoKey = `${selectedDuration}sec_${selectedStyle}`;
         const updatedVideos = {
           ...commercialVideos,
           [videoKey]: {
-            url: response.data.video_url,
+            url: response.data.video_url || response.data.url,
             thumbnail_url: response.data.thumbnail_url,
             duration: selectedDuration,
             style: selectedStyle,
-            provider: response.data.provider,
+            provider: response.data.provider || activeProvider,
             created_at: new Date().toISOString(),
             prompt: videoPrompt
           }
@@ -101,13 +108,13 @@ Style: ${selectedStyle} - ensure smooth transitions, professional quality, and b
           commercial_videos: updatedVideos
         });
 
-        toast.success(`Video generated successfully using ${response.data.provider}!`);
+        toast.success(`Video generated successfully using ${response.data.provider || activeProvider}!`);
       } else {
-        toast.error('All video providers failed. Please try again.');
+        toast.error(response?.data?.error || 'All video providers failed. Please try again.');
       }
     } catch (error) {
       console.error('Video generation error:', error);
-      toast.error('Failed to generate video');
+      toast.error(error?.message || 'Failed to generate video. Please ensure you have API credentials configured.');
     } finally {
       setIsGenerating(false);
     }
