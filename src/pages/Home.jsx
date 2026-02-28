@@ -297,7 +297,8 @@ export default function Home() {
               <img
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69642d0098b49c16dd4c5c29/7820b7ffc_Screenshot2026-02-28at11623AM.png"
                 alt="Credit Savvi Logo"
-                className="w-14 h-14 rounded-full object-cover"
+                className="w-14 h-14 object-contain"
+                style={{ background: 'transparent' }}
               />
 
 
