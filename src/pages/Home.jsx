@@ -204,12 +204,12 @@ export default function Home() {
                     {isGeneratingImage ? (
                       <>
                         <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-                        Optimizing...
+                        Generating...
                       </>
                     ) : (
                       <>
                         <Sparkles className="w-3 h-3 mr-1" />
-                        Optimize for US Market
+                        Generate Hero Image
                       </>
                     )}
                   </Button>
