@@ -3,14 +3,21 @@
    Standard: Optimization, Speed, Efficiency
    ========================================= */
 
-/* Logo containers — always transparent */
+/* Logo containers — always transparent everywhere */
 .logo,
 .logo img,
-[class*="logo"] img {
+[class*="logo"] img,
+img[alt="Logo"],
+img[alt*="logo"],
+img[alt*="Logo"] {
   background: transparent !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  mix-blend-mode: normal;
+}
+
+/* Force transparent background on any element that wraps a logo image */
+.logo,
+[class*="logo"] {
+  background: transparent !important;
 }
 
 /* =========================================
