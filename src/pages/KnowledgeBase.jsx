@@ -1,22 +1,43 @@
 import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { BookText, Search, Phone, Globe, Palette, Users, Settings, BarChart } from 'lucide-react';
+import { BookText, Search, Loader2 } from 'lucide-react';
 
-const ARTICLES = [
-  { title: 'Getting Started with BrandForge', category: 'Getting Started', icon: BookText, content: 'Learn the basics of creating your first business project with AI-powered tools.' },
-  { title: 'Creating Your First Project', category: 'Getting Started', icon: Settings, content: 'Step-by-step guide to set up and launch your first business project.' },
-  { title: 'Understanding Market Research', category: 'Features', icon: BarChart, content: 'How our AI analyzes competitors and identifies market opportunities.' },
-  { title: 'Phone Integration Setup', category: 'Integrations', icon: Phone, content: 'Connect RingCentral or Dialpad for advanced phone features.' },
-  { title: 'Customizing Color Themes', category: 'Customization', icon: Palette, content: 'Learn how to customize your platform appearance with white label themes.' },
-  { title: 'Managing Team Members', category: 'Team', icon: Users, content: 'Add users, assign roles, and manage permissions for your team.' },
-  { title: 'Website Content Generation', category: 'Features', icon: Globe, content: 'Generate SEO-optimized website content with AI assistance.' },
-  { title: 'White Label Options', category: 'Advanced', icon: Settings, content: 'Customize branding and unlock premium color themes for your platform.' }
-];
+const CATEGORY_ICONS = {
+  'getting_started': BookText,
+  'dashboard': Search,
+  'phone_system': Search,
+  'omnichannel': Search,
+  'website': Search,
+  'social_media': Search,
+  'branding': Search,
+  'analytics': Search,
+  'billing': Search,
+  'faq': Search
+};
 
 export default function KnowledgeBase() {
   const [searchTerm, setSearchTerm] = useState('');
+  
+  const { data: articles = [], isLoading } = useQuery({
+    queryKey: ['knowledgebase'],
+    queryFn: async () => {
+      try {
+        const user = await base44.auth.me();
+        if (!user) return [];
+        const data = await base44.entities.KnowledgeBase.filter({
+          created_by: user.email
+        });
+        return data || [];
+      } catch (err) {
+        console.error('Failed to load knowledge base:', err);
+        return [];
+      }
+    }
+  });
 
   const filteredArticles = ARTICLES.filter(article =>
     article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
