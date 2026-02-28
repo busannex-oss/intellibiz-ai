@@ -364,7 +364,7 @@ The video should be engaging, highlight key benefits, and end with a strong call
           </div>
 
           {viewMode === 'preview' ? (
-            <Card className="border-0 shadow-xl overflow-hidden">
+            <Card className="border-0 shadow-xl overflow-hidden bg-white">
               {/* Hero Preview */}
               <div 
                 className="p-12 md:p-20 text-center text-white"
