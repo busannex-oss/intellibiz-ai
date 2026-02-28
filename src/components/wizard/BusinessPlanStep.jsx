@@ -392,6 +392,7 @@ Generate a COMPLETE, DETAILED business plan that would impress any investor or b
                     { value: 'risks', content: businessPlan.risk_analysis },
                   ].map(({ value, content }) => (
                     <TabsContent key={value} value={value}>
+                      <div className="bg-slate-50 rounded-xl p-6 border border-slate-100">
                       <ReactMarkdown
                         components={{
                           h1: ({ children }) => <h1 className="text-2xl font-bold text-slate-800 mt-8 mb-4 pb-2 border-b-2 border-violet-200">{children}</h1>,
