@@ -394,18 +394,23 @@ Generate a COMPLETE, DETAILED business plan that would impress any investor or b
                     <TabsContent key={value} value={value}>
                       <ReactMarkdown
                         components={{
-                          h1: ({ children }) => <h1 className="text-2xl font-bold text-slate-800 mt-8 mb-3 pb-2 border-b border-slate-200">{children}</h1>,
-                          h2: ({ children }) => <h2 className="text-xl font-bold text-violet-700 mt-7 mb-3">{children}</h2>,
+                          h1: ({ children }) => <h1 className="text-2xl font-bold text-slate-800 mt-8 mb-4 pb-2 border-b-2 border-violet-200">{children}</h1>,
+                          h2: ({ children }) => <h2 className="text-lg font-bold text-violet-700 mt-6 mb-3 flex items-center gap-2"><span className="w-1 h-5 bg-violet-500 rounded-full inline-block"></span>{children}</h2>,
                           h3: ({ children }) => <h3 className="text-base font-semibold text-slate-700 mt-5 mb-2">{children}</h3>,
-                          p: ({ children }) => <p className="text-slate-600 leading-relaxed mb-3">{children}</p>,
-                          ul: ({ children }) => <ul className="space-y-1 mb-4 ml-4">{children}</ul>,
-                          ol: ({ children }) => <ol className="space-y-1 mb-4 ml-4 list-decimal">{children}</ol>,
-                          li: ({ children }) => <li className="text-slate-600 flex gap-2 items-start"><span className="text-violet-500 mt-1 flex-shrink-0">•</span><span>{children}</span></li>,
+                          p: ({ children }) => <p className="text-slate-600 leading-relaxed mb-3 text-sm">{children}</p>,
+                          ul: ({ children }) => <ul className="space-y-2 mb-4 ml-2">{children}</ul>,
+                          ol: ({ children }) => <ol className="space-y-2 mb-4 ml-2 list-none counter-reset-item">{children}</ol>,
+                          li: ({ children, ...props }) => (
+                            <li className="text-slate-600 text-sm flex gap-2 items-start leading-relaxed">
+                              <span className="w-5 h-5 rounded-full bg-violet-100 text-violet-600 flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">›</span>
+                              <span className="flex-1">{children}</span>
+                            </li>
+                          ),
                           strong: ({ children }) => <strong className="font-semibold text-slate-800">{children}</strong>,
-                          table: ({ children }) => <div className="overflow-x-auto my-4"><table className="w-full text-sm border-collapse">{children}</table></div>,
-                          th: ({ children }) => <th className="bg-violet-50 text-violet-800 font-semibold text-left p-3 border border-slate-200">{children}</th>,
-                          td: ({ children }) => <td className="p-3 border border-slate-200 text-slate-600">{children}</td>,
-                          blockquote: ({ children }) => <blockquote className="border-l-4 border-violet-400 pl-4 my-4 text-slate-500 italic">{children}</blockquote>,
+                          table: ({ children }) => <div className="overflow-x-auto my-4 rounded-lg border border-slate-200"><table className="w-full text-sm border-collapse">{children}</table></div>,
+                          th: ({ children }) => <th className="bg-violet-50 text-violet-800 font-semibold text-left p-3 border-b border-slate-200">{children}</th>,
+                          td: ({ children }) => <td className="p-3 border-b border-slate-100 text-slate-600">{children}</td>,
+                          blockquote: ({ children }) => <blockquote className="border-l-4 border-violet-400 pl-4 my-4 bg-violet-50 py-2 rounded-r-lg text-slate-600 italic text-sm">{children}</blockquote>,
                         }}
                       >{content}</ReactMarkdown>
                     </TabsContent>
