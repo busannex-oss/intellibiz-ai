@@ -200,24 +200,26 @@ export default function Home() {
                       <div className="text-slate-400 text-xs">Logo · Website · Social Media · Business Plan</div>
                     </div>
                   </div>
-                  <Button
-                    onClick={generateTargetedHeroImage}
-                    disabled={isGeneratingImage}
-                    size="sm"
-                    className="w-full bg-amber-600 hover:bg-amber-700 text-white text-xs"
-                  >
-                    {isGeneratingImage ? (
-                      <>
-                        <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-                        Generating...
-                      </>
-                    ) : (
-                      <>
-                        <Sparkles className="w-3 h-3 mr-1" />
-                        Generate Hero Image
-                      </>
-                    )}
-                  </Button>
+                  {isLoggedIn && (
+                    <Button
+                      onClick={generateTargetedHeroImage}
+                      disabled={isGeneratingImage}
+                      size="sm"
+                      className="w-full bg-amber-600 hover:bg-amber-700 text-white text-xs"
+                    >
+                      {isGeneratingImage ? (
+                        <>
+                          <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                          Generating...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-3 h-3 mr-1" />
+                          Generate Hero Image
+                        </>
+                      )}
+                    </Button>
+                  )}
                 </div>
               </div>
               {/* Decorative glow */}
