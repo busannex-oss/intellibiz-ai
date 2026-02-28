@@ -7,7 +7,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ChevronLeft, Mail, Users, Share2, Trash2, Plus, CheckCircle, AlertCircle, Copy, ExternalLink, Palette, ArrowRight, Download } from 'lucide-react';
+import { ChevronLeft, Mail, Users, Share2, Trash2, Plus, CheckCircle, AlertCircle, Copy, ExternalLink, Palette, ArrowRight, Download, Facebook, Twitter, Linkedin } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
