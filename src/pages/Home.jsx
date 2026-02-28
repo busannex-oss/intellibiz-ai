@@ -85,18 +85,16 @@ export default function Home() {
       const project = projects?.[0];
       if (!project) return;
 
-      const targetDemographics = project.market_research?.target_demographics || {};
-      const brandPersonality = project.brand_personality?.traits || ['professional'];
-
-      const prompt = `Create a professional hero image for a US business landing page featuring:
-- Target demographic: ${targetDemographics.age_range || '25-45'} year old professional
-- Gender distribution: ${targetDemographics.gender_distribution || 'mixed'}
-- Setting: Modern US office or business environment
-- Style: ${brandPersonality[0] || 'professional'}
-- Convey: Ambition, success, business growth, American entrepreneurship
-- High conversion potential for US market
-- Modern, sleek, professional aesthetic
-- Include diverse representation appropriate for US market`;
+      const prompt = `Create a professional, modern hero image for a financial education platform landing page featuring:
+      - A woman aged 30-40 with diverse background (could be African American, Latina, Asian, or Middle Eastern)
+      - Casual professional attire, in a modern home office or warm coffee shop setting
+      - Appears confident, thoughtful, and hopeful about her financial future
+      - May be holding a laptop, tablet, or notebook
+      - Warm, accessible, empowering setting - not corporate or intimidating
+      - Modern, minimalist aesthetic with warm, inviting lighting
+      - Convey: financial empowerment, dignity, hope, entrepreneurship, accessible financial education
+      - Shows someone who has overcome financial struggles and is building wealth
+      - Professional quality, high conversion potential for underserved financial education demographic`;
 
       const response = await base44.integrations.Core.GenerateImage({
         prompt
