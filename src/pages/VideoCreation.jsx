@@ -141,14 +141,31 @@ export default function VideoCreation() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-violet-50/30 p-4 md:p-8">
       <div className="max-w-7xl mx-auto space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-3">
-            <Video className="w-8 h-8 text-purple-600" />
-            Business Video Production
-          </h1>
-          <p className="text-slate-600 mt-1">
-            AI-powered video generation with multi-provider fallback: Sora → Veo → Runway → PIKA
-          </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-3">
+              <Video className="w-8 h-8 text-purple-600" />
+              Business Video Production
+            </h1>
+            <p className="text-slate-600 mt-1">
+              AI-powered video generation with multi-provider fallback: Sora → Veo → Runway → PIKA
+            </p>
+          </div>
+          <div className="w-64">
+            <Label className="text-sm font-semibold">Select Brand</Label>
+            <Select value={selectedProjectId || ''} onValueChange={setSelectedProjectId}>
+              <SelectTrigger className="h-10 text-sm">
+                <SelectValue placeholder="Choose a brand..." />
+              </SelectTrigger>
+              <SelectContent>
+                {allProjects.map(proj => (
+                  <SelectItem key={proj.id} value={proj.id}>
+                    {proj.business_name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         {/* Video Generator */}
