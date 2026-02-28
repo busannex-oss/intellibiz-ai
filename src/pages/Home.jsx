@@ -256,8 +256,8 @@ export default function Home() {
 
                <Card className="group border border-slate-700/50 bg-gradient-to-br from-slate-800/80 to-slate-800/40 backdrop-blur-sm h-full overflow-hidden hover:border-slate-600 transition-all duration-300">
                  <CardContent className="p-8">
-                   <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-lg flex-shrink-0`}>
-                     <feature.icon className="w-7 h-7 text-white" />
+                   <div className="mb-5">
+                     <feature.icon className={`w-8 h-8 bg-gradient-to-br ${feature.color} bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300`} />
                    </div>
                    <h3 className="text-xl font-semibold text-white mb-3 tracking-[-0.02em] break-words">{feature.title}</h3>
                    <p className="text-slate-400 leading-[1.6] tracking-[-0.011em] break-words">{feature.description}</p>
