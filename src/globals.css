@@ -1,3 +1,4 @@
+
 /* =========================================
    BrandForge Global Styles
    Standard: Optimization, Speed, Efficiency
@@ -42,18 +43,9 @@ h4 { font-size: 16px; line-height: 1.5; }
 
 /* =========================================
    Global Button Overrides
-   White outline buttons always show white text
    ========================================= */
-button[class*="border-white"],
-button[class*="border-slate"][class*="text-white"],
-button[class*="outline"][class*="text-white"] {
-  color: #ffffff !important;
-}
-
-/* Outline variant on dark backgrounds */
-.dark button[data-variant="outline"],
-.bg-slate-900 button,
-.bg-slate-800 button {
+button {
+  background-color: inherit;
   color: inherit;
 }
 
