@@ -15,7 +15,7 @@ import { toast } from 'sonner';
 
 export default function VideoCreation() {
   const [searchParams] = useSearchParams();
-  const projectId = searchParams.get('projectId');
+  const urlProjectId = searchParams.get('projectId');
   const queryClient = useQueryClient();
   
   const [isGenerating, setIsGenerating] = useState(false);
@@ -23,14 +23,25 @@ export default function VideoCreation() {
   const [selectedStyle, setSelectedStyle] = useState('professional');
   const [activeProvider, setActiveProvider] = useState('sora');
   const [showAdvanced, setShowAdvanced] = useState(false);
+  const [selectedProjectId, setSelectedProjectId] = useState(urlProjectId || null);
+
+  const { data: allProjects = [] } = useQuery({
+    queryKey: ['userProjects'],
+    queryFn: async () => {
+      const user = await base44.auth.me();
+      if (!user) return [];
+      return base44.entities.BusinessProject.filter({ created_by: user.email });
+    }
+  });
 
   const { data: project } = useQuery({
-    queryKey: ['project', projectId],
+    queryKey: ['project', selectedProjectId],
     queryFn: async () => {
-      const projects = await base44.entities.BusinessProject.filter({ id: projectId });
+      if (!selectedProjectId) return null;
+      const projects = await base44.entities.BusinessProject.filter({ id: selectedProjectId });
       return projects[0];
     },
-    enabled: !!projectId
+    enabled: !!selectedProjectId
   });
 
   const updateProjectMutation = useMutation({
