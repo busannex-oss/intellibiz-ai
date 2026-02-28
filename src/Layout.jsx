@@ -184,18 +184,18 @@ export default function Layout({ children }) {
               </div>
             </div>
 
-            {/* Resources Links */}
+            {/* Services Links */}
             <div>
-              <h3 className="text-white font-semibold mb-4">Resources</h3>
+              <h3 className="text-white font-semibold mb-4">Services</h3>
               <div className="space-y-2">
-                <Link to={createPageUrl('Resources')} className="block text-slate-400 hover:text-white text-sm transition-colors">
-                  Phone Services
+                <Link to={createPageUrl('Services')} className="block text-slate-400 hover:text-white text-sm transition-colors">
+                  All Services
                 </Link>
                 <Link to={createPageUrl('KnowledgeBase')} className="block text-slate-400 hover:text-white text-sm transition-colors">
                   Knowledge Base
                 </Link>
-                <Link to={createPageUrl('Dashboard')} className="block text-slate-400 hover:text-white text-sm transition-colors">
-                  Dashboard
+                <Link to={createPageUrl('HowItWorks')} className="block text-slate-400 hover:text-white text-sm transition-colors">
+                  How It Works
                 </Link>
               </div>
             </div>
