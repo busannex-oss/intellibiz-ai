@@ -55,6 +55,30 @@ export default function KnowledgeBase() {
 
   const categories = [...new Set(articles.map(a => a.category).filter(Boolean))];
 
+  const createMutation = useMutation({
+    mutationFn: async () => {
+      const user = await base44.auth.me();
+      if (!user) throw new Error('Not authenticated');
+      return base44.entities.KnowledgeBase.create({
+        ...formData,
+        project_id: user.email
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['knowledgebase'] });
+      setFormData({ title: '', content: '', category: 'getting_started' });
+      setIsDialogOpen(false);
+    }
+  });
+
+  const handleCreate = () => {
+    if (!formData.title.trim() || !formData.content.trim()) {
+      alert('Please fill in all fields');
+      return;
+    }
+    createMutation.mutate();
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4 md:p-8">
       <div className="max-w-6xl mx-auto space-y-6">
