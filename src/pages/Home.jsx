@@ -27,6 +27,7 @@ import {
   Loader2 } from
 'lucide-react';
 import { motion } from 'framer-motion';
+import { Sparkles } from 'lucide-react';
 
 const features = [
 {
