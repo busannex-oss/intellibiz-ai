@@ -92,28 +92,34 @@ export default function KnowledgeBase() {
         ) : (
           <div className="grid md:grid-cols-2 gap-4">
             {filteredArticles.map((article) => {
-              const Icon = CATEGORY_ICONS[article.category] || BookText;
-              return (
-                <Card key={article.id} className="border-0 bg-slate-800/50 border border-slate-700 hover:border-slate-600 transition-all cursor-pointer">
-                  <CardHeader>
-                    <div className="flex items-start gap-3">
-                      <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center flex-shrink-0">
-                        <Icon className="w-5 h-5 text-blue-400" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-white text-lg">{article.title}</CardTitle>
-                        <Badge variant="outline" className="mt-2 border-slate-600 text-slate-400 text-xs">
-                          {article.category}
-                        </Badge>
-                      </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-slate-400 text-sm line-clamp-2">{article.content}</p>
-                  </CardContent>
-                </Card>
-              );
-            })}
+               const Icon = CATEGORY_ICONS[article.category] || BookText;
+               const isExpanded = expandedId === article.id;
+               return (
+                 <Card key={article.id} className="border-0 bg-slate-800/50 border border-slate-700 hover:border-slate-600 transition-all cursor-pointer overflow-hidden" onClick={() => setExpandedId(isExpanded ? null : article.id)}>
+                   <CardHeader>
+                     <div className="flex items-start gap-3">
+                       <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                         <Icon className="w-5 h-5 text-blue-400" />
+                       </div>
+                       <div className="flex-1">
+                         <div className="flex items-center justify-between">
+                           <CardTitle className="text-white text-lg">{article.title}</CardTitle>
+                           <ChevronDown className={`w-5 h-5 text-slate-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
+                         </div>
+                         <Badge variant="outline" className="mt-2 border-slate-600 text-slate-400 text-xs">
+                           {article.category}
+                         </Badge>
+                       </div>
+                     </div>
+                   </CardHeader>
+                   {isExpanded && (
+                     <CardContent>
+                       <div className="text-slate-300 text-sm whitespace-pre-wrap">{article.content}</div>
+                     </CardContent>
+                   )}
+                 </Card>
+               );
+             })}
           </div>
         )}
 
