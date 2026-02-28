@@ -462,39 +462,43 @@ export default function BusinessPlanDocument({ project }) {
           )}
 
           {/* P&L Statement */}
-          {project?.financial_data?.pl_statement && (
-            <div>
-              <h3 className="text-xl font-bold text-slate-900 mb-4">3-Year Profit & Loss Statement</h3>
-              <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-                <table className="w-full text-sm">
-                  <thead className="bg-slate-50">
-                    <tr>
-                      <th className="px-4 py-3 text-left font-bold text-slate-800">Line Item</th>
-                      <th className="px-4 py-3 text-right font-bold text-slate-800">Year 1</th>
-                      <th className="px-4 py-3 text-right font-bold text-slate-800">Year 2</th>
-                      <th className="px-4 py-3 text-right font-bold text-slate-800">Year 3</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Object.keys(project.financial_data.pl_statement.year_1 || {}).map((key, idx) => (
-                      <tr key={key} className={`border-t ${key === 'net_income' ? 'bg-emerald-50 font-bold' : ''}`}>
-                        <td className="px-4 py-3 text-slate-700 capitalize">{key.replace(/_/g, ' ')}</td>
-                        <td className="px-4 py-3 text-right font-medium text-slate-800">
-                          ${project.financial_data.pl_statement.year_1[key]?.toLocaleString()}
-                        </td>
-                        <td className="px-4 py-3 text-right font-medium text-slate-800">
-                          ${project.financial_data.pl_statement.year_2[key]?.toLocaleString()}
-                        </td>
-                        <td className="px-4 py-3 text-right font-medium text-slate-800">
-                          ${project.financial_data.pl_statement.year_3[key]?.toLocaleString()}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
+           {project?.financial_data?.pl_statement && (
+             <div>
+               <h3 className="text-xl font-bold text-slate-900 mb-4">3-Year Profit & Loss Statement</h3>
+               <div className="bg-white rounded-xl border border-slate-200 p-6">
+                 <div className="space-y-4">
+                   <div className="grid grid-cols-3 gap-4 mb-6">
+                     <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
+                       <p className="text-xs text-blue-600 uppercase tracking-wide font-semibold mb-2">Year 1 Revenue</p>
+                       <p className="text-2xl font-bold text-blue-900">${project.financial_data.pl_statement.year_1?.revenue?.toLocaleString()}</p>
+                     </div>
+                     <div className="bg-purple-50 rounded-lg p-4 border border-purple-200">
+                       <p className="text-xs text-purple-600 uppercase tracking-wide font-semibold mb-2">Year 2 Revenue</p>
+                       <p className="text-2xl font-bold text-purple-900">${project.financial_data.pl_statement.year_2?.revenue?.toLocaleString()}</p>
+                     </div>
+                     <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-200">
+                       <p className="text-xs text-emerald-600 uppercase tracking-wide font-semibold mb-2">Year 3 Revenue</p>
+                       <p className="text-2xl font-bold text-emerald-900">${project.financial_data.pl_statement.year_3?.revenue?.toLocaleString()}</p>
+                     </div>
+                   </div>
+                   <div className="grid grid-cols-3 gap-4">
+                     <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-200">
+                       <p className="text-xs text-emerald-600 uppercase tracking-wide font-semibold mb-2">Year 1 Net Income</p>
+                       <p className="text-2xl font-bold text-emerald-900">${project.financial_data.pl_statement.year_1?.net_income?.toLocaleString()}</p>
+                     </div>
+                     <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-200">
+                       <p className="text-xs text-emerald-600 uppercase tracking-wide font-semibold mb-2">Year 2 Net Income</p>
+                       <p className="text-2xl font-bold text-emerald-900">${project.financial_data.pl_statement.year_2?.net_income?.toLocaleString()}</p>
+                     </div>
+                     <div className="bg-emerald-50 rounded-lg p-4 border border-emerald-200">
+                       <p className="text-xs text-emerald-600 uppercase tracking-wide font-semibold mb-2">Year 3 Net Income</p>
+                       <p className="text-2xl font-bold text-emerald-900">${project.financial_data.pl_statement.year_3?.net_income?.toLocaleString()}</p>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+             </div>
+           )}
 
           {/* Balance Sheet */}
           {project?.financial_data?.balance_sheet && (
