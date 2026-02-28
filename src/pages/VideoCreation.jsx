@@ -316,6 +316,8 @@ export default function VideoCreation() {
                                src={video.url}
                                className="w-full h-full object-cover"
                                controls
+                               controlsList="nodownload"
+                               preload="metadata"
                              />
                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center pointer-events-none">
                                <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/30">
