@@ -222,14 +222,23 @@ export default function BusinessPlanCustomizationStep({ project, onUpdate, onNex
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back
             </Button>
-            <Button
-              onClick={handleSave}
-              disabled={loading}
-              className="bg-gradient-to-r from-violet-500 to-purple-500"
-            >
-              {loading ? 'Saving...' : 'Save Customization'}
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                onClick={() => navigate(createPageUrl(`BusinessReport?projectId=${project?.id}`))}
+                variant="outline"
+              >
+                <Eye className="w-4 h-4 mr-2" />
+                Preview
+              </Button>
+              <Button
+                onClick={handleSave}
+                disabled={loading}
+                className="bg-gradient-to-r from-violet-500 to-purple-500"
+              >
+                {loading ? 'Saving...' : 'Save Customization'}
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
           </div>
         </CardContent>
       </Card>
