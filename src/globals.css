@@ -9,14 +9,21 @@
 [class*="logo"] img,
 img[alt="Logo"],
 img[alt*="logo"],
-img[alt*="Logo"] {
+img[alt*="Logo"],
+img[alt*="logo"] {
   background: transparent !important;
-  mix-blend-mode: multiply;
 }
 
 /* Force transparent background on any element that wraps a logo image */
 .logo,
 [class*="logo"] {
+  background: transparent !important;
+}
+
+/* Mix-blend-mode to visually remove white backgrounds from logos on dark surfaces */
+.logo-blend img,
+.logo-blend {
+  mix-blend-mode: screen;
   background: transparent !important;
 }
 
