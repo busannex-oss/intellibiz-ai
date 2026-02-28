@@ -5,7 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Palette, FileText, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Palette, FileText, ArrowRight, ArrowLeft, Eye } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 
 export default function BusinessPlanCustomizationStep({ project, onUpdate, onNext, onPrev }) {
   const [customization, setCustomization] = useState(project?.business_plan_customization || {
