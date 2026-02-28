@@ -117,7 +117,7 @@ export default function NewsletterStep({ project, onUpdate, onNext, onPrev }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
-      className="max-w-6xl mx-auto space-y-8"
+      className="max-w-6xl mx-auto space-y-8 bg-white rounded-2xl p-8"
     >
       <div className="text-center space-y-3">
         <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-violet-700 to-indigo-700 bg-clip-text text-transparent">
