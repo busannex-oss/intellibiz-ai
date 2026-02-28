@@ -68,8 +68,51 @@ const features = [
 
 
 export default function Home() {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+  const [heroImage, setHeroImage] = useState('https://images.unsplash.com/photo-1552664730-d307ca884978?w=900&q=80&auto=format&fit=crop');
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+
+  const generateTargetedHeroImage = async () => {
+    setIsGeneratingImage(true);
+    try {
+      const user = await base44.auth.me();
+      if (!user) return;
+
+      const projects = await base44.entities.BusinessProject.filter({
+        created_by: user.email
+      });
+
+      const project = projects?.[0];
+      if (!project) return;
+
+      const targetDemographics = project.market_research?.target_demographics || {};
+      const brandPersonality = project.brand_personality?.traits || ['professional'];
+
+      const prompt = `Create a professional hero image for a US business landing page featuring:
+- Target demographic: ${targetDemographics.age_range || '25-45'} year old professional
+- Gender distribution: ${targetDemographics.gender_distribution || 'mixed'}
+- Setting: Modern US office or business environment
+- Style: ${brandPersonality[0] || 'professional'}
+- Convey: Ambition, success, business growth, American entrepreneurship
+- High conversion potential for US market
+- Modern, sleek, professional aesthetic
+- Include diverse representation appropriate for US market`;
+
+      const response = await base44.integrations.Core.GenerateImage({
+        prompt
+      });
+
+      if (response?.url) {
+        setHeroImage(response.url);
+      }
+    } catch (error) {
+      console.error('Failed to generate hero image:', error);
+    } finally {
+      setIsGeneratingImage(false);
+    }
+  };
+
+   return (
+     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       {/* Hero */}
       <div className="relative overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent" />
