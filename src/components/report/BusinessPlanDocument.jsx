@@ -548,46 +548,38 @@ export default function BusinessPlanDocument({ project }) {
             </div>
           )}
 
-          {/* Detailed Cash Flow Table */}
-          {project?.financial_data?.cash_flow_projections?.length > 0 && (
-            <div>
-              <h3 className="text-xl font-bold text-slate-900 mb-4">12-Month Cash Flow Projection</h3>
-              <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
-                <table className="w-full text-sm">
-                  <thead className="bg-slate-50">
-                    <tr>
-                      <th className="px-4 py-3 text-left font-semibold text-slate-700">Month</th>
-                      <th className="px-4 py-3 text-right font-semibold text-slate-700">Cash In</th>
-                      <th className="px-4 py-3 text-right font-semibold text-slate-700">Cash Out</th>
-                      <th className="px-4 py-3 text-right font-semibold text-slate-700">Net Flow</th>
-                      <th className="px-4 py-3 text-right font-semibold text-slate-700">Balance</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {project.financial_data.cash_flow_projections.map((month, idx) => (
-                      <tr key={idx} className="border-t">
-                        <td className="px-4 py-3 text-slate-700 font-medium">{month.month}</td>
-                        <td className="px-4 py-3 text-right text-emerald-600 font-medium">
-                          ${month.cash_in?.toLocaleString() || 0}
-                        </td>
-                        <td className="px-4 py-3 text-right text-red-600 font-medium">
-                          ${month.cash_out?.toLocaleString() || 0}
-                        </td>
-                        <td className="px-4 py-3 text-right font-medium">
-                          ${month.net_cash_flow?.toLocaleString() || 0}
-                        </td>
-                        <td className="px-4 py-3 text-right font-bold" style={{ 
-                          color: month.cumulative_cash >= 0 ? '#10b981' : '#ef4444' 
-                        }}>
-                          ${month.cumulative_cash?.toLocaleString() || 0}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
+          {/* Key Cash Flow Metrics */}
+           {project?.financial_data?.cash_flow_projections?.length > 0 && (
+             <div className="bg-white rounded-xl border border-slate-200 p-6">
+               <h3 className="text-lg font-semibold text-slate-800 mb-4">Cash Flow Summary</h3>
+               <div className="grid grid-cols-4 gap-4">
+                 <div className="text-center p-4 bg-blue-50 rounded-lg border border-blue-200">
+                   <p className="text-xs text-blue-600 uppercase tracking-wide mb-1">Total Cash In</p>
+                   <p className="text-xl font-bold text-blue-900">
+                     ${project.financial_data.cash_flow_projections.reduce((sum, m) => sum + (m.cash_in || 0), 0).toLocaleString()}
+                   </p>
+                 </div>
+                 <div className="text-center p-4 bg-red-50 rounded-lg border border-red-200">
+                   <p className="text-xs text-red-600 uppercase tracking-wide mb-1">Total Cash Out</p>
+                   <p className="text-xl font-bold text-red-900">
+                     ${project.financial_data.cash_flow_projections.reduce((sum, m) => sum + (m.cash_out || 0), 0).toLocaleString()}
+                   </p>
+                 </div>
+                 <div className="text-center p-4 bg-purple-50 rounded-lg border border-purple-200">
+                   <p className="text-xs text-purple-600 uppercase tracking-wide mb-1">Net Flow</p>
+                   <p className="text-xl font-bold text-purple-900">
+                     ${project.financial_data.cash_flow_projections.reduce((sum, m) => sum + (m.net_cash_flow || 0), 0).toLocaleString()}
+                   </p>
+                 </div>
+                 <div className="text-center p-4 bg-emerald-50 rounded-lg border border-emerald-200">
+                   <p className="text-xs text-emerald-600 uppercase tracking-wide mb-1">Final Balance</p>
+                   <p className="text-xl font-bold text-emerald-900">
+                     ${project.financial_data.cash_flow_projections[project.financial_data.cash_flow_projections.length - 1]?.cumulative_cash?.toLocaleString() || 0}
+                   </p>
+                 </div>
+               </div>
+             </div>
+           )}
 
           {/* Financial Risks & Opportunities */}
           <div className="grid md:grid-cols-2 gap-6">
