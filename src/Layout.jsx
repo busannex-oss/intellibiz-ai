@@ -220,7 +220,9 @@ export default function Layout({ children }) {
           {/* Bottom Bar */}
           <div className="border-t border-slate-800 pt-6">
             <div className="text-center text-slate-400 text-sm">
-              {settings?.footer_content?.copyright_text || '© 2026 BrandForge. All rights reserved.'}
+              {settings?.footer_content?.copyright_text
+  ? settings.footer_content.copyright_text.replace(/\d{4}/, new Date().getFullYear())
+  : `© ${new Date().getFullYear()} BrandForge. All rights reserved.`}
             </div>
           </div>
         </div>
