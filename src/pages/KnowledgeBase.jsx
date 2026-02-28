@@ -86,9 +86,10 @@ export default function KnowledgeBase() {
             <p className="text-slate-400 mt-4">Loading articles...</p>
           </div>
         ) : articles.length === 0 ? (
-          <div className="text-center py-12">
-            <p className="text-slate-400">No articles yet. Create your first knowledge base article to get started.</p>
-          </div>
+           <div className="text-center py-12">
+             <p className="text-slate-400">No articles found. Your Knowledge Base is empty.</p>
+             <p className="text-slate-500 text-sm mt-2">Ensure you have created Knowledge Base articles.</p>
+           </div>
         ) : (
           <div className="grid md:grid-cols-2 gap-4">
             {filteredArticles.map((article) => {
