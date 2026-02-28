@@ -4,7 +4,7 @@ import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { BookText, Search, Loader2 } from 'lucide-react';
+import { BookText, Search, Loader2, ChevronDown } from 'lucide-react';
 
 const CATEGORY_ICONS = {
   'getting_started': BookText,
