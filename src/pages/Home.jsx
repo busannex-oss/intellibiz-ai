@@ -246,26 +246,26 @@ export default function Home() {
         </motion.div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feature, index) =>
-          <motion.div
-            key={feature.title}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1 }}>
+           {features.map((feature, index) =>
+           <motion.div
+             key={feature.title}
+             initial={{ opacity: 0, y: 20 }}
+             whileInView={{ opacity: 1, y: 0 }}
+             viewport={{ once: true }}
+             transition={{ delay: index * 0.1 }}>
 
-              <Card className="group border border-slate-700/50 bg-gradient-to-br from-slate-800/80 to-slate-800/40 backdrop-blur-sm h-full overflow-hidden hover:border-slate-600 transition-all duration-300">
-                <CardContent className="p-8">
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                    <feature.icon className="w-7 h-7 text-white" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-white mb-3 tracking-[-0.02em]">{feature.title}</h3>
-                  <p className="text-slate-400 leading-[1.6] tracking-[-0.011em]">{feature.description}</p>
-                </CardContent>
-              </Card>
-            </motion.div>
-          )}
-        </div>
+               <Card className="group border border-slate-700/50 bg-gradient-to-br from-slate-800/80 to-slate-800/40 backdrop-blur-sm h-full overflow-hidden hover:border-slate-600 transition-all duration-300">
+                 <CardContent className="p-8">
+                   <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-lg flex-shrink-0`}>
+                     <feature.icon className="w-7 h-7 text-white" />
+                   </div>
+                   <h3 className="text-xl font-semibold text-white mb-3 tracking-[-0.02em] break-words">{feature.title}</h3>
+                   <p className="text-slate-400 leading-[1.6] tracking-[-0.011em] break-words">{feature.description}</p>
+                 </CardContent>
+               </Card>
+             </motion.div>
+           )}
+         </div>
       </div>
 
       {/* Process */}
