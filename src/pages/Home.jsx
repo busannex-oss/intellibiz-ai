@@ -294,7 +294,11 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-8">
             <div className="flex items-center gap-3">
-              
+              <img
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/69642d0098b49c16dd4c5c29/7820b7ffc_Screenshot2026-02-28at11623AM.png"
+                alt="Credit Savvi Logo"
+                className="w-14 h-14 rounded-full object-cover"
+              />
 
 
             </div>
