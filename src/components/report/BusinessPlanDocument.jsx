@@ -503,7 +503,7 @@ export default function BusinessPlanDocument({ project }) {
           {/* Balance Sheet */}
           {project?.financial_data?.balance_sheet && (
             <div>
-              <h3 className="text-xl font-bold text-slate-900 mb-4">Balance Sheet Overview</h3>
+              <h3 className="text-xl font-bold text-slate-900 mb-4">Balance Sheet Overview (Year 3)</h3>
               <div className="grid md:grid-cols-3 gap-6">
                 {project.financial_data.balance_sheet.assets && (
                   <div className="bg-blue-50 rounded-xl p-5 border border-blue-200">
