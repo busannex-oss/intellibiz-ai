@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
 export default function BusinessPlanCustomizationStep({ project, onUpdate, onNext, onPrev }) {
+  const navigate = useNavigate();
   const [customization, setCustomization] = useState(project?.business_plan_customization || {
     included_sections: [
       'executive_summary',
