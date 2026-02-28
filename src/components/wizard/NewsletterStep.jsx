@@ -236,7 +236,7 @@ export default function NewsletterStep({ project, onUpdate, onNext, onPrev }) {
               rel="noopener noreferrer"
             >
               <Button variant="outline" className="w-full justify-start">
-                <span className="text-xl mr-3">📘</span>
+                <Facebook className="w-5 h-5 mr-3 text-blue-600" />
                 Share on Facebook
                 <ExternalLink className="w-4 h-4 ml-auto" />
               </Button>
@@ -247,7 +247,7 @@ export default function NewsletterStep({ project, onUpdate, onNext, onPrev }) {
               rel="noopener noreferrer"
             >
               <Button variant="outline" className="w-full justify-start">
-                <span className="text-xl mr-3">🐦</span>
+                <Twitter className="w-5 h-5 mr-3 text-slate-800" />
                 Share on X (Twitter)
                 <ExternalLink className="w-4 h-4 ml-auto" />
               </Button>
@@ -258,7 +258,7 @@ export default function NewsletterStep({ project, onUpdate, onNext, onPrev }) {
               rel="noopener noreferrer"
             >
               <Button variant="outline" className="w-full justify-start">
-                <span className="text-xl mr-3">💼</span>
+                <Linkedin className="w-5 h-5 mr-3 text-blue-700" />
                 Share on LinkedIn
                 <ExternalLink className="w-4 h-4 ml-auto" />
               </Button>
@@ -267,7 +267,7 @@ export default function NewsletterStep({ project, onUpdate, onNext, onPrev }) {
               href={`mailto:?subject=Check out ${project?.business_name}&body=I thought you might be interested in this: ${window.location.origin}`}
             >
               <Button variant="outline" className="w-full justify-start">
-                <span className="text-xl mr-3">📧</span>
+                <Mail className="w-5 h-5 mr-3 text-slate-600" />
                 Invite via Email
                 <ExternalLink className="w-4 h-4 ml-auto" />
               </Button>
