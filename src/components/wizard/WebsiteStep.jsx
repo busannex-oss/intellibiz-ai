@@ -276,7 +276,13 @@ The video should be engaging, highlight key benefits, and end with a strong call
   };
 
   const website = project?.website_content;
-  const colors = project?.brand_colors || { primary: '#6366f1', secondary: '#8b5cf6', accent: '#ec4899' };
+  const brandColors = project?.brand_colors || [];
+  const getColor = (role, fallback) => brandColors.find(c => c.role === role)?.hex || fallback;
+  const colors = {
+    primary: getColor('primary', '#6366f1'),
+    secondary: getColor('secondary', '#8b5cf6'),
+    accent: getColor('accent', '#ec4899'),
+  };
 
   return (
     <motion.div
