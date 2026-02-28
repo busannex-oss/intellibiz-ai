@@ -381,7 +381,7 @@ Generate a COMPLETE, DETAILED business plan that would impress any investor or b
                     <TabsTrigger value="risks">Risks</TabsTrigger>
                   </TabsList>
                   {[
-                    { value: 'full', content: businessPlan.full_plan_markdown },
+                    { value: 'full', content: businessPlan.full_plan_markdown || '' },
                     { value: 'executive', content: businessPlan.executive_summary },
                     { value: 'market', content: businessPlan.market_analysis },
                     { value: 'competitive', content: businessPlan.competitive_analysis },
