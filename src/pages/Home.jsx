@@ -84,7 +84,7 @@ export default function Home() {
 
             <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-sm font-medium mb-8">
               <Zap className="w-4 h-4" />
-              AI-Powered Business Builder
+              AI-Powered Business Builder — Desktop · Mobile · iPad
             </div>
             
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white mb-8 leading-[1.1] tracking-[-0.03em]">
@@ -93,9 +93,12 @@ export default function Home() {
               Competitors
             </h1>
             
-            <p className="text-lg md:text-xl text-slate-400 mb-12 max-w-2xl mx-auto leading-[1.7] tracking-[-0.011em] font-medium">
+            <p className="text-lg md:text-xl text-slate-400 mb-4 max-w-2xl mx-auto leading-[1.7] tracking-[-0.011em] font-medium">
               AI-powered market research analyzes your competition, finds gaps, and builds 
               a complete brand strategically designed to win market share.
+            </p>
+            <p className="text-base text-slate-500 mb-12 max-w-xl mx-auto leading-relaxed">
+              Fully cross-platform — optimized for <span className="text-slate-300 font-semibold">desktop</span>, <span className="text-slate-300 font-semibold">smartphone</span>, and <span className="text-slate-300 font-semibold">iPad</span>. Build your business from anywhere, on any device.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
