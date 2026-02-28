@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
+import { base44 } from '@/api/base44Client';
 import {
   Zap as LogoIcon,
   FileBarChart,
@@ -22,7 +23,8 @@ import {
   Twitter,
   Instagram,
   Linkedin,
-  Youtube } from
+  Youtube,
+  Loader2 } from
 'lucide-react';
 import { motion } from 'framer-motion';
 
