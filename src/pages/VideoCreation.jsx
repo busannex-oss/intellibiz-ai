@@ -31,12 +31,17 @@ export default function VideoCreation() {
     navigate(`?projectId=${projectId}`, { replace: true });
   };
 
-  const { data: allProjects = [] } = useQuery({
+  const { data: allProjects = [], isLoading: isLoadingProjects } = useQuery({
     queryKey: ['userProjects'],
     queryFn: async () => {
       const user = await base44.auth.me();
       if (!user) return [];
-      return base44.entities.BusinessProject.filter({ created_by: user.email });
+      const projects = await base44.entities.BusinessProject.filter({ created_by: user.email });
+      // Auto-select first project if none selected
+      if (projects.length > 0 && !selectedProjectId) {
+        setSelectedProjectId(projects[0].id);
+      }
+      return projects;
     },
     staleTime: 1000 * 60 * 5, // 5 minutes
     gcTime: 1000 * 60 * 10, // 10 minutes
