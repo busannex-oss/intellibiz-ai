@@ -153,7 +153,7 @@ export default function Home() {
               
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link to={createPageUrl('Onboarding')}>
-                  <Button className="h-14 px-8 text-base bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-2xl shadow-amber-500/25 transition-all duration-300 hover:scale-105 font-semibold">
+                  <Button className="h-14 px-8 text-base bg-white hover:bg-slate-100 text-slate-900 shadow-2xl shadow-white/25 transition-all duration-300 hover:scale-105 font-semibold">
                     <Rocket className="w-5 h-5 mr-2" />
                     For best results follow the Steps
                     <ChevronRight className="w-5 h-5 ml-2" />
