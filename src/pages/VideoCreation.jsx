@@ -310,16 +310,24 @@ export default function VideoCreation() {
                   <Card key={key} className={`border-2 ${selectedCommercial === key ? 'border-purple-500 shadow-lg' : 'border-slate-200'}`}>
                     <CardContent className="p-4 space-y-4">
                       <div className="aspect-video bg-slate-900 rounded-lg overflow-hidden relative group">
-                        <img
-                          src={video.thumbnail_url || video.url}
-                          alt="Video thumbnail"
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all flex items-center justify-center">
-                          <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/30">
-                            <Play className="w-8 h-8 text-white fill-white" />
-                          </div>
-                        </div>
+                         {video.url ? (
+                           <>
+                             <video
+                               src={video.url}
+                               className="w-full h-full object-cover"
+                               controls
+                             />
+                             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center pointer-events-none">
+                               <div className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center group-hover:bg-white/30">
+                                 <Play className="w-8 h-8 text-white fill-white" />
+                               </div>
+                             </div>
+                           </>
+                         ) : (
+                           <div className="w-full h-full bg-slate-800 flex items-center justify-center">
+                             <p className="text-slate-400">Video unavailable</p>
+                           </div>
+                         )}
                         {selectedCommercial === key && (
                           <Badge className="absolute top-3 right-3 bg-purple-600">
                             <CheckCircle className="w-3 h-3 mr-1" />
