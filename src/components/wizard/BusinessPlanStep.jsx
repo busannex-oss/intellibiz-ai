@@ -380,33 +380,36 @@ Generate a COMPLETE, DETAILED business plan that would impress any investor or b
                     <TabsTrigger value="financial">Financials</TabsTrigger>
                     <TabsTrigger value="risks">Risks</TabsTrigger>
                   </TabsList>
-                  <TabsContent value="full" className="prose prose-slate max-w-none">
-                    <ReactMarkdown>{businessPlan.full_plan_markdown}</ReactMarkdown>
-                  </TabsContent>
-                  <TabsContent value="executive" className="prose prose-slate max-w-none">
-                    <ReactMarkdown>{businessPlan.executive_summary}</ReactMarkdown>
-                  </TabsContent>
-                  <TabsContent value="market" className="prose prose-slate max-w-none">
-                    <ReactMarkdown>{businessPlan.market_analysis}</ReactMarkdown>
-                  </TabsContent>
-                  <TabsContent value="competitive" className="prose prose-slate max-w-none">
-                    <ReactMarkdown>{businessPlan.competitive_analysis}</ReactMarkdown>
-                  </TabsContent>
-                  <TabsContent value="products" className="prose prose-slate max-w-none">
-                    <ReactMarkdown>{businessPlan.products_services}</ReactMarkdown>
-                  </TabsContent>
-                  <TabsContent value="marketing" className="prose prose-slate max-w-none">
-                    <ReactMarkdown>{businessPlan.marketing_sales_strategy}</ReactMarkdown>
-                  </TabsContent>
-                  <TabsContent value="operations" className="prose prose-slate max-w-none">
-                    <ReactMarkdown>{businessPlan.operations_plan}</ReactMarkdown>
-                  </TabsContent>
-                  <TabsContent value="financial" className="prose prose-slate max-w-none">
-                    <ReactMarkdown>{businessPlan.financial_projections}</ReactMarkdown>
-                  </TabsContent>
-                  <TabsContent value="risks" className="prose prose-slate max-w-none">
-                    <ReactMarkdown>{businessPlan.risk_analysis}</ReactMarkdown>
-                  </TabsContent>
+                  {[
+                    { value: 'full', content: businessPlan.full_plan_markdown },
+                    { value: 'executive', content: businessPlan.executive_summary },
+                    { value: 'market', content: businessPlan.market_analysis },
+                    { value: 'competitive', content: businessPlan.competitive_analysis },
+                    { value: 'products', content: businessPlan.products_services },
+                    { value: 'marketing', content: businessPlan.marketing_sales_strategy },
+                    { value: 'operations', content: businessPlan.operations_plan },
+                    { value: 'financial', content: businessPlan.financial_projections_30yr || businessPlan.financial_projections },
+                    { value: 'risks', content: businessPlan.risk_analysis },
+                  ].map(({ value, content }) => (
+                    <TabsContent key={value} value={value}>
+                      <ReactMarkdown
+                        components={{
+                          h1: ({ children }) => <h1 className="text-2xl font-bold text-slate-800 mt-8 mb-3 pb-2 border-b border-slate-200">{children}</h1>,
+                          h2: ({ children }) => <h2 className="text-xl font-bold text-violet-700 mt-7 mb-3">{children}</h2>,
+                          h3: ({ children }) => <h3 className="text-base font-semibold text-slate-700 mt-5 mb-2">{children}</h3>,
+                          p: ({ children }) => <p className="text-slate-600 leading-relaxed mb-3">{children}</p>,
+                          ul: ({ children }) => <ul className="space-y-1 mb-4 ml-4">{children}</ul>,
+                          ol: ({ children }) => <ol className="space-y-1 mb-4 ml-4 list-decimal">{children}</ol>,
+                          li: ({ children }) => <li className="text-slate-600 flex gap-2 items-start"><span className="text-violet-500 mt-1 flex-shrink-0">•</span><span>{children}</span></li>,
+                          strong: ({ children }) => <strong className="font-semibold text-slate-800">{children}</strong>,
+                          table: ({ children }) => <div className="overflow-x-auto my-4"><table className="w-full text-sm border-collapse">{children}</table></div>,
+                          th: ({ children }) => <th className="bg-violet-50 text-violet-800 font-semibold text-left p-3 border border-slate-200">{children}</th>,
+                          td: ({ children }) => <td className="p-3 border border-slate-200 text-slate-600">{children}</td>,
+                          blockquote: ({ children }) => <blockquote className="border-l-4 border-violet-400 pl-4 my-4 text-slate-500 italic">{children}</blockquote>,
+                        }}
+                      >{content}</ReactMarkdown>
+                    </TabsContent>
+                  ))}
                 </Tabs>
               )}
               
