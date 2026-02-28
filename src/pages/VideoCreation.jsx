@@ -45,9 +45,9 @@ export default function VideoCreation() {
   });
 
   const updateProjectMutation = useMutation({
-    mutationFn: (data) => base44.entities.BusinessProject.update(projectId, data),
+    mutationFn: (data) => base44.entities.BusinessProject.update(selectedProjectId, data),
     onSuccess: () => {
-      queryClient.invalidateQueries(['project', projectId]);
+      queryClient.invalidateQueries(['project', selectedProjectId]);
     }
   });
 
