@@ -434,7 +434,17 @@ Create:
             </Card>
           )}
 
-          {/* Detailed Research Tabs */}
+          {/* Market Size + Growth — always visible above tabs */}
+          <Card className="border-0 shadow-xl bg-white overflow-hidden">
+            <CardContent className="p-6 md:p-8">
+              <div className="grid md:grid-cols-2 gap-8">
+                <MarketSizeFunnel marketSize={research.market_size} />
+                <GrowthProjectionChart growthTrends={research.growth_trends} />
+              </div>
+            </CardContent>
+          </Card>
+
+                  {/* Detailed Research Tabs */}
           <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden">
             <CardHeader className="bg-gradient-to-r from-slate-50 to-slate-100 border-b">
               <div className="flex items-center justify-between">
