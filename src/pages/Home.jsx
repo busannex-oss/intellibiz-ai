@@ -69,8 +69,13 @@ const features = [
 
 
 export default function Home() {
-  const [heroImage, setHeroImage] = useState('https://images.unsplash.com/photo-1552664730-d307ca884978?w=900&q=80&auto=format&fit=crop');
+  const [heroImage, setHeroImage] = useState('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&q=80&auto=format&fit=crop');
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  React.useEffect(() => {
+    base44.auth.me().then(user => setIsLoggedIn(!!user)).catch(() => setIsLoggedIn(false));
+  }, []);
 
   const generateTargetedHeroImage = async () => {
     setIsGeneratingImage(true);
