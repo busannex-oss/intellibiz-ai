@@ -527,7 +527,7 @@ export default function Dashboard() {
               </CardContent>
             </Card>
           </Link>
-          <Link to={createPageUrl('CustomerJourney')}>
+          <Link to={createPageUrl(`CustomerJourney?projectId=${projects[0]?.id}`)}>
             <Card className="border-0 bg-gradient-to-br from-violet-500/10 to-violet-600/10 border border-violet-500/20 hover:border-violet-500/40 transition-all cursor-pointer h-full">
               <CardContent className="p-5">
                 <MapIcon className="w-9 h-9 text-violet-400 mb-2" />
