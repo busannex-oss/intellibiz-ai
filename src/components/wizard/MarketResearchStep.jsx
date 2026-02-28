@@ -515,6 +515,8 @@ Create:
                 </TabsContent>
 
                 <TabsContent value="opportunities" className="space-y-6">
+                  <PainPointsChart painPoints={research.customer_pain_points} />
+                  <DriversChart drivers={research.market_drivers} challenges={research.challenges} />
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
                      <h4 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
