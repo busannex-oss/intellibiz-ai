@@ -181,7 +181,7 @@ export default function Home() {
                 <Link to={createPageUrl('Onboarding')}>
                   <Button className="h-14 px-8 text-base bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-2xl shadow-amber-500/25 transition-all duration-300 hover:scale-105 font-semibold">
                     <Rocket className="w-5 h-5 mr-2" />
-                    Create the brand
+                    Create Now
                     <ChevronRight className="w-5 h-5 ml-2" />
                   </Button>
                 </Link>
