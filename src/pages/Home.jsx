@@ -357,7 +357,7 @@ export default function Home() {
               Join thousands of entrepreneurs who launched their businesses with our AI-powered platform
             </p>
             <Link to={createPageUrl('CreateBusiness')}>
-              <Button className="h-16 px-12 text-lg bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white shadow-2xl shadow-amber-500/25 font-semibold">
+              <Button className="h-16 px-12 text-lg bg-white hover:bg-slate-100 text-slate-900 shadow-2xl shadow-white/25 font-semibold">
                 Get Started Free
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
