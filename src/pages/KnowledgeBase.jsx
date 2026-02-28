@@ -79,30 +79,44 @@ export default function KnowledgeBase() {
         </div>
 
         {/* Articles */}
-        <div className="grid md:grid-cols-2 gap-4">
-          {filteredArticles.map((article, i) => (
-            <Card key={i} className="border-0 bg-slate-800/50 border border-slate-700 hover:border-slate-600 transition-all cursor-pointer">
-              <CardHeader>
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center flex-shrink-0">
-                    <article.icon className="w-5 h-5 text-blue-400" />
-                  </div>
-                  <div>
-                    <CardTitle className="text-white text-lg">{article.title}</CardTitle>
-                    <Badge variant="outline" className="mt-2 border-slate-600 text-slate-400 text-xs">
-                      {article.category}
-                    </Badge>
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <p className="text-slate-400 text-sm">{article.content}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="text-center py-12">
+            <Loader2 className="w-8 h-8 animate-spin text-blue-400 mx-auto" />
+            <p className="text-slate-400 mt-4">Loading articles...</p>
+          </div>
+        ) : articles.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-slate-400">No articles yet. Create your first knowledge base article to get started.</p>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-2 gap-4">
+            {filteredArticles.map((article) => {
+              const Icon = CATEGORY_ICONS[article.category] || BookText;
+              return (
+                <Card key={article.id} className="border-0 bg-slate-800/50 border border-slate-700 hover:border-slate-600 transition-all cursor-pointer">
+                  <CardHeader>
+                    <div className="flex items-start gap-3">
+                      <div className="w-10 h-10 rounded-lg bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                        <Icon className="w-5 h-5 text-blue-400" />
+                      </div>
+                      <div>
+                        <CardTitle className="text-white text-lg">{article.title}</CardTitle>
+                        <Badge variant="outline" className="mt-2 border-slate-600 text-slate-400 text-xs">
+                          {article.category}
+                        </Badge>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-slate-400 text-sm line-clamp-2">{article.content}</p>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+        )}
 
-        {filteredArticles.length === 0 && (
+        {articles.length > 0 && filteredArticles.length === 0 && (
           <div className="text-center py-12">
             <p className="text-slate-400">No articles found matching "{searchTerm}"</p>
           </div>
