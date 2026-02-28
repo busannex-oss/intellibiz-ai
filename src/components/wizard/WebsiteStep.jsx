@@ -365,21 +365,28 @@ The video should be engaging, highlight key benefits, and end with a strong call
 
           {viewMode === 'preview' ? (
             <Card className="border-0 shadow-xl overflow-hidden bg-white">
-              {/* Hero Preview */}
+              {/* Hero Preview with background image */}
               <div 
-                className="p-12 md:p-20 text-center text-white"
-                style={{ background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})` }}
+                className="relative p-12 md:p-20 text-center text-white overflow-hidden min-h-[480px] flex flex-col items-center justify-center"
               >
-                {project.logo_url && (
-                   <div className="logo h-16 mx-auto mb-6">
-                     <img src={project.logo_url} alt="Logo" className="max-w-full max-h-full object-contain" />
-                   </div>
-                )}
-                <h1 className="text-3xl md:text-5xl font-bold mb-4">{website.hero?.headline}</h1>
-                <p className="text-lg md:text-xl opacity-90 mb-8 max-w-2xl mx-auto">{website.hero?.subheadline}</p>
-                <Button className="h-12 px-8 bg-white text-slate-800 hover:bg-slate-100">
-                  {website.hero?.cta_text}
-                </Button>
+                {/* Hero background image */}
+                <img
+                  src={`https://images.unsplash.com/photo-1497366216548-37526070297c?w=1400&auto=format&fit=crop&q=80`}
+                  alt="Hero background"
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                {/* Gradient overlay using brand colors */}
+                <div 
+                  className="absolute inset-0"
+                  style={{ background: `linear-gradient(135deg, ${colors.primary}cc, ${colors.secondary}bb)` }}
+                />
+                <div className="relative z-10">
+                  <h1 className="text-3xl md:text-5xl font-bold mb-4 drop-shadow-lg">{website.hero?.headline}</h1>
+                  <p className="text-lg md:text-xl opacity-90 mb-8 max-w-2xl mx-auto drop-shadow">{website.hero?.subheadline}</p>
+                  <Button className="h-12 px-8 bg-white text-slate-800 hover:bg-slate-100">
+                    {website.hero?.cta_text}
+                  </Button>
+                </div>
               </div>
 
               {/* About Preview */}
