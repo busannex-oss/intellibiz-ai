@@ -460,7 +460,11 @@ Create:
                   <TabsTrigger value="strategy">Strategy</TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="competitors" className="space-y-4">
+                <TabsContent value="competitors" className="space-y-6">
+                  <div className="grid md:grid-cols-2 gap-6">
+                    <MarketShareDonut competitors={research.competitors} />
+                    <CompetitorRadar competitors={research.competitors} />
+                  </div>
                   <div className="grid gap-4">
                     {research.competitors?.map((competitor, i) => (
                       <Card key={i} className="border shadow-sm">
