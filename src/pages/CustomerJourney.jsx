@@ -183,7 +183,7 @@ export default function CustomerJourney() {
   const getActiveChannels = () => {
     if (!omnichannelConfig?.channels) return [];
     return Object.keys(omnichannelConfig.channels)
-      .filter(ch => omnichannelConfig.channels[ch].enabled)
+      .filter(ch => omnichannelConfig.channels[ch]?.enabled)
       .map(ch => ch.replace('_', ' '));
   };
 
