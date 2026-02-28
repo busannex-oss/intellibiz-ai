@@ -241,18 +241,31 @@ export default function AdminDashboard() {
   const admins = users.filter(u => u.role === 'admin').length;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-6">
+    <div className="min-h-screen bg-slate-50">
+      <div className="space-y-0">
         {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-white flex items-center gap-3">
-              <Shield className="w-8 h-8 text-blue-500" />
-              Admin Dashboard
-            </h1>
-            <p className="text-slate-400 mt-1">Manage users, settings, and app configuration</p>
+        <div className="bg-white border-b border-slate-200 px-6 py-6">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-4xl font-bold text-slate-900 flex items-center gap-3">
+                  <Shield className="w-9 h-9 text-blue-600" />
+                  CMS Admin
+                </h1>
+                <p className="text-slate-600 mt-2">Content management system and user administration</p>
+              </div>
+              <div className="text-right">
+                <div className="text-sm text-slate-600">Logged in as</div>
+                <div className="text-lg font-semibold text-slate-900">{currentUser?.full_name || currentUser?.email}</div>
+                <div className="inline-block mt-2 px-3 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded-full">
+                  Super Admin
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+
+        <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
 
         {/* Stats */}
         <div className="grid md:grid-cols-4 gap-4">
