@@ -36,8 +36,11 @@ export default function BusinessPlanDocument({ project }) {
   const shouldInclude = (section) => customization.included_sections.includes(section);
 
   return (
-    <div id="business-plan-content" className="font-sans bg-white">
+    <div id="business-plan-content" className="font-sans bg-white" style={{ background: '#ffffff' }}>
       <style>{`
+        #business-plan-content {
+          background-color: #ffffff !important;
+        }
         @media print, (prefers-color-scheme: light) {
           .page-break-after {
             page-break-after: always;
