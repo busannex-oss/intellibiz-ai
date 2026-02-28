@@ -159,7 +159,7 @@ export default function VideoCreation() {
           </div>
           <div className="w-64">
             <Label className="text-sm font-semibold">Select Brand</Label>
-            <Select value={selectedProjectId || ''} onValueChange={setSelectedProjectId}>
+            <Select value={selectedProjectId || ''} onValueChange={handleProjectSelect}>
               <SelectTrigger className="h-10 text-sm">
                 <SelectValue placeholder="Choose a brand..." />
               </SelectTrigger>
