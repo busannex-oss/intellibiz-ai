@@ -11,7 +11,7 @@ img[alt="Logo"],
 img[alt*="logo"],
 img[alt*="Logo"] {
   background: transparent !important;
-  mix-blend-mode: normal;
+  mix-blend-mode: multiply;
 }
 
 /* Force transparent background on any element that wraps a logo image */
