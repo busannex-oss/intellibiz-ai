@@ -185,8 +185,8 @@ export default function Home() {
                  />
                 {/* Overlay gradient */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-slate-900/60 via-transparent to-amber-500/10" />
-                {/* Floating badge */}
-                <div className="absolute bottom-6 left-6 right-6">
+                {/* Floating badge with optimize button */}
+                <div className="absolute bottom-6 left-6 right-6 space-y-3">
                   <div className="bg-slate-900/80 backdrop-blur-md rounded-xl p-4 border border-slate-700/50 flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center flex-shrink-0">
                       <Zap className="w-5 h-5 text-white" />
@@ -196,6 +196,24 @@ export default function Home() {
                       <div className="text-slate-400 text-xs">Logo · Website · Social Media · Business Plan</div>
                     </div>
                   </div>
+                  <Button
+                    onClick={generateTargetedHeroImage}
+                    disabled={isGeneratingImage}
+                    size="sm"
+                    className="w-full bg-amber-600 hover:bg-amber-700 text-white text-xs"
+                  >
+                    {isGeneratingImage ? (
+                      <>
+                        <Loader2 className="w-3 h-3 mr-1 animate-spin" />
+                        Optimizing...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-3 h-3 mr-1" />
+                        Optimize for US Market
+                      </>
+                    )}
+                  </Button>
                 </div>
               </div>
               {/* Decorative glow */}
