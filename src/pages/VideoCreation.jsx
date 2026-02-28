@@ -178,13 +178,15 @@ export default function VideoCreation() {
               </SelectTrigger>
               <SelectContent>
                 {allProjects.length > 0 ? (
-                  allProjects.map(proj => (
-                    <SelectItem key={proj.id} value={proj.id}>
-                      {proj.business_name}
-                    </SelectItem>
-                  ))
+                allProjects.map(proj => (
+                 <SelectItem key={proj.id} value={proj.id}>
+                   {proj.business_name}
+                 </SelectItem>
+                ))
+                ) : isLoadingProjects ? (
+                <div className="p-2 text-sm text-slate-500">Loading brands...</div>
                 ) : (
-                  <div className="p-2 text-sm text-slate-500">No brands found</div>
+                <div className="p-2 text-sm text-slate-500">No brands found</div>
                 )}
               </SelectContent>
             </Select>
