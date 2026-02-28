@@ -41,7 +41,8 @@ import {
   Palette,
   Settings,
   Video,
-  Search
+  Search,
+  Map as MapIcon
 } from 'lucide-react';
 import {
   DropdownMenu,
