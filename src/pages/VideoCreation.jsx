@@ -37,17 +37,25 @@ export default function VideoCreation() {
       const user = await base44.auth.me();
       if (!user) return [];
       return base44.entities.BusinessProject.filter({ created_by: user.email });
-    }
+    },
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    gcTime: 1000 * 60 * 10, // 10 minutes
+    refetchOnWindowFocus: false
   });
 
   const { data: project } = useQuery({
     queryKey: ['project', selectedProjectId],
     queryFn: async () => {
       if (!selectedProjectId) return null;
+      const found = allProjects.find(p => p.id === selectedProjectId);
+      if (found) return found;
       const projects = await base44.entities.BusinessProject.filter({ id: selectedProjectId });
       return projects[0];
     },
-    enabled: !!selectedProjectId
+    enabled: !!selectedProjectId,
+    staleTime: 1000 * 60 * 5,
+    gcTime: 1000 * 60 * 10,
+    refetchOnWindowFocus: false
   });
 
   const updateProjectMutation = useMutation({
