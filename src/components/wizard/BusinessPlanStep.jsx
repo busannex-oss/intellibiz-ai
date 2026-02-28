@@ -408,7 +408,7 @@ Generate a COMPLETE, DETAILED business plan that would impress any investor or b
                             </li>
                           ),
                           strong: ({ children }) => <strong className="font-semibold text-slate-800">{children}</strong>,
-                          table: ({ children }) => <div className="overflow-x-auto my-4 rounded-lg border border-slate-200"><table className="w-full text-sm border-collapse">{children}</table></div>,
+                          table: ({ children }) => <table className="w-full text-sm border-collapse my-4 rounded-lg border border-slate-200">{children}</table>,
                           th: ({ children }) => <th className="bg-violet-50 text-violet-800 font-semibold text-left p-3 border-b border-slate-200">{children}</th>,
                           td: ({ children }) => <td className="p-3 border-b border-slate-100 text-slate-600">{children}</td>,
                           blockquote: ({ children }) => <blockquote className="border-l-4 border-violet-400 pl-4 my-4 bg-violet-50 py-2 rounded-r-lg text-slate-600 italic text-sm">{children}</blockquote>,
