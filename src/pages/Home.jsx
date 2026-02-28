@@ -107,7 +107,7 @@ export default function Home() {
                 </Button>
               </Link>
               <Link to={createPageUrl('Dashboard')}>
-                <Button variant="outline" className="h-16 px-10 text-lg border-slate-600 bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-white">
+                <Button variant="outline" className="h-16 px-10 text-lg border-white/30 bg-white/10 text-white hover:bg-white/20 hover:border-white/50 backdrop-blur-sm font-semibold">
                     View My Projects
                   </Button>
               </Link>
