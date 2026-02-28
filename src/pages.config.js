@@ -76,11 +76,11 @@ import PlatformVideo from './pages/PlatformVideo';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import Resources from './pages/Resources';
 import SEOTools from './pages/SEOTools';
+import Services from './pages/Services';
 import Tasks from './pages/Tasks';
 import TermsOfService from './pages/TermsOfService';
 import VideoCreation from './pages/VideoCreation';
 import WhiteLabel from './pages/WhiteLabel';
-import Services from './pages/Services';
 import __Layout from './Layout.jsx';
 
 
@@ -114,11 +114,11 @@ export const PAGES = {
     "PrivacyPolicy": PrivacyPolicy,
     "Resources": Resources,
     "SEOTools": SEOTools,
+    "Services": Services,
     "Tasks": Tasks,
     "TermsOfService": TermsOfService,
     "VideoCreation": VideoCreation,
     "WhiteLabel": WhiteLabel,
-    "Services": Services,
 }
 
 export const pagesConfig = {

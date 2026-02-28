@@ -365,27 +365,29 @@ The video should be engaging, highlight key benefits, and end with a strong call
 
           {viewMode === 'preview' ? (
             <Card className="border-0 shadow-xl overflow-hidden bg-white">
-              {/* Hero Preview with background image */}
+              {/* Hero Preview - split layout */}
               <div 
-                className="relative p-12 md:p-20 text-center text-white overflow-hidden min-h-[480px] flex flex-col items-center justify-center"
+                className="grid md:grid-cols-2 text-white overflow-hidden min-h-[380px]"
+                style={{ background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})` }}
               >
-                {/* Hero background image */}
-                <img
-                  src={`https://images.unsplash.com/photo-1497366216548-37526070297c?w=1400&auto=format&fit=crop&q=80`}
-                  alt="Hero background"
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-                {/* Gradient overlay using brand colors */}
-                <div 
-                  className="absolute inset-0"
-                  style={{ background: `linear-gradient(135deg, ${colors.primary}cc, ${colors.secondary}bb)` }}
-                />
-                <div className="relative z-10">
-                  <h1 className="text-3xl md:text-5xl font-bold mb-4 drop-shadow-lg">{website.hero?.headline}</h1>
-                  <p className="text-lg md:text-xl opacity-90 mb-8 max-w-2xl mx-auto drop-shadow">{website.hero?.subheadline}</p>
-                  <Button className="h-12 px-8 bg-white text-slate-800 hover:bg-slate-100">
-                    {website.hero?.cta_text}
-                  </Button>
+                {/* Left: text */}
+                <div className="flex flex-col justify-center p-10 md:p-14">
+                  <h1 className="text-2xl md:text-4xl font-bold mb-4 leading-tight">{website.hero?.headline}</h1>
+                  <p className="text-base opacity-90 mb-6 leading-relaxed">{website.hero?.subheadline}</p>
+                  <div>
+                    <Button className="h-11 px-7 bg-white text-slate-800 hover:bg-slate-100">
+                      {website.hero?.cta_text}
+                    </Button>
+                  </div>
+                </div>
+                {/* Right: image */}
+                <div className="relative hidden md:block">
+                  <img
+                    src="https://images.unsplash.com/photo-1664575602554-2087b04935a5?w=700&q=80&auto=format&fit=crop"
+                    alt="Hero"
+                    className="w-full h-full object-cover opacity-80"
+                  />
+                  <div className="absolute inset-0" style={{ background: `linear-gradient(to right, ${colors.primary}88, transparent)` }} />
                 </div>
               </div>
 

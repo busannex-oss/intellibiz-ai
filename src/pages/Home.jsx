@@ -126,7 +126,7 @@ export default function Home() {
               className="relative">
               <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-amber-500/10 border border-slate-700/50">
                 <img
-                  src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=900&q=80&auto=format&fit=crop"
+                  src="https://images.unsplash.com/photo-1664575602554-2087b04935a5?w=900&q=80&auto=format&fit=crop"
                   alt="Ambitious entrepreneur building their brand with AI-powered tools"
                   className="w-full h-[420px] object-cover"
                 />
