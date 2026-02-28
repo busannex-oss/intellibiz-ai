@@ -39,13 +39,13 @@ export default function KnowledgeBase() {
     }
   });
 
-  const filteredArticles = ARTICLES.filter(article =>
-    article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    article.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    article.content.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredArticles = articles.filter(article =>
+    article.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    article.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    article.content?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const categories = [...new Set(ARTICLES.map(a => a.category))];
+  const categories = [...new Set(articles.map(a => a.category).filter(Boolean))];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4 md:p-8">
