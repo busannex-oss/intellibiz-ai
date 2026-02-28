@@ -129,6 +129,10 @@ export default function Home() {
 
       if (response?.url) {
         setHeroImage(response.url);
+        // Save to project
+        await base44.entities.BusinessProject.update(project.id, {
+          logo_url: response.url
+        });
       }
     } catch (error) {
       console.error('Failed to generate hero image:', error);
