@@ -15,6 +15,7 @@ import { toast } from 'sonner';
 
 export default function VideoCreation() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const urlProjectId = searchParams.get('projectId');
   const queryClient = useQueryClient();
   
@@ -24,6 +25,11 @@ export default function VideoCreation() {
   const [activeProvider, setActiveProvider] = useState('sora');
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState(urlProjectId || null);
+
+  const handleProjectSelect = (projectId) => {
+    setSelectedProjectId(projectId);
+    navigate(`?projectId=${projectId}`, { replace: true });
+  };
 
   const { data: allProjects = [] } = useQuery({
     queryKey: ['userProjects'],
