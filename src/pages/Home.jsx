@@ -164,17 +164,25 @@ export default function Home() {
             </motion.div>
 
             {/* Right: Hero Image */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-              className="relative">
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-amber-500/10 border border-slate-700/50">
-                <img
-                  src="https://images.unsplash.com/photo-1664575602554-2087b04935a5?w=900&q=80&auto=format&fit=crop"
-                  alt="Ambitious entrepreneur building their brand with AI-powered tools"
-                  className="w-full h-[420px] object-cover"
-                />
+             <motion.div
+               initial={{ opacity: 0, x: 30 }}
+               animate={{ opacity: 1, x: 0 }}
+               transition={{ duration: 0.7, delay: 0.2 }}
+               className="relative">
+               <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-amber-500/10 border border-slate-700/50">
+                 {isGeneratingImage && (
+                   <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-10 rounded-2xl">
+                     <div className="flex flex-col items-center gap-3">
+                       <Loader2 className="w-8 h-8 animate-spin text-amber-400" />
+                       <p className="text-white text-sm">Optimizing for US market...</p>
+                     </div>
+                   </div>
+                 )}
+                 <img
+                   src={heroImage}
+                   alt="Ambitious entrepreneur building their brand with AI-powered tools"
+                   className="w-full h-[420px] object-cover"
+                 />
                 {/* Overlay gradient */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-slate-900/60 via-transparent to-amber-500/10" />
                 {/* Floating badge */}
