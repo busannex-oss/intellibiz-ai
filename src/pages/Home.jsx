@@ -74,7 +74,29 @@ export default function Home() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   React.useEffect(() => {
-    base44.auth.me().then(user => setIsLoggedIn(!!user)).catch(() => setIsLoggedIn(false));
+    const loadHeroImage = async () => {
+      try {
+        const user = await base44.auth.me();
+        if (!user) {
+          setIsLoggedIn(false);
+          return;
+        }
+        setIsLoggedIn(true);
+
+        const projects = await base44.entities.BusinessProject.filter({
+          created_by: user.email
+        });
+
+        const project = projects?.[0];
+        if (project?.logo_url) {
+          setHeroImage(project.logo_url);
+        }
+      } catch (error) {
+        setIsLoggedIn(false);
+      }
+    };
+
+    loadHeroImage();
   }, []);
 
   const generateTargetedHeroImage = async () => {
