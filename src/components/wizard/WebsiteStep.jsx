@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
-import { Loader2, Sparkles, RefreshCw, ChevronRight, ChevronLeft, Pencil, Check, Eye, Code, Download, Play, Star, Zap, Shield, Globe2, Users, TrendingUp, Heart, Phone, Mail, Award, Rocket, Lightbulb, Target, BarChart3, Headphones, Palette, MessageSquare, Clock, CheckCircle2 } from 'lucide-react';
+import { Loader2, Sparkles, RefreshCw, ChevronRight, ChevronLeft, Pencil, Check, Eye, Code, Download, Play, Star, Zap, Shield, Globe2, Users, TrendingUp, Heart, Phone, Mail, Award, Rocket, Lightbulb, Target, BarChart3, Headphones, Palette, MessageSquare, Clock, CheckCircle2, ImageIcon, Upload } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
