@@ -242,74 +242,81 @@ export default function AdminDashboard() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <div className="space-y-0">
-        {/* Header */}
-        <div className="bg-white border-b border-slate-200 px-6 py-6">
-          <div className="max-w-7xl mx-auto">
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-4xl font-bold text-slate-900 flex items-center gap-3">
-                  <Shield className="w-9 h-9 text-blue-600" />
-                  CMS Admin
-                </h1>
-                <p className="text-slate-600 mt-2">Content management system and user administration</p>
-              </div>
-              <div className="text-right">
-                <div className="text-sm text-slate-600">Logged in as</div>
-                <div className="text-lg font-semibold text-slate-900">{currentUser?.full_name || currentUser?.email}</div>
-                <div className="inline-block mt-2 px-3 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded-full">
-                  Super Admin
-                </div>
+      {/* Header */}
+      <div className="bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold text-white flex items-center gap-3">
+                <Shield className="w-8 h-8 text-white/80" />
+                CMS Admin
+              </h1>
+              <p className="text-violet-200 mt-1">Content management system and user administration</p>
+            </div>
+            <div className="text-right">
+              <div className="text-sm text-violet-200">Logged in as</div>
+              <div className="text-lg font-semibold text-white">{currentUser?.full_name || currentUser?.email}</div>
+              <div className="inline-block mt-1 px-3 py-1 bg-white/20 text-white text-xs font-semibold rounded-full">
+                Super Admin
               </div>
             </div>
           </div>
         </div>
+      </div>
 
-        <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
+      <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
 
         {/* Stats */}
-        <div className="grid md:grid-cols-4 gap-4">
-          <Card className="border-0 bg-slate-800/50 border border-slate-700">
+        <div className="grid md:grid-cols-4 gap-4 -mt-6">
+          <Card className="wizard-card border-0">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-slate-400">Total Users</p>
-                  <p className="text-3xl font-bold text-white">{users.length}</p>
+                  <p className="text-sm text-slate-500">Total Users</p>
+                  <p className="text-3xl font-bold text-slate-900">{users.length}</p>
                 </div>
-                <Users className="w-10 h-10 text-blue-500" />
+                <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
+                  <Users className="w-6 h-6 text-blue-600" />
+                </div>
               </div>
             </CardContent>
           </Card>
-          <Card className="border-0 bg-slate-800/50 border border-slate-700">
+          <Card className="wizard-card border-0">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-slate-400">Active Users</p>
-                  <p className="text-3xl font-bold text-emerald-500">{activeUsers}</p>
+                  <p className="text-sm text-slate-500">Active Users</p>
+                  <p className="text-3xl font-bold text-emerald-600">{activeUsers}</p>
                 </div>
-                <Activity className="w-10 h-10 text-emerald-500" />
+                <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center">
+                  <Activity className="w-6 h-6 text-emerald-600" />
+                </div>
               </div>
             </CardContent>
           </Card>
-          <Card className="border-0 bg-slate-800/50 border border-slate-700">
+          <Card className="wizard-card border-0">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-slate-400">Super Admins</p>
-                  <p className="text-3xl font-bold text-purple-500">{superAdmins}</p>
+                  <p className="text-sm text-slate-500">Super Admins</p>
+                  <p className="text-3xl font-bold text-purple-600">{superAdmins}</p>
                 </div>
-                <Shield className="w-10 h-10 text-purple-500" />
+                <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center">
+                  <Shield className="w-6 h-6 text-purple-600" />
+                </div>
               </div>
             </CardContent>
           </Card>
-          <Card className="border-0 bg-slate-800/50 border border-slate-700">
+          <Card className="wizard-card border-0">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-slate-400">Admins</p>
-                  <p className="text-3xl font-bold text-amber-500">{admins}</p>
+                  <p className="text-sm text-slate-500">Admins</p>
+                  <p className="text-3xl font-bold text-amber-600">{admins}</p>
                 </div>
-                <Settings className="w-10 h-10 text-amber-500" />
+                <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center">
+                  <Settings className="w-6 h-6 text-amber-600" />
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -317,12 +324,12 @@ export default function AdminDashboard() {
 
         {/* Tabs */}
         <Tabs defaultValue="users" className="w-full">
-          <TabsList className="bg-slate-800 border-slate-700 mb-6">
-            <TabsTrigger value="users" className="data-[state=active]:bg-slate-700">
+          <TabsList className="bg-white border border-slate-200 mb-6 shadow-sm">
+            <TabsTrigger value="users" className="data-[state=active]:bg-violet-600 data-[state=active]:text-white">
               <Users className="w-4 h-4 mr-2" />
               Users
             </TabsTrigger>
-            <TabsTrigger value="settings" className="data-[state=active]:bg-slate-700">
+            <TabsTrigger value="settings" className="data-[state=active]:bg-violet-600 data-[state=active]:text-white">
               <Globe className="w-4 h-4 mr-2" />
               App Settings
             </TabsTrigger>
@@ -330,10 +337,10 @@ export default function AdminDashboard() {
 
           {/* Users Tab */}
           <TabsContent value="users">
-            <Card className="border-0 bg-slate-800/50 border border-slate-700">
-              <CardHeader>
+            <Card className="wizard-card border-0">
+              <CardHeader className="border-b border-slate-100">
                 <div className="flex items-center justify-between">
-                  <CardTitle className="text-white">User Management</CardTitle>
+                  <CardTitle className="text-slate-900">User Management</CardTitle>
                   {isSuperAdmin && (
                     <div className="flex gap-2">
                       <Dialog>
