@@ -350,28 +350,27 @@ export default function AdminDashboard() {
                             Invite User
                           </Button>
                         </DialogTrigger>
-                        <DialogContent className="bg-slate-800 border-slate-700">
+                        <DialogContent>
                           <DialogHeader>
-                            <DialogTitle className="text-white">Invite New User</DialogTitle>
+                            <DialogTitle>Invite New User</DialogTitle>
                           </DialogHeader>
                           <div className="space-y-4">
                             <div>
-                              <Label className="text-white">Email Address</Label>
+                              <Label>Email Address</Label>
                               <Input
                                 type="email"
                                 value={newUserEmail}
                                 onChange={(e) => setNewUserEmail(e.target.value)}
                                 placeholder="user@example.com"
-                                className="bg-slate-900 border-slate-700 text-white"
                               />
                             </div>
                             <div>
-                              <Label className="text-white">Role</Label>
+                              <Label>Role</Label>
                               <Select value={newUserRole} onValueChange={setNewUserRole}>
-                                <SelectTrigger className="bg-slate-900 border-slate-700 text-white">
+                                <SelectTrigger>
                                   <SelectValue />
                                 </SelectTrigger>
-                                <SelectContent className="bg-slate-800 border-slate-700">
+                                <SelectContent>
                                   <SelectItem value="user">User</SelectItem>
                                   <SelectItem value="admin">Admin</SelectItem>
                                   {isSuperAdmin && <SelectItem value="super_admin">Super Admin</SelectItem>}
