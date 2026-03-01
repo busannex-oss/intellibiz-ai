@@ -550,8 +550,25 @@ The video should be engaging, highlight key benefits, and end with a strong call
                 <div className="p-12 md:p-16 bg-slate-50">
                   <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-8 text-center">A Message From Our CEO</h2>
                   <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-8 items-center">
-                    <div className="w-48 h-48 rounded-2xl bg-gradient-to-br from-slate-200 to-slate-300 flex-shrink-0 flex items-center justify-center">
-                      <div className="text-6xl text-slate-500">{website.ceo_message.name?.charAt(0)}</div>
+                    {/* CEO Photo */}
+                    <div className="flex-shrink-0 flex flex-col items-center gap-2">
+                      <div className="w-48 h-48 rounded-2xl overflow-hidden bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center relative group">
+                        {website.ceo_photo_url ? (
+                          <img src={website.ceo_photo_url} alt={website.ceo_message.name} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="text-6xl text-slate-500">{website.ceo_message.name?.charAt(0)}</div>
+                        )}
+                      </div>
+                      <input ref={ceoPhotoInputRef} type="file" accept="image/*" className="hidden" onChange={handleCeoPhotoUpload} />
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => ceoPhotoInputRef.current?.click()}
+                        disabled={isUploadingCeoPhoto}
+                        className="text-xs border-slate-400 text-slate-600 hover:bg-slate-100"
+                      >
+                        {isUploadingCeoPhoto ? <><Loader2 className="w-3 h-3 mr-1 animate-spin" />Uploading...</> : <><Upload className="w-3 h-3 mr-1" />{website.ceo_photo_url ? 'Change Photo' : 'Upload Photo'}</>}
+                      </Button>
                     </div>
                     <div>
                       <p className="text-lg text-slate-700 leading-relaxed mb-4 italic">"{website.ceo_message.message}"</p>
