@@ -3,6 +3,24 @@
    Standard: Optimization, Speed, Efficiency
    ========================================= */
 
+/* =========================================
+   Mobile / PWA Enhancements
+   ========================================= */
+html, body {
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+button, a, nav a, [role="button"] {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Safe area padding for notched devices */
+.safe-top    { padding-top: env(safe-area-inset-top); }
+.safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+
 /* Logo containers — always transparent everywhere */
 .logo,
 .logo img,

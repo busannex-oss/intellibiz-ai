@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Button } from "@/components/ui/button";
-import { Zap, LayoutGrid, Sparkles, Menu, X, Crown, Settings, Search, Map, Facebook, Twitter, Instagram, Linkedin, Youtube } from 'lucide-react';
+import { Zap, LayoutGrid, Sparkles, Crown, Facebook, Twitter, Instagram, Linkedin, Youtube, Home, FolderOpen, ListTodo, Settings } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
 export default function Layout({ children }) {
