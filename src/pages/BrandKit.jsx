@@ -374,9 +374,9 @@ export default function BrandKit() {
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {project.brand_colors.map((color, i) => (
                       <div key={i} className="text-center">
-                        <div className="w-full h-24 rounded-lg mb-2" style={{ backgroundColor: color.hex }} />
-                        <p className="font-medium text-sm">{color.name}</p>
-                        <p className="text-xs text-slate-500">{color.hex}</p>
+                        <div className="w-full h-24 rounded-lg mb-2 shadow-lg" style={{ backgroundColor: color.hex }} />
+                        <p className="font-medium text-sm text-white">{color.name}</p>
+                        <p className="text-xs text-slate-400">{color.hex}</p>
                       </div>
                     ))}
                   </div>
