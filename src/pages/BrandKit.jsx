@@ -354,10 +354,10 @@ export default function BrandKit() {
 
                 {project?.brand_personality?.traits && (
                   <div>
-                    <Label className="mb-3 block">Brand Traits</Label>
+                    <Label className="text-slate-300 mb-3 block">Brand Traits</Label>
                     <div className="flex flex-wrap gap-2">
                       {project.brand_personality.traits.map((trait, i) => (
-                        <Badge key={i} className="bg-violet-100 text-violet-800 text-sm">{trait}</Badge>
+                        <Badge key={i} className="bg-amber-500/20 text-amber-400 border border-amber-500/30 text-sm">{trait}</Badge>
                       ))}
                     </div>
                   </div>
