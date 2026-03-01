@@ -169,8 +169,22 @@ Make every word count. Focus on conversion and differentiation.`,
       }
     });
     
+    // Auto-generate hero image based on business info
+    let heroImageUrl = project?.website_content?.hero_image_url;
+    if (!heroImageUrl) {
+      try {
+        const { url } = await base44.integrations.Core.GenerateImage({
+          prompt: `Professional hero image for "${project.business_name}" in the ${project.industry} industry. ${project.description}. Modern, high quality, cinematic, clean composition, suitable for a business website hero section.`
+        });
+        heroImageUrl = url;
+        setHeroImage(url);
+      } catch (e) {
+        // fallback to existing
+      }
+    }
+
     await onUpdate({
-      website_content: response,
+      website_content: { ...response, hero_image_url: heroImageUrl },
       current_step: Math.max(project.current_step || 1, 3)
     });
     
