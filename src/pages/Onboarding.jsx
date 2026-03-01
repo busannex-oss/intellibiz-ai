@@ -104,7 +104,6 @@ export default function Onboarding() {
         prompt: `Given this business setup:
 - Name: ${userData.business_name}
 - Industry: ${userData.industry}
-- Type: ${projectTypes[userData.project_type].label}
 
 Provide 5 personalized, actionable suggestions for features or steps they should prioritize. Each suggestion should be specific to their industry and project type.`,
         response_json_schema: {
@@ -144,7 +143,6 @@ Provide 5 personalized, actionable suggestions for features or steps they should
       const response = await base44.integrations.Core.InvokeLLM({
         prompt: `You are an onboarding assistant for BrandForge, an AI business builder platform. 
 User context: ${userData.business_name} in ${userData.industry} industry.
-Project type: ${projectTypes[userData.project_type].label}
 
 User question: "${userQuestion}"
 
