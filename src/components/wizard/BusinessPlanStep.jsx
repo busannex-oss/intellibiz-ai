@@ -318,16 +318,117 @@ Generate a COMPLETE, DETAILED business plan that would impress any investor or b
                 </div>
               )}
 
-              {/* Plan Sections Outline */}
+              {/* 30-Year Strategic Roadmap */}
               <div>
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Plan Will Include</p>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                  {['Executive Summary', 'Market Analysis', 'Competitive Analysis', 'Products & Services', 'Marketing Strategy', 'Operations Plan', '30-Year Financials', 'Risk Analysis', 'Implementation Timeline'].map((section) => (
-                    <div key={section} className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 py-2">
-                      <div className="w-2 h-2 rounded-full bg-violet-400 flex-shrink-0" />
-                      <span className="text-xs text-slate-700 font-medium">{section}</span>
-                    </div>
-                  ))}
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4">30-Year Strategic Growth & Legacy Roadmap</p>
+                <div className="space-y-3">
+                  {[
+                    {
+                      phase: 'I', years: 'Years 1–3', title: 'Foundation & Proof', color: 'violet',
+                      objective: 'Establish credibility, measurable outcomes, and stable revenue.',
+                      revenue: 'Year 1: $100K+ → Year 3: $250K+',
+                      focus: ['Finalize trauma-led curriculum architecture', 'Launch online cohorts', 'Secure 3–10 institutional contracts', 'Trademark & protect IP'],
+                      deliverables: ['Published impact report', 'Standardized delivery model', 'Flagship program launch'],
+                      tagline: 'This phase proves viability.'
+                    },
+                    {
+                      phase: 'II', years: 'Years 4–7', title: 'Infrastructure & Technology', color: 'indigo',
+                      objective: 'Create systems that scale beyond founder presence.',
+                      revenue: 'Year 5: $500K+ → Year 7: $750K–$1M',
+                      focus: ['Launch mobile reinforcement app', 'Build certification pathway', 'Introduce subscription model', 'Expand into workforce partnerships'],
+                      deliverables: ['App with behavioral tracking', '25+ certified facilitators', 'Multi-state partnerships'],
+                      tagline: 'This phase creates scalability.'
+                    },
+                    {
+                      phase: 'III', years: 'Years 8–12', title: 'National Expansion', color: 'blue',
+                      objective: 'Move from program to nationally recognized brand.',
+                      revenue: 'Year 10: $2M+',
+                      focus: ['Launch controlled licensing model', 'Expand into public school partnerships', 'Secure corporate sponsorships', 'Publish founder book / thought leadership'],
+                      deliverables: ['50+ institutional partners', '100,000+ individuals impacted', 'National conference presence'],
+                      tagline: 'This phase builds dominance.'
+                    },
+                    {
+                      phase: 'IV', years: 'Years 13–18', title: 'Franchise & Asset Expansion', color: 'emerald',
+                      objective: 'Institutionalize the system.',
+                      revenue: 'Year 15: $5M+',
+                      focus: ['Launch franchise model', 'Develop regional hubs', 'Expand corporate consulting arm', 'Build research division'],
+                      deliverables: ['25–50 franchise locations', 'Annual national summit', 'Proprietary data research reports'],
+                      tagline: 'This phase builds infrastructure.'
+                    },
+                    {
+                      phase: 'V', years: 'Years 19–25', title: 'Institutional Authority', color: 'amber',
+                      objective: 'Become a permanent educational authority.',
+                      revenue: '$10M+ annually',
+                      focus: ['Accreditation partnerships', 'Government contracts', 'Endowment or foundation arm', 'University collaborations'],
+                      deliverables: ['Credit Sensi™ Institute', 'Research publications', 'Permanent funding endowment'],
+                      tagline: 'This phase creates permanence.'
+                    },
+                    {
+                      phase: 'VI', years: 'Years 26–30', title: 'Legacy & Generational Transfer', color: 'rose',
+                      objective: 'Transition from founder-led to institution-led.',
+                      revenue: '$10M+ enterprise',
+                      focus: ['Leadership succession planning', 'Establish board governance', 'Expand global partnerships', 'Protect brand continuity'],
+                      deliverables: ['Multi-generational leadership structure', 'International partnerships', 'Documented 30-year impact archive'],
+                      tagline: 'This phase creates longevity beyond you.'
+                    },
+                  ].map((phase) => {
+                    const colorMap = {
+                      violet: { bg: 'bg-violet-50', border: 'border-violet-200', badge: 'bg-violet-600', text: 'text-violet-700', dot: 'bg-violet-400' },
+                      indigo: { bg: 'bg-indigo-50', border: 'border-indigo-200', badge: 'bg-indigo-600', text: 'text-indigo-700', dot: 'bg-indigo-400' },
+                      blue: { bg: 'bg-blue-50', border: 'border-blue-200', badge: 'bg-blue-600', text: 'text-blue-700', dot: 'bg-blue-400' },
+                      emerald: { bg: 'bg-emerald-50', border: 'border-emerald-200', badge: 'bg-emerald-600', text: 'text-emerald-700', dot: 'bg-emerald-400' },
+                      amber: { bg: 'bg-amber-50', border: 'border-amber-200', badge: 'bg-amber-500', text: 'text-amber-700', dot: 'bg-amber-400' },
+                      rose: { bg: 'bg-rose-50', border: 'border-rose-200', badge: 'bg-rose-600', text: 'text-rose-700', dot: 'bg-rose-400' },
+                    };
+                    const c = colorMap[phase.color];
+                    return (
+                      <div key={phase.phase} className={`rounded-xl border ${c.border} ${c.bg} p-4`}>
+                        <div className="flex items-start gap-3">
+                          <div className={`${c.badge} text-white text-xs font-bold rounded-lg px-2.5 py-1.5 flex-shrink-0`}>
+                            Phase {phase.phase}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex flex-wrap items-center gap-2 mb-1">
+                              <span className={`font-bold text-sm ${c.text}`}>{phase.title}</span>
+                              <span className="text-xs text-slate-400 font-medium">{phase.years}</span>
+                            </div>
+                            <p className="text-xs text-slate-600 mb-2">{phase.objective}</p>
+                            <div className="flex flex-wrap gap-x-4 gap-y-1 mb-2">
+                              {phase.focus.map(f => (
+                                <span key={f} className="text-xs text-slate-500 flex items-center gap-1">
+                                  <span className={`w-1.5 h-1.5 rounded-full ${c.dot} flex-shrink-0`} />{f}
+                                </span>
+                              ))}
+                            </div>
+                            <div className="flex items-center justify-between flex-wrap gap-2">
+                              <span className={`text-xs font-semibold ${c.text}`}>🎯 {phase.revenue}</span>
+                              <span className="text-xs text-slate-400 italic">{phase.tagline}</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+
+                {/* Financial Arc Summary */}
+                <div className="mt-4 bg-slate-900 rounded-xl p-4">
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">The Financial Arc (Conservative Model)</p>
+                  <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+                    {[
+                      { label: 'Years 1–3', value: '$250K' },
+                      { label: 'Years 4–7', value: '$1M' },
+                      { label: 'Years 8–12', value: '$2M–$3M' },
+                      { label: 'Years 13–18', value: '$5M+' },
+                      { label: 'Years 19–30', value: '$10M+' },
+                    ].map(({ label, value }) => (
+                      <div key={label} className="text-center bg-slate-800 rounded-lg p-2">
+                        <p className="text-xs text-slate-400 mb-1">{label}</p>
+                        <p className="text-sm font-bold text-emerald-400">{value}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-xs text-slate-500 mt-2 text-center italic">This assumes disciplined scaling — not hype.</p>
                 </div>
               </div>
             </CardContent>
