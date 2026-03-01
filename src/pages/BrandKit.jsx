@@ -200,32 +200,32 @@ export default function BrandKit() {
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <Card>
+          <Card className="bg-slate-800/50 border-slate-700">
             <CardContent className="p-4 text-center">
-              <FileImage className="w-8 h-8 mx-auto mb-2 text-violet-600" />
-              <p className="text-2xl font-bold text-slate-800">{assets.length}</p>
-              <p className="text-sm text-slate-500">Total Assets</p>
+              <FileImage className="w-8 h-8 mx-auto mb-2 text-amber-400" />
+              <p className="text-2xl font-bold text-white">{assets.length}</p>
+              <p className="text-sm text-slate-400">Total Assets</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-slate-800/50 border-slate-700">
             <CardContent className="p-4 text-center">
-              <Image className="w-8 h-8 mx-auto mb-2 text-blue-600" />
-              <p className="text-2xl font-bold text-slate-800">{groupedAssets.logo.length + groupedAssets.image.length}</p>
-              <p className="text-sm text-slate-500">Visual Assets</p>
+              <Image className="w-8 h-8 mx-auto mb-2 text-blue-400" />
+              <p className="text-2xl font-bold text-white">{groupedAssets.logo.length + groupedAssets.image.length}</p>
+              <p className="text-sm text-slate-400">Visual Assets</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-slate-800/50 border-slate-700">
             <CardContent className="p-4 text-center">
-              <Palette className="w-8 h-8 mx-auto mb-2 text-emerald-600" />
-              <p className="text-2xl font-bold text-slate-800">{project?.brand_colors?.length || 0}</p>
-              <p className="text-sm text-slate-500">Brand Colors</p>
+              <Palette className="w-8 h-8 mx-auto mb-2 text-emerald-400" />
+              <p className="text-2xl font-bold text-white">{project?.brand_colors?.length || 0}</p>
+              <p className="text-sm text-slate-400">Brand Colors</p>
             </CardContent>
           </Card>
-          <Card>
+          <Card className="bg-slate-800/50 border-slate-700">
             <CardContent className="p-4 text-center">
-              <MessageSquare className="w-8 h-8 mx-auto mb-2 text-amber-600" />
-              <p className="text-2xl font-bold text-slate-800">{project?.brand_personality ? '✓' : '—'}</p>
-              <p className="text-sm text-slate-500">Voice Defined</p>
+              <MessageSquare className="w-8 h-8 mx-auto mb-2 text-amber-400" />
+              <p className="text-2xl font-bold text-white">{project?.brand_personality ? '✓' : '—'}</p>
+              <p className="text-sm text-slate-400">Voice Defined</p>
             </CardContent>
           </Card>
         </div>
