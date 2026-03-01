@@ -577,9 +577,8 @@ export default function AdminDashboard() {
               </Card>
             </div>
           </TabsContent>
-          </Tabs>
-          </div>
-          </div>
-          </div>
-          );
-          }
+        </Tabs>
+      </div>
+    </div>
+  );
+}
