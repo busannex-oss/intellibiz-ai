@@ -234,6 +234,61 @@ export default function AccountSettings() {
             )}
           </Button>
         </div>
+
+        {/* Delete Account */}
+        <Card className="border border-red-500/30 bg-red-500/5">
+          <CardHeader>
+            <CardTitle className="text-red-400 flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5" />
+              Danger Zone
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-slate-400 text-sm">
+              Once you delete your account, all your data will be permanently removed. This action cannot be undone.
+            </p>
+            {!showDeleteSection ? (
+              <Button
+                variant="outline"
+                className="border-red-500/50 text-red-400 hover:bg-red-500/10"
+                onClick={() => setShowDeleteSection(true)}
+              >
+                <Trash2 className="w-4 h-4 mr-2" />
+                Delete My Account
+              </Button>
+            ) : (
+              <div className="space-y-3 p-4 bg-red-500/10 rounded-lg border border-red-500/20">
+                <p className="text-sm text-red-300 font-medium">
+                  Type <span className="font-bold">DELETE</span> to confirm account deletion:
+                </p>
+                <input
+                  value={deleteConfirm}
+                  onChange={(e) => setDeleteConfirm(e.target.value)}
+                  placeholder="Type DELETE to confirm"
+                  className="w-full px-3 py-2 bg-slate-900 border border-red-500/40 rounded-lg text-white text-sm focus:outline-none focus:border-red-500"
+                />
+                <div className="flex gap-2">
+                  <Button
+                    variant="ghost"
+                    className="text-slate-400"
+                    onClick={() => { setShowDeleteSection(false); setDeleteConfirm(''); }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    disabled={deleteConfirm !== 'DELETE'}
+                    className="bg-red-600 hover:bg-red-700 disabled:opacity-40"
+                    onClick={() => toast.error('Account deletion requires contacting support. Please email support@brandforge.ai')}
+                  >
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Permanently Delete Account
+                  </Button>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
       </div>
     </div>
   );
