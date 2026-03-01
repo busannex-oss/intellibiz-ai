@@ -162,21 +162,30 @@ Provide a helpful, concise answer focused on onboarding and getting started with
 
   const progressPercentage = (step / 3) * 100;
 
+  const cardClass = "border border-slate-700 bg-slate-800/60 backdrop-blur-sm";
+  const labelClass = "text-slate-300";
+  const inputClass = "bg-slate-900 border-slate-700 text-white placeholder-slate-500 focus:border-amber-500";
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-violet-50/30 to-indigo-50/50 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-6">
       <div className="max-w-5xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 mb-2 flex items-center justify-center gap-2">
-            <Sparkles className="w-8 h-8 text-violet-600" />
+          <h1 className="text-4xl font-bold text-white mb-2 flex items-center justify-center gap-2 tracking-[-0.02em]">
+            <Sparkles className="w-8 h-8 text-amber-400" />
             Welcome to BrandForge
           </h1>
-          <p className="text-slate-600">Let's build your business with AI</p>
+          <p className="text-slate-400">Let's build your business with AI</p>
         </div>
 
         {/* Progress */}
         <div className="mb-8">
-          <Progress value={progressPercentage} className="h-2" />
+          <div className="h-2 bg-slate-700 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full transition-all duration-500"
+              style={{ width: `${progressPercentage}%` }}
+            />
+          </div>
           <div className="flex justify-between mt-2 text-sm text-slate-500">
             <span>Step {step} of 3</span>
             <span>{Math.round(progressPercentage)}% Complete</span>
@@ -192,10 +201,10 @@ Provide a helpful, concise answer focused on onboarding and getting started with
              animate={{ opacity: 1, x: 0 }}
              exit={{ opacity: 0, x: -20 }}
            >
-             <Card>
+             <Card className={cardClass}>
                <CardHeader>
-                 <CardTitle className="text-2xl">Your 4-Step Path to Business Success</CardTitle>
-                 <p className="text-sm text-slate-600 mt-2">
+                 <CardTitle className="text-2xl text-white">Your 4-Step Path to Business Success</CardTitle>
+                 <p className="text-sm text-slate-400 mt-2">
                    These are the exact steps every successful business follows — in this order.
                    The sequence matters: each step builds on the last for the best results.
                  </p>
@@ -207,21 +216,21 @@ Provide a helpful, concise answer focused on onboarding and getting started with
                      return (
                        <div
                          key={item.step}
-                         className="p-6 rounded-xl border-2 border-slate-200 bg-white"
+                         className="p-6 rounded-xl border border-slate-700 bg-slate-900/50 hover:border-slate-600 transition-colors"
                        >
                          <div className="flex items-center gap-3 mb-3">
-                           <div className={`w-9 h-9 rounded-full ${item.bg} flex items-center justify-center flex-shrink-0`}>
-                             <span className={`text-sm font-bold ${item.color}`}>{item.step}</span>
+                           <div className="w-9 h-9 rounded-full bg-amber-500/20 border border-amber-500/30 flex items-center justify-center flex-shrink-0">
+                             <span className="text-sm font-bold text-amber-400">{item.step}</span>
                            </div>
                            <div className="flex items-center gap-2">
-                             <Icon className={`w-5 h-5 ${item.color}`} />
-                             <h3 className="font-bold text-slate-900 text-base">{item.label}</h3>
+                             <Icon className="w-5 h-5 text-amber-400" />
+                             <h3 className="font-bold text-white text-base">{item.label}</h3>
                            </div>
                          </div>
-                         <p className="text-sm text-slate-600 mb-3">{item.desc}</p>
+                         <p className="text-sm text-slate-400 mb-3">{item.desc}</p>
                          <div className="flex flex-wrap gap-2">
                            {item.features.map((feature, i) => (
-                             <Badge key={i} variant="secondary" className="text-xs">
+                             <Badge key={i} className="text-xs bg-slate-700/60 text-slate-300 border border-slate-600">
                                {feature}
                              </Badge>
                            ))}
@@ -231,11 +240,15 @@ Provide a helpful, concise answer focused on onboarding and getting started with
                    })}
                  </div>
 
-                 <p className="text-center text-sm text-slate-500 font-medium pt-1">
+                 <p className="text-center text-sm text-slate-400 font-medium pt-1">
                    ✅ Follow these steps in order for best results
                  </p>
 
-                 <Button onClick={() => setStep(2)} className="w-full" size="lg">
+                 <Button
+                   onClick={() => setStep(2)}
+                   className="w-full h-12 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold shadow-lg shadow-amber-500/20"
+                   size="lg"
+                 >
                    Get Started <ArrowRight className="w-4 h-4 ml-2" />
                  </Button>
                </CardContent>
@@ -251,14 +264,15 @@ Provide a helpful, concise answer focused on onboarding and getting started with
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -20 }}
             >
-              <Card>
+              <Card className={cardClass}>
                 <CardHeader>
-                  <CardTitle>Tell us about your business</CardTitle>
+                  <CardTitle className="text-white">Tell us about your business</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
-                    <Label>Business Name *</Label>
+                    <Label className={labelClass}>Business Name *</Label>
                     <Input
+                      className={inputClass}
                       value={userData.business_name}
                       onChange={(e) => setUserData({ ...userData, business_name: e.target.value })}
                       placeholder="e.g., TechStart Solutions"
@@ -266,28 +280,23 @@ Provide a helpful, concise answer focused on onboarding and getting started with
                   </div>
 
                   <div className="space-y-2">
-                    <Label>Industry *</Label>
+                    <Label className={labelClass}>Industry *</Label>
                     <Select value={userData.industry} onValueChange={(v) => setUserData({ ...userData, industry: v })}>
-                      <SelectTrigger>
+                      <SelectTrigger className={inputClass}>
                         <SelectValue placeholder="Select your industry" />
                       </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Technology">Technology</SelectItem>
-                        <SelectItem value="E-commerce">E-commerce</SelectItem>
-                        <SelectItem value="Food & Beverage">Food & Beverage</SelectItem>
-                        <SelectItem value="Healthcare">Healthcare</SelectItem>
-                        <SelectItem value="Education">Education</SelectItem>
-                        <SelectItem value="Real Estate">Real Estate</SelectItem>
-                        <SelectItem value="Consulting">Consulting</SelectItem>
-                        <SelectItem value="Creative Services">Creative Services</SelectItem>
-                        <SelectItem value="Other">Other</SelectItem>
+                      <SelectContent className="bg-slate-800 border-slate-700">
+                        {['Technology','E-commerce','Food & Beverage','Healthcare','Education','Real Estate','Consulting','Creative Services','Other'].map(v => (
+                          <SelectItem key={v} value={v} className="text-slate-200 focus:bg-slate-700">{v}</SelectItem>
+                        ))}
                       </SelectContent>
                     </Select>
                   </div>
 
                   <div className="space-y-2">
-                    <Label>Brief Description *</Label>
+                    <Label className={labelClass}>Brief Description *</Label>
                     <Textarea
+                      className={inputClass}
                       value={userData.description}
                       onChange={(e) => setUserData({ ...userData, description: e.target.value })}
                       placeholder="What does your business do?"
@@ -297,16 +306,18 @@ Provide a helpful, concise answer focused on onboarding and getting started with
 
                   <div className="grid md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label>Target Audience</Label>
+                      <Label className={labelClass}>Target Audience</Label>
                       <Input
+                        className={inputClass}
                         value={userData.target_audience}
                         onChange={(e) => setUserData({ ...userData, target_audience: e.target.value })}
                         placeholder="e.g., Small business owners"
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Location</Label>
+                      <Label className={labelClass}>Location</Label>
                       <Input
+                        className={inputClass}
                         value={userData.location}
                         onChange={(e) => setUserData({ ...userData, location: e.target.value })}
                         placeholder="e.g., San Francisco, CA"
@@ -315,12 +326,12 @@ Provide a helpful, concise answer focused on onboarding and getting started with
                   </div>
 
                   <div className="flex gap-2">
-                    <Button onClick={() => setStep(1)} variant="outline">
+                    <Button onClick={() => setStep(1)} variant="outline" className="border-slate-700 text-slate-300 hover:bg-slate-700 bg-transparent">
                       Back
                     </Button>
                     <Button 
                       onClick={() => setStep(3)} 
-                      className="flex-1"
+                      className="flex-1 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold"
                       disabled={!userData.business_name || !userData.industry || !userData.description}
                     >
                       Continue <ArrowRight className="w-4 h-4 ml-2" />
@@ -341,30 +352,29 @@ Provide a helpful, concise answer focused on onboarding and getting started with
               className="space-y-6"
             >
               {/* AI Suggestions */}
-              <Card>
+              <Card className={cardClass}>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Lightbulb className="w-5 h-5 text-amber-600" />
+                  <CardTitle className="flex items-center gap-2 text-white">
+                    <Lightbulb className="w-5 h-5 text-amber-400" />
                     Personalized Recommendations
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   {loadingSuggestions ? (
                     <div className="text-center py-8">
-                      <Loader2 className="w-8 h-8 animate-spin mx-auto text-violet-600 mb-2" />
-                      <p className="text-slate-500">Analyzing your business needs...</p>
+                      <Loader2 className="w-8 h-8 animate-spin mx-auto text-amber-400 mb-2" />
+                      <p className="text-slate-400">Analyzing your business needs...</p>
                     </div>
                   ) : (
                     <ul className="space-y-3">
                       {aiSuggestions.map((suggestion, i) => (
-                        <li key={i} className="flex items-start gap-3 p-4 bg-slate-50 rounded-lg">
-                          <CheckCircle className="w-5 h-5 text-emerald-600 flex-shrink-0 mt-0.5" />
+                        <li key={i} className="flex items-start gap-3 p-4 bg-slate-900/50 rounded-lg border border-slate-700">
+                          <CheckCircle className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
                           <div>
-                            <p className="font-medium text-slate-900">{suggestion.title}</p>
-                            <p className="text-sm text-slate-600 mt-1">{suggestion.description}</p>
+                            <p className="font-medium text-white">{suggestion.title}</p>
+                            <p className="text-sm text-slate-400 mt-1">{suggestion.description}</p>
                             <Badge 
-                              className="mt-2"
-                              variant={suggestion.priority === 'high' ? 'default' : 'secondary'}
+                              className={`mt-2 text-xs border ${suggestion.priority === 'high' ? 'bg-amber-500/20 text-amber-400 border-amber-500/30' : 'bg-slate-700 text-slate-300 border-slate-600'}`}
                             >
                               {suggestion.priority} priority
                             </Badge>
@@ -377,10 +387,10 @@ Provide a helpful, concise answer focused on onboarding and getting started with
               </Card>
 
               {/* AI Assistant Chat */}
-              <Card>
+              <Card className={cardClass}>
                 <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <MessageSquare className="w-5 h-5 text-violet-600" />
+                  <CardTitle className="flex items-center gap-2 text-white">
+                    <MessageSquare className="w-5 h-5 text-amber-400" />
                     Ask Our AI Assistant
                   </CardTitle>
                 </CardHeader>
@@ -393,11 +403,11 @@ Provide a helpful, concise answer focused on onboarding and getting started with
                             key={i}
                             className={`p-3 rounded-lg ${
                               msg.role === 'user'
-                                ? 'bg-violet-100 ml-8'
-                                : 'bg-slate-100 mr-8'
+                                ? 'bg-amber-500/10 border border-amber-500/20 ml-8'
+                                : 'bg-slate-900/50 border border-slate-700 mr-8'
                             }`}
                           >
-                            <p className="text-sm text-slate-700">{msg.content}</p>
+                            <p className="text-sm text-slate-300">{msg.content}</p>
                           </div>
                         ))}
                       </div>
@@ -405,12 +415,17 @@ Provide a helpful, concise answer focused on onboarding and getting started with
 
                     <div className="flex gap-2">
                       <Input
+                        className={inputClass}
                         value={userQuestion}
                         onChange={(e) => setUserQuestion(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && handleAskQuestion()}
                         placeholder="Ask anything about getting started..."
                       />
-                      <Button onClick={handleAskQuestion} disabled={answeringQuestion}>
+                      <Button
+                        onClick={handleAskQuestion}
+                        disabled={answeringQuestion}
+                        className="bg-amber-500 hover:bg-amber-600 text-white"
+                      >
                         {answeringQuestion ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Ask'}
                       </Button>
                     </div>
@@ -422,7 +437,7 @@ Provide a helpful, concise answer focused on onboarding and getting started with
               <Button
                 onClick={() => createProjectMutation.mutate(userData)}
                 disabled={createProjectMutation.isPending}
-                className="w-full"
+                className="w-full h-12 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-semibold shadow-lg shadow-amber-500/20"
                 size="lg"
               >
                 {createProjectMutation.isPending ? (
