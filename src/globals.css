@@ -125,6 +125,15 @@ nav, footer {
 }
 
 /* =========================================
+   Wizard Step Cards — consistent white content background
+   ========================================= */
+.wizard-card {
+  background: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.10);
+}
+
+/* =========================================
    Print styles
    ========================================= */
 @media print {
