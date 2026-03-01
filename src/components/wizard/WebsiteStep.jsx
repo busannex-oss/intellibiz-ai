@@ -553,37 +553,63 @@ The video should be engaging, highlight key benefits, and end with a strong call
                 </div>
               )}
 
-              {/* CEO Message Preview */}
+              {/* STAFF Group Section */}
               {website.ceo_message && (
                 <div className="p-12 md:p-16 bg-slate-50">
-                  <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-8 text-center">A Message From Our CEO</h2>
-                  <div className="max-w-4xl mx-auto flex flex-col md:flex-row gap-8 items-center">
-                    {/* CEO Photo */}
-                    <div className="flex-shrink-0 flex flex-col items-center gap-2">
-                      <div className="w-48 h-48 rounded-2xl overflow-hidden bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center relative group">
-                        {website.ceo_photo_url ? (
-                          <img src={website.ceo_photo_url} alt={website.ceo_message.name} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="text-6xl text-slate-500">{website.ceo_message.name?.charAt(0)}</div>
-                        )}
-                      </div>
-                      <input ref={ceoPhotoInputRef} type="file" accept="image/*" className="hidden" onChange={handleCeoPhotoUpload} />
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => ceoPhotoInputRef.current?.click()}
-                        disabled={isUploadingCeoPhoto}
-                        className="text-xs border-slate-400 text-slate-600 hover:bg-slate-100"
-                      >
-                        {isUploadingCeoPhoto ? <><Loader2 className="w-3 h-3 mr-1 animate-spin" />Uploading...</> : <><Upload className="w-3 h-3 mr-1" />{website.ceo_photo_url ? 'Change Photo' : 'Upload Photo'}</>}
-                      </Button>
-                    </div>
-                    <div>
-                      <p className="text-lg text-slate-700 leading-relaxed mb-4 italic">"{website.ceo_message.message}"</p>
-                      <div>
-                        <p className="font-semibold text-slate-900">{website.ceo_message.name}</p>
-                        <p className="text-sm text-slate-600">{website.ceo_message.title}</p>
-                      </div>
+                  <div className="text-center mb-10">
+                    <span className="inline-block bg-slate-200 text-slate-600 text-xs font-bold uppercase tracking-widest px-4 py-1 rounded-full mb-3">STAFF</span>
+                    <h2 className="text-2xl md:text-3xl font-bold text-slate-800">Meet Our Leadership Team</h2>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
+                    {STAFF_ROLES.map(({ key, label, fullLabel }) => {
+                      const staffInfo = key === 'ceo' ? website.ceo_message : website[`${key}_info`];
+                      const photoUrl = website.staff_photos?.[key];
+                      const name = staffInfo?.name || '';
+                      return (
+                        <div key={key} className="flex flex-col items-center gap-3">
+                          {/* Photo */}
+                          <div className="w-28 h-28 rounded-2xl overflow-hidden bg-gradient-to-br from-slate-200 to-slate-300 flex items-center justify-center shadow-md">
+                            {photoUrl ? (
+                              <img src={photoUrl} alt={name || label} className="w-full h-full object-cover" />
+                            ) : (
+                              <span className="text-3xl text-slate-500 font-semibold">{name ? name.charAt(0) : label.charAt(0)}</span>
+                            )}
+                          </div>
+                          {/* Info */}
+                          <div className="text-center">
+                            <p className="font-semibold text-slate-800 text-sm">{name || `Your ${label}`}</p>
+                            <p className="text-xs text-slate-500">{staffInfo?.title || fullLabel}</p>
+                          </div>
+                          {/* Upload button */}
+                          <input
+                            ref={el => staffPhotoInputRefs.current[key] = el}
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={(e) => handleStaffPhotoUpload(e, key)}
+                          />
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => staffPhotoInputRefs.current[key]?.click()}
+                            disabled={uploadingStaffPhoto === key}
+                            className="text-xs h-7 px-3 border-slate-300 text-slate-600 hover:bg-slate-100"
+                          >
+                            {uploadingStaffPhoto === key
+                              ? <><Loader2 className="w-3 h-3 mr-1 animate-spin" />Uploading...</>
+                              : <><Upload className="w-3 h-3 mr-1" />{photoUrl ? 'Change' : 'Upload'}</>
+                            }
+                          </Button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  {/* CEO Message below */}
+                  <div className="max-w-3xl mx-auto mt-12 bg-white rounded-2xl p-8 shadow-sm border border-slate-100">
+                    <p className="text-lg text-slate-700 leading-relaxed mb-4 italic text-center">"{website.ceo_message.message}"</p>
+                    <div className="text-center">
+                      <p className="font-semibold text-slate-900">{website.ceo_message.name}</p>
+                      <p className="text-sm text-slate-500">{website.ceo_message.title}</p>
                     </div>
                   </div>
                 </div>
