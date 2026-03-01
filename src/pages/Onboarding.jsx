@@ -188,65 +188,61 @@ Provide a helpful, concise answer focused on onboarding and getting started with
         <AnimatePresence mode="wait">
           {/* Step 1: Project Type */}
           {step === 1 && (
-            <motion.div
-              key="step1"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-            >
-              <Card>
-                <CardHeader>
-                  <CardTitle>Choose Your Path - 4 Simple Options</CardTitle>
-                  <p className="text-sm text-slate-600 mt-2">
-                    Each option is a streamlined workflow designed for speed and simplicity. 
-                    Select the path that fits your needs - you can always add more features later.
-                  </p>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    {Object.entries(projectTypes).map(([key, type], index) => {
-                      const Icon = type.icon;
-                      const stepNumber = index + 1;
-                      return (
-                        <button
-                          key={key}
-                          onClick={() => setUserData({ ...userData, project_type: key })}
-                          className={`p-6 rounded-xl border-2 text-left transition-all ${
-                            userData.project_type === key
-                              ? 'border-violet-600 bg-violet-50'
-                              : 'border-slate-200 hover:border-violet-300'
-                          }`}
-                        >
-                          <div className="flex items-center gap-3 mb-3">
-                            <div className="w-8 h-8 rounded-full bg-violet-100 flex items-center justify-center flex-shrink-0">
-                              <span className="text-sm font-bold text-violet-700">{stepNumber}</span>
-                            </div>
-                            <div className="flex-1">
-                              <div className="flex items-center gap-2">
-                                <Icon className="w-5 h-5 text-violet-600" />
-                                <h3 className="font-bold text-slate-900 text-base">{type.label}</h3>
-                              </div>
-                            </div>
-                          </div>
-                          <p className="text-sm text-slate-600 mb-3">{type.desc}</p>
-                          <div className="flex flex-wrap gap-2">
-                            {type.features.slice(0, 3).map((feature, i) => (
-                              <Badge key={i} variant="secondary" className="text-xs">
-                                {feature}
-                              </Badge>
-                            ))}
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
+           <motion.div
+             key="step1"
+             initial={{ opacity: 0, x: 20 }}
+             animate={{ opacity: 1, x: 0 }}
+             exit={{ opacity: 0, x: -20 }}
+           >
+             <Card>
+               <CardHeader>
+                 <CardTitle className="text-2xl">Your 4-Step Path to Business Success</CardTitle>
+                 <p className="text-sm text-slate-600 mt-2">
+                   These are the exact steps every successful business follows — in this order.
+                   The sequence matters: each step builds on the last for the best results.
+                 </p>
+               </CardHeader>
+               <CardContent className="space-y-4">
+                 <div className="grid md:grid-cols-2 gap-4">
+                   {businessSteps.map((item) => {
+                     const Icon = item.icon;
+                     return (
+                       <div
+                         key={item.step}
+                         className="p-6 rounded-xl border-2 border-slate-200 bg-white"
+                       >
+                         <div className="flex items-center gap-3 mb-3">
+                           <div className={`w-9 h-9 rounded-full ${item.bg} flex items-center justify-center flex-shrink-0`}>
+                             <span className={`text-sm font-bold ${item.color}`}>{item.step}</span>
+                           </div>
+                           <div className="flex items-center gap-2">
+                             <Icon className={`w-5 h-5 ${item.color}`} />
+                             <h3 className="font-bold text-slate-900 text-base">{item.label}</h3>
+                           </div>
+                         </div>
+                         <p className="text-sm text-slate-600 mb-3">{item.desc}</p>
+                         <div className="flex flex-wrap gap-2">
+                           {item.features.map((feature, i) => (
+                             <Badge key={i} variant="secondary" className="text-xs">
+                               {feature}
+                             </Badge>
+                           ))}
+                         </div>
+                       </div>
+                     );
+                   })}
+                 </div>
 
-                  <Button onClick={() => setStep(2)} className="w-full" size="lg">
-                    Continue <ArrowRight className="w-4 h-4 ml-2" />
-                  </Button>
-                </CardContent>
-              </Card>
-            </motion.div>
+                 <p className="text-center text-sm text-slate-500 font-medium pt-1">
+                   ✅ Follow these steps in order for best results
+                 </p>
+
+                 <Button onClick={() => setStep(2)} className="w-full" size="lg">
+                   Get Started <ArrowRight className="w-4 h-4 ml-2" />
+                 </Button>
+               </CardContent>
+             </Card>
+           </motion.div>
           )}
 
           {/* Step 2: Business Details */}
