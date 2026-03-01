@@ -171,7 +171,7 @@ export default function BrandKit() {
 
           <Dialog>
             <DialogTrigger asChild>
-              <Button className="bg-violet-600 hover:bg-violet-700">
+              <Button className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white">
                 <Share2 className="w-4 h-4 mr-2" />
                 Share Brand Kit
               </Button>
