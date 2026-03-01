@@ -275,7 +275,7 @@ Generate a COMPLETE, DETAILED business plan that would impress any investor or b
       {!businessPlan ? (
         <div className="space-y-6">
           {/* Business Plan Outline based on entered info */}
-          <Card className="border border-slate-200 shadow-sm bg-white">
+          <Card className="wizard-card border-0">
             <CardHeader className="border-b border-slate-100 pb-4">
               <CardTitle className="text-lg text-slate-800 flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-violet-500" />
