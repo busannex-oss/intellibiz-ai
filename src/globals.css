@@ -126,11 +126,13 @@ nav, footer {
 
 /* =========================================
    Wizard Step Cards — consistent white content background
+   All wizard content cards use this for a unified look
    ========================================= */
 .wizard-card {
-  background: #ffffff;
+  background: #ffffff !important;
   border-radius: 1rem;
-  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.10);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 24px 0 rgba(0,0,0,0.08);
 }
 
 /* =========================================
