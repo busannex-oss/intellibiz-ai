@@ -331,6 +331,21 @@ The video should be engaging, highlight key benefits, and end with a strong call
     }
   };
 
+  const handleCeoPhotoUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setIsUploadingCeoPhoto(true);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      await onUpdate({ website_content: { ...(project.website_content || {}), ceo_photo_url: file_url } });
+      toast.success('CEO photo uploaded!');
+    } catch (error) {
+      toast.error('Failed to upload photo');
+    } finally {
+      setIsUploadingCeoPhoto(false);
+    }
+  };
+
   const website = project?.website_content;
   const brandColors = project?.brand_colors || [];
   const getColor = (role, fallback) => brandColors.find(c => c.role === role)?.hex || fallback;
