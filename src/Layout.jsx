@@ -91,7 +91,7 @@ export default function Layout({ children }) {
         }
       `}</style>
       {/* Navigation */}
-      <nav className="bg-slate-900/95 backdrop-blur-xl border-b border-slate-800 sticky top-0 z-50">
+      <nav className="bg-slate-900/95 backdrop-blur-xl border-b border-slate-800 sticky top-0 z-50 safe-top">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-18 py-3">
             {/* Logo */}
