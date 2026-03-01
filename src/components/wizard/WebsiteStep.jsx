@@ -338,18 +338,19 @@ The video should be engaging, highlight key benefits, and end with a strong call
     }
   };
 
-  const handleCeoPhotoUpload = async (e) => {
+  const handleStaffPhotoUpload = async (e, roleKey) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setIsUploadingCeoPhoto(true);
+    setUploadingStaffPhoto(roleKey);
     try {
       const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      await onUpdate({ website_content: { ...(project.website_content || {}), ceo_photo_url: file_url } });
-      toast.success('CEO photo uploaded!');
+      const staff_photos = { ...(project.website_content?.staff_photos || {}), [roleKey]: file_url };
+      await onUpdate({ website_content: { ...(project.website_content || {}), staff_photos } });
+      toast.success('Photo uploaded!');
     } catch (error) {
       toast.error('Failed to upload photo');
     } finally {
-      setIsUploadingCeoPhoto(false);
+      setUploadingStaffPhoto(null);
     }
   };
 
