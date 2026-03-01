@@ -20,6 +20,8 @@ export default function WebsiteStep({ project, onUpdate, onNext, onPrev }) {
   const [isGeneratingHeroImage, setIsGeneratingHeroImage] = useState(false);
   const [isUploadingHeroImage, setIsUploadingHeroImage] = useState(false);
   const heroFileInputRef = useRef(null);
+  const ceoPhotoInputRef = useRef(null);
+  const [isUploadingCeoPhoto, setIsUploadingCeoPhoto] = useState(false);
 
   const generateWebsite = async () => {
     setIsGenerating(true);
