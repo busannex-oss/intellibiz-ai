@@ -14,7 +14,7 @@ export default function WebsiteStep({ project, onUpdate, onNext, onPrev }) {
   const [editContent, setEditContent] = useState('');
   const [viewMode, setViewMode] = useState('preview');
   const [videoUrls, setVideoUrls] = useState(project?.video_urls || {});
-  const [heroImage, setHeroImage] = useState(project?.website_content?.hero_image_url || 'https://images.unsplash.com/photo-1664575602554-2087b04935a5?w=700&q=80&auto=format&fit=crop');
+  const [heroImage, setHeroImage] = useState(project?.website_content?.hero_image_url || '');
   const [showHeroImagePanel, setShowHeroImagePanel] = useState(false);
   const [heroAiPrompt, setHeroAiPrompt] = useState('');
   const [isGeneratingHeroImage, setIsGeneratingHeroImage] = useState(false);
