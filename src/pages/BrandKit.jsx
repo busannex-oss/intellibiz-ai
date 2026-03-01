@@ -264,7 +264,7 @@ export default function BrandKit() {
                   <CardContent>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       {groupedAssets[type].map(asset => (
-                        <div key={asset.id} className="group relative bg-slate-50 rounded-lg p-4 border border-slate-200 hover:border-violet-300 transition-colors">
+                        <div key={asset.id} className="group relative bg-slate-900/50 rounded-lg p-4 border border-slate-700 hover:border-amber-500/50 transition-colors">
                           {(asset.asset_type === 'logo' || asset.asset_type === 'image') && (
                             <div className="aspect-square logo rounded-lg mb-3 p-2">
                               <img src={asset.file_url} alt={asset.name} className="max-w-full max-h-full object-contain" />
