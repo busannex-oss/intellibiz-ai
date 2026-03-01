@@ -308,7 +308,7 @@ Create:
       </div>
 
       {!research ? (
-        <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+        <Card className="wizard-card border-0">
           <CardContent className="p-8 space-y-6">
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-2">
@@ -445,7 +445,7 @@ Create:
           </Card>
 
                   {/* Detailed Research Tabs */}
-          <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden">
+          <Card className="wizard-card border-0 overflow-hidden">
             <CardHeader className="bg-gradient-to-r from-slate-50 to-slate-100 border-b">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-xl">Market Intelligence Report</CardTitle>
