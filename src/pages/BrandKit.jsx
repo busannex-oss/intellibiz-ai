@@ -249,9 +249,9 @@ export default function BrandKit() {
           <TabsContent value="assets" className="space-y-6">
             {['logo', 'image', 'font', 'video', 'template', 'document'].map(type => (
               groupedAssets[type].length > 0 && (
-                <Card key={type}>
+                <Card key={type} className="bg-slate-800/50 border-slate-700">
                   <CardHeader>
-                    <CardTitle className="capitalize flex items-center gap-2">
+                    <CardTitle className="capitalize flex items-center gap-2 text-white">
                       {type === 'logo' && <FileImage className="w-5 h-5" />}
                       {type === 'image' && <Image className="w-5 h-5" />}
                       {type === 'font' && <Type className="w-5 h-5" />}
