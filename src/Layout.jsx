@@ -147,10 +147,32 @@ export default function Layout({ children }) {
       </nav>
 
       {/* Main Content */}
-      <main>{children}</main>
+      <main className="pb-16 md:pb-0">{children}</main>
+
+      {/* Mobile Bottom Navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-xl border-t border-slate-800 md:hidden safe-bottom">
+        <div className="flex items-center justify-around h-14">
+          {mobileNav.map(({ label, icon: Icon, page }) => {
+            const href = createPageUrl(page);
+            const isActive = location.pathname === href || location.search.includes(page);
+            return (
+              <Link
+                key={page}
+                to={href}
+                className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg transition-colors ${
+                  isActive ? 'text-amber-400' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <Icon className="w-5 h-5" />
+                <span className="text-[10px] font-medium">{label}</span>
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
 
       {/* Footer */}
-      <footer className="border-t border-slate-800 py-12 mt-auto">
+      <footer className="border-t border-slate-800 py-12 mt-auto hidden md:block">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             {/* Brand Section */}
