@@ -1,4 +1,3 @@
-
 /* =========================================
    BrandForge Global Styles
    Standard: Optimization, Speed, Efficiency
@@ -47,6 +46,19 @@ h4 { font-size: 16px; line-height: 1.5; }
 button {
   background-color: inherit;
   color: inherit;
+}
+
+/* Production fix: outline buttons in dark navbars/surfaces must not bleed white bg.
+   The shadcn outline variant uses bg-background (white by default).
+   Any nav/dark-surface button without explicit bg should be transparent. */
+nav button:not([style*="background"]) {
+  background-color: transparent;
+}
+
+/* Ensure all outline-style buttons on dark backgrounds stay transparent */
+.bg-slate-900 button,
+.bg-slate-800 button {
+  background-color: transparent;
 }
 
 /* =========================================
