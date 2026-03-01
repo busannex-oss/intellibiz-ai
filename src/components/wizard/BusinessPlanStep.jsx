@@ -12,6 +12,78 @@ export default function BusinessPlanStep({ project, onUpdate, onNext, onPrev }) 
   const [isGenerating, setIsGenerating] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedPlan, setEditedPlan] = useState('');
+  const [isGeneratingOutline, setIsGeneratingOutline] = useState(false);
+  const [planOutline, setPlanOutline] = useState(project?.business_plan_outline || null);
+
+  // Auto-generate outline if not yet created and market research is available
+  useEffect(() => {
+    if (!planOutline && !isGeneratingOutline && project?.market_research && !project?.business_plan) {
+      generateOutline();
+    }
+  }, []);
+
+  const generateOutline = async () => {
+    setIsGeneratingOutline(true);
+    const marketResearch = project?.market_research;
+
+    const response = await base44.integrations.Core.InvokeLLM({
+      prompt: `You are creating a 30-Year Strategic Business Plan OUTLINE for a client's business. This is the core product we deliver.
+
+Business Name: ${project.business_name}
+Industry: ${project.industry}
+Description: ${project.description}
+Target Audience: ${project.target_audience || 'General consumers'}
+Location: ${project.location || 'United States'}
+Unique Value Proposition: ${project?.unique_value_proposition || 'Not yet defined'}
+Market Size: ${marketResearch?.market_size || 'TBD'}
+Key Opportunities: ${marketResearch?.opportunities?.slice(0, 3).join(', ') || 'TBD'}
+
+Create a 30-year strategic roadmap broken into 6 phases. Each phase must be SPECIFIC to this business — its industry, audience, and goals. Do NOT use generic placeholders.
+
+For each phase provide:
+- A title that reflects THIS business's journey
+- A clear objective tied to the actual business
+- 3–4 specific focus areas for this business
+- 2–3 deliverables unique to this industry
+- A realistic revenue target based on the market
+- A one-sentence tagline that captures the phase's purpose`,
+      response_json_schema: {
+        type: "object",
+        properties: {
+          phases: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                phase: { type: "string" },
+                years: { type: "string" },
+                title: { type: "string" },
+                objective: { type: "string" },
+                focus: { type: "array", items: { type: "string" } },
+                deliverables: { type: "array", items: { type: "string" } },
+                revenue: { type: "string" },
+                tagline: { type: "string" }
+              }
+            }
+          },
+          financial_arc: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                label: { type: "string" },
+                value: { type: "string" }
+              }
+            }
+          }
+        }
+      }
+    });
+
+    setPlanOutline(response);
+    await onUpdate({ business_plan_outline: response });
+    setIsGeneratingOutline(false);
+  };
 
   const generateBusinessPlan = async () => {
     setIsGenerating(true);
