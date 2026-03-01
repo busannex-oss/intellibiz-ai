@@ -85,28 +85,28 @@ export default function CreateBusiness() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin" />
-          <p className="text-slate-400 font-medium">Loading your project...</p>
+          <div className="w-12 h-12 border-4 border-violet-500 border-t-transparent rounded-full animate-spin" />
+          <p className="text-slate-500 font-medium">Loading your project...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900">
+    <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="text-center mb-6">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-400 text-sm font-medium mb-4">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-violet-50 border border-violet-200 text-violet-600 text-sm font-medium mb-4">
             <Sparkles className="w-4 h-4" />
             AI-Powered Business Builder
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+          <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-2">
             {project?.business_name ? `Building: ${project.business_name}` : 'Create Your Business'}
           </h1>
-          <p className="text-slate-400">Follow the streamlined 7-step process to launch your brand</p>
+          <p className="text-slate-500">Follow the streamlined 7-step process to launch your brand</p>
         </div>
 
         {/* Step Indicator */}
