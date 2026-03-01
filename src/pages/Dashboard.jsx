@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import '@/components/styles/backend.css';
 import { base44 } from '@/api/base44Client';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
