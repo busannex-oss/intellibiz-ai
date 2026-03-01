@@ -280,6 +280,41 @@ The video should be engaging, highlight key benefits, and end with a strong call
     }
   };
 
+  const generateHeroImage = async () => {
+    const prompt = heroAiPrompt.trim() || `Professional hero image for a business website for "${project.business_name}" in the ${project.industry} industry. Modern, high quality, clean background.`;
+    setIsGeneratingHeroImage(true);
+    try {
+      const response = await base44.integrations.Core.GenerateImage({ prompt });
+      if (response?.url) {
+        setHeroImage(response.url);
+        await onUpdate({ website_content: { ...(project.website_content || {}), hero_image_url: response.url } });
+        toast.success('Hero image generated!');
+        setShowHeroImagePanel(false);
+      }
+    } catch (error) {
+      toast.error('Failed to generate image');
+    } finally {
+      setIsGeneratingHeroImage(false);
+    }
+  };
+
+  const handleHeroImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setIsUploadingHeroImage(true);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      setHeroImage(file_url);
+      await onUpdate({ website_content: { ...(project.website_content || {}), hero_image_url: file_url } });
+      toast.success('Image uploaded!');
+      setShowHeroImagePanel(false);
+    } catch (error) {
+      toast.error('Failed to upload image');
+    } finally {
+      setIsUploadingHeroImage(false);
+    }
+  };
+
   const website = project?.website_content;
   const brandColors = project?.brand_colors || [];
   const getColor = (role, fallback) => brandColors.find(c => c.role === role)?.hex || fallback;
