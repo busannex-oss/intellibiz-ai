@@ -42,6 +42,14 @@ export default function Layout({ children }) {
     youtube: { icon: Youtube, color: 'hover:text-red-500' }
   };
 
+  const mobileNav = [
+    { label: 'Home', icon: Home, page: 'Home' },
+    { label: 'Projects', icon: FolderOpen, page: 'Dashboard' },
+    { label: 'New', icon: Sparkles, page: 'CreateBusiness' },
+    { label: 'Tasks', icon: ListTodo, page: 'Tasks' },
+    { label: 'Settings', icon: Settings, page: 'AccountSettings' },
+  ];
+
   return (
     <div className="min-h-screen bg-slate-900 font-sans antialiased">
       <style>{`
