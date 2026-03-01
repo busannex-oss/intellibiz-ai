@@ -200,7 +200,7 @@ ${additionalInstructions ? `CUSTOM INSTRUCTIONS: ${additionalInstructions}` : ''
         <TabsContent value="logo" className="space-y-8">
           <div className="grid md:grid-cols-2 gap-8">
             {/* Logo Preview */}
-            <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden">
+            <Card className="wizard-card border-0 overflow-hidden">
               <CardContent className="p-0">
                 <div className="aspect-square bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center relative">
                   {isGenerating ? (
@@ -236,7 +236,7 @@ ${additionalInstructions ? `CUSTOM INSTRUCTIONS: ${additionalInstructions}` : ''
 
         {/* Controls */}
         <div className="space-y-6">
-          <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+          <Card className="wizard-card border-0">
             <CardContent className="p-6 space-y-6">
               <div>
                 <h3 className="font-semibold text-slate-800 mb-2">Business Info</h3>
@@ -337,7 +337,7 @@ ${additionalInstructions ? `CUSTOM INSTRUCTIONS: ${additionalInstructions}` : ''
 
           {/* Saved Logos */}
           {savedLogos.length > 0 && (
-            <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+            <Card className="wizard-card border-0">
               <CardHeader>
                 <CardTitle className="text-lg">Saved Logos ({savedLogos.length})</CardTitle>
               </CardHeader>
@@ -450,7 +450,7 @@ ${additionalInstructions ? `CUSTOM INSTRUCTIONS: ${additionalInstructions}` : ''
         </TabsContent>
 
         <TabsContent value="colors">
-          <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
+          <Card className="wizard-card border-0">
             <CardContent className="p-6">
               <BrandColorsStep
                 colors={project?.brand_colors || []}
