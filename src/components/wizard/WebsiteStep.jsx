@@ -20,8 +20,15 @@ export default function WebsiteStep({ project, onUpdate, onNext, onPrev }) {
   const [isGeneratingHeroImage, setIsGeneratingHeroImage] = useState(false);
   const [isUploadingHeroImage, setIsUploadingHeroImage] = useState(false);
   const heroFileInputRef = useRef(null);
-  const ceoPhotoInputRef = useRef(null);
-  const [isUploadingCeoPhoto, setIsUploadingCeoPhoto] = useState(false);
+  const staffPhotoInputRefs = useRef({});
+  const [uploadingStaffPhoto, setUploadingStaffPhoto] = useState(null);
+
+  const STAFF_ROLES = [
+    { key: 'ceo', label: 'CEO', fullLabel: 'Chief Executive Officer' },
+    { key: 'cto', label: 'CTO', fullLabel: 'Chief Technology Officer' },
+    { key: 'coo', label: 'COO', fullLabel: 'Chief Operating Officer' },
+    { key: 'cfo', label: 'CFO', fullLabel: 'Chief Financial Officer' },
+  ];
 
   const generateWebsite = async () => {
     setIsGenerating(true);
