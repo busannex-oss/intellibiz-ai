@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from 'react-router-dom';
@@ -11,7 +11,6 @@ import {
   Globe2,
   Megaphone,
   Headphones,
-  Mail,
   ChevronRight,
   Rocket,
   Zap,
@@ -19,15 +18,13 @@ import {
   ArrowRight,
   Radar,
   Target,
-  Facebook,
-  Twitter,
-  Instagram,
-  Linkedin,
-  Youtube,
-  Loader2 } from
-'lucide-react';
+  Loader2,
+  Upload,
+  Sparkles,
+  ImageIcon
+} from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Sparkles } from 'lucide-react';
+import { toast } from 'sonner';
 
 const features = [
 {
