@@ -32,12 +32,28 @@ export default function TasksPage() {
 
   const { mutate: deleteTask } = useMutation({
     mutationFn: (taskId) => base44.entities.Task.delete(taskId),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks'] })
+    onMutate: async (taskId) => {
+      await queryClient.cancelQueries({ queryKey: ['tasks'] });
+      const prev = queryClient.getQueryData(['tasks']);
+      queryClient.setQueryData(['tasks'], (old = []) => old.filter(t => t.id !== taskId));
+      return { prev };
+    },
+    onError: (_err, _id, ctx) => queryClient.setQueryData(['tasks'], ctx.prev),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['tasks'] })
   });
 
   const { mutate: updateTaskStatus } = useMutation({
     mutationFn: ({ taskId, status }) => base44.entities.Task.update(taskId, { status }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['tasks'] })
+    onMutate: async ({ taskId, status }) => {
+      await queryClient.cancelQueries({ queryKey: ['tasks'] });
+      const prev = queryClient.getQueryData(['tasks']);
+      queryClient.setQueryData(['tasks'], (old = []) =>
+        old.map(t => t.id === taskId ? { ...t, status } : t)
+      );
+      return { prev };
+    },
+    onError: (_err, _vars, ctx) => queryClient.setQueryData(['tasks'], ctx.prev),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['tasks'] })
   });
 
   const handleFormSave = () => {
