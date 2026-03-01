@@ -273,36 +273,80 @@ Generate a COMPLETE, DETAILED business plan that would impress any investor or b
       )}
 
       {!businessPlan ? (
-        <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm">
-          <CardContent className="p-8 text-center space-y-6">
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-violet-100 to-indigo-100 mx-auto flex items-center justify-center">
-              <Sparkles className="w-10 h-10 text-violet-600" />
-            </div>
-            <div>
-              <h3 className="text-xl font-semibold text-slate-800 mb-2">Ready to Create Your Strategic Plan</h3>
-              <p className="text-slate-500 max-w-lg mx-auto">
-                Our AI will use your market research data to create a business plan specifically designed to outperform your competitors.
-              </p>
-            </div>
+        <div className="space-y-6">
+          {/* Business Plan Outline based on entered info */}
+          <Card className="border border-slate-200 shadow-sm bg-white">
+            <CardHeader className="border-b border-slate-100 pb-4">
+              <CardTitle className="text-lg text-slate-800 flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-violet-500" />
+                Business Plan Outline — {project?.business_name || 'Your Business'}
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-6 space-y-5">
+              {/* Business Info Summary */}
+              <div className="grid md:grid-cols-2 gap-4">
+                {project?.industry && (
+                  <div className="bg-slate-50 rounded-xl p-4">
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Industry</p>
+                    <p className="text-slate-800 font-medium">{project.industry}</p>
+                  </div>
+                )}
+                {project?.target_audience && (
+                  <div className="bg-slate-50 rounded-xl p-4">
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Target Audience</p>
+                    <p className="text-slate-800 font-medium">{project.target_audience}</p>
+                  </div>
+                )}
+                {project?.location && (
+                  <div className="bg-slate-50 rounded-xl p-4">
+                    <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Market / Location</p>
+                    <p className="text-slate-800 font-medium">{project.location}</p>
+                  </div>
+                )}
+                {project?.unique_value_proposition && (
+                  <div className="bg-violet-50 rounded-xl p-4 md:col-span-2">
+                    <p className="text-xs font-semibold text-violet-400 uppercase tracking-wider mb-1">Unique Value Proposition</p>
+                    <p className="text-slate-800">{project.unique_value_proposition}</p>
+                  </div>
+                )}
+              </div>
+
+              {project?.description && (
+                <div className="bg-slate-50 rounded-xl p-4">
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Business Description</p>
+                  <p className="text-slate-700">{project.description}</p>
+                </div>
+              )}
+
+              {/* Plan Sections Outline */}
+              <div>
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3">Plan Will Include</p>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                  {['Executive Summary', 'Market Analysis', 'Competitive Analysis', 'Products & Services', 'Marketing Strategy', 'Operations Plan', '30-Year Financials', 'Risk Analysis', 'Implementation Timeline'].map((section) => (
+                    <div key={section} className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 py-2">
+                      <div className="w-2 h-2 rounded-full bg-violet-400 flex-shrink-0" />
+                      <span className="text-xs text-slate-700 font-medium">{section}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="text-center">
             <Button
               onClick={generateBusinessPlan}
               disabled={isGenerating}
-              className="h-14 px-8 text-lg bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 shadow-lg shadow-violet-200"
+              className="h-14 px-10 text-lg bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 shadow-lg"
             >
               {isGenerating ? (
-                <>
-                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                  Creating Strategic Plan...
-                </>
+                <><Loader2 className="w-5 h-5 mr-2 animate-spin" />Creating Your Business Plan...</>
               ) : (
-                <>
-                  <Sparkles className="w-5 h-5 mr-2" />
-                  Generate Competition-Beating Plan
-                </>
+                <><Sparkles className="w-5 h-5 mr-2" />Generate Full Business Plan</>
               )}
             </Button>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       ) : (
         <div className="space-y-6">
           <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden">
