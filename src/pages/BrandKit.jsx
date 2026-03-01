@@ -150,22 +150,22 @@ export default function BrandKit() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-4">
             <Link to={createPageUrl(`CreateBusiness?projectId=${projectId}`)}>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="text-slate-400 hover:text-white">
                 <ArrowLeft className="w-5 h-5" />
               </Button>
             </Link>
             <div>
-              <h1 className="text-3xl font-bold text-slate-900 flex items-center gap-2">
-                <Palette className="w-8 h-8 text-violet-600" />
+              <h1 className="text-3xl font-bold text-white flex items-center gap-2">
+                <Palette className="w-8 h-8 text-amber-400" />
                 Brand Kit
               </h1>
-              <p className="text-slate-500">{project?.business_name}</p>
+              <p className="text-slate-400">{project?.business_name}</p>
             </div>
           </div>
 
