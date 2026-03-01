@@ -287,7 +287,7 @@ export default function Dashboard() {
             <Button 
               variant="outline" 
               onClick={() => setShowWelcomeTour(true)}
-              className="border-slate-700 text-white hover:bg-slate-800"
+              className="border-slate-700 bg-transparent text-white hover:bg-slate-800"
             >
               <Sparkles className="w-4 h-4 mr-2" />
               View Tour
