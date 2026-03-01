@@ -231,7 +231,7 @@ export default function BrandKit() {
         </div>
 
         <Tabs defaultValue="assets" className="space-y-6">
-          <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-3">
+          <TabsList className="grid w-full max-w-2xl mx-auto grid-cols-3 bg-slate-800 border-slate-700">
             <TabsTrigger value="assets">
               <FileImage className="w-4 h-4 mr-2" />
               Assets
