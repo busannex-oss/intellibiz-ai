@@ -391,19 +391,18 @@ export default function AdminDashboard() {
                             Reset Password
                           </Button>
                         </DialogTrigger>
-                        <DialogContent className="bg-slate-800 border-slate-700">
+                        <DialogContent>
                           <DialogHeader>
-                            <DialogTitle className="text-white">Reset User Password</DialogTitle>
+                            <DialogTitle>Reset User Password</DialogTitle>
                           </DialogHeader>
                           <div className="space-y-4">
                             <div>
-                              <Label className="text-white">User Email</Label>
+                              <Label>User Email</Label>
                               <Input
                                 type="email"
                                 value={resetPasswordEmail}
                                 onChange={(e) => setResetPasswordEmail(e.target.value)}
                                 placeholder="user@example.com"
-                                className="bg-slate-900 border-slate-700 text-white"
                               />
                             </div>
                             <Button 
