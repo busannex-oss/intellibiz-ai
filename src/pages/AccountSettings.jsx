@@ -6,12 +6,14 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { User, Building, MapPin, Phone, Mail, Globe, Save, Loader2 } from 'lucide-react';
+import { User, Building, Phone, Globe, Save, Loader2, Trash2, AlertTriangle } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AccountSettings() {
   const queryClient = useQueryClient();
   const [isSaving, setIsSaving] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState('');
+  const [showDeleteSection, setShowDeleteSection] = useState(false);
   
   const { data: user, isLoading } = useQuery({
     queryKey: ['currentUser'],
