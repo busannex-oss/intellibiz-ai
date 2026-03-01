@@ -423,30 +423,30 @@ export default function AdminDashboard() {
               <CardContent>
                 <div className="space-y-4">
                   {users.map(user => (
-                    <div key={user.id} className="p-4 bg-slate-700/30 rounded-lg">
+                    <div key={user.id} className="p-4 bg-slate-50 rounded-xl border border-slate-100">
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-2">
-                            <h3 className="text-white font-semibold">{user.full_name || 'No Name'}</h3>
+                          <div className="flex items-center gap-3 mb-1">
+                            <h3 className="text-slate-900 font-semibold">{user.full_name || 'No Name'}</h3>
                             <Badge className={
-                              user.role === 'super_admin' ? 'bg-purple-500/20 text-purple-400 border-purple-500/30' :
-                              user.role === 'admin' ? 'bg-blue-500/20 text-blue-400 border-blue-500/30' :
-                              'bg-slate-500/20 text-slate-400 border-slate-500/30'
+                              user.role === 'super_admin' ? 'bg-purple-100 text-purple-700' :
+                              user.role === 'admin' ? 'bg-blue-100 text-blue-700' :
+                              'bg-slate-100 text-slate-600'
                             }>
                               {user.role}
                             </Badge>
                             {user.is_active === false && (
-                              <Badge className="bg-red-500/20 text-red-400 border-red-500/30">Inactive</Badge>
+                              <Badge className="bg-red-100 text-red-700">Inactive</Badge>
                             )}
                             {user.id === currentUser?.id && (
-                              <Badge className="bg-emerald-500/20 text-emerald-400">You</Badge>
+                              <Badge className="bg-emerald-100 text-emerald-700">You</Badge>
                             )}
                           </div>
-                          <p className="text-sm text-slate-400 mb-3">{user.email}</p>
+                          <p className="text-sm text-slate-500 mb-3">{user.email}</p>
                           
                           {user.role !== 'super_admin' && isSuperAdmin && (
                             <div className="space-y-2">
-                              <p className="text-xs text-slate-500 font-medium">Permissions:</p>
+                              <p className="text-xs text-slate-400 font-medium uppercase tracking-wide">Permissions:</p>
                               <div className="flex flex-wrap gap-3">
                                 {['manage_users', 'manage_projects', 'manage_settings', 'view_analytics', 'manage_billing'].map(perm => (
                                   <div key={perm} className="flex items-center gap-2">
@@ -455,7 +455,7 @@ export default function AdminDashboard() {
                                       onCheckedChange={() => handleTogglePermission(user, perm)}
                                       disabled={user.role === 'super_admin'}
                                     />
-                                    <span className="text-xs text-slate-400 capitalize">{perm.replace(/_/g, ' ')}</span>
+                                    <span className="text-xs text-slate-600 capitalize">{perm.replace(/_/g, ' ')}</span>
                                   </div>
                                 ))}
                               </div>
@@ -467,21 +467,16 @@ export default function AdminDashboard() {
                           {isSuperAdmin && user.role !== 'super_admin' && (
                             <>
                               <Select value={user.role} onValueChange={(val) => handleChangeRole(user, val)}>
-                                <SelectTrigger className="w-32 bg-slate-900 border-slate-600 text-white text-xs">
+                                <SelectTrigger className="w-32 text-xs">
                                   <SelectValue />
                                 </SelectTrigger>
-                                <SelectContent className="bg-slate-800 border-slate-700">
+                                <SelectContent>
                                   <SelectItem value="user">User</SelectItem>
                                   <SelectItem value="admin">Admin</SelectItem>
                                   <SelectItem value="super_admin">Super Admin</SelectItem>
                                 </SelectContent>
                               </Select>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => handleToggleActive(user)}
-                                className="border-slate-600 text-white"
-                              >
+                              <Button size="sm" variant="outline" onClick={() => handleToggleActive(user)}>
                                 {user.is_active === false ? 'Activate' : 'Deactivate'}
                               </Button>
                               <Button
@@ -491,7 +486,6 @@ export default function AdminDashboard() {
                                   setResetPasswordEmail(user.email);
                                   setShowResetDialog(true);
                                 }}
-                                className="border-slate-600 text-white"
                               >
                                 <Key className="w-4 h-4" />
                               </Button>
@@ -499,14 +493,14 @@ export default function AdminDashboard() {
                                 size="sm"
                                 variant="ghost"
                                 onClick={() => handleDeleteUser(user)}
-                                className="text-red-400 hover:text-red-300 hover:bg-red-500/10"
+                                className="text-red-500 hover:bg-red-50"
                               >
                                 <Trash2 className="w-4 h-4" />
                               </Button>
                             </>
                           )}
                           {user.role === 'super_admin' && (
-                            <Badge className="bg-purple-500/20 text-purple-400">Protected</Badge>
+                            <Badge className="bg-purple-100 text-purple-700">Protected</Badge>
                           )}
                         </div>
                       </div>
