@@ -69,72 +69,74 @@ export default function Home() {
   const [heroImage, setHeroImage] = useState('https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=900&q=80&auto=format&fit=crop');
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [currentProject, setCurrentProject] = useState(null);
+  const [showImagePanel, setShowImagePanel] = useState(false);
+  const [aiPrompt, setAiPrompt] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef(null);
 
   React.useEffect(() => {
     const loadHeroImage = async () => {
       try {
         const user = await base44.auth.me();
-        if (!user) {
-          setIsLoggedIn(false);
-          return;
-        }
+        if (!user) { setIsLoggedIn(false); return; }
         setIsLoggedIn(true);
-
-        const projects = await base44.entities.BusinessProject.filter({
-          created_by: user.email
-        });
-
+        const projects = await base44.entities.BusinessProject.filter({ created_by: user.email });
         const project = projects?.[0];
-        if (project?.logo_url) {
-          setHeroImage(project.logo_url);
+        setCurrentProject(project);
+        if (project?.website_content?.hero_image_url) {
+          setHeroImage(project.website_content.hero_image_url);
         }
       } catch (error) {
         setIsLoggedIn(false);
       }
     };
-
     loadHeroImage();
   }, []);
 
-  const generateTargetedHeroImage = async () => {
+  const saveHeroImage = async (url) => {
+    if (!currentProject) return;
+    await base44.entities.BusinessProject.update(currentProject.id, {
+      website_content: { ...(currentProject.website_content || {}), hero_image_url: url }
+    });
+    setCurrentProject(prev => ({
+      ...prev,
+      website_content: { ...(prev?.website_content || {}), hero_image_url: url }
+    }));
+  };
+
+  const generateHeroImage = async () => {
+    const prompt = aiPrompt.trim() || `Professional hero image for a business landing page. Modern, high quality, warm and inviting atmosphere, diverse entrepreneur, laptop or tablet in hand, confident and empowered.`;
     setIsGeneratingImage(true);
     try {
-      const user = await base44.auth.me();
-      if (!user) return;
-
-      const projects = await base44.entities.BusinessProject.filter({
-        created_by: user.email
-      });
-
-      const project = projects?.[0];
-      if (!project) return;
-
-      const prompt = `Create a professional, modern hero image for a financial education platform landing page featuring:
-      - A woman aged 30-40 with diverse background (could be African American, Latina, Asian, or Middle Eastern)
-      - Casual professional attire, in a modern home office or warm coffee shop setting
-      - Appears confident, thoughtful, and hopeful about her financial future
-      - May be holding a laptop, tablet, or notebook
-      - Warm, accessible, empowering setting - not corporate or intimidating
-      - Modern, minimalist aesthetic with warm, inviting lighting
-      - Convey: financial empowerment, dignity, hope, entrepreneurship, accessible financial education
-      - Shows someone who has overcome financial struggles and is building wealth
-      - Professional quality, high conversion potential for underserved financial education demographic`;
-
-      const response = await base44.integrations.Core.GenerateImage({
-        prompt
-      });
-
+      const response = await base44.integrations.Core.GenerateImage({ prompt });
       if (response?.url) {
         setHeroImage(response.url);
-        // Save to project
-        await base44.entities.BusinessProject.update(project.id, {
-          logo_url: response.url
-        });
+        await saveHeroImage(response.url);
+        toast.success('Hero image generated!');
+        setShowImagePanel(false);
       }
     } catch (error) {
-      console.error('Failed to generate hero image:', error);
+      toast.error('Failed to generate image');
     } finally {
       setIsGeneratingImage(false);
+    }
+  };
+
+  const handleUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setIsUploading(true);
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      setHeroImage(file_url);
+      await saveHeroImage(file_url);
+      toast.success('Image uploaded!');
+      setShowImagePanel(false);
+    } catch (error) {
+      toast.error('Failed to upload image');
+    } finally {
+      setIsUploading(false);
     }
   };
 
