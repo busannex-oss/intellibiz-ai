@@ -431,20 +431,24 @@ The video should be engaging, highlight key benefits, and end with a strong call
               <div className="p-12 md:p-16 bg-white">
                 <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-8 text-center">Why Choose Us</h2>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
-                  {website.features?.map((feature, i) => (
-                    <div key={i} className="flex gap-4">
-                      <div 
-                        className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-white text-sm font-bold"
-                        style={{ backgroundColor: colors.accent }}
-                      >
-                        ✓
+                  {website.features?.map((feature, i) => {
+                    const featureIcons = [CheckCircle2, Heart, TrendingUp, Users, Clock, MessageSquare, Phone, Mail, BarChart3, Headphones, Palette, Shield];
+                    const FIcon = featureIcons[i % featureIcons.length];
+                    return (
+                      <div key={i} className="flex gap-4 p-5 rounded-xl bg-slate-50 hover:bg-white hover:shadow-sm transition-all border border-transparent hover:border-slate-200">
+                        <div 
+                          className="w-10 h-10 rounded-xl flex-shrink-0 flex items-center justify-center shadow-sm"
+                          style={{ background: `linear-gradient(135deg, ${colors.accent}, ${colors.primary})` }}
+                        >
+                          <FIcon className="w-5 h-5 text-white" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-slate-800 mb-1">{feature.title}</h3>
+                          <p className="text-sm text-slate-600">{feature.description}</p>
+                        </div>
                       </div>
-                      <div>
-                        <h3 className="font-semibold text-slate-800 mb-1">{feature.title}</h3>
-                        <p className="text-sm text-slate-600">{feature.description}</p>
-                      </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 
