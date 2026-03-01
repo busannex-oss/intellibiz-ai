@@ -270,12 +270,12 @@ export default function BrandKit() {
                               <img src={asset.file_url} alt={asset.name} className="max-w-full max-h-full object-contain" />
                             </div>
                           )}
-                          <p className="font-medium text-sm text-slate-800 truncate">{asset.name}</p>
+                          <p className="font-medium text-sm text-white truncate">{asset.name}</p>
                           {asset.file_format && (
-                            <Badge variant="secondary" className="mt-1 text-xs">{asset.file_format.toUpperCase()}</Badge>
+                           <Badge className="mt-1 text-xs bg-slate-700 text-slate-300">{asset.file_format.toUpperCase()}</Badge>
                           )}
                           {asset.description && (
-                            <p className="text-xs text-slate-500 mt-2 line-clamp-2">{asset.description}</p>
+                           <p className="text-xs text-slate-400 mt-2 line-clamp-2">{asset.description}</p>
                           )}
                           <div className="flex gap-1 mt-3">
                             <a href={asset.file_url} download target="_blank" rel="noopener noreferrer">
