@@ -400,18 +400,30 @@ The video should be engaging, highlight key benefits, and end with a strong call
               <div className="p-12 md:p-16 bg-slate-50">
                 <h2 className="text-2xl md:text-3xl font-bold text-slate-800 mb-8 text-center">Our Services</h2>
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {website.services?.map((service, i) => (
-                    <div key={i} className="bg-white rounded-xl p-6 shadow-sm">
-                      <div 
-                        className="w-12 h-12 rounded-lg mb-4 flex items-center justify-center text-white text-xl"
-                        style={{ backgroundColor: colors.primary }}
-                      >
-                        {service.icon || '✨'}
+                  {website.services?.map((service, i) => {
+                    const serviceIcons = [
+                      <Star className="w-6 h-6 text-white" />,
+                      <Zap className="w-6 h-6 text-white" />,
+                      <Shield className="w-6 h-6 text-white" />,
+                      <Globe2 className="w-6 h-6 text-white" />,
+                      <Rocket className="w-6 h-6 text-white" />,
+                      <Award className="w-6 h-6 text-white" />,
+                      <Lightbulb className="w-6 h-6 text-white" />,
+                      <Target className="w-6 h-6 text-white" />,
+                    ];
+                    return (
+                      <div key={i} className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                        <div 
+                          className="w-14 h-14 rounded-2xl mb-4 flex items-center justify-center shadow-lg"
+                          style={{ background: `linear-gradient(135deg, ${colors.primary}, ${colors.secondary})` }}
+                        >
+                          {serviceIcons[i % serviceIcons.length]}
+                        </div>
+                        <h3 className="font-semibold text-slate-800 mb-2">{service.title}</h3>
+                        <p className="text-sm text-slate-600">{service.description}</p>
                       </div>
-                      <h3 className="font-semibold text-slate-800 mb-2">{service.title}</h3>
-                      <p className="text-sm text-slate-600">{service.description}</p>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 
