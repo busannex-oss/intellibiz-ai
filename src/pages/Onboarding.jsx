@@ -35,32 +35,44 @@ export default function Onboarding() {
   const [loadingSuggestions, setLoadingSuggestions] = useState(false);
   const [answeringQuestion, setAnsweringQuestion] = useState(false);
 
-  const projectTypes = {
-    full_business: { 
-      label: 'Complete Business Setup',
-      desc: 'Market research, branding, website, financials',
+  const businessSteps = [
+    {
+      step: 1,
+      label: 'Research & Business Plan',
+      desc: 'Research your industry and create your business plan — the foundation of everything.',
       icon: TrendingUp,
-      features: ['Market Research', 'Business Plan', 'Logo & Branding', 'Website', 'Financial Planning']
+      features: ['Market Research', 'Competitor Analysis', 'Business Plan', 'Financial Projections'],
+      color: 'text-violet-600',
+      bg: 'bg-violet-100'
     },
-    brand_identity: {
-      label: 'Brand Identity Only',
-      desc: 'Logo, colors, brand guidelines',
+    {
+      step: 2,
+      label: 'Brand Identity',
+      desc: 'Establish your brand — create your logo and style guide to stand out.',
       icon: Palette,
-      features: ['Logo Design', 'Brand Colors', 'Brand Kit', 'Style Guide']
+      features: ['Logo Design', 'Brand Colors', 'Style Guide', 'Brand Kit'],
+      color: 'text-pink-600',
+      bg: 'bg-pink-100'
     },
-    website_launch: {
-      label: 'Website Launch',
-      desc: 'Professional website with content',
+    {
+      step: 3,
+      label: 'Online Presence',
+      desc: 'Build your website, social media assets, and omnichannel communication.',
       icon: Globe,
-      features: ['Website Design', 'Content Generation', 'SEO Strategy', 'Social Assets']
+      features: ['Website Design', 'Social Media Assets', 'Omnichannel Setup', 'SEO Strategy'],
+      color: 'text-blue-600',
+      bg: 'bg-blue-100'
     },
-    financial_planning: {
-      label: 'Financial Analysis',
-      desc: 'Projections, P&L, cash flow',
+    {
+      step: 4,
+      label: 'Growth & Marketing',
+      desc: 'Launch newsletters, ads, and track performance to grow your business.',
       icon: DollarSign,
-      features: ['Financial Forecasts', 'P&L Statements', 'Cash Flow', 'ROI Analysis']
+      features: ['Newsletter Campaigns', 'Advertising', 'Analytics', 'Performance Reports'],
+      color: 'text-emerald-600',
+      bg: 'bg-emerald-100'
     }
-  };
+  ];
 
   const createProjectMutation = useMutation({
     mutationFn: async (data) => {
