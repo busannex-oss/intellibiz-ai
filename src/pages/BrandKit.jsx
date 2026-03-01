@@ -338,7 +338,7 @@ export default function BrandKit() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Brand Story</Label>
+                  <Label className="text-slate-300">Brand Story</Label>
                   <Textarea
                     placeholder="Tell the story of your brand, its origins, mission, and purpose..."
                     value={project?.brand_personality?.brand_story || ''}
