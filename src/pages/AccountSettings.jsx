@@ -37,13 +37,20 @@ export default function AccountSettings() {
     mutationFn: async (data) => {
       return base44.auth.updateMe(data);
     },
+    onMutate: async (data) => {
+      await queryClient.cancelQueries({ queryKey: ['currentUser'] });
+      const prev = queryClient.getQueryData(['currentUser']);
+      queryClient.setQueryData(['currentUser'], (old) => ({ ...old, ...data }));
+      return { prev };
+    },
     onSuccess: () => {
       toast.success('Account information updated successfully');
-      queryClient.invalidateQueries(['currentUser']);
     },
-    onError: (error) => {
+    onError: (error, _vars, ctx) => {
+      queryClient.setQueryData(['currentUser'], ctx?.prev);
       toast.error('Failed to update account: ' + error.message);
-    }
+    },
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['currentUser'] })
   });
 
   const handleSave = async () => {
