@@ -199,11 +199,11 @@ export default function Home() {
                transition={{ duration: 0.7, delay: 0.2 }}
                className="relative">
                <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-amber-500/10 border border-slate-700/50">
-                 {isGeneratingImage && (
-                   <div className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-10 rounded-2xl">
+                 {(isGeneratingImage || isUploading) && (
+                   <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-10 rounded-2xl">
                      <div className="flex flex-col items-center gap-3">
                        <Loader2 className="w-8 h-8 animate-spin text-amber-400" />
-                       <p className="text-white text-sm">Optimizing for US market...</p>
+                       <p className="text-white text-sm">{isUploading ? 'Uploading...' : 'Generating image...'}</p>
                      </div>
                    </div>
                  )}
@@ -214,7 +214,7 @@ export default function Home() {
                  />
                 {/* Overlay gradient */}
                 <div className="absolute inset-0 bg-gradient-to-tr from-slate-900/60 via-transparent to-amber-500/10" />
-                {/* Floating badge with optimize button */}
+                {/* Floating badge */}
                 <div className="absolute bottom-6 left-6 right-6 space-y-3">
                   <div className="bg-slate-900/80 backdrop-blur-md rounded-xl p-4 border border-slate-700/50 flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center flex-shrink-0">
@@ -227,26 +227,55 @@ export default function Home() {
                   </div>
                   {isLoggedIn && (
                     <Button
-                      onClick={generateTargetedHeroImage}
-                      disabled={isGeneratingImage}
+                      onClick={() => setShowImagePanel(v => !v)}
                       size="sm"
-                      className="w-full bg-amber-600 hover:bg-amber-700 text-white text-xs"
+                      className="w-full bg-slate-800/90 hover:bg-slate-700 text-white text-xs border border-slate-600"
                     >
-                      {isGeneratingImage ? (
-                        <>
-                          <Loader2 className="w-3 h-3 mr-1 animate-spin" />
-                          Generating...
-                        </>
-                      ) : (
-                        <>
-                          <Sparkles className="w-3 h-3 mr-1" />
-                          Generate Hero Image
-                        </>
-                      )}
+                      <ImageIcon className="w-3 h-3 mr-1" />
+                      Change Hero Image
                     </Button>
                   )}
                 </div>
               </div>
+
+              {/* Image Panel */}
+              {showImagePanel && isLoggedIn && (
+                <div className="mt-3 rounded-xl bg-slate-800/90 border border-slate-700 p-4 space-y-3">
+                  <p className="text-white text-sm font-semibold">Hero Image</p>
+                  {/* AI Generate */}
+                  <div className="space-y-2">
+                    <textarea
+                      value={aiPrompt}
+                      onChange={e => setAiPrompt(e.target.value)}
+                      placeholder="Describe the image you want (or leave blank for auto-generate)..."
+                      className="w-full px-3 py-2 bg-slate-900 border border-slate-600 rounded-lg text-white text-xs placeholder-slate-500 resize-none h-16 focus:outline-none focus:border-amber-500"
+                    />
+                    <Button
+                      onClick={generateHeroImage}
+                      disabled={isGeneratingImage}
+                      size="sm"
+                      className="w-full bg-amber-600 hover:bg-amber-700 text-white text-xs"
+                    >
+                      {isGeneratingImage ? <><Loader2 className="w-3 h-3 mr-1 animate-spin" />Generating...</> : <><Sparkles className="w-3 h-3 mr-1" />Generate with AI</>}
+                    </Button>
+                  </div>
+                  <div className="flex items-center gap-2 text-slate-500 text-xs">
+                    <div className="flex-1 h-px bg-slate-700" />or<div className="flex-1 h-px bg-slate-700" />
+                  </div>
+                  {/* Upload */}
+                  <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleUpload} />
+                  <Button
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isUploading}
+                    size="sm"
+                    variant="outline"
+                    className="w-full border-slate-600 text-slate-300 hover:bg-slate-700 text-xs"
+                  >
+                    {isUploading ? <><Loader2 className="w-3 h-3 mr-1 animate-spin" />Uploading...</> : <><Upload className="w-3 h-3 mr-1" />Upload My Own Image</>}
+                  </Button>
+                </div>
+              )}
+
               {/* Decorative glow */}
               <div className="absolute -inset-4 bg-gradient-to-br from-amber-500/10 to-orange-500/5 rounded-3xl blur-2xl -z-10" />
             </motion.div>
