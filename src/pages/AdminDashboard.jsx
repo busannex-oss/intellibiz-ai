@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { base44 } from '@/api/base44Client';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -6,11 +6,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
+import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Shield, Users, Trash2, UserPlus, Settings, Activity, AlertTriangle, Key, Mail, Globe, Save } from 'lucide-react';
+import { Shield, Users, Trash2, UserPlus, Settings, Activity, AlertTriangle, Key, Mail, Globe, Save, Palette, Image, Navigation, Lock, Search, Loader2, Upload, Sparkles } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AdminDashboard() {
@@ -20,18 +21,23 @@ export default function AdminDashboard() {
   const [resetPasswordEmail, setResetPasswordEmail] = useState('');
   const [showResetDialog, setShowResetDialog] = useState(false);
   const queryClient = useQueryClient();
+  const fileInputRef = useRef(null);
+  const [isGeneratingHero, setIsGeneratingHero] = useState(false);
+  const [isUploadingHero, setIsUploadingHero] = useState(false);
+  const [heroPrompt, setHeroPrompt] = useState('');
 
   // App Settings State
-  const [socialMedia, setSocialMedia] = useState({
-    facebook: '',
-    twitter: '',
-    instagram: '',
-    linkedin: '',
-    youtube: '',
-    tiktok: ''
-  });
+  const [siteName, setSiteName] = useState('BrandForge');
+  const [siteTagline, setSiteTagline] = useState('');
+  const [logoUrl, setLogoUrl] = useState('');
+  const [colorTheme, setColorTheme] = useState('amber');
+  const [socialMedia, setSocialMedia] = useState({ facebook: '', twitter: '', instagram: '', linkedin: '', youtube: '', tiktok: '' });
   const [copyrightText, setCopyrightText] = useState('');
+  const [footerTagline, setFooterTagline] = useState('');
   const [showSocialIcons, setShowSocialIcons] = useState(true);
+  const [hero, setHero] = useState({ headline: '', subheadline: '', cta_primary_text: '', cta_primary_link: '', cta_secondary_text: '', cta_secondary_link: '', image_url: '', badge_text: '' });
+  const [permissions, setPermissions] = useState({ allow_user_signup: true, allow_project_creation: true, allow_white_label: true, allow_knowledge_base: true, allow_phone_system: true, allow_analytics: true, max_projects_per_user: 10 });
+  const [seo, setSeo] = useState({ meta_title: '', meta_description: '', og_image_url: '' });
 
   // Fetch current user
   useQuery({
@@ -43,183 +49,128 @@ export default function AdminDashboard() {
     }
   });
 
-  // Fetch all users
   const { data: users = [], isLoading } = useQuery({
     queryKey: ['allUsers'],
     queryFn: () => base44.entities.User.list('-created_date')
   });
 
-  // Fetch App Settings
   const { data: appSettings } = useQuery({
     queryKey: ['appSettings'],
     queryFn: async () => {
       const settings = await base44.entities.AppSettings.list();
       if (settings && settings.length > 0) {
         const s = settings[0];
+        setSiteName(s.site_name || 'BrandForge');
+        setSiteTagline(s.site_tagline || '');
+        setLogoUrl(s.logo_url || '');
+        setColorTheme(s.color_theme || 'amber');
         setSocialMedia(s.social_media || {});
         setCopyrightText(s.footer_content?.copyright_text || '');
+        setFooterTagline(s.footer_content?.footer_tagline || '');
         setShowSocialIcons(s.footer_content?.show_social_icons !== false);
+        setHero(s.hero || {});
+        setPermissions(s.permissions || { allow_user_signup: true, allow_project_creation: true, allow_white_label: true, allow_knowledge_base: true, allow_phone_system: true, allow_analytics: true, max_projects_per_user: 10 });
+        setSeo(s.seo || {});
         return s;
       }
       return null;
     },
   });
 
-  // Check if current user is super admin - check both top-level role and data.role
   const isSuperAdmin = currentUser?.role === 'super_admin' || currentUser?.data?.role === 'super_admin';
   const isAdmin = currentUser?.role === 'admin' || currentUser?.data?.role === 'admin' || isSuperAdmin;
 
-  // Invite user mutation
   const inviteUserMutation = useMutation({
-    mutationFn: async () => {
-      await base44.users.inviteUser(newUserEmail, newUserRole);
-    },
-    onSuccess: () => {
-      toast.success('User invited successfully');
-      setNewUserEmail('');
-      setNewUserRole('user');
-      queryClient.invalidateQueries(['allUsers']);
-    },
-    onError: (error) => {
-      toast.error('Failed to invite user: ' + error.message);
-    }
+    mutationFn: async () => { await base44.users.inviteUser(newUserEmail, newUserRole); },
+    onSuccess: () => { toast.success('User invited successfully'); setNewUserEmail(''); setNewUserRole('user'); queryClient.invalidateQueries(['allUsers']); },
+    onError: (error) => { toast.error('Failed to invite user: ' + error.message); }
   });
 
-  // Update user mutation
   const updateUserMutation = useMutation({
-    mutationFn: async ({ userId, updates }) => {
-      return base44.entities.User.update(userId, updates);
-    },
-    onSuccess: () => {
-      toast.success('User updated successfully');
-      queryClient.invalidateQueries(['allUsers']);
-    },
-    onError: (error) => {
-      toast.error('Failed to update user: ' + error.message);
-    }
+    mutationFn: async ({ userId, updates }) => base44.entities.User.update(userId, updates),
+    onSuccess: () => { toast.success('User updated'); queryClient.invalidateQueries(['allUsers']); },
+    onError: (error) => { toast.error('Failed to update user: ' + error.message); }
   });
 
-  // Delete user mutation
   const deleteUserMutation = useMutation({
-    mutationFn: async (userId) => {
-      return base44.entities.User.delete(userId);
-    },
-    onSuccess: () => {
-      toast.success('User deleted successfully');
-      queryClient.invalidateQueries(['allUsers']);
-    },
-    onError: (error) => {
-      toast.error('Failed to delete user: ' + error.message);
-    }
+    mutationFn: async (userId) => base44.entities.User.delete(userId),
+    onSuccess: () => { toast.success('User deleted'); queryClient.invalidateQueries(['allUsers']); },
+    onError: (error) => { toast.error('Failed to delete user: ' + error.message); }
   });
 
-  // Save App Settings Mutation
   const saveSettingsMutation = useMutation({
-    mutationFn: async (settingsData) => {
-      if (appSettings?.id) {
-        return await base44.entities.AppSettings.update(appSettings.id, settingsData);
-      } else {
-        return await base44.entities.AppSettings.create(settingsData);
-      }
+    mutationFn: async (data) => {
+      if (appSettings?.id) return await base44.entities.AppSettings.update(appSettings.id, data);
+      return await base44.entities.AppSettings.create(data);
     },
-    onSuccess: () => {
-      toast.success("Settings saved successfully");
-      queryClient.invalidateQueries({ queryKey: ['appSettings'] });
-    },
-    onError: (error) => {
-      toast.error(`Failed to save settings: ${error.message}`);
-    },
+    onSuccess: () => { toast.success('Settings saved'); queryClient.invalidateQueries({ queryKey: ['appSettings'] }); },
+    onError: (error) => { toast.error('Failed to save: ' + error.message); },
   });
 
   const handleSaveSettings = () => {
     saveSettingsMutation.mutate({
+      site_name: siteName,
+      site_tagline: siteTagline,
+      logo_url: logoUrl,
+      color_theme: colorTheme,
+      hero,
       social_media: socialMedia,
-      footer_content: {
-        copyright_text: copyrightText,
-        show_social_icons: showSocialIcons
-      }
+      footer_content: { copyright_text: copyrightText, show_social_icons: showSocialIcons, footer_tagline: footerTagline },
+      permissions,
+      seo,
     });
   };
 
+  const handleGenerateHeroImage = async () => {
+    const prompt = heroPrompt.trim() || 'Professional hero image for a business landing page. Modern, warm, diverse entrepreneur with laptop, confident and empowered.';
+    setIsGeneratingHero(true);
+    const response = await base44.integrations.Core.GenerateImage({ prompt });
+    if (response?.url) { setHero(prev => ({ ...prev, image_url: response.url })); toast.success('Hero image generated!'); }
+    setIsGeneratingHero(false);
+  };
+
+  const handleUploadHero = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setIsUploadingHero(true);
+    const { file_url } = await base44.integrations.Core.UploadFile({ file });
+    setHero(prev => ({ ...prev, image_url: file_url }));
+    toast.success('Hero image uploaded!');
+    setIsUploadingHero(false);
+  };
+
   const handleInviteUser = () => {
-    if (!newUserEmail) {
-      toast.error('Please enter an email address');
-      return;
-    }
+    if (!newUserEmail) { toast.error('Please enter an email address'); return; }
     inviteUserMutation.mutate();
   };
 
   const handleTogglePermission = (user, permission) => {
-    if (user.role === 'super_admin') {
-      toast.error('Cannot modify super admin permissions');
-      return;
-    }
-    
-    const updatedPermissions = {
-      ...user.permissions,
-      [permission]: !user.permissions?.[permission]
-    };
-    
-    updateUserMutation.mutate({
-      userId: user.id,
-      updates: { permissions: updatedPermissions }
-    });
+    if (user.role === 'super_admin') { toast.error('Cannot modify super admin permissions'); return; }
+    updateUserMutation.mutate({ userId: user.id, updates: { permissions: { ...user.permissions, [permission]: !user.permissions?.[permission] } } });
   };
 
   const handleChangeRole = (user, newRole) => {
-    if (user.role === 'super_admin') {
-      toast.error('Cannot change super admin role');
-      return;
-    }
-    
-    if (!isSuperAdmin) {
-      toast.error('Only super admins can change user roles');
-      return;
-    }
-    
-    updateUserMutation.mutate({
-      userId: user.id,
-      updates: { role: newRole }
-    });
+    if (user.role === 'super_admin') { toast.error('Cannot change super admin role'); return; }
+    if (!isSuperAdmin) { toast.error('Only super admins can change user roles'); return; }
+    updateUserMutation.mutate({ userId: user.id, updates: { role: newRole } });
   };
 
   const handleDeleteUser = (user) => {
-    if (user.role === 'super_admin') {
-      toast.error('Cannot delete super admin');
-      return;
-    }
-    
-    if (!isSuperAdmin && user.role === 'admin') {
-      toast.error('Only super admins can delete admins');
-      return;
-    }
-    
-    if (confirm(`Are you sure you want to delete ${user.full_name || user.email}?`)) {
-      deleteUserMutation.mutate(user.id);
-    }
+    if (user.role === 'super_admin') { toast.error('Cannot delete super admin'); return; }
+    if (!isSuperAdmin && user.role === 'admin') { toast.error('Only super admins can delete admins'); return; }
+    if (confirm(`Delete ${user.full_name || user.email}?`)) deleteUserMutation.mutate(user.id);
   };
 
   const handleToggleActive = (user) => {
-    if (user.role === 'super_admin') {
-      toast.error('Cannot deactivate super admin');
-      return;
-    }
-    
-    updateUserMutation.mutate({
-      userId: user.id,
-      updates: { is_active: !user.is_active }
-    });
+    if (user.role === 'super_admin') { toast.error('Cannot deactivate super admin'); return; }
+    updateUserMutation.mutate({ userId: user.id, updates: { is_active: !user.is_active } });
   };
 
   const handleResetPassword = async (email) => {
-    try {
-      await base44.auth.resetPassword(email);
-      toast.success(`Password reset email sent to ${email}`);
-      setShowResetDialog(false);
-      setResetPasswordEmail('');
-    } catch (error) {
-      toast.error('Failed to send password reset email');
-    }
+    await base44.auth.resetPassword(email);
+    toast.success(`Reset email sent to ${email}`);
+    setShowResetDialog(false);
+    setResetPasswordEmail('');
   };
 
   if (!isAdmin) {
@@ -240,6 +191,15 @@ export default function AdminDashboard() {
   const superAdmins = users.filter(u => u.role === 'super_admin').length;
   const admins = users.filter(u => u.role === 'admin').length;
 
+  const permissionLabels = {
+    allow_user_signup: 'Allow User Sign-up',
+    allow_project_creation: 'Allow Project Creation',
+    allow_white_label: 'Allow White Label',
+    allow_knowledge_base: 'Allow Knowledge Base',
+    allow_phone_system: 'Allow Phone System',
+    allow_analytics: 'Allow Analytics',
+  };
+
   return (
     <div className="min-h-screen bg-slate-50">
       {/* Header */}
@@ -251,13 +211,13 @@ export default function AdminDashboard() {
                 <Shield className="w-8 h-8 text-white/80" />
                 CMS Admin
               </h1>
-              <p className="text-violet-200 mt-1">Content management system and user administration</p>
+              <p className="text-violet-200 mt-1">Full content management, user administration &amp; platform settings</p>
             </div>
             <div className="text-right">
               <div className="text-sm text-violet-200">Logged in as</div>
               <div className="text-lg font-semibold text-white">{currentUser?.full_name || currentUser?.email}</div>
               <div className="inline-block mt-1 px-3 py-1 bg-white/20 text-white text-xs font-semibold rounded-full">
-                Super Admin
+                {currentUser?.role}
               </div>
             </div>
           </div>
@@ -265,77 +225,49 @@ export default function AdminDashboard() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
-
         {/* Stats */}
         <div className="grid md:grid-cols-4 gap-4 -mt-6">
-          <Card className="wizard-card border-0">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-slate-500">Total Users</p>
-                  <p className="text-3xl font-bold text-slate-900">{users.length}</p>
+          {[
+            { label: 'Total Users', value: users.length, icon: Users, color: 'blue' },
+            { label: 'Active Users', value: activeUsers, icon: Activity, color: 'emerald' },
+            { label: 'Super Admins', value: superAdmins, icon: Shield, color: 'purple' },
+            { label: 'Admins', value: admins, icon: Settings, color: 'amber' },
+          ].map(({ label, value, icon: Icon, color }) => (
+            <Card key={label} className="wizard-card border-0">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-slate-500">{label}</p>
+                    <p className={`text-3xl font-bold text-${color}-600`}>{value}</p>
+                  </div>
+                  <div className={`w-12 h-12 rounded-xl bg-${color}-100 flex items-center justify-center`}>
+                    <Icon className={`w-6 h-6 text-${color}-600`} />
+                  </div>
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
-                  <Users className="w-6 h-6 text-blue-600" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="wizard-card border-0">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-slate-500">Active Users</p>
-                  <p className="text-3xl font-bold text-emerald-600">{activeUsers}</p>
-                </div>
-                <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center">
-                  <Activity className="w-6 h-6 text-emerald-600" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="wizard-card border-0">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-slate-500">Super Admins</p>
-                  <p className="text-3xl font-bold text-purple-600">{superAdmins}</p>
-                </div>
-                <div className="w-12 h-12 rounded-xl bg-purple-100 flex items-center justify-center">
-                  <Shield className="w-6 h-6 text-purple-600" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          <Card className="wizard-card border-0">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm text-slate-500">Admins</p>
-                  <p className="text-3xl font-bold text-amber-600">{admins}</p>
-                </div>
-                <div className="w-12 h-12 rounded-xl bg-amber-100 flex items-center justify-center">
-                  <Settings className="w-6 h-6 text-amber-600" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
+          ))}
         </div>
 
         {/* Tabs */}
         <Tabs defaultValue="users" className="w-full">
-          <TabsList className="bg-white border border-slate-200 mb-6 shadow-sm">
-            <TabsTrigger value="users" className="data-[state=active]:bg-violet-600 data-[state=active]:text-white">
-              <Users className="w-4 h-4 mr-2" />
-              Users
-            </TabsTrigger>
-            <TabsTrigger value="settings" className="data-[state=active]:bg-violet-600 data-[state=active]:text-white">
-              <Globe className="w-4 h-4 mr-2" />
-              App Settings
-            </TabsTrigger>
+          <TabsList className="bg-white border border-slate-200 mb-6 shadow-sm flex-wrap h-auto gap-1 p-1">
+            {[
+              { value: 'users', icon: Users, label: 'Users' },
+              { value: 'hero', icon: Image, label: 'Hero' },
+              { value: 'branding', icon: Palette, label: 'Branding' },
+              { value: 'permissions', icon: Lock, label: 'Permissions' },
+              { value: 'seo', icon: Search, label: 'SEO' },
+              { value: 'social', icon: Globe, label: 'Social & Footer' },
+            ].map(({ value, icon: Icon, label }) => (
+              <TabsTrigger key={value} value={value} className="data-[state=active]:bg-violet-600 data-[state=active]:text-white">
+                <Icon className="w-4 h-4 mr-2" />
+                {label}
+              </TabsTrigger>
+            ))}
           </TabsList>
 
-          {/* Users Tab */}
+          {/* === USERS TAB === */}
           <TabsContent value="users">
             <Card className="wizard-card border-0">
               <CardHeader className="border-b border-slate-100">
@@ -351,25 +283,16 @@ export default function AdminDashboard() {
                           </Button>
                         </DialogTrigger>
                         <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Invite New User</DialogTitle>
-                          </DialogHeader>
+                          <DialogHeader><DialogTitle>Invite New User</DialogTitle></DialogHeader>
                           <div className="space-y-4">
                             <div>
                               <Label>Email Address</Label>
-                              <Input
-                                type="email"
-                                value={newUserEmail}
-                                onChange={(e) => setNewUserEmail(e.target.value)}
-                                placeholder="user@example.com"
-                              />
+                              <Input type="email" value={newUserEmail} onChange={(e) => setNewUserEmail(e.target.value)} placeholder="user@example.com" />
                             </div>
                             <div>
                               <Label>Role</Label>
                               <Select value={newUserRole} onValueChange={setNewUserRole}>
-                                <SelectTrigger>
-                                  <SelectValue />
-                                </SelectTrigger>
+                                <SelectTrigger><SelectValue /></SelectTrigger>
                                 <SelectContent>
                                   <SelectItem value="user">User</SelectItem>
                                   <SelectItem value="admin">Admin</SelectItem>
@@ -383,35 +306,19 @@ export default function AdminDashboard() {
                           </div>
                         </DialogContent>
                       </Dialog>
-                      
                       <Dialog open={showResetDialog} onOpenChange={setShowResetDialog}>
                         <DialogTrigger asChild>
-                          <Button variant="outline" className="border-slate-700 text-white hover:bg-slate-800">
-                            <Key className="w-4 h-4 mr-2" />
-                            Reset Password
-                          </Button>
+                          <Button variant="outline"><Key className="w-4 h-4 mr-2" />Reset Password</Button>
                         </DialogTrigger>
                         <DialogContent>
-                          <DialogHeader>
-                            <DialogTitle>Reset User Password</DialogTitle>
-                          </DialogHeader>
+                          <DialogHeader><DialogTitle>Reset User Password</DialogTitle></DialogHeader>
                           <div className="space-y-4">
                             <div>
                               <Label>User Email</Label>
-                              <Input
-                                type="email"
-                                value={resetPasswordEmail}
-                                onChange={(e) => setResetPasswordEmail(e.target.value)}
-                                placeholder="user@example.com"
-                              />
+                              <Input type="email" value={resetPasswordEmail} onChange={(e) => setResetPasswordEmail(e.target.value)} placeholder="user@example.com" />
                             </div>
-                            <Button 
-                              onClick={() => handleResetPassword(resetPasswordEmail)} 
-                              className="w-full"
-                              disabled={!resetPasswordEmail}
-                            >
-                              <Mail className="w-4 h-4 mr-2" />
-                              Send Reset Link
+                            <Button onClick={() => handleResetPassword(resetPasswordEmail)} className="w-full" disabled={!resetPasswordEmail}>
+                              <Mail className="w-4 h-4 mr-2" />Send Reset Link
                             </Button>
                           </div>
                         </DialogContent>
@@ -421,87 +328,46 @@ export default function AdminDashboard() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-3 pt-4">
                   {users.map(user => (
                     <div key={user.id} className="p-4 bg-slate-50 rounded-xl border border-slate-100">
                       <div className="flex items-start justify-between gap-4">
                         <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-1">
+                          <div className="flex items-center gap-2 mb-1 flex-wrap">
                             <h3 className="text-slate-900 font-semibold">{user.full_name || 'No Name'}</h3>
-                            <Badge className={
-                              user.role === 'super_admin' ? 'bg-purple-100 text-purple-700' :
-                              user.role === 'admin' ? 'bg-blue-100 text-blue-700' :
-                              'bg-slate-100 text-slate-600'
-                            }>
-                              {user.role}
-                            </Badge>
-                            {user.is_active === false && (
-                              <Badge className="bg-red-100 text-red-700">Inactive</Badge>
-                            )}
-                            {user.id === currentUser?.id && (
-                              <Badge className="bg-emerald-100 text-emerald-700">You</Badge>
-                            )}
+                            <Badge className={user.role === 'super_admin' ? 'bg-purple-100 text-purple-700' : user.role === 'admin' ? 'bg-blue-100 text-blue-700' : 'bg-slate-100 text-slate-600'}>{user.role}</Badge>
+                            {user.is_active === false && <Badge className="bg-red-100 text-red-700">Inactive</Badge>}
+                            {user.id === currentUser?.id && <Badge className="bg-emerald-100 text-emerald-700">You</Badge>}
                           </div>
-                          <p className="text-sm text-slate-500 mb-3">{user.email}</p>
-                          
+                          <p className="text-sm text-slate-500 mb-2">{user.email}</p>
                           {user.role !== 'super_admin' && isSuperAdmin && (
-                            <div className="space-y-2">
-                              <p className="text-xs text-slate-400 font-medium uppercase tracking-wide">Permissions:</p>
-                              <div className="flex flex-wrap gap-3">
-                                {['manage_users', 'manage_projects', 'manage_settings', 'view_analytics', 'manage_billing'].map(perm => (
-                                  <div key={perm} className="flex items-center gap-2">
-                                    <Switch
-                                      checked={user.permissions?.[perm] || false}
-                                      onCheckedChange={() => handleTogglePermission(user, perm)}
-                                      disabled={user.role === 'super_admin'}
-                                    />
-                                    <span className="text-xs text-slate-600 capitalize">{perm.replace(/_/g, ' ')}</span>
-                                  </div>
-                                ))}
-                              </div>
+                            <div className="flex flex-wrap gap-3 mt-2">
+                              {['manage_users', 'manage_projects', 'manage_settings', 'view_analytics', 'manage_billing'].map(perm => (
+                                <div key={perm} className="flex items-center gap-1.5">
+                                  <Switch checked={user.permissions?.[perm] || false} onCheckedChange={() => handleTogglePermission(user, perm)} />
+                                  <span className="text-xs text-slate-600 capitalize">{perm.replace(/_/g, ' ')}</span>
+                                </div>
+                              ))}
                             </div>
                           )}
                         </div>
-                        
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 flex-shrink-0 flex-wrap justify-end">
                           {isSuperAdmin && user.role !== 'super_admin' && (
                             <>
                               <Select value={user.role} onValueChange={(val) => handleChangeRole(user, val)}>
-                                <SelectTrigger className="w-32 text-xs">
-                                  <SelectValue />
-                                </SelectTrigger>
+                                <SelectTrigger className="w-28 text-xs"><SelectValue /></SelectTrigger>
                                 <SelectContent>
                                   <SelectItem value="user">User</SelectItem>
                                   <SelectItem value="admin">Admin</SelectItem>
                                   <SelectItem value="super_admin">Super Admin</SelectItem>
                                 </SelectContent>
                               </Select>
-                              <Button size="sm" variant="outline" onClick={() => handleToggleActive(user)}>
-                                {user.is_active === false ? 'Activate' : 'Deactivate'}
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => {
-                                  setResetPasswordEmail(user.email);
-                                  setShowResetDialog(true);
-                                }}
-                              >
-                                <Key className="w-4 h-4" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                onClick={() => handleDeleteUser(user)}
-                                className="text-red-500 hover:bg-red-50"
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
+                              <Button size="sm" variant="outline" onClick={() => handleToggleActive(user)}>{user.is_active === false ? 'Activate' : 'Deactivate'}</Button>
+                              <Button size="sm" variant="outline" onClick={() => { setResetPasswordEmail(user.email); setShowResetDialog(true); }}><Key className="w-4 h-4" /></Button>
+                              <Button size="sm" variant="ghost" onClick={() => handleDeleteUser(user)} className="text-red-500 hover:bg-red-50"><Trash2 className="w-4 h-4" /></Button>
                             </>
                           )}
-                          {user.role === 'super_admin' && (
-                            <Badge className="bg-purple-100 text-purple-700">Protected</Badge>
-                          )}
+                          {user.role === 'super_admin' && <Badge className="bg-purple-100 text-purple-700">Protected</Badge>}
                         </div>
                       </div>
                     </div>
@@ -511,67 +377,172 @@ export default function AdminDashboard() {
             </Card>
           </TabsContent>
 
-          {/* App Settings Tab */}
-          <TabsContent value="settings">
+          {/* === HERO TAB === */}
+          <TabsContent value="hero">
             <div className="grid md:grid-cols-2 gap-6">
-              {/* Social Media Links */}
               <Card className="wizard-card border-0">
                 <CardHeader className="border-b border-slate-100">
-                  <CardTitle className="text-slate-900 flex items-center gap-2">
-                    <Globe className="w-5 h-5 text-blue-500" />
-                    Social Media Links
-                  </CardTitle>
-                  <CardDescription>Configure social media links for the footer</CardDescription>
+                  <CardTitle className="text-slate-900 flex items-center gap-2"><Image className="w-5 h-5 text-violet-500" />Hero Content</CardTitle>
+                  <CardDescription>Customize the homepage hero section text and CTAs</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4 pt-4">
+                  <div><Label>Headline</Label><Input placeholder="Build a Brand That Outperforms Competitors" value={hero.headline || ''} onChange={e => setHero(p => ({ ...p, headline: e.target.value }))} /></div>
+                  <div><Label>Sub-headline</Label><Textarea placeholder="AI-powered market research analyzes your competition..." value={hero.subheadline || ''} onChange={e => setHero(p => ({ ...p, subheadline: e.target.value }))} className="h-20" /></div>
+                  <div><Label>Badge Text</Label><Input placeholder="AI-Powered Business Builder" value={hero.badge_text || ''} onChange={e => setHero(p => ({ ...p, badge_text: e.target.value }))} /></div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div><Label>Primary CTA Text</Label><Input placeholder="Create Now" value={hero.cta_primary_text || ''} onChange={e => setHero(p => ({ ...p, cta_primary_text: e.target.value }))} /></div>
+                    <div><Label>Primary CTA Link / Page</Label><Input placeholder="CreateBusiness" value={hero.cta_primary_link || ''} onChange={e => setHero(p => ({ ...p, cta_primary_link: e.target.value }))} /></div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div><Label>Secondary CTA Text</Label><Input placeholder="View My Projects" value={hero.cta_secondary_text || ''} onChange={e => setHero(p => ({ ...p, cta_secondary_text: e.target.value }))} /></div>
+                    <div><Label>Secondary CTA Link / Page</Label><Input placeholder="Dashboard" value={hero.cta_secondary_link || ''} onChange={e => setHero(p => ({ ...p, cta_secondary_link: e.target.value }))} /></div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="wizard-card border-0">
+                <CardHeader className="border-b border-slate-100">
+                  <CardTitle className="text-slate-900 flex items-center gap-2"><Image className="w-5 h-5 text-pink-500" />Hero Image</CardTitle>
+                  <CardDescription>Set or generate the main hero image</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4 pt-4">
+                  {hero.image_url && <img src={hero.image_url} alt="Hero preview" className="w-full h-40 object-cover rounded-lg border border-slate-200" />}
+                  <div><Label>Image URL</Label><Input placeholder="https://..." value={hero.image_url || ''} onChange={e => setHero(p => ({ ...p, image_url: e.target.value }))} /></div>
+                  <div>
+                    <Label>Generate with AI</Label>
+                    <Textarea placeholder="Describe the hero image you want..." value={heroPrompt} onChange={e => setHeroPrompt(e.target.value)} className="h-16 mt-1" />
+                    <Button onClick={handleGenerateHeroImage} disabled={isGeneratingHero} className="w-full mt-2 bg-violet-600 hover:bg-violet-700">
+                      {isGeneratingHero ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Generating...</> : <><Sparkles className="w-4 h-4 mr-2" />Generate with AI</>}
+                    </Button>
+                  </div>
+                  <div className="flex items-center gap-2 text-slate-400 text-xs"><div className="flex-1 h-px bg-slate-200" />or<div className="flex-1 h-px bg-slate-200" /></div>
+                  <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleUploadHero} />
+                  <Button variant="outline" onClick={() => fileInputRef.current?.click()} disabled={isUploadingHero} className="w-full">
+                    {isUploadingHero ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Uploading...</> : <><Upload className="w-4 h-4 mr-2" />Upload Image</>}
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+            <div className="flex justify-end mt-4">
+              <Button onClick={handleSaveSettings} disabled={saveSettingsMutation.isPending} className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700">
+                <Save className="w-4 h-4 mr-2" />{saveSettingsMutation.isPending ? 'Saving...' : 'Save Hero Settings'}
+              </Button>
+            </div>
+          </TabsContent>
+
+          {/* === BRANDING TAB === */}
+          <TabsContent value="branding">
+            <Card className="wizard-card border-0">
+              <CardHeader className="border-b border-slate-100">
+                <CardTitle className="text-slate-900 flex items-center gap-2"><Palette className="w-5 h-5 text-pink-500" />Site Branding</CardTitle>
+                <CardDescription>Customize site name, logo, and color theme</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-5 pt-4 max-w-xl">
+                <div><Label>Site Name</Label><Input placeholder="BrandForge" value={siteName} onChange={e => setSiteName(e.target.value)} /></div>
+                <div><Label>Site Tagline</Label><Input placeholder="AI-powered platform to build, launch, and grow your business" value={siteTagline} onChange={e => setSiteTagline(e.target.value)} /></div>
+                <div><Label>Logo URL</Label><Input placeholder="https://your-logo.png" value={logoUrl} onChange={e => setLogoUrl(e.target.value)} />
+                  {logoUrl && <img src={logoUrl} alt="Logo preview" className="mt-2 h-12 object-contain" />}
+                </div>
+                <div>
+                  <Label>Color Theme</Label>
+                  <Select value={colorTheme} onValueChange={setColorTheme}>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      {['amber', 'blue', 'violet', 'emerald', 'rose', 'slate'].map(c => (
+                        <SelectItem key={c} value={c} className="capitalize">{c.charAt(0).toUpperCase() + c.slice(1)}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <Button onClick={handleSaveSettings} disabled={saveSettingsMutation.isPending} className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700">
+                  <Save className="w-4 h-4 mr-2" />{saveSettingsMutation.isPending ? 'Saving...' : 'Save Branding'}
+                </Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* === PERMISSIONS TAB === */}
+          <TabsContent value="permissions">
+            <Card className="wizard-card border-0">
+              <CardHeader className="border-b border-slate-100">
+                <CardTitle className="text-slate-900 flex items-center gap-2"><Lock className="w-5 h-5 text-red-500" />Platform Permissions</CardTitle>
+                <CardDescription>Control which features are available to users across the platform</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4 pt-4 max-w-xl">
+                {Object.entries(permissionLabels).map(([key, label]) => (
+                  <div key={key} className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
+                    <div>
+                      <p className="font-medium text-slate-800">{label}</p>
+                    </div>
+                    <Switch checked={permissions[key] !== false} onCheckedChange={val => setPermissions(p => ({ ...p, [key]: val }))} />
+                  </div>
+                ))}
+                <div className="pt-2">
+                  <Label>Max Projects Per User</Label>
+                  <Input type="number" min={1} max={100} value={permissions.max_projects_per_user || 10} onChange={e => setPermissions(p => ({ ...p, max_projects_per_user: parseInt(e.target.value) || 10 }))} className="max-w-xs" />
+                </div>
+                <Button onClick={handleSaveSettings} disabled={saveSettingsMutation.isPending} className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 mt-2">
+                  <Save className="w-4 h-4 mr-2" />{saveSettingsMutation.isPending ? 'Saving...' : 'Save Permissions'}
+                </Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* === SEO TAB === */}
+          <TabsContent value="seo">
+            <Card className="wizard-card border-0">
+              <CardHeader className="border-b border-slate-100">
+                <CardTitle className="text-slate-900 flex items-center gap-2"><Search className="w-5 h-5 text-blue-500" />SEO Settings</CardTitle>
+                <CardDescription>Configure meta title, description, and Open Graph image for search engines and social sharing</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4 pt-4 max-w-xl">
+                <div><Label>Meta Title</Label><Input placeholder="BrandForge — AI Business Builder" value={seo.meta_title || ''} onChange={e => setSeo(p => ({ ...p, meta_title: e.target.value }))} /></div>
+                <div><Label>Meta Description</Label><Textarea placeholder="AI-powered platform to build, launch, and grow your business..." value={seo.meta_description || ''} onChange={e => setSeo(p => ({ ...p, meta_description: e.target.value }))} className="h-24" /></div>
+                <div><Label>OG Image URL</Label><Input placeholder="https://your-og-image.png" value={seo.og_image_url || ''} onChange={e => setSeo(p => ({ ...p, og_image_url: e.target.value }))} />
+                  {seo.og_image_url && <img src={seo.og_image_url} alt="OG preview" className="mt-2 h-24 object-cover rounded border border-slate-200 w-full" />}
+                </div>
+                <Button onClick={handleSaveSettings} disabled={saveSettingsMutation.isPending} className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700">
+                  <Save className="w-4 h-4 mr-2" />{saveSettingsMutation.isPending ? 'Saving...' : 'Save SEO'}
+                </Button>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* === SOCIAL & FOOTER TAB === */}
+          <TabsContent value="social">
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card className="wizard-card border-0">
+                <CardHeader className="border-b border-slate-100">
+                  <CardTitle className="text-slate-900 flex items-center gap-2"><Globe className="w-5 h-5 text-blue-500" />Social Media Links</CardTitle>
+                  <CardDescription>Configure social media links shown in the footer</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4 pt-4">
                   {['facebook', 'twitter', 'instagram', 'linkedin', 'youtube', 'tiktok'].map(platform => (
                     <div key={platform}>
                       <Label className="capitalize">{platform === 'twitter' ? 'Twitter/X' : platform}</Label>
-                      <Input
-                        placeholder={`https://${platform}.com/yourprofile`}
-                        value={socialMedia[platform] || ''}
-                        onChange={(e) => setSocialMedia({ ...socialMedia, [platform]: e.target.value })}
-                      />
+                      <Input placeholder={`https://${platform}.com/yourprofile`} value={socialMedia[platform] || ''} onChange={(e) => setSocialMedia({ ...socialMedia, [platform]: e.target.value })} />
                     </div>
                   ))}
                 </CardContent>
               </Card>
 
-              {/* Footer Settings */}
               <Card className="wizard-card border-0">
                 <CardHeader className="border-b border-slate-100">
-                  <CardTitle className="text-slate-900 flex items-center gap-2">
-                    <Settings className="w-5 h-5 text-amber-500" />
-                    Footer Settings
-                  </CardTitle>
-                  <CardDescription>Customize footer appearance</CardDescription>
+                  <CardTitle className="text-slate-900 flex items-center gap-2"><Settings className="w-5 h-5 text-amber-500" />Footer Settings</CardTitle>
+                  <CardDescription>Customize footer text and appearance</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-6 pt-4">
-                  <div>
-                    <Label>Copyright Text</Label>
-                    <Input
-                      placeholder="© 2026 BrandForge. All rights reserved."
-                      value={copyrightText}
-                      onChange={(e) => setCopyrightText(e.target.value)}
-                    />
-                  </div>
+                <CardContent className="space-y-5 pt-4">
+                  <div><Label>Copyright Text</Label><Input placeholder="© 2026 BrandForge. All rights reserved." value={copyrightText} onChange={(e) => setCopyrightText(e.target.value)} /></div>
+                  <div><Label>Footer Tagline</Label><Input placeholder="AI-powered platform to build, launch, and grow your business" value={footerTagline} onChange={e => setFooterTagline(e.target.value)} /></div>
                   <div className="flex items-center justify-between">
                     <div>
                       <Label>Show Social Icons</Label>
                       <p className="text-sm text-slate-500">Display social media icons in footer</p>
                     </div>
-                    <Switch
-                      checked={showSocialIcons}
-                      onCheckedChange={setShowSocialIcons}
-                    />
+                    <Switch checked={showSocialIcons} onCheckedChange={setShowSocialIcons} />
                   </div>
-                  <Button 
-                    onClick={handleSaveSettings}
-                    disabled={saveSettingsMutation.isPending}
-                    className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600"
-                  >
-                    <Save className="w-4 h-4 mr-2" />
-                    Save Settings
+                  <Button onClick={handleSaveSettings} disabled={saveSettingsMutation.isPending} className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600">
+                    <Save className="w-4 h-4 mr-2" />{saveSettingsMutation.isPending ? 'Saving...' : 'Save Settings'}
                   </Button>
                 </CardContent>
               </Card>
