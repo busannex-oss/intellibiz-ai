@@ -301,11 +301,11 @@ export default function BrandKit() {
             ))}
 
             {assets.length === 0 && (
-              <Card>
+              <Card className="bg-slate-800/50 border-slate-700">
                 <CardContent className="p-12 text-center">
-                  <FileImage className="w-16 h-16 text-slate-300 mx-auto mb-4" />
-                  <p className="text-slate-500 mb-4">No brand assets yet</p>
-                  <p className="text-sm text-slate-400 mb-6">Upload your logos, images, fonts, and other brand materials</p>
+                  <FileImage className="w-16 h-16 text-slate-600 mx-auto mb-4" />
+                  <p className="text-slate-400 mb-4">No brand assets yet</p>
+                  <p className="text-sm text-slate-500 mb-6">Upload your logos, images, fonts, and other brand materials</p>
                   <Button onClick={() => document.getElementById('asset-tabs').click()}>
                     <Upload className="w-4 h-4 mr-2" />
                     Upload Your First Asset
