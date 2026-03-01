@@ -386,10 +386,10 @@ export default function BrandKit() {
           </TabsContent>
 
           <TabsContent value="upload" id="asset-tabs">
-            <Card>
+            <Card className="bg-slate-800/50 border-slate-700">
               <CardHeader>
-                <CardTitle>Upload New Asset</CardTitle>
-                <CardDescription>Add logos, images, fonts, or other brand materials</CardDescription>
+                <CardTitle className="text-white">Upload New Asset</CardTitle>
+                <CardDescription className="text-slate-400">Add logos, images, fonts, or other brand materials</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-2">
