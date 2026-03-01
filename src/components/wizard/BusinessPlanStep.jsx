@@ -450,7 +450,7 @@ Generate a COMPLETE, DETAILED business plan that would impress any investor or b
         </div>
       ) : (
         <div className="space-y-6">
-          <Card className="border-0 shadow-xl bg-white/80 backdrop-blur-sm overflow-hidden">
+          <Card className="wizard-card border-0 overflow-hidden">
             <CardHeader className="bg-gradient-to-r from-violet-50 to-indigo-50 border-b">
               <div className="flex items-center justify-between">
                 <CardTitle className="text-xl text-slate-800">
