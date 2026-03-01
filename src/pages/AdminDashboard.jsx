@@ -515,98 +515,49 @@ export default function AdminDashboard() {
           <TabsContent value="settings">
             <div className="grid md:grid-cols-2 gap-6">
               {/* Social Media Links */}
-              <Card className="border-0 bg-slate-800/50 backdrop-blur-sm border border-slate-700">
-                <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
-                    <Globe className="w-5 h-5 text-blue-400" />
+              <Card className="wizard-card border-0">
+                <CardHeader className="border-b border-slate-100">
+                  <CardTitle className="text-slate-900 flex items-center gap-2">
+                    <Globe className="w-5 h-5 text-blue-500" />
                     Social Media Links
                   </CardTitle>
-                  <CardDescription className="text-slate-400">
-                    Configure social media links for the footer
-                  </CardDescription>
+                  <CardDescription>Configure social media links for the footer</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <Label className="text-slate-300">Facebook</Label>
-                    <Input
-                      placeholder="https://facebook.com/yourpage"
-                      value={socialMedia.facebook || ''}
-                      onChange={(e) => setSocialMedia({ ...socialMedia, facebook: e.target.value })}
-                      className="bg-slate-900/50 border-slate-700 text-white"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-slate-300">Twitter/X</Label>
-                    <Input
-                      placeholder="https://twitter.com/yourhandle"
-                      value={socialMedia.twitter || ''}
-                      onChange={(e) => setSocialMedia({ ...socialMedia, twitter: e.target.value })}
-                      className="bg-slate-900/50 border-slate-700 text-white"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-slate-300">Instagram</Label>
-                    <Input
-                      placeholder="https://instagram.com/yourprofile"
-                      value={socialMedia.instagram || ''}
-                      onChange={(e) => setSocialMedia({ ...socialMedia, instagram: e.target.value })}
-                      className="bg-slate-900/50 border-slate-700 text-white"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-slate-300">LinkedIn</Label>
-                    <Input
-                      placeholder="https://linkedin.com/company/yourcompany"
-                      value={socialMedia.linkedin || ''}
-                      onChange={(e) => setSocialMedia({ ...socialMedia, linkedin: e.target.value })}
-                      className="bg-slate-900/50 border-slate-700 text-white"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-slate-300">YouTube</Label>
-                    <Input
-                      placeholder="https://youtube.com/@yourchannel"
-                      value={socialMedia.youtube || ''}
-                      onChange={(e) => setSocialMedia({ ...socialMedia, youtube: e.target.value })}
-                      className="bg-slate-900/50 border-slate-700 text-white"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-slate-300">TikTok</Label>
-                    <Input
-                      placeholder="https://tiktok.com/@yourprofile"
-                      value={socialMedia.tiktok || ''}
-                      onChange={(e) => setSocialMedia({ ...socialMedia, tiktok: e.target.value })}
-                      className="bg-slate-900/50 border-slate-700 text-white"
-                    />
-                  </div>
+                <CardContent className="space-y-4 pt-4">
+                  {['facebook', 'twitter', 'instagram', 'linkedin', 'youtube', 'tiktok'].map(platform => (
+                    <div key={platform}>
+                      <Label className="capitalize">{platform === 'twitter' ? 'Twitter/X' : platform}</Label>
+                      <Input
+                        placeholder={`https://${platform}.com/yourprofile`}
+                        value={socialMedia[platform] || ''}
+                        onChange={(e) => setSocialMedia({ ...socialMedia, [platform]: e.target.value })}
+                      />
+                    </div>
+                  ))}
                 </CardContent>
               </Card>
 
               {/* Footer Settings */}
-              <Card className="border-0 bg-slate-800/50 backdrop-blur-sm border border-slate-700">
-                <CardHeader>
-                  <CardTitle className="text-white flex items-center gap-2">
-                    <Settings className="w-5 h-5 text-amber-400" />
+              <Card className="wizard-card border-0">
+                <CardHeader className="border-b border-slate-100">
+                  <CardTitle className="text-slate-900 flex items-center gap-2">
+                    <Settings className="w-5 h-5 text-amber-500" />
                     Footer Settings
                   </CardTitle>
-                  <CardDescription className="text-slate-400">
-                    Customize footer appearance
-                  </CardDescription>
+                  <CardDescription>Customize footer appearance</CardDescription>
                 </CardHeader>
-                <CardContent className="space-y-6">
+                <CardContent className="space-y-6 pt-4">
                   <div>
-                    <Label className="text-slate-300">Copyright Text</Label>
+                    <Label>Copyright Text</Label>
                     <Input
                       placeholder="© 2026 BrandForge. All rights reserved."
                       value={copyrightText}
                       onChange={(e) => setCopyrightText(e.target.value)}
-                      className="bg-slate-900/50 border-slate-700 text-white"
                     />
                   </div>
                   <div className="flex items-center justify-between">
                     <div>
-                      <Label className="text-slate-300">Show Social Icons</Label>
+                      <Label>Show Social Icons</Label>
                       <p className="text-sm text-slate-500">Display social media icons in footer</p>
                     </div>
                     <Switch
