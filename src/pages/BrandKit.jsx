@@ -366,9 +366,9 @@ export default function BrandKit() {
             </Card>
 
             {project?.brand_colors && (
-              <Card>
+              <Card className="bg-slate-800/50 border-slate-700">
                 <CardHeader>
-                  <CardTitle>Brand Colors</CardTitle>
+                  <CardTitle className="text-white">Brand Colors</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
