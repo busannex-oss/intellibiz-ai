@@ -316,14 +316,14 @@ export default function BrandKit() {
           </TabsContent>
 
           <TabsContent value="guidelines" className="space-y-6">
-            <Card>
+            <Card className="bg-slate-800/50 border-slate-700">
               <CardHeader>
-                <CardTitle>Brand Personality & Voice</CardTitle>
-                <CardDescription>Define how your brand communicates and presents itself</CardDescription>
+                <CardTitle className="text-white">Brand Personality & Voice</CardTitle>
+                <CardDescription className="text-slate-400">Define how your brand communicates and presents itself</CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="space-y-2">
-                  <Label>Tone of Voice</Label>
+                  <Label className="text-slate-300">Tone of Voice</Label>
                   <Textarea
                     placeholder="e.g., Professional yet approachable, friendly and conversational, bold and confident..."
                     value={project?.brand_personality?.tone_of_voice || ''}
