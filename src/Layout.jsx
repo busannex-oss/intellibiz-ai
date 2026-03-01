@@ -7,6 +7,18 @@ import { base44 } from '@/api/base44Client';
 
 export default function Layout({ children }) {
   const [settings, setSettings] = useState(null);
+  const location = useLocation();
+
+  // Auto dark mode: apply 'dark' class based on system preference
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+    const apply = (e) => {
+      document.documentElement.classList.toggle('dark', e.matches);
+    };
+    apply(mq);
+    mq.addEventListener('change', apply);
+    return () => mq.removeEventListener('change', apply);
+  }, []);
 
   useEffect(() => {
     const loadSettings = async () => {
