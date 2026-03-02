@@ -462,6 +462,7 @@ const CATEGORIES = [
 ];
 
 const CLEARANCE_COLORS = {
+  'Super Admin Only': 'bg-red-100 text-red-700',
   'Super Admin / Delegated': 'bg-purple-100 text-purple-700',
   'Admin': 'bg-blue-100 text-blue-700',
   'Professional+': 'bg-amber-100 text-amber-700',
