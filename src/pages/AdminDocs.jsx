@@ -447,6 +447,7 @@ const AGENTS = [
 
 const CATEGORIES = [
   { id: 'all', label: 'All Agents' },
+  { id: 'Security', label: 'Security' },
   { id: 'Visual Quality', label: 'Visual Quality' },
   { id: 'Brand Integrity', label: 'Brand Integrity' },
   { id: 'CMS & Design', label: 'CMS & Design' },
