@@ -433,6 +433,11 @@ export default function AdminDashboard() {
             </div>
           </TabsContent>
 
+          {/* === BRAND AUDIT TAB === */}
+          <TabsContent value="brand_audit">
+            <BrandAuditTab />
+          </TabsContent>
+
           {/* === THEME & BRAND TAB (Super Admin only) === */}
           <TabsContent value="theme">
             <ThemeTab
