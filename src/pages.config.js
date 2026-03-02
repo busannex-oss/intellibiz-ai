@@ -81,6 +81,7 @@ import Tasks from './pages/Tasks';
 import TermsOfService from './pages/TermsOfService';
 import VideoCreation from './pages/VideoCreation';
 import WhiteLabel from './pages/WhiteLabel';
+import AdminDocs from './pages/AdminDocs';
 import __Layout from './Layout.jsx';
 
 
@@ -119,6 +120,7 @@ export const PAGES = {
     "TermsOfService": TermsOfService,
     "VideoCreation": VideoCreation,
     "WhiteLabel": WhiteLabel,
+    "AdminDocs": AdminDocs,
 }
 
 export const pagesConfig = {
