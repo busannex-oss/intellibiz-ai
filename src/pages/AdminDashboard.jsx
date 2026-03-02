@@ -11,7 +11,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Shield, Users, Trash2, UserPlus, Settings, Activity, AlertTriangle, Key, Mail, Globe, Save, Palette, Image, Navigation, Lock, Search, Loader2, Upload, Sparkles, Type, ShieldCheck } from 'lucide-react';
+import { Shield, Users, Trash2, UserPlus, Settings, Activity, AlertTriangle, Key, Mail, Globe, Save, Palette, Image, Navigation, Lock, Search, Loader2, Upload, Sparkles, Type, ShieldCheck, BookOpen } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 import ThemeTab from '@/components/admin/ThemeTab';
 import BrandAuditTab from '@/components/admin/BrandAuditTab';
 import { toast } from 'sonner';
