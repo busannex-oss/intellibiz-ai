@@ -256,11 +256,11 @@ export default function AdminDashboard() {
             {[
               { value: 'users', icon: Users, label: 'Users' },
               { value: 'hero', icon: Image, label: 'Hero' },
-              { value: 'branding', icon: Palette, label: 'Branding' },
+              { value: 'theme', icon: Type, label: 'Theme & Brand', superOnly: true },
               { value: 'permissions', icon: Lock, label: 'Permissions' },
               { value: 'seo', icon: Search, label: 'SEO' },
               { value: 'social', icon: Globe, label: 'Social & Footer' },
-            ].map(({ value, icon: Icon, label }) => (
+            ].filter(t => !t.superOnly || isSuperAdmin || currentUser?.permissions?.manage_theme).map(({ value, icon: Icon, label }) => (
               <TabsTrigger key={value} value={value} className="data-[state=active]:bg-violet-600 data-[state=active]:text-white">
                 <Icon className="w-4 h-4 mr-2" />
                 {label}
