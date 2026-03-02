@@ -49,6 +49,7 @@
  */
 import AccountSettings from './pages/AccountSettings';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminDocs from './pages/AdminDocs';
 import Advertising from './pages/Advertising';
 import Analytics from './pages/Analytics';
 import BrandKit from './pages/BrandKit';
@@ -81,13 +82,13 @@ import Tasks from './pages/Tasks';
 import TermsOfService from './pages/TermsOfService';
 import VideoCreation from './pages/VideoCreation';
 import WhiteLabel from './pages/WhiteLabel';
-import AdminDocs from './pages/AdminDocs';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "AccountSettings": AccountSettings,
     "AdminDashboard": AdminDashboard,
+    "AdminDocs": AdminDocs,
     "Advertising": Advertising,
     "Analytics": Analytics,
     "BrandKit": BrandKit,
@@ -120,7 +121,6 @@ export const PAGES = {
     "TermsOfService": TermsOfService,
     "VideoCreation": VideoCreation,
     "WhiteLabel": WhiteLabel,
-    "AdminDocs": AdminDocs,
 }
 
 export const pagesConfig = {
