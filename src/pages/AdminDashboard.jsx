@@ -431,35 +431,13 @@ export default function AdminDashboard() {
             </div>
           </TabsContent>
 
-          {/* === BRANDING TAB === */}
-          <TabsContent value="branding">
-            <Card className="wizard-card border-0">
-              <CardHeader className="border-b border-slate-100">
-                <CardTitle className="text-slate-900 flex items-center gap-2"><Palette className="w-5 h-5 text-pink-500" />Site Branding</CardTitle>
-                <CardDescription>Customize site name, logo, and color theme</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-5 pt-4 max-w-xl">
-                <div><Label>Site Name</Label><Input placeholder="BrandForge" value={siteName} onChange={e => setSiteName(e.target.value)} /></div>
-                <div><Label>Site Tagline</Label><Input placeholder="AI-powered platform to build, launch, and grow your business" value={siteTagline} onChange={e => setSiteTagline(e.target.value)} /></div>
-                <div><Label>Logo URL</Label><Input placeholder="https://your-logo.png" value={logoUrl} onChange={e => setLogoUrl(e.target.value)} />
-                  {logoUrl && <img src={logoUrl} alt="Logo preview" className="mt-2 h-12 object-contain" />}
-                </div>
-                <div>
-                  <Label>Color Theme</Label>
-                  <Select value={colorTheme} onValueChange={setColorTheme}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      {['amber', 'blue', 'violet', 'emerald', 'rose', 'slate'].map(c => (
-                        <SelectItem key={c} value={c} className="capitalize">{c.charAt(0).toUpperCase() + c.slice(1)}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <Button onClick={handleSaveSettings} disabled={saveSettingsMutation.isPending} className="bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700">
-                  <Save className="w-4 h-4 mr-2" />{saveSettingsMutation.isPending ? 'Saving...' : 'Save Branding'}
-                </Button>
-              </CardContent>
-            </Card>
+          {/* === THEME & BRAND TAB (Super Admin only) === */}
+          <TabsContent value="theme">
+            <ThemeTab
+              appSettings={appSettings}
+              onSave={(data) => saveSettingsMutation.mutate(data)}
+              isSaving={saveSettingsMutation.isPending}
+            />
           </TabsContent>
 
           {/* === PERMISSIONS TAB === */}
