@@ -229,6 +229,16 @@ export default function AdminDashboard() {
       </div>
 
       <div className="max-w-7xl mx-auto px-6 py-8 space-y-6">
+        {/* Docs Quick Link */}
+        <div className="flex justify-end mb-2">
+          <Link to={createPageUrl('AdminDocs')}>
+            <button className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 text-violet-200 hover:text-white rounded-lg text-sm font-medium transition-all border border-white/20">
+              <BookOpen className="w-4 h-4" />
+              Platform Documentation
+            </button>
+          </Link>
+        </div>
+
         {/* Stats */}
         <div className="grid md:grid-cols-4 gap-4 -mt-6">
           {[
