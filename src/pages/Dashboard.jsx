@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Badge } from "@/components/ui/badge";
 import WelcomeTour from '@/components/onboarding/WelcomeTour';
 import OnboardingChecklist from '@/components/onboarding/OnboardingChecklist';
+import OnboardingAssistant from '@/components/onboarding/OnboardingAssistant';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
   Sparkles, 
@@ -62,6 +63,7 @@ export default function Dashboard() {
   const brandingKitRef = useRef(null);
   const [brandingKitProject, setBrandingKitProject] = useState(null);
   const [showWelcomeTour, setShowWelcomeTour] = useState(false);
+  const [userRole, setUserRole] = useState('user');
   
   const { data: user } = useQuery({
     queryKey: ['currentUser'],
@@ -96,9 +98,11 @@ export default function Dashboard() {
   });
 
   useEffect(() => {
-    if (user && !user.onboarding_completed && projects.length === 0) {
-      setShowWelcomeTour(true);
-    }
+    if (!user) return;
+    if (!user.onboarding_completed && projects.length === 0) setShowWelcomeTour(true);
+    // Determine role
+    const role = user.role === 'admin' ? 'admin' : 'user';
+    setUserRole(role);
   }, [user, projects]);
 
   const handleTourComplete = () => {
@@ -260,11 +264,19 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-4 md:p-8">
-      <WelcomeTour 
-        open={showWelcomeTour} 
+      <WelcomeTour
+        open={showWelcomeTour}
         onClose={() => setShowWelcomeTour(false)}
         onComplete={handleTourComplete}
+        userRole={userRole}
       />
+      {user && !user.onboarding_completed && (
+        <OnboardingAssistant
+          userRole={userRole}
+          userName={user?.full_name || ''}
+          context="Dashboard — user reviewing their projects overview"
+        />
+      )}
       
       {/* Hidden branding kit renderer */}
       {brandingKitProject && (
