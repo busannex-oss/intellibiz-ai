@@ -343,7 +343,7 @@ export default function AdminDashboard() {
                           <p className="text-sm text-slate-500 mb-2">{user.email}</p>
                           {user.role !== 'super_admin' && isSuperAdmin && (
                             <div className="flex flex-wrap gap-3 mt-2">
-                              {['manage_users', 'manage_projects', 'manage_settings', 'view_analytics', 'manage_billing'].map(perm => (
+                              {['manage_users', 'manage_projects', 'manage_settings', 'view_analytics', 'manage_billing', 'manage_theme'].map(perm => (
                                 <div key={perm} className="flex items-center gap-1.5">
                                   <Switch checked={user.permissions?.[perm] || false} onCheckedChange={() => handleTogglePermission(user, perm)} />
                                   <span className="text-xs text-slate-600 capitalize">{perm.replace(/_/g, ' ')}</span>
