@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.23';
 
 const APP_PAGES = [
   { name: 'Home', description: 'Main landing page with hero, features, process, and CTA sections. Dark slate-900 theme with amber/orange primary accents.' },
