@@ -4,6 +4,12 @@ module.exports = {
     content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
   theme: {
   	extend: {
+  		colors: {
+  			slate: {
+  				...require('tailwindcss/colors').slate,
+  				400: '#8c848a',
+  			},
+  		},
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
