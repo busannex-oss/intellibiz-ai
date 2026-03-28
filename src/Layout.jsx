@@ -82,7 +82,7 @@ export default function Layout({ children }) {
         }
       `}</style>
       {/* Navigation */}
-      <nav className="bg-white/95 backdrop-blur-xl border-b border-slate-200 sticky top-0 z-50 safe-top">
+      <nav className="bg-slate-900/95 backdrop-blur-xl border-b border-slate-800 sticky top-0 z-50 safe-top">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between h-18 py-3">
             {/* Logo */}
@@ -141,7 +141,7 @@ export default function Layout({ children }) {
       <main className="pb-16 md:pb-0">{children}</main>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-t border-slate-200 md:hidden safe-bottom">
+      <nav className="fixed bottom-0 left-0 right-0 z-50 bg-slate-900/95 backdrop-blur-xl border-t border-slate-800 md:hidden safe-bottom">
         <div className="flex items-center justify-around h-14">
           {mobileNav.map(({ label, icon: Icon, page }) => {
             const href = createPageUrl(page);
@@ -163,7 +163,7 @@ export default function Layout({ children }) {
       </nav>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 py-12 mt-auto hidden md:block bg-white">
+      <footer className="border-t border-slate-800 py-12 mt-auto hidden md:block bg-slate-900">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             {/* Brand Section */}
