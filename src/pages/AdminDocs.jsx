@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -542,11 +544,44 @@ export default function AdminDocs() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [activeSection, setActiveSection] = useState('agents');
 
-  // Use hardcoded agent config
-  const AGENTS = Object.entries(AGENT_UI_CONFIG).map(([key, agent]) => ({
-    id: key,
-    ...agent,
-  }));
+  // Fetch agents from database
+  const { data: dbAgents = [], isLoading } = useQuery({
+    queryKey: ['ai-agents'],
+    queryFn: () => base44.entities.AIAgent.list(),
+  });
+
+  // Merge database agents with UI config
+  const AGENTS = dbAgents
+    .filter((agent) => agent.is_active)
+    .map((agent) => ({
+      id: agent.agent_key,
+      name: AGENT_UI_CONFIG[agent.agent_key]?.name || `${agent.first_name} ${agent.last_name}`,
+      icon: AGENT_UI_CONFIG[agent.agent_key]?.icon,
+      color: AGENT_UI_CONFIG[agent.agent_key]?.color,
+      badge: AGENT_UI_CONFIG[agent.agent_key]?.badge,
+      category: AGENT_UI_CONFIG[agent.agent_key]?.category,
+      status: 'active',
+      clearance: AGENT_UI_CONFIG[agent.agent_key]?.clearance,
+      tagline: AGENT_UI_CONFIG[agent.agent_key]?.tagline,
+      description: AGENT_UI_CONFIG[agent.agent_key]?.description,
+      responsibilities: agent.responsibilities
+        ? agent.responsibilities.split('\n').filter(Boolean)
+        : AGENT_UI_CONFIG[agent.agent_key]?.responsibilities || [],
+      useCases: AGENT_UI_CONFIG[agent.agent_key]?.useCases || [],
+      accessPath: AGENT_UI_CONFIG[agent.agent_key]?.accessPath || '',
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-slate-600">Loading agents...</p>
+        </div>
+      </div>
+    );
+  }
 
   const filteredAgents = AGENTS.filter((a) => {
     const matchCat = activeCategory === 'all' || a.category === activeCategory;
