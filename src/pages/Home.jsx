@@ -112,13 +112,13 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen bg-white">
       {/* Hero */}
       <div className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-500/10 via-transparent to-transparent" />
-        <div className="absolute top-20 left-10 w-72 h-72 bg-amber-500/10 rounded-full blur-3xl" />
-        <div className="absolute top-40 right-10 w-96 h-96 bg-orange-500/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-amber-500/5 via-transparent to-transparent" />
+        <div className="absolute top-20 left-10 w-72 h-72 bg-amber-500/5 rounded-full blur-3xl" />
+        <div className="absolute top-40 right-10 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
 
         <div className="relative max-w-7xl mx-auto px-4 py-16 md:py-24">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -129,7 +129,7 @@ export default function Home() {
                 {heroBadge}
               </div>
 
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-white mb-6 leading-[1.1] tracking-[-0.03em]">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold text-slate-900 mb-6 leading-[1.1] tracking-[-0.03em]">
                 {heroHeadline.includes('Outperforms') ? (
                   <>
                     Build a Brand That
@@ -152,7 +152,7 @@ export default function Home() {
                   </Button>
                 </Link>
                 <Link to={createPageUrl(ctaSecondaryLink)}>
-                  <Button variant="outline" className="h-14 px-8 text-base border-white/30 bg-white/10 text-white hover:bg-white/20 hover:border-white/50 backdrop-blur-sm font-semibold">
+                  <Button variant="outline" className="h-14 px-8 text-base border-slate-300 bg-white text-slate-800 hover:bg-slate-50 hover:border-slate-400 font-semibold">
                     {ctaSecondaryText}
                   </Button>
                 </Link>
@@ -173,17 +173,17 @@ export default function Home() {
                 <img src={heroImage} alt="Hero" className="w-full h-[420px] object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-tr from-slate-900/60 via-transparent to-amber-500/10" />
                 <div className="absolute bottom-6 left-6 right-6 space-y-3">
-                  <div className="bg-slate-900/80 backdrop-blur-md rounded-xl p-4 border border-slate-700/50 flex items-center gap-3">
+                  <div className="bg-white/90 backdrop-blur-md rounded-xl p-4 border border-slate-200 flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center flex-shrink-0">
                       <Zap className="w-5 h-5 text-white" />
                     </div>
                     <div>
-                      <div className="text-white font-semibold text-sm">AI builds your entire brand</div>
+                      <div className="text-slate-900 font-semibold text-sm">AI builds your entire brand</div>
                       <div className="text-slate-400 text-xs">Logo · Website · Social Media · Business Plan</div>
                     </div>
                   </div>
                   {isLoggedIn && (
-                    <Button onClick={() => setShowImagePanel(v => !v)} size="sm" className="w-full bg-slate-800/90 hover:bg-slate-700 text-white text-xs border border-slate-600">
+                    <Button onClick={() => setShowImagePanel(v => !v)} size="sm" className="w-full bg-white hover:bg-slate-50 text-slate-700 text-xs border border-slate-300">
                       <ImageIcon className="w-3 h-3 mr-1" />
                       Change Hero Image
                     </Button>
@@ -192,16 +192,16 @@ export default function Home() {
               </div>
 
               {showImagePanel && isLoggedIn && (
-                <div className="mt-3 rounded-xl bg-slate-800/90 border border-slate-700 p-4 space-y-3">
-                  <p className="text-white text-sm font-semibold">Hero Image</p>
+                <div className="mt-3 rounded-xl bg-white border border-slate-200 shadow p-4 space-y-3">
+                  <p className="text-slate-900 text-sm font-semibold">Hero Image</p>
                   <div className="space-y-2">
-                    <textarea value={aiPrompt} onChange={e => setAiPrompt(e.target.value)} placeholder="Describe the image you want..." className="w-full px-3 py-2 bg-slate-900 border border-slate-600 rounded-lg text-white text-xs placeholder-slate-500 resize-none h-16 focus:outline-none focus:border-amber-500" />
+                    <textarea value={aiPrompt} onChange={e => setAiPrompt(e.target.value)} placeholder="Describe the image you want..." className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 text-xs placeholder-slate-400 resize-none h-16 focus:outline-none focus:border-amber-500" />
                     <Button onClick={generateHeroImage} disabled={isGeneratingImage} size="sm" className="w-full bg-amber-600 hover:bg-amber-700 text-white text-xs">
                       {isGeneratingImage ? <><Loader2 className="w-3 h-3 mr-1 animate-spin" />Generating...</> : <><Sparkles className="w-3 h-3 mr-1" />Generate with AI</>}
                     </Button>
                   </div>
-                  <div className="flex items-center gap-2 text-slate-500 text-xs">
-                    <div className="flex-1 h-px bg-slate-700" />or<div className="flex-1 h-px bg-slate-700" />
+                  <div className="flex items-center gap-2 text-slate-400 text-xs">
+                    <div className="flex-1 h-px bg-slate-200" />or<div className="flex-1 h-px bg-slate-200" />
                   </div>
                   <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleUpload} />
                   <Button onClick={() => fileInputRef.current?.click()} disabled={isUploading} size="sm" variant="outline" className="w-full border-slate-600 text-slate-300 hover:bg-slate-700 text-xs">
@@ -219,18 +219,18 @@ export default function Home() {
       {/* Features */}
       <div className="max-w-7xl mx-auto px-4 py-24">
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-[-0.02em]">Everything You Need to Launch</h2>
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4 tracking-[-0.02em]">Everything You Need to Launch</h2>
           <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-[1.6]">From business planning to marketing—we've got you covered</p>
         </motion.div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {DEFAULT_FEATURES.map((feature, index) => (
             <motion.div key={feature.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.1 }}>
-              <Card className="group border border-slate-700/50 bg-gradient-to-br from-slate-800/80 to-slate-800/40 backdrop-blur-sm h-full overflow-hidden hover:border-slate-600 transition-all duration-300">
+              <Card className="group border border-slate-200 bg-white h-full overflow-hidden hover:border-amber-300 hover:shadow-md transition-all duration-300">
                 <CardContent className="p-8">
                   <div className="mb-5">
                     <feature.icon className={`w-8 h-8 bg-gradient-to-br ${feature.color} bg-clip-text text-transparent group-hover:scale-110 transition-transform duration-300`} />
                   </div>
-                  <h3 className="text-xl font-semibold text-white mb-3 tracking-[-0.02em]">{feature.title}</h3>
+                  <h3 className="text-xl font-semibold text-slate-900 mb-3 tracking-[-0.02em]">{feature.title}</h3>
                   <p className="text-slate-400 leading-[1.6]">{feature.description}</p>
                 </CardContent>
               </Card>
@@ -240,13 +240,13 @@ export default function Home() {
       </div>
 
       {/* Process */}
-      <div className="relative py-24 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-amber-500/5 via-orange-500/5 to-amber-500/5" />
-        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent" />
-        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-700 to-transparent" />
+      <div className="relative py-24 overflow-hidden bg-slate-50">
+        <div className="absolute inset-0 bg-gradient-to-r from-amber-500/3 via-orange-500/3 to-amber-500/3" />
+        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
+        <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent" />
         <div className="relative max-w-7xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-[-0.02em]">How It Works</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4 tracking-[-0.02em]">How It Works</h2>
             <p className="text-lg text-slate-400 leading-[1.6]">Four simple steps to your complete business</p>
           </div>
           <div className="grid md:grid-cols-4 gap-8">
@@ -258,7 +258,7 @@ export default function Home() {
             ].map((item, i) => (
               <motion.div key={item.step} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.2 }} className="text-center">
                 <div className="text-7xl font-extrabold bg-gradient-to-b from-amber-500/30 to-transparent bg-clip-text text-transparent mb-4">{item.step}</div>
-                <h3 className="text-xl font-semibold text-white mb-2">{item.title}</h3>
+                <h3 className="text-xl font-semibold text-slate-900 mb-2">{item.title}</h3>
                 <p className="text-slate-400">{item.desc}</p>
               </motion.div>
             ))}
@@ -270,7 +270,7 @@ export default function Home() {
       <div className="max-w-7xl mx-auto px-4 py-24">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div>
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-8 tracking-[-0.02em]">Why Choose Our Platform?</h2>
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-8 tracking-[-0.02em]">Why Choose Our Platform?</h2>
             <div className="space-y-6">
               {[
                 { icon: Target, title: 'Competitor Intelligence', desc: 'AI analyzes real competitors to find exploitable weaknesses' },
@@ -283,7 +283,7 @@ export default function Home() {
                     <benefit.icon className="w-6 h-6 text-amber-400" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-white mb-1">{benefit.title}</h3>
+                    <h3 className="text-lg font-semibold text-slate-900 mb-1">{benefit.title}</h3>
                     <p className="text-slate-400 leading-[1.6]">{benefit.desc}</p>
                   </div>
                 </div>
@@ -295,10 +295,10 @@ export default function Home() {
 
       {/* CTA */}
       <div className="max-w-4xl mx-auto px-4 py-24">
-        <Card className="border border-slate-700/50 bg-gradient-to-br from-slate-800 to-slate-800/50 overflow-hidden relative">
+        <Card className="border border-slate-200 bg-white overflow-hidden relative shadow-sm">
           <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-orange-500/5" />
           <CardContent className="p-14 text-center relative z-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4 tracking-[-0.02em]">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4 tracking-[-0.02em]">
               Start Building Your Business Today
             </h2>
             <p className="text-lg text-slate-400 mb-10 max-w-xl mx-auto leading-[1.6]">
