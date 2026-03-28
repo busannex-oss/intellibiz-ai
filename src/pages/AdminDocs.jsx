@@ -13,8 +13,7 @@ import {
 // ── Agent Registry ──────────────────────────────────────────────────────────
 
 const AGENTS = [
-  {
-    id: 'graphic_artist',
+  graphic_artist: {
     name: 'Graphic Artist',
     icon: Image,
     color: 'from-pink-500 to-rose-500',
@@ -41,7 +40,7 @@ const AGENTS = [
     accessPath: 'Admin Dashboard → Agents → Graphic Artist',
   },
   {
-    id: 'brand_sentinel',
+  brand_sentinel: {
     name: 'Brand Sentinel',
     icon: ShieldCheck,
     color: 'from-violet-500 to-indigo-600',
@@ -69,8 +68,7 @@ const AGENTS = [
     ],
     accessPath: 'Admin Dashboard → Agents → Brand Sentinel',
   },
-  {
-    id: 'brand_consistency_guardian',
+  brand_consistency_guardian: {
     name: 'Reliability & Diagnostics',
     icon: AlertTriangle,
     color: 'from-amber-500 to-orange-500',
@@ -96,8 +94,7 @@ const AGENTS = [
     ],
     accessPath: 'Admin Dashboard → Agents → Brand Consistency Guardian',
   },
-  {
-    id: 'cms_design_guardian',
+  cms_design_guardian: {
     name: 'Theme Coordinator',
     icon: Palette,
     color: 'from-blue-500 to-cyan-500',
@@ -123,8 +120,7 @@ const AGENTS = [
     ],
     accessPath: 'Admin Dashboard → Theme & Brand tab',
   },
-  {
-    id: 'logo_standards_guardian',
+  logo_standards_guardian: {
     name: 'Logo Standards Guardian',
     icon: Star,
     color: 'from-yellow-400 to-amber-500',
@@ -150,8 +146,7 @@ const AGENTS = [
     ],
     accessPath: 'Projects → Brand Assets → Logo Standards Guardian',
   },
-  {
-    id: 'business_assistant',
+  business_assistant: {
     name: 'Business Assistant',
     icon: Lightbulb,
     color: 'from-emerald-500 to-teal-500',
@@ -176,8 +171,7 @@ const AGENTS = [
     ],
     accessPath: 'Any project page → Business Assistant chat',
   },
-  {
-    id: 'market_intelligence',
+  market_intelligence: {
     name: 'Market Intelligence',
     icon: BarChart2,
     color: 'from-cyan-500 to-blue-500',
@@ -201,8 +195,7 @@ const AGENTS = [
     ],
     accessPath: 'Projects → Market Research tab',
   },
-  {
-    id: 'business_plan_architect',
+  business_plan_architect: {
     name: 'Business Plan Architect',
     icon: FileText,
     color: 'from-violet-500 to-purple-600',
@@ -227,8 +220,7 @@ const AGENTS = [
     ],
     accessPath: 'Projects → Business Plan tab',
   },
-  {
-    id: 'commercial_video_architect',
+  commercial_video_architect: {
     name: 'Commercial Video Architect',
     icon: Video,
     color: 'from-red-500 to-pink-500',
@@ -252,8 +244,7 @@ const AGENTS = [
     ],
     accessPath: 'Projects → Video Creation tab',
   },
-  {
-    id: 'board_advisor',
+  board_advisor: {
     name: 'Board Advisor',
     icon: Crown,
     color: 'from-slate-600 to-slate-800',
@@ -278,8 +269,7 @@ const AGENTS = [
     ],
     accessPath: 'Projects → Board Advisor (Professional+ plan)',
   },
-  {
-    id: 'seo_growth_engine',
+  seo_growth_engine: {
     name: 'SEO Growth Engine',
     icon: TrendingUp,
     color: 'from-green-500 to-emerald-600',
@@ -304,8 +294,7 @@ const AGENTS = [
     ],
     accessPath: 'Projects → SEO Tools tab',
   },
-  {
-    id: 'advertising_manager',
+  advertising_manager: {
     name: 'Advertising Manager',
     icon: Megaphone,
     color: 'from-orange-500 to-amber-500',
@@ -330,8 +319,7 @@ const AGENTS = [
     ],
     accessPath: 'Projects → Advertising tab',
   },
-  {
-    id: 'seasonal_newsletter_strategist',
+  seasonal_newsletter_strategist: {
     name: 'Newsletter Strategist',
     icon: Mail,
     color: 'from-teal-500 to-cyan-500',
@@ -356,8 +344,7 @@ const AGENTS = [
     ],
     accessPath: 'Projects → Newsletter tab',
   },
-  {
-    id: 'performance_monitor',
+  performance_monitor: {
     name: 'Performance Monitor',
     icon: BarChart2,
     color: 'from-blue-600 to-indigo-600',
@@ -382,8 +369,7 @@ const AGENTS = [
     ],
     accessPath: 'Projects → Analytics tab → AI Insights',
   },
-  {
-    id: 'security_sentinel',
+  security_sentinel: {
     name: 'Security Sentinel',
     icon: Lock,
     color: 'from-red-600 to-rose-700',
@@ -412,8 +398,7 @@ const AGENTS = [
     ],
     accessPath: 'Admin Dashboard → Security Sentinel (Super Admin only)',
   },
-  {
-    id: 'project_manager',
+  project_manager: {
     name: 'Project Manager',
     icon: Clipboard,
     color: 'from-slate-500 to-slate-700',
@@ -441,7 +426,7 @@ const AGENTS = [
     ],
     accessPath: 'Tasks page → Project Manager / Admin Dashboard → Agent Reports',
   },
-];
+};
 
 // ── Category Filter Config ──────────────────────────────────────────────────
 
@@ -558,9 +543,48 @@ export default function AdminDocs() {
   const [activeCategory, setActiveCategory] = useState('all');
   const [activeSection, setActiveSection] = useState('agents');
 
-  const filteredAgents = AGENTS.filter(a => {
+  // Fetch agents from database
+  const { data: dbAgents = [], isLoading } = useQuery({
+    queryKey: ['ai-agents'],
+    queryFn: () => base44.entities.AIAgent.list(),
+  });
+
+  // Merge database agents with UI config
+  const AGENTS = dbAgents
+    .filter((agent) => agent.is_active)
+    .map((agent) => ({
+      id: agent.agent_key,
+      name: AGENT_UI_CONFIG[agent.agent_key]?.name || `${agent.first_name} ${agent.last_name}`,
+      icon: AGENT_UI_CONFIG[agent.agent_key]?.icon,
+      color: AGENT_UI_CONFIG[agent.agent_key]?.color,
+      badge: AGENT_UI_CONFIG[agent.agent_key]?.badge,
+      category: AGENT_UI_CONFIG[agent.agent_key]?.category,
+      status: 'active',
+      clearance: AGENT_UI_CONFIG[agent.agent_key]?.clearance,
+      tagline: AGENT_UI_CONFIG[agent.agent_key]?.tagline,
+      description: AGENT_UI_CONFIG[agent.agent_key]?.description,
+      responsibilities: agent.responsibilities
+        ? agent.responsibilities.split('\n').filter(Boolean)
+        : AGENT_UI_CONFIG[agent.agent_key]?.responsibilities || [],
+      useCases: AGENT_UI_CONFIG[agent.agent_key]?.useCases || [],
+      accessPath: AGENT_UI_CONFIG[agent.agent_key]?.accessPath || '',
+    }));
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-slate-200 border-t-slate-800 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-slate-600">Loading agents...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const filteredAgents = AGENTS.filter((a) => {
     const matchCat = activeCategory === 'all' || a.category === activeCategory;
-    const matchSearch = !search ||
+    const matchSearch =
+      !search ||
       a.name.toLowerCase().includes(search.toLowerCase()) ||
       a.description.toLowerCase().includes(search.toLowerCase()) ||
       a.category.toLowerCase().includes(search.toLowerCase());
@@ -585,7 +609,7 @@ export default function AdminDocs() {
                 Complete internal reference for all AI agents, their roles, capabilities, access levels, and operational guidelines. This documentation ensures every team member understands how to leverage the platform's AI infrastructure.
               </p>
               <div className="flex items-center gap-4 mt-4 text-sm text-violet-300">
-                <span className="flex items-center gap-1.5"><Bot className="w-4 h-4" />{AGENTS.length} AI Agents</span>
+                <span className="flex items-center gap-1.5"><Bot className="w-4 h-4" />{AGENTS.length} AI Agents (from database)</span>
                 <span className="flex items-center gap-1.5"><Lock className="w-4 h-4" />Confidential — Internal Use Only</span>
                 <span className="flex items-center gap-1.5"><Eye className="w-4 h-4" />Last updated: March 2026</span>
               </div>
