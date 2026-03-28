@@ -619,27 +619,46 @@ export default function AdminDocs() {
           </div>
 
           {/* Section Nav */}
-          <div className="flex gap-3 mt-8">
-            {[
-              { id: 'agents', icon: Bot, label: 'AI Agents' },
-              { id: 'overview', icon: Layers, label: 'Platform Overview' },
-              { id: 'image_standards', icon: Image, label: 'Image Standards' },
-              { id: 'brand_rules', icon: ShieldCheck, label: 'Brand Rules' },
-            ].map(s => (
-              <button
-                key={s.id}
-                onClick={() => setActiveSection(s.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-                  activeSection === s.id
-                    ? 'bg-white text-slate-900 shadow'
-                    : 'bg-white/10 text-violet-200 hover:bg-white/20 hover:text-white'
-                }`}
-              >
-                <s.icon className="w-4 h-4" />
-                {s.label}
-              </button>
-            ))}
-          </div>
+              <div className="flex gap-3 mt-8">
+                {[
+                  { id: 'agents', icon: Bot, label: 'AI Agents' },
+                  { id: 'overview', icon: Layers, label: 'Platform Overview' },
+                  { id: 'image_standards', icon: Image, label: 'Image Standards' },
+                  { id: 'brand_rules', icon: ShieldCheck, label: 'Brand Rules' },
+                ].map(s => (
+                  <button
+                    key={s.id}
+                    onClick={() => setActiveSection(s.id)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                      activeSection === s.id
+                        ? 'bg-white text-slate-900 shadow'
+                        : 'bg-white/10 text-violet-200 hover:bg-white/20 hover:text-white'
+                    }`}
+                  >
+                    <s.icon className="w-4 h-4" />
+                    {s.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Agent Team Preview */}
+              <div className="mt-8 pt-6 border-t border-violet-700/50">
+                <p className="text-sm text-violet-300 mb-4">Your AI Team ({AGENTS.length} agents)</p>
+                <div className="flex flex-wrap gap-3">
+                  {AGENTS.slice(0, 8).map(agent => {
+                    const AgentIcon = agent.icon;
+                    return (
+                      <div key={agent.id} className="flex flex-col items-center gap-2">
+                        <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${agent.color} flex items-center justify-center shadow-lg`}>
+                          <AgentIcon className="w-6 h-6 text-white" />
+                        </div>
+                        <span className="text-xs text-violet-200 text-center leading-tight max-w-[60px]">{agent.name}</span>
+                      </div>
+                    );
+                  })}
+                  {AGENTS.length > 8 && <div className="flex items-center gap-2 text-violet-300 text-xs">+{AGENTS.length - 8} more</div>}
+                </div>
+              </div>
         </div>
       </div>
 
