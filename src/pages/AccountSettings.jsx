@@ -6,8 +6,27 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { User, Building, Phone, Globe, Save, Loader2, Trash2, AlertTriangle, Bot } from 'lucide-react';
+import { User, Building, Phone, Globe, Save, Loader2, Trash2, AlertTriangle, Bot, Lock, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
+
+const AGENT_UI_CONFIG = {
+  graphic_artist: { name: 'Graphic Artist', icon: Bot, color: 'from-pink-500 to-rose-500', category: 'Visual Quality' },
+  brand_sentinel: { name: 'Brand Sentinel', icon: Bot, color: 'from-violet-500 to-indigo-600', category: 'Brand Integrity' },
+  brand_consistency_guardian: { name: 'Reliability & Diagnostics', icon: Bot, color: 'from-amber-500 to-orange-500', category: 'Diagnostics' },
+  cms_design_guardian: { name: 'Theme Coordinator', icon: Bot, color: 'from-blue-500 to-cyan-500', category: 'CMS & Design' },
+  logo_standards_guardian: { name: 'Logo Standards Guardian', icon: Bot, color: 'from-yellow-400 to-amber-500', category: 'Visual Quality' },
+  business_assistant: { name: 'Business Assistant', icon: Bot, color: 'from-emerald-500 to-teal-500', category: 'Business Intelligence' },
+  market_intelligence: { name: 'Market Intelligence', icon: Bot, color: 'from-cyan-500 to-blue-500', category: 'Research' },
+  business_plan_architect: { name: 'Business Plan Architect', icon: Bot, color: 'from-violet-500 to-purple-600', category: 'Business Intelligence' },
+  commercial_video_architect: { name: 'Commercial Video Architect', icon: Bot, color: 'from-red-500 to-pink-500', category: 'Content Creation' },
+  board_advisor: { name: 'Board Advisor', icon: Bot, color: 'from-slate-600 to-slate-800', category: 'Executive Strategy' },
+  seo_growth_engine: { name: 'SEO Growth Engine', icon: Bot, color: 'from-green-500 to-emerald-600', category: 'Marketing' },
+  advertising_manager: { name: 'Advertising Manager', icon: Bot, color: 'from-orange-500 to-amber-500', category: 'Marketing' },
+  seasonal_newsletter_strategist: { name: 'Newsletter Strategist', icon: Bot, color: 'from-teal-500 to-cyan-500', category: 'Content Creation' },
+  performance_monitor: { name: 'Performance Monitor', icon: Bot, color: 'from-blue-600 to-indigo-600', category: 'Analytics' },
+  security_sentinel: { name: 'Security Sentinel', icon: Bot, color: 'from-red-600 to-rose-700', category: 'Security' },
+  project_manager: { name: 'Project Manager', icon: Bot, color: 'from-slate-500 to-slate-700', category: 'Operations' },
+};
 
 export default function AccountSettings() {
   const queryClient = useQueryClient();
@@ -240,35 +259,48 @@ export default function AccountSettings() {
               Your AI Team
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <Card className="border border-slate-700 bg-slate-900/50">
-                <CardContent className="p-4 text-center">
-                  <p className="text-3xl font-bold text-violet-400">{agents.length}</p>
-                  <p className="text-xs text-slate-400 mt-1">Total AI Agents</p>
-                </CardContent>
-              </Card>
-              <Card className="border border-slate-700 bg-slate-900/50">
-                <CardContent className="p-4 text-center">
-                  <p className="text-3xl font-bold text-pink-400">{agents.filter(a => a.is_active).length}</p>
-                  <p className="text-xs text-slate-400 mt-1">Active</p>
-                </CardContent>
-              </Card>
-              <Card className="border border-slate-700 bg-slate-900/50">
-                <CardContent className="p-4 text-center">
-                  <p className="text-3xl font-bold text-blue-400">0</p>
-                  <p className="text-xs text-slate-400 mt-1">Admin Only</p>
-                </CardContent>
-              </Card>
-              <Card className="border border-slate-700 bg-slate-900/50">
-                <CardContent className="p-4 text-center">
-                  <p className="text-3xl font-bold text-emerald-400">0</p>
-                  <p className="text-xs text-slate-400 mt-1">User-Facing</p>
-                </CardContent>
-              </Card>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <div className="p-3 bg-slate-900/50 rounded-lg border border-slate-700 text-center">
+                <p className="text-2xl font-bold text-violet-400">{agents.length}</p>
+                <p className="text-xs text-slate-400 mt-1">Total AI Agents</p>
+              </div>
+              <div className="p-3 bg-slate-900/50 rounded-lg border border-slate-700 text-center">
+                <p className="text-2xl font-bold text-pink-400">{agents.filter(a => a.is_active).length}</p>
+                <p className="text-xs text-slate-400 mt-1">Active</p>
+              </div>
+              <div className="p-3 bg-slate-900/50 rounded-lg border border-slate-700 text-center">
+                <p className="text-2xl font-bold text-blue-400">0</p>
+                <p className="text-xs text-slate-400 mt-1">Admin Only</p>
+              </div>
+              <div className="p-3 bg-slate-900/50 rounded-lg border border-slate-700 text-center">
+                <p className="text-2xl font-bold text-emerald-400">0</p>
+                <p className="text-xs text-slate-400 mt-1">User-Facing</p>
+              </div>
             </div>
-            {agents.length === 0 && (
-              <p className="text-sm text-slate-400 mt-4 text-center">No AI agents loaded yet. Go to Admin Dashboard to seed agents.</p>
+
+            {agents.length > 0 ? (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 pt-4">
+                {agents.filter(a => a.is_active).map(agent => {
+                  const config = AGENT_UI_CONFIG[agent.agent_key];
+                  if (!config) return null;
+                  return (
+                    <div key={agent.id} className="p-4 bg-slate-900/50 rounded-lg border border-slate-700 hover:border-slate-600 transition-all">
+                      <div className="flex items-start gap-3">
+                        <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${config.color} flex items-center justify-center flex-shrink-0`}>
+                          <Bot className="w-5 h-5 text-white" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-semibold text-white text-sm">{config.name}</h4>
+                          <p className="text-xs text-slate-400 mt-0.5">{config.category}</p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <p className="text-sm text-slate-400 text-center py-4">No AI agents loaded yet. Go to Admin Dashboard to seed agents.</p>
             )}
           </CardContent>
         </Card>
