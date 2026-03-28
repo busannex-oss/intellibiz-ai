@@ -61,7 +61,7 @@ const AuthenticatedApp = () => {
         />
       ))}
       <Route path="/AgentMemoryLog" element={<LayoutWrapper currentPageName="AgentMemoryLog"><AgentMemoryLogPage /></LayoutWrapper>} />
-      <Route path="/AgentProfiles" element={<LayoutWrapper currentPageName="AgentProfiles"><AgentProfilesPage /></LayoutWrapper>} /> element={<LayoutWrapper currentPageName="AgentMemoryLog"><AgentMemoryLogPage /></LayoutWrapper>} />
+      <Route path="/AgentProfiles" element={<LayoutWrapper currentPageName="AgentProfiles"><AgentProfilesPage /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
