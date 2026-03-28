@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
 import { Edit2, Trash2, Save, X, Plus, Loader2, RefreshCw, Bot, Shield, Brain } from 'lucide-react';
 import { toast } from 'sonner';
 import { Link } from 'react-router-dom';
@@ -200,6 +201,7 @@ function AgentCard({ agent, onSave, onDelete, isNew }) {
             </>
           ) : (
             <>
+              {/* Name + Title */}
               <div>
                 <h3 className="text-lg font-bold text-slate-900 leading-tight">{form.first_name} {form.last_name}</h3>
                 <p className="text-sm text-violet-600 font-medium">{form.job_title || '—'}</p>
@@ -207,18 +209,33 @@ function AgentCard({ agent, onSave, onDelete, isNew }) {
                   {form.agent_key.replace(/_/g, ' ')} · {form.gender} · Age {form.age || '—'}
                 </p>
               </div>
-              {form.personality && (
-                <div>
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Personality</p>
-                  <p className="text-sm text-slate-600 line-clamp-2">{form.personality}</p>
-                </div>
-              )}
-              {form.responsibilities && (
-                <div>
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Responsibilities</p>
-                  <p className="text-sm text-slate-600 line-clamp-2">{form.responsibilities}</p>
-                </div>
-              )}
+
+              {/* Personality */}
+              <div>
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Personality</p>
+                <p className="text-sm text-slate-600">{form.personality || '—'}</p>
+              </div>
+
+              {/* Responsibilities */}
+              <div>
+                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Responsibilities</p>
+                <p className="text-sm text-slate-600">{form.responsibilities || '—'}</p>
+              </div>
+
+              {/* Active Toggle */}
+              <div className="flex items-center justify-between pt-1 border-t border-slate-100">
+                <span className="text-xs font-semibold text-slate-500">Active</span>
+                <Switch
+                  checked={!!form.is_active}
+                  onCheckedChange={async (val) => {
+                    const updated = { ...form, is_active: val };
+                    setForm(updated);
+                    await onSave({ ...agent, is_active: val });
+                  }}
+                />
+              </div>
+
+              {/* Action Buttons */}
               <div className="flex gap-2 pt-1 flex-wrap">
                 <Button onClick={() => setEditing(true)} variant="outline" size="sm" className="h-8 text-xs gap-1">
                   <Edit2 className="w-3 h-3" />Edit
@@ -228,6 +245,9 @@ function AgentCard({ agent, onSave, onDelete, isNew }) {
                     <Brain className="w-3 h-3" />Memory
                   </Button>
                 </Link>
+                <Button onClick={handleSave} disabled={saving} variant="outline" size="sm" className="h-8 text-xs gap-1 text-violet-600 border-violet-300 hover:bg-violet-50">
+                  {saving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}Save
+                </Button>
                 <Button onClick={() => onDelete(agent.id)} variant="ghost" size="sm" className="h-8 text-xs gap-1 text-red-500 hover:bg-red-50 ml-auto">
                   <Trash2 className="w-3 h-3" />Delete
                 </Button>
