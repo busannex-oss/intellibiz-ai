@@ -148,21 +148,38 @@ function AgentCard({ agent, onSave, onDelete, isNew }) {
             </>
           ) : (
             <>
-              <div>
+              {/* Name & Title */}
+              <div className="border-b border-slate-100 pb-3">
                 <h3 className="text-base font-bold text-slate-900 leading-tight">{form.first_name} {form.last_name}</h3>
                 <p className="text-sm text-violet-600 font-medium">{form.job_title || '—'}</p>
-                <p className="text-xs text-slate-400 mt-0.5 capitalize">{form.agent_key.replace(/_/g, ' ')} · Age {form.age || '—'}</p>
+                <p className="text-xs text-slate-400 mt-0.5">Age: {form.age || '—'} · <span className="capitalize">{form.agent_key.replace(/_/g, ' ')}</span></p>
               </div>
+
+              {/* Personality */}
               <div>
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Personality</p>
-                <p className="text-sm text-slate-600">{form.personality || '—'}</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Personality</p>
+                <p className="text-sm text-slate-600 leading-snug line-clamp-3">{form.personality || '—'}</p>
               </div>
+
+              {/* Responsibilities */}
               <div>
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Responsibilities</p>
-                <p className="text-sm text-slate-600">{form.responsibilities || '—'}</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Responsibilities</p>
+                <p className="text-sm text-slate-600 leading-snug line-clamp-3">{form.responsibilities || '—'}</p>
               </div>
+
+              {/* Memory Log */}
+              <div className="bg-slate-50 rounded-lg p-3 border border-slate-200">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Memory Log</p>
+                <Link to={`${createPageUrl('AgentMemoryLog')}?agent=${form.agent_key}`}>
+                  <Button variant="outline" size="sm" className="w-full h-8 text-xs gap-1.5 border-violet-300 text-violet-600 hover:bg-violet-50">
+                    <Brain className="w-3.5 h-3.5" />View Memory Log
+                  </Button>
+                </Link>
+              </div>
+
+              {/* Toggle */}
               <div className="flex items-center justify-between pt-1 border-t border-slate-100">
-                <span className="text-xs font-semibold text-slate-500">Active</span>
+                <span className="text-sm font-medium text-slate-600">Active</span>
                 <Switch
                   checked={!!form.is_active}
                   onCheckedChange={async (val) => {
@@ -171,20 +188,17 @@ function AgentCard({ agent, onSave, onDelete, isNew }) {
                   }}
                 />
               </div>
-              <div className="flex gap-2 flex-wrap">
-                <Button onClick={() => setEditing(true)} variant="outline" size="sm" className="h-8 text-xs gap-1">
+
+              {/* Action Buttons */}
+              <div className="flex gap-2 pt-1">
+                <Button onClick={() => setEditing(true)} variant="outline" size="sm" className="flex-1 h-8 text-xs gap-1">
                   <Edit2 className="w-3 h-3" />Edit
                 </Button>
-                <Link to={`${createPageUrl('AgentMemoryLog')}?agent=${form.agent_key}`}>
-                  <Button variant="outline" size="sm" className="h-8 text-xs gap-1">
-                    <Brain className="w-3 h-3" />Memory
-                  </Button>
-                </Link>
-                <Button onClick={handleSave} disabled={saving} variant="outline" size="sm" className="h-8 text-xs gap-1 text-violet-600 border-violet-300 hover:bg-violet-50">
+                <Button onClick={handleSave} disabled={saving} size="sm" className="flex-1 h-8 text-xs gap-1 bg-violet-600 hover:bg-violet-700 text-white">
                   {saving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}Save
                 </Button>
-                <Button onClick={() => onDelete(agent.id)} variant="ghost" size="sm" className="h-8 text-xs gap-1 text-red-500 hover:bg-red-50 ml-auto">
-                  <Trash2 className="w-3 h-3" />Delete
+                <Button onClick={() => onDelete(agent.id)} variant="ghost" size="sm" className="h-8 text-xs gap-1 text-red-500 hover:bg-red-50 px-2">
+                  <Trash2 className="w-3 h-3" />
                 </Button>
               </div>
             </>
