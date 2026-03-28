@@ -1,0 +1,94 @@
+{
+  "name": "PageContent",
+  "type": "object",
+  "properties": {
+    "page_key": {
+      "type": "string",
+      "description": "Which page this content belongs to (e.g. 'services', 'how_it_works', 'investor', 'resources')"
+    },
+    "section_key": {
+      "type": "string",
+      "description": "Section within the page (e.g. 'hero', 'service_item', 'step', 'feature', 'stat', 'partnership')"
+    },
+    "order": {
+      "type": "number",
+      "default": 0
+    },
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "string"
+    },
+    "body": {
+      "type": "string"
+    },
+    "icon": {
+      "type": "string",
+      "description": "Lucide icon name"
+    },
+    "color": {
+      "type": "string",
+      "description": "Tailwind gradient classes"
+    },
+    "badge_text": {
+      "type": "string"
+    },
+    "cta_text": {
+      "type": "string"
+    },
+    "cta_link": {
+      "type": "string"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "metadata": {
+      "type": "object"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "page_key",
+    "section_key"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "super_admin"
+          ]
+        }
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "super_admin"
+          ]
+        }
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "super_admin"
+          ]
+        }
+      }
+    }
+  }
+}
