@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { User, Building, Phone, Globe, Save, Loader2, Trash2, AlertTriangle } from 'lucide-react';
+import { User, Building, Phone, Globe, Save, Loader2, Trash2, AlertTriangle, Bot } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function AccountSettings() {
@@ -18,6 +18,11 @@ export default function AccountSettings() {
   const { data: user, isLoading } = useQuery({
     queryKey: ['currentUser'],
     queryFn: () => base44.auth.me()
+  });
+
+  const { data: agents = [] } = useQuery({
+    queryKey: ['ai-agents'],
+    queryFn: () => base44.entities.AIAgent.list()
   });
 
   const [formData, setFormData] = useState({
@@ -227,9 +232,50 @@ export default function AccountSettings() {
           </CardContent>
         </Card>
 
+        {/* AI Agents Section */}
+        <Card className="border-0 bg-slate-800/50 border border-slate-700">
+          <CardHeader>
+            <CardTitle className="text-white flex items-center gap-2">
+              <Bot className="w-5 h-5 text-violet-400" />
+              Your AI Team
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <Card className="border border-slate-700 bg-slate-900/50">
+                <CardContent className="p-4 text-center">
+                  <p className="text-3xl font-bold text-violet-400">{agents.length}</p>
+                  <p className="text-xs text-slate-400 mt-1">Total AI Agents</p>
+                </CardContent>
+              </Card>
+              <Card className="border border-slate-700 bg-slate-900/50">
+                <CardContent className="p-4 text-center">
+                  <p className="text-3xl font-bold text-pink-400">{agents.filter(a => a.is_active).length}</p>
+                  <p className="text-xs text-slate-400 mt-1">Active</p>
+                </CardContent>
+              </Card>
+              <Card className="border border-slate-700 bg-slate-900/50">
+                <CardContent className="p-4 text-center">
+                  <p className="text-3xl font-bold text-blue-400">0</p>
+                  <p className="text-xs text-slate-400 mt-1">Admin Only</p>
+                </CardContent>
+              </Card>
+              <Card className="border border-slate-700 bg-slate-900/50">
+                <CardContent className="p-4 text-center">
+                  <p className="text-3xl font-bold text-emerald-400">0</p>
+                  <p className="text-xs text-slate-400 mt-1">User-Facing</p>
+                </CardContent>
+              </Card>
+            </div>
+            {agents.length === 0 && (
+              <p className="text-sm text-slate-400 mt-4 text-center">No AI agents loaded yet. Go to Admin Dashboard to seed agents.</p>
+            )}
+          </CardContent>
+        </Card>
+
         {/* Save Button */}
-        <div className="flex justify-end">
-          <Button
+         <div className="flex justify-end">
+           <Button
             onClick={handleSave}
             disabled={isSaving}
             className="bg-blue-600 hover:bg-blue-700 h-12 px-8"
