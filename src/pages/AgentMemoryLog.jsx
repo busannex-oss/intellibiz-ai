@@ -159,9 +159,9 @@ export default function AgentMemoryLogPage() {
         <div className="max-w-6xl mx-auto">
           <h1 className="text-3xl font-bold text-white flex items-center gap-3">
             <Brain className="w-8 h-8 text-white/80" />
-            Agent Memory Logs
+            Team Memory Logs
           </h1>
-          <p className="text-indigo-200 mt-1">Persistent memory storage with keyword-vector retrieval for all AI agents</p>
+          <p className="text-indigo-200 mt-1">Persistent memory storage with keyword-vector retrieval for all team members</p>
         </div>
       </div>
 
@@ -192,7 +192,7 @@ export default function AgentMemoryLogPage() {
               <Select value={selectedAgent} onValueChange={(v) => { setSelectedAgent(v); setSearchResults(null); }}>
                 <SelectTrigger className="w-full md:w-64">
                   <Bot className="w-4 h-4 mr-2 text-slate-400" />
-                  <SelectValue placeholder="Select an agent..." />
+                  <SelectValue placeholder="Select a team member..." />
                 </SelectTrigger>
                 <SelectContent>
                   {AGENTS.map(a => (
@@ -297,7 +297,7 @@ export default function AgentMemoryLogPage() {
         {!selectedAgent && (
           <div className="text-center py-16">
             <Brain className="w-16 h-16 text-slate-200 mx-auto mb-4" />
-            <p className="text-slate-400 text-lg">Select an agent to view its memory log</p>
+            <p className="text-slate-400 text-lg">Select a team member to view their memory log</p>
           </div>
         )}
       </div>
