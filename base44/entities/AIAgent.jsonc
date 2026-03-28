@@ -4,7 +4,7 @@
   "properties": {
     "agent_key": {
       "type": "string",
-      "description": "Machine-readable agent identifier (e.g. brand_sentinel)"
+      "description": "Machine-readable agent identifier"
     },
     "first_name": {
       "type": "string"
@@ -19,16 +19,13 @@
       "type": "string"
     },
     "personality": {
-      "type": "string",
-      "description": "Personality description"
+      "type": "string"
     },
     "responsibilities": {
-      "type": "string",
-      "description": "Core responsibilities"
+      "type": "string"
     },
     "headshot_url": {
-      "type": "string",
-      "description": "AI-generated headshot URL"
+      "type": "string"
     },
     "is_active": {
       "type": "boolean",
@@ -44,6 +41,7 @@
       "user_condition": {
         "role": {
           "$in": [
+            "admin",
             "super_admin"
           ]
         }
@@ -63,6 +61,7 @@
       "user_condition": {
         "role": {
           "$in": [
+            "admin",
             "super_admin"
           ]
         }
@@ -72,6 +71,7 @@
       "user_condition": {
         "role": {
           "$in": [
+            "admin",
             "super_admin"
           ]
         }
