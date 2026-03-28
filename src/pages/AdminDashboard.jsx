@@ -11,11 +11,12 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Shield, Users, Trash2, UserPlus, Settings, Activity, AlertTriangle, Key, Mail, Globe, Save, Palette, Image, Navigation, Lock, Search, Loader2, Upload, Sparkles, Type, ShieldCheck, BookOpen } from 'lucide-react';
+import { Shield, Users, Trash2, UserPlus, Settings, Activity, AlertTriangle, Key, Mail, Globe, Save, Palette, Image, Navigation, Lock, Search, Loader2, Upload, Sparkles, Type, ShieldCheck, BookOpen, Bot } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import ThemeTab from '@/components/admin/ThemeTab';
 import BrandAuditTab from '@/components/admin/BrandAuditTab';
+import AgentProfilesPage from './AgentProfiles';
 import { toast } from 'sonner';
 
 export default function AdminDashboard() {
@@ -268,6 +269,7 @@ export default function AdminDashboard() {
           <TabsList className="bg-white border border-slate-200 mb-6 shadow-sm flex-wrap h-auto gap-1 p-1">
             {[
               { value: 'users', icon: Users, label: 'Users' },
+              { value: 'team', icon: Bot, label: 'The Team', superOnly: true },
               { value: 'brand_audit', icon: ShieldCheck, label: 'Brand Audit' },
               { value: 'hero', icon: Image, label: 'Hero' },
               { value: 'theme', icon: Type, label: 'Theme & Brand', superOnly: true },
@@ -390,6 +392,11 @@ export default function AdminDashboard() {
                 </div>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* === THE TEAM TAB === */}
+          <TabsContent value="team">
+            <AgentProfilesPage />
           </TabsContent>
 
           {/* === HERO TAB === */}
