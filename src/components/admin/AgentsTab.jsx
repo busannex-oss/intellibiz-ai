@@ -13,6 +13,25 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Plus, Edit, Trash2, Save, Sparkles, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
+const DEFAULT_AGENTS = [
+  { agent_key: 'graphic_artist', first_name: 'Graphic', last_name: 'Artist', job_title: 'Senior Visual QA Director', personality: 'Detail-oriented, critical, constructive', responsibilities: 'Inspects all platform images for publication quality, transparency, composition, and brand alignment', is_active: true },
+  { agent_key: 'brand_sentinel', first_name: 'Brand', last_name: 'Sentinel', job_title: 'Brand Consistency Enforcer', personality: 'Rigorous, systematic, authoritative', responsibilities: 'Enforces visual and verbal brand consistency across all touchpoints and outputs', is_active: true },
+  { agent_key: 'brand_consistency_guardian', first_name: 'Reliability', last_name: 'Diagnostics', job_title: 'Diagnostic & Reliability Agent', personality: 'Analytical, methodical, user-invoked', responsibilities: 'Identifies errors, inconsistencies, and misconfigurations in the platform', is_active: true },
+  { agent_key: 'cms_design_guardian', first_name: 'Theme', last_name: 'Coordinator', job_title: 'Platform Design System Authority', personality: 'Systematic, delegated, compliance-focused', responsibilities: 'Manages platform themes, branding, and design system compliance', is_active: true },
+  { agent_key: 'logo_standards_guardian', first_name: 'Logo', last_name: 'Standards Guardian', job_title: 'Logo Asset Authority', personality: 'Precise, standards-driven, quality assurance', responsibilities: 'Ensures every logo meets agency-grade professional standards and transparency requirements', is_active: true },
+  { agent_key: 'business_assistant', first_name: 'Business', last_name: 'Assistant', job_title: 'Business Advisor', personality: 'Helpful, strategic, user-focused', responsibilities: 'Provides business strategy, planning guidance, and market positioning advice', is_active: true },
+  { agent_key: 'market_intelligence', first_name: 'Market', last_name: 'Intelligence', job_title: 'Research & Insights Analyst', personality: 'Data-driven, analytical, forward-thinking', responsibilities: 'Conducts market research, competitor analysis, and identifies growth opportunities', is_active: true },
+  { agent_key: 'business_plan_architect', first_name: 'Business', last_name: 'Plan Architect', job_title: 'Financial Planning Specialist', personality: 'Comprehensive, detailed, investor-focused', responsibilities: 'Generates 30-year business plans with financial projections and strategy', is_active: true },
+  { agent_key: 'commercial_video_architect', first_name: 'Commercial', last_name: 'Video Architect', job_title: 'Video Content Strategist', personality: 'Creative, strategic, platform-aware', responsibilities: 'Generates commercial video scripts and production briefs for multiple platforms', is_active: true },
+  { agent_key: 'board_advisor', first_name: 'Board', last_name: 'Advisor', job_title: 'Executive Strategy Counselor', personality: 'Strategic, authoritative, experienced', responsibilities: 'Provides C-suite level strategic guidance and business decision analysis', is_active: true },
+  { agent_key: 'seo_growth_engine', first_name: 'SEO', last_name: 'Growth Engine', job_title: 'Search Growth Strategist', personality: 'Data-driven, optimization-focused, competitive', responsibilities: 'Conducts keyword research and SEO strategy to outrank competitors', is_active: true },
+  { agent_key: 'advertising_manager', first_name: 'Advertising', last_name: 'Manager', job_title: 'Multi-Channel Campaign Manager', personality: 'Strategic, creative, ROI-focused', responsibilities: 'Plans and optimizes advertising campaigns across Google, Meta, LinkedIn, and TikTok', is_active: true },
+  { agent_key: 'seasonal_newsletter_strategist', first_name: 'Newsletter', last_name: 'Strategist', job_title: 'Email Content Strategist', personality: 'Creative, strategic, audience-aware', responsibilities: 'Plans and writes branded email newsletters aligned to seasonal campaigns', is_active: true },
+  { agent_key: 'performance_monitor', first_name: 'Performance', last_name: 'Monitor', job_title: 'Analytics & Insights Engine', personality: 'Analytical, insightful, data-driven', responsibilities: 'Analyzes metrics to surface insights, detect anomalies, and predict trends', is_active: true },
+  { agent_key: 'security_sentinel', first_name: 'Security', last_name: 'Sentinel', job_title: 'Constitutional Authority', personality: 'Vigilant, systematic, immutable', responsibilities: 'Enforces Super Admin policy and platform security protocols', is_active: true },
+  { agent_key: 'project_manager', first_name: 'Project', last_name: 'Manager', job_title: 'Platform Command Center', personality: 'Organized, vigilant, compliance-focused', responsibilities: 'Monitors all AI agents and submits daily compliance reports', is_active: true },
+];
+
 export default function AgentsTab() {
   const [editingAgent, setEditingAgent] = useState(null);
   const [formData, setFormData] = useState({});
@@ -52,6 +71,17 @@ export default function AgentsTab() {
       queryClient.invalidateQueries({ queryKey: ['ai-agents'] });
     },
     onError: (err) => toast.error(err.message),
+  });
+
+  const seedMutation = useMutation({
+    mutationFn: async () => {
+      await base44.entities.AIAgent.bulkCreate(DEFAULT_AGENTS);
+    },
+    onSuccess: () => {
+      toast.success('All agents loaded');
+      queryClient.invalidateQueries({ queryKey: ['ai-agents'] });
+    },
+    onError: (err) => toast.error('Failed to seed: ' + err.message),
   });
 
   const handleGenerateHeadshot = async () => {
@@ -107,77 +137,83 @@ export default function AgentsTab() {
               </CardTitle>
               <CardDescription>Create and manage AI agents on the platform</CardDescription>
             </div>
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button onClick={() => { setEditingAgent(null); setFormData({}); }} className="bg-violet-600 hover:bg-violet-700">
-                  <Plus className="w-4 h-4 mr-2" />
-                  New Agent
+            <div className="flex gap-2">
+              {agents.length === 0 && (
+                <Button onClick={() => seedMutation.mutate()} disabled={seedMutation.isPending} className="bg-emerald-600 hover:bg-emerald-700">
+                  {seedMutation.isPending ? 'Loading...' : 'Load All Agents'}
                 </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl">
-                <DialogHeader>
-                  <DialogTitle>{editingAgent ? 'Edit Agent' : 'Create New Agent'}</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4 max-h-96 overflow-y-auto">
-                  {formData.headshot_url && <img src={formData.headshot_url} alt="Headshot" className="w-32 h-32 rounded-lg object-cover" />}
-                  
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <Label>First Name *</Label>
-                      <Input value={formData.first_name || ''} onChange={e => setFormData(p => ({ ...p, first_name: e.target.value }))} placeholder="Alex" />
+              )}
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button onClick={() => { setEditingAgent(null); setFormData({}); }} className="bg-violet-600 hover:bg-violet-700">
+                    <Plus className="w-4 h-4 mr-2" />
+                    New Agent
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl">
+                  <DialogHeader>
+                    <DialogTitle>{editingAgent ? 'Edit Agent' : 'Create New Agent'}</DialogTitle>
+                  </DialogHeader>
+                  <div className="space-y-4 max-h-96 overflow-y-auto">
+                    {formData.headshot_url && <img src={formData.headshot_url} alt="Headshot" className="w-32 h-32 rounded-lg object-cover" />}
+                    
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <Label>First Name *</Label>
+                        <Input value={formData.first_name || ''} onChange={e => setFormData(p => ({ ...p, first_name: e.target.value }))} placeholder="Alex" />
+                      </div>
+                      <div>
+                        <Label>Last Name</Label>
+                        <Input value={formData.last_name || ''} onChange={e => setFormData(p => ({ ...p, last_name: e.target.value }))} placeholder="Rivera" />
+                      </div>
                     </div>
-                    <div>
-                      <Label>Last Name</Label>
-                      <Input value={formData.last_name || ''} onChange={e => setFormData(p => ({ ...p, last_name: e.target.value }))} placeholder="Rivera" />
+
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <Label>Age</Label>
+                        <Input type="number" value={formData.age || ''} onChange={e => setFormData(p => ({ ...p, age: parseInt(e.target.value) || null }))} />
+                      </div>
+                      <div>
+                        <Label>Agent Key *</Label>
+                        <Input value={formData.agent_key || ''} onChange={e => setFormData(p => ({ ...p, agent_key: e.target.value }))} placeholder="brand_sentinel" />
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <Label>Age</Label>
-                      <Input type="number" value={formData.age || ''} onChange={e => setFormData(p => ({ ...p, age: parseInt(e.target.value) || null }))} />
+                      <Label>Job Title</Label>
+                      <Input value={formData.job_title || ''} onChange={e => setFormData(p => ({ ...p, job_title: e.target.value }))} placeholder="Chief Brand Intelligence Officer" />
                     </div>
+
                     <div>
-                      <Label>Agent Key *</Label>
-                      <Input value={formData.agent_key || ''} onChange={e => setFormData(p => ({ ...p, agent_key: e.target.value }))} placeholder="brand_sentinel" />
+                      <Label>Personality</Label>
+                      <Textarea value={formData.personality || ''} onChange={e => setFormData(p => ({ ...p, personality: e.target.value }))} placeholder="Analytical, detail-oriented, creative..." className="h-16" />
                     </div>
-                  </div>
 
-                  <div>
-                    <Label>Job Title</Label>
-                    <Input value={formData.job_title || ''} onChange={e => setFormData(p => ({ ...p, job_title: e.target.value }))} placeholder="Chief Brand Intelligence Officer" />
-                  </div>
+                    <div>
+                      <Label>Responsibilities</Label>
+                      <Textarea value={formData.responsibilities || ''} onChange={e => setFormData(p => ({ ...p, responsibilities: e.target.value }))} placeholder="Line-separated responsibilities" className="h-20" />
+                    </div>
 
-                  <div>
-                    <Label>Personality</Label>
-                    <Textarea value={formData.personality || ''} onChange={e => setFormData(p => ({ ...p, personality: e.target.value }))} placeholder="Analytical, detail-oriented, creative..." className="h-16" />
-                  </div>
+                    <div>
+                      <Label>Headshot URL</Label>
+                      <Input value={formData.headshot_url || ''} onChange={e => setFormData(p => ({ ...p, headshot_url: e.target.value }))} placeholder="https://..." />
+                      <Button onClick={handleGenerateHeadshot} disabled={isGeneratingHeadshot} className="w-full mt-2" variant="outline">
+                        {isGeneratingHeadshot ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Generating...</> : <><Sparkles className="w-4 h-4 mr-2" />Generate Headshot</>}
+                      </Button>
+                    </div>
 
-                  <div>
-                    <Label>Responsibilities</Label>
-                    <Textarea value={formData.responsibilities || ''} onChange={e => setFormData(p => ({ ...p, responsibilities: e.target.value }))} placeholder="Line-separated responsibilities" className="h-20" />
-                  </div>
+                    <div className="flex items-center justify-between">
+                      <Label>Active</Label>
+                      <Switch checked={formData.is_active !== false} onCheckedChange={v => setFormData(p => ({ ...p, is_active: v }))} />
+                    </div>
 
-                  <div>
-                    <Label>Headshot URL</Label>
-                    <Input value={formData.headshot_url || ''} onChange={e => setFormData(p => ({ ...p, headshot_url: e.target.value }))} placeholder="https://..." />
-                    <Button onClick={handleGenerateHeadshot} disabled={isGeneratingHeadshot} className="w-full mt-2" variant="outline">
-                      {isGeneratingHeadshot ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Generating...</> : <><Sparkles className="w-4 h-4 mr-2" />Generate Headshot</>}
+                    <Button onClick={handleSave} disabled={createMutation.isPending || updateMutation.isPending} className="w-full bg-violet-600 hover:bg-violet-700">
+                      <Save className="w-4 h-4 mr-2" />{editingAgent ? 'Update Agent' : 'Create Agent'}
                     </Button>
                   </div>
-
-                  <div className="flex items-center justify-between">
-                    <Label>Active</Label>
-                    <Switch checked={formData.is_active !== false} onCheckedChange={v => setFormData(p => ({ ...p, is_active: v }))} />
-                  </div>
-
-                  <Button onClick={handleSave} disabled={createMutation.isPending || updateMutation.isPending} className="w-full bg-violet-600 hover:bg-violet-700">
-                    <Save className="w-4 h-4 mr-2" />{editingAgent ? 'Update Agent' : 'Create Agent'}
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
-          </div>
+                </DialogContent>
+              </Dialog>
+            </div>
         </CardHeader>
 
         <CardContent className="pt-6">
