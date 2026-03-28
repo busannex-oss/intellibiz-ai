@@ -121,7 +121,7 @@ export default function Layout({ children }) {
               <Link to={createPageUrl('AgentProfiles')}>
                 <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
                   <Users className="w-4 h-4 mr-2" />
-                  AI Team
+                  The Team
                 </Button>
               </Link>
               <Link to={createPageUrl('AdminDashboard')}>

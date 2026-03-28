@@ -297,13 +297,13 @@ export default function AgentProfiles() {
       <div className="bg-gradient-to-r from-violet-600 to-indigo-700 px-6 py-10">
         <div className="max-w-7xl mx-auto flex items-start justify-between flex-wrap gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-white">AI Employee Profiles</h1>
+            <h1 className="text-3xl font-bold text-white">The Team</h1>
             <p className="text-violet-200 mt-1 text-sm">
-              Build your AI team — click a headshot to cycle through photos until you find the right look, then save.
+              Meet your AI team — click a headshot to cycle through photos until you find the right look, then save.
             </p>
           </div>
           <Button onClick={() => setShowNew(true)} disabled={showNew} className="bg-white text-violet-700 hover:bg-violet-50 gap-2 font-semibold">
-            <Plus className="w-4 h-4" />New AI Employee
+            <Plus className="w-4 h-4" />Add Team Member
           </Button>
         </div>
       </div>
@@ -337,9 +337,9 @@ export default function AgentProfiles() {
             {!showNew && agents.length === 0 && (
               <div className="col-span-full text-center py-20">
                 <Bot className="w-16 h-16 text-slate-200 mx-auto mb-4" />
-                <p className="text-slate-400 text-lg mb-4">No AI employees yet</p>
+                <p className="text-slate-400 text-lg mb-4">No team members yet</p>
                 <Button onClick={() => setShowNew(true)} className="bg-violet-600 hover:bg-violet-700 gap-2">
-                  <Plus className="w-4 h-4" />Create First AI Employee
+                  <Plus className="w-4 h-4" />Add First Team Member
                 </Button>
               </div>
             )}
