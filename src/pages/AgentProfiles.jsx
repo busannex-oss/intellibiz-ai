@@ -292,7 +292,7 @@ export default function AgentProfiles() {
     onError: (e) => toast.error('Delete failed: ' + e.message),
   });
 
-  const isSuperAdmin = currentUser?.role === 'super_admin';
+  const isSuperAdmin = ['super_admin', 'admin'].includes(currentUser?.role);
 
   if (!currentUser) {
     return <div className="min-h-screen flex items-center justify-center"><Loader2 className="w-6 h-6 animate-spin text-violet-500" /></div>;
