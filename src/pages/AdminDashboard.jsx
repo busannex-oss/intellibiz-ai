@@ -16,7 +16,7 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import ThemeTab from '@/components/admin/ThemeTab';
 import BrandAuditTab from '@/components/admin/BrandAuditTab';
-import AgentProfilesPage from './AgentProfiles';
+import TeamTab from '@/components/admin/TeamTab';
 import { toast } from 'sonner';
 
 export default function AdminDashboard() {
@@ -396,7 +396,7 @@ export default function AdminDashboard() {
 
           {/* === THE TEAM TAB === */}
           <TabsContent value="team">
-            <AgentProfilesPage />
+            <TeamTab />
           </TabsContent>
 
           {/* === HERO TAB === */}
