@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Button } from "@/components/ui/button";
-import { Zap, LayoutGrid, Sparkles, Crown, Facebook, Twitter, Instagram, Linkedin, Youtube, Home, FolderOpen, ListTodo, Settings } from 'lucide-react';
+import { Zap, LayoutGrid, Sparkles, Crown, Facebook, Twitter, Instagram, Linkedin, Youtube, Home, FolderOpen, ListTodo, Settings, Users } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 
 export default function Layout({ children }) {
@@ -116,6 +116,12 @@ export default function Layout({ children }) {
                 <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
                   <Crown className="w-4 h-4 mr-2" />
                   White Label
+                </Button>
+              </Link>
+              <Link to={createPageUrl('AgentProfiles')}>
+                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
+                  <Users className="w-4 h-4 mr-2" />
+                  AI Team
                 </Button>
               </Link>
               <Link to={createPageUrl('AdminDashboard')}>
