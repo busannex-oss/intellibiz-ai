@@ -99,13 +99,13 @@ export default function Layout({ children }) {
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg shadow-amber-500/20">
                 <Zap className="w-5 h-5 text-white" />
               </div>
-              <span className="font-bold text-xl text-white tracking-tight" style={{ letterSpacing: '-0.03em' }}>BrandForge</span>
+              <span className="font-bold text-xl text-slate-900 tracking-tight" style={{ letterSpacing: '-0.03em' }}>BrandForge</span>
             </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center gap-2">
               <Link to={createPageUrl('Dashboard')}>
-                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
+                <Button variant="ghost" className="text-slate-600 hover:text-slate-900 hover:bg-slate-100">
                   <LayoutGrid className="w-4 h-4 mr-2" />
                   Dashboard
                 </Button>
@@ -117,18 +117,18 @@ export default function Layout({ children }) {
                 </Button>
               </Link>
               <Link to={createPageUrl('Resources')}>
-                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
+                <Button variant="ghost" className="text-slate-600 hover:text-slate-900 hover:bg-slate-100">
                   Resources
                 </Button>
               </Link>
               <Link to={createPageUrl('WhiteLabel')}>
-                <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-slate-800">
+                <Button variant="ghost" className="text-slate-600 hover:text-slate-900 hover:bg-slate-100">
                   <Crown className="w-4 h-4 mr-2" />
                   White Label
                 </Button>
               </Link>
               <Link to={createPageUrl('AdminDashboard')}>
-                <Button variant="outline" className="border-slate-700 bg-transparent text-slate-300 hover:bg-slate-800 hover:text-white">
+                <Button variant="outline" className="border-slate-300 bg-transparent text-slate-700 hover:bg-slate-100 hover:text-slate-900">
                   Admin
                 </Button>
               </Link>
@@ -160,7 +160,7 @@ export default function Layout({ children }) {
                 key={page}
                 to={href}
                 className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg transition-colors ${
-                  isActive ? 'text-amber-400' : 'text-slate-400 hover:text-white'
+                  isActive ? 'text-amber-500' : 'text-slate-400 hover:text-slate-900'
                 }`}
               >
                 <Icon className="w-5 h-5" />
@@ -181,7 +181,7 @@ export default function Layout({ children }) {
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center">
                   <Zap className="w-5 h-5 text-white" />
                 </div>
-                <span className="font-bold text-xl text-white">BrandForge</span>
+                <span className="font-bold text-xl text-slate-900">BrandForge</span>
               </div>
               <p className="text-slate-400 text-sm mb-4">
                 AI-powered platform to build, launch, and grow your business
@@ -212,7 +212,7 @@ export default function Layout({ children }) {
 
             {/* Company Links */}
             <div>
-              <h3 className="text-white font-semibold mb-4">Company</h3>
+              <h3 className="text-slate-900 font-semibold mb-4">Company</h3>
               <div className="space-y-2">
                 <Link to={createPageUrl('HowItWorks')} className="block text-slate-400 hover:text-white text-sm transition-colors">
                   How It Works
@@ -228,7 +228,7 @@ export default function Layout({ children }) {
 
             {/* Services Links */}
             <div>
-              <h3 className="text-white font-semibold mb-4">Services</h3>
+              <h3 className="text-slate-900 font-semibold mb-4">Services</h3>
               <div className="space-y-2">
                 <Link to={createPageUrl('Services')} className="block text-slate-400 hover:text-white text-sm transition-colors">
                   All Services
@@ -244,7 +244,7 @@ export default function Layout({ children }) {
 
             {/* Legal Links */}
             <div>
-              <h3 className="text-white font-semibold mb-4">Legal</h3>
+              <h3 className="text-slate-900 font-semibold mb-4">Legal</h3>
               <div className="space-y-2">
                 <Link to={createPageUrl('PrivacyPolicy')} className="block text-slate-400 hover:text-white text-sm transition-colors">
                   Privacy Policy
@@ -260,7 +260,7 @@ export default function Layout({ children }) {
           </div>
 
           {/* Bottom Bar */}
-          <div className="border-t border-slate-800 pt-6">
+          <div className="border-t border-slate-200 pt-6">
             <div className="text-center text-slate-400 text-sm">
               {settings?.footer_content?.copyright_text
   ? settings.footer_content.copyright_text.replace(/\d{4}/, new Date().getFullYear())
