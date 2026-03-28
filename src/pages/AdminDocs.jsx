@@ -12,7 +12,7 @@ import {
 
 // ── Agent Registry ──────────────────────────────────────────────────────────
 
-const AGENTS = [
+const AGENT_UI_CONFIG = {
   graphic_artist: {
     name: 'Graphic Artist',
     icon: Image,
@@ -39,7 +39,6 @@ const AGENTS = [
     ],
     accessPath: 'Admin Dashboard → Agents → Graphic Artist',
   },
-  {
   brand_sentinel: {
     name: 'Brand Sentinel',
     icon: ShieldCheck,
