@@ -1,0 +1,81 @@
+{
+  "name": "AIAgent",
+  "type": "object",
+  "properties": {
+    "agent_key": {
+      "type": "string",
+      "description": "Machine-readable agent identifier (e.g. brand_sentinel)"
+    },
+    "first_name": {
+      "type": "string"
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "age": {
+      "type": "number"
+    },
+    "job_title": {
+      "type": "string"
+    },
+    "personality": {
+      "type": "string",
+      "description": "Personality description"
+    },
+    "responsibilities": {
+      "type": "string",
+      "description": "Core responsibilities"
+    },
+    "headshot_url": {
+      "type": "string",
+      "description": "AI-generated headshot URL"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "agent_key",
+    "first_name"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "super_admin"
+          ]
+        }
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "super_admin",
+            "admin"
+          ]
+        }
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "super_admin"
+          ]
+        }
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "super_admin"
+          ]
+        }
+      }
+    }
+  }
+}

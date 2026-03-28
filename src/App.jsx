@@ -9,6 +9,7 @@ import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
 import AgentMemoryLogPage from './pages/AgentMemoryLog';
+import AgentProfilesPage from './pages/AgentProfiles';
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
@@ -60,6 +61,7 @@ const AuthenticatedApp = () => {
         />
       ))}
       <Route path="/AgentMemoryLog" element={<LayoutWrapper currentPageName="AgentMemoryLog"><AgentMemoryLogPage /></LayoutWrapper>} />
+      <Route path="/AgentProfiles" element={<LayoutWrapper currentPageName="AgentProfiles"><AgentProfilesPage /></LayoutWrapper>} /> element={<LayoutWrapper currentPageName="AgentMemoryLog"><AgentMemoryLogPage /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
