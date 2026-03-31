@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from 'react-router-dom';
@@ -18,10 +18,7 @@ import {
   ArrowRight,
   Radar,
   Target,
-  Loader2,
-  Upload,
-  Sparkles,
-  ImageIcon
+  Loader2
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'sonner';
@@ -40,11 +37,7 @@ export default function Home() {
   const [isGeneratingImage, setIsGeneratingImage] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentProject, setCurrentProject] = useState(null);
-  const [showImagePanel, setShowImagePanel] = useState(false);
-  const [aiPrompt, setAiPrompt] = useState('');
-  const [isUploading, setIsUploading] = useState(false);
   const [cms, setCms] = useState(null);
-  const fileInputRef = useRef(null);
 
   useEffect(() => {
     const init = async () => {
@@ -78,38 +71,18 @@ export default function Home() {
   const ctaSecondaryText = cms?.hero?.cta_secondary_text || 'View My Projects';
   const ctaSecondaryLink = cms?.hero?.cta_secondary_link || 'Dashboard';
 
-  const saveHeroImage = async (url) => {
-    if (!currentProject) return;
-    await base44.entities.BusinessProject.update(currentProject.id, {
-      website_content: { ...(currentProject.website_content || {}), hero_image_url: url }
-    });
-    setCurrentProject(prev => ({ ...prev, website_content: { ...(prev?.website_content || {}), hero_image_url: url } }));
-  };
 
   const generateHeroImage = async () => {
-    const prompt = aiPrompt.trim() || `Professional hero image for a business landing page. Modern, high quality, warm and inviting atmosphere, diverse entrepreneur, laptop or tablet in hand, confident and empowered.`;
     setIsGeneratingImage(true);
-    const response = await base44.integrations.Core.GenerateImage({ prompt });
+    const response = await base44.integrations.Core.GenerateImage({ prompt: `Professional hero image for a business landing page. Modern, high quality, warm and inviting atmosphere, diverse entrepreneur, laptop or tablet in hand, confident and empowered.` });
     if (response?.url) {
       setHeroImage(response.url);
-      await saveHeroImage(response.url);
       toast.success('Hero image generated!');
-      setShowImagePanel(false);
     }
     setIsGeneratingImage(false);
   };
 
-  const handleUpload = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setIsUploading(true);
-    const { file_url } = await base44.integrations.Core.UploadFile({ file });
-    setHeroImage(file_url);
-    await saveHeroImage(file_url);
-    toast.success('Image uploaded!');
-    setShowImagePanel(false);
-    setIsUploading(false);
-  };
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
@@ -162,11 +135,11 @@ export default function Home() {
             {/* Right: Hero Image */}
             <motion.div initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7, delay: 0.2 }} className="relative">
               <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-amber-500/10 border border-slate-700/50">
-                {(isGeneratingImage || isUploading) && (
+                {isGeneratingImage && (
                   <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-10 rounded-2xl">
                     <div className="flex flex-col items-center gap-3">
                       <Loader2 className="w-8 h-8 animate-spin text-amber-400" />
-                      <p className="text-white text-sm">{isUploading ? 'Uploading...' : 'Generating image...'}</p>
+                      <p className="text-white text-sm">Generating image...</p>
                     </div>
                   </div>
                 )}
@@ -182,33 +155,10 @@ export default function Home() {
                       <div className="text-slate-400 text-xs">Logo · Website · Social Media · Business Plan</div>
                     </div>
                   </div>
-                  {isLoggedIn && (
-                    <Button onClick={() => setShowImagePanel(v => !v)} size="sm" className="w-full bg-slate-800/90 hover:bg-slate-700 text-white text-xs border border-slate-600">
-                      <ImageIcon className="w-3 h-3 mr-1" />
-                      Change Hero Image
-                    </Button>
-                  )}
+
                 </div>
               </div>
 
-              {showImagePanel && isLoggedIn && (
-                <div className="mt-3 rounded-xl bg-slate-800/90 border border-slate-700 p-4 space-y-3">
-                  <p className="text-white text-sm font-semibold">Hero Image</p>
-                  <div className="space-y-2">
-                    <textarea value={aiPrompt} onChange={e => setAiPrompt(e.target.value)} placeholder="Describe the image you want..." className="w-full px-3 py-2 bg-slate-900 border border-slate-600 rounded-lg text-white text-xs placeholder-slate-500 resize-none h-16 focus:outline-none focus:border-amber-500" />
-                    <Button onClick={generateHeroImage} disabled={isGeneratingImage} size="sm" className="w-full bg-amber-600 hover:bg-amber-700 text-white text-xs">
-                      {isGeneratingImage ? <><Loader2 className="w-3 h-3 mr-1 animate-spin" />Generating...</> : <><Sparkles className="w-3 h-3 mr-1" />Generate with AI</>}
-                    </Button>
-                  </div>
-                  <div className="flex items-center gap-2 text-slate-500 text-xs">
-                    <div className="flex-1 h-px bg-slate-700" />or<div className="flex-1 h-px bg-slate-700" />
-                  </div>
-                  <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleUpload} />
-                  <Button onClick={() => fileInputRef.current?.click()} disabled={isUploading} size="sm" variant="outline" className="w-full border-slate-600 text-slate-300 hover:bg-slate-700 text-xs">
-                    {isUploading ? <><Loader2 className="w-3 h-3 mr-1 animate-spin" />Uploading...</> : <><Upload className="w-3 h-3 mr-1" />Upload My Own Image</>}
-                  </Button>
-                </div>
-              )}
 
               <div className="absolute -inset-4 bg-gradient-to-br from-amber-500/10 to-orange-500/5 rounded-3xl blur-2xl -z-10" />
             </motion.div>
