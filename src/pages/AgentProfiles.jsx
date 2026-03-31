@@ -25,7 +25,7 @@ const AGENT_KEYS = [
 
 const EMPTY = {
   agent_key: '', first_name: '', last_name: '', age: '', gender: 'male',
-  job_title: '', personality: '', responsibilities: '', headshot_url: '', is_active: true,
+  job_title: '', personality: '', tone: '', education: '', responsibilities: '', headshot_url: '', is_active: true,
 };
 
 function AgentCard({ agent, onSave, onDelete, isNew }) {
@@ -180,6 +180,18 @@ function AgentCard({ agent, onSave, onDelete, isNew }) {
                 <Textarea value={form.personality} onChange={e => set('personality', e.target.value)} placeholder="Analytical, detail-oriented, creative..." className="h-16 text-sm resize-none" />
               </div>
 
+              {/* Tone */}
+              <div>
+                <Label className="text-xs text-slate-500">Communication Tone</Label>
+                <Textarea value={form.tone || ''} onChange={e => set('tone', e.target.value)} placeholder="Warm and advisory — approachable with actionable guidance" className="h-16 text-sm resize-none" />
+              </div>
+
+              {/* Education */}
+              <div>
+                <Label className="text-xs text-slate-500">Educational Background</Label>
+                <Textarea value={form.education || ''} onChange={e => set('education', e.target.value)} placeholder="MBA, Harvard Business School; BA Economics, Duke University" className="h-16 text-sm resize-none" />
+              </div>
+
               {/* Responsibilities */}
               <div>
                 <Label className="text-xs text-slate-500">Responsibilities</Label>
@@ -215,6 +227,22 @@ function AgentCard({ agent, onSave, onDelete, isNew }) {
                 <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Personality</p>
                 <p className="text-sm text-slate-600">{form.personality || '—'}</p>
               </div>
+
+              {/* Tone */}
+              {form.tone && (
+                <div>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Tone</p>
+                  <p className="text-sm text-slate-600">{form.tone}</p>
+                </div>
+              )}
+
+              {/* Education */}
+              {form.education && (
+                <div>
+                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Education</p>
+                  <p className="text-sm text-slate-600">{form.education}</p>
+                </div>
+              )}
 
               {/* Responsibilities */}
               <div>

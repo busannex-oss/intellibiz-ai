@@ -15,11 +15,28 @@
     "age": {
       "type": "number"
     },
+    "gender": {
+      "type": "string",
+      "enum": [
+        "male",
+        "female",
+        "non-binary"
+      ],
+      "default": "male"
+    },
     "job_title": {
       "type": "string"
     },
     "personality": {
       "type": "string"
+    },
+    "tone": {
+      "type": "string",
+      "description": "Communication tone and style (e.g. Warm and advisory, Direct and precise)"
+    },
+    "education": {
+      "type": "string",
+      "description": "Educational background and credentials"
     },
     "responsibilities": {
       "type": "string"
