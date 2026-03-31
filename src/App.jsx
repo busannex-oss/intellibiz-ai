@@ -10,6 +10,7 @@ import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
 import PWAPrompt from './components/PWAPrompt';
 import AgentMemoryLogPage from './pages/AgentMemoryLog';
+import AgentProfilesPage from './pages/AgentProfiles';
 import WhiteLabelSettings from './pages/WhiteLabelSettings';
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
@@ -61,6 +62,7 @@ const AuthenticatedApp = () => {
           }
         />
       ))}
+      <Route path="/AgentProfiles" element={<LayoutWrapper currentPageName="AgentProfiles"><AgentProfilesPage /></LayoutWrapper>} />
       <Route path="/AgentMemoryLog" element={<LayoutWrapper currentPageName="AgentMemoryLog"><AgentMemoryLogPage /></LayoutWrapper>} />
 
       <Route path="/WhiteLabelSettings" element={<LayoutWrapper currentPageName="WhiteLabelSettings"><WhiteLabelSettings /></LayoutWrapper>} />
