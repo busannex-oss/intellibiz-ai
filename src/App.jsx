@@ -8,6 +8,7 @@ import PageNotFound from './lib/PageNotFound';
 import { AuthProvider, useAuth } from '@/lib/AuthContext';
 import UserNotRegisteredError from '@/components/UserNotRegisteredError';
 
+import PWAPrompt from './components/PWAPrompt';
 import AgentMemoryLogPage from './pages/AgentMemoryLog';
 import AgentProfilesPage from './pages/AgentProfiles';
 import WhiteLabelSettings from './pages/WhiteLabelSettings';
@@ -80,6 +81,7 @@ function App() {
           <AuthenticatedApp />
         </Router>
         <Toaster />
+        <PWAPrompt />
       </QueryClientProvider>
     </AuthProvider>
   )
