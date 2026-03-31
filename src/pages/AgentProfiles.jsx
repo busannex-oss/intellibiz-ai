@@ -345,9 +345,9 @@ export default function AgentProfiles() {
       <div className="bg-gradient-to-r from-violet-600 to-indigo-700 px-6 py-10">
         <div className="max-w-7xl mx-auto flex items-start justify-between flex-wrap gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-white">The Team</h1>
+            <h1 className="text-3xl font-bold text-white">AI Agent Management</h1>
             <p className="text-violet-200 mt-1 text-sm">
-              Meet your AI team — click a headshot to cycle through photos until you find the right look, then save.
+              Manage your AI agents — click a headshot in edit mode to generate a photo, then save. to cycle through photos until you find the right look, then save.
             </p>
           </div>
           <Button onClick={() => setShowNew(true)} disabled={showNew} className="bg-white text-violet-700 hover:bg-violet-50 gap-2 font-semibold">
