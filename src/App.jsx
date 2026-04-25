@@ -17,6 +17,7 @@ import IndependentContractorAgreement from './pages/IndependentContractorAgreeme
 import PartnershipAgreement from './pages/PartnershipAgreement';
 import LetterOfIntent from './pages/LetterOfIntent';
 import IPAssignmentAgreement from './pages/IPAssignmentAgreement';
+import TermsOfEngagement from './pages/TermsOfEngagement';
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
@@ -76,6 +77,7 @@ const AuthenticatedApp = () => {
       <Route path="/PartnershipAgreement" element={<LayoutWrapper currentPageName="PartnershipAgreement"><PartnershipAgreement /></LayoutWrapper>} />
       <Route path="/LetterOfIntent" element={<LayoutWrapper currentPageName="LetterOfIntent"><LetterOfIntent /></LayoutWrapper>} />
       <Route path="/IPAssignmentAgreement" element={<LayoutWrapper currentPageName="IPAssignmentAgreement"><IPAssignmentAgreement /></LayoutWrapper>} />
+      <Route path="/TermsOfEngagement" element={<LayoutWrapper currentPageName="TermsOfEngagement"><TermsOfEngagement /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
