@@ -47,6 +47,110 @@
     "is_active": {
       "type": "boolean",
       "default": true
+    },
+    "mission": {
+      "type": "string",
+      "description": "1-sentence statement describing how the agent helps the business"
+    },
+    "core_persona_prompt": {
+      "type": "string",
+      "description": "Complete persona prompt defining the agent's identity and thinking style"
+    },
+    "initial_greeting": {
+      "type": "string",
+      "description": "Warm greeting and introduction to the role"
+    },
+    "discovery_questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Step-by-step questions to gather context"
+    },
+    "operational_guidelines": {
+      "type": "string",
+      "description": "Rules for how the agent processes information"
+    },
+    "deliverables": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Specific assets the agent produces"
+    },
+    "primary_partners": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "partner_name": {
+            "type": "string"
+          },
+          "collaboration_details": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Partner agents and collaboration approach"
+    },
+    "team_meeting_role": {
+      "type": "string",
+      "description": "Specific lens or point of view for group planning sessions"
+    },
+    "non_disclosure_rules": {
+      "type": "string",
+      "description": "Confidentiality and process guidelines"
+    },
+    "expertise": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Core competencies"
+    },
+    "achievements": {
+      "type": "string",
+      "description": "Years of experience and notable projects"
+    },
+    "work_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string"
+          },
+          "dates": {
+            "type": "string"
+          },
+          "responsibilities": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Previous roles with dates and key responsibilities"
+    },
+    "technical_skills": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Technical skills and certifications"
+    },
+    "success_metrics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "metric_name": {
+            "type": "string"
+          },
+          "metric_description": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "KPIs and success indicators"
     }
   },
   "required": [
