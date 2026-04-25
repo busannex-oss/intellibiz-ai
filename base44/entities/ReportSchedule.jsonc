@@ -1,0 +1,78 @@
+{
+  "name": "ReportSchedule",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "report_type": {
+      "type": "string",
+      "enum": [
+        "weekly",
+        "monthly",
+        "custom"
+      ],
+      "default": "weekly"
+    },
+    "frequency": {
+      "type": "string",
+      "enum": [
+        "weekly",
+        "biweekly",
+        "monthly"
+      ],
+      "default": "weekly"
+    },
+    "day_of_week": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 6,
+      "description": "0=Sunday, 6=Saturday"
+    },
+    "send_time": {
+      "type": "string",
+      "description": "HH:MM format in user's timezone"
+    },
+    "recipient_emails": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Stakeholder emails"
+    },
+    "include_transcripts": {
+      "type": "boolean",
+      "default": true
+    },
+    "include_metrics": {
+      "type": "boolean",
+      "default": true
+    },
+    "include_insights": {
+      "type": "boolean",
+      "default": true
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "last_sent": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "next_send": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "name",
+    "recipient_emails"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {},
+    "delete": {}
+  }
+}

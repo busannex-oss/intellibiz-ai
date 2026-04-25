@@ -21,6 +21,8 @@ import TermsOfEngagement from './pages/TermsOfEngagement';
 import SharedWorkspace from './pages/SharedWorkspace';
 import AgentAnalyticsDashboard from './pages/AgentAnalyticsDashboard';
 import AgentVersionHistoryPage from './pages/AgentVersionHistory';
+import WorkflowDesigner from './pages/WorkflowDesigner';
+import ReportingCenter from './pages/ReportingCenter';
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
@@ -84,6 +86,8 @@ const AuthenticatedApp = () => {
       <Route path="/SharedWorkspace" element={<LayoutWrapper currentPageName="SharedWorkspace"><SharedWorkspace /></LayoutWrapper>} />
       <Route path="/AgentAnalyticsDashboard" element={<LayoutWrapper currentPageName="AgentAnalyticsDashboard"><AgentAnalyticsDashboard /></LayoutWrapper>} />
       <Route path="/AgentVersionHistory" element={<LayoutWrapper currentPageName="AgentVersionHistory"><AgentVersionHistoryPage /></LayoutWrapper>} />
+      <Route path="/WorkflowDesigner" element={<LayoutWrapper currentPageName="WorkflowDesigner"><WorkflowDesigner /></LayoutWrapper>} />
+      <Route path="/ReportingCenter" element={<LayoutWrapper currentPageName="ReportingCenter"><ReportingCenter /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

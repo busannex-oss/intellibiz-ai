@@ -1,0 +1,144 @@
+{
+  "name": "AgentWorkflow",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Workflow name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Workflow description and purpose"
+    },
+    "trigger_type": {
+      "type": "string",
+      "enum": [
+        "manual",
+        "scheduled",
+        "webhook",
+        "event"
+      ],
+      "default": "manual",
+      "description": "How the workflow is triggered"
+    },
+    "trigger_config": {
+      "type": "object",
+      "description": "Configuration for the trigger (e.g., schedule time, event type)"
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "agent_id": {
+            "type": "string"
+          },
+          "agent_name": {
+            "type": "string"
+          },
+          "position": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "number"
+              },
+              "y": {
+                "type": "number"
+              }
+            }
+          },
+          "input_mapping": {
+            "type": "object",
+            "description": "Maps previous agent output to this agent's input"
+          },
+          "output_template": {
+            "type": "string",
+            "description": "Template for formatting this agent's output for next agent"
+          },
+          "retry_on_failure": {
+            "type": "boolean",
+            "default": false
+          },
+          "max_retries": {
+            "type": "number",
+            "default": 0
+          }
+        }
+      },
+      "description": "Workflow nodes representing agents"
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "source_node_id": {
+            "type": "string"
+          },
+          "target_node_id": {
+            "type": "string"
+          },
+          "condition": {
+            "type": "string",
+            "description": "Optional condition for edge execution"
+          }
+        }
+      },
+      "description": "Connections between workflow nodes"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "active",
+        "paused",
+        "archived"
+      ],
+      "default": "draft"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true
+    },
+    "execution_history": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "execution_id": {
+            "type": "string"
+          },
+          "started_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "completed_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "status": {
+            "type": "string"
+          },
+          "results": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {},
+    "delete": {}
+  }
+}

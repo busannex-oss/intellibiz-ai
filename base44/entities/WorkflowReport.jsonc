@@ -1,0 +1,139 @@
+{
+  "name": "WorkflowReport",
+  "type": "object",
+  "properties": {
+    "report_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Week ending date"
+    },
+    "report_period_start": {
+      "type": "string",
+      "format": "date"
+    },
+    "report_period_end": {
+      "type": "string",
+      "format": "date"
+    },
+    "report_type": {
+      "type": "string",
+      "enum": [
+        "weekly",
+        "monthly",
+        "custom"
+      ],
+      "default": "weekly"
+    },
+    "collaborations_count": {
+      "type": "number"
+    },
+    "workflows_executed": {
+      "type": "number"
+    },
+    "successful_outcomes": {
+      "type": "number"
+    },
+    "avg_effectiveness_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100
+    },
+    "agent_contributions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "agent_name": {
+            "type": "string"
+          },
+          "participation_count": {
+            "type": "number"
+          },
+          "success_rate": {
+            "type": "number"
+          },
+          "performance_score": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "collaboration_transcripts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "conversation_id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "agents_involved": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "summary": {
+            "type": "string"
+          },
+          "outcome": {
+            "type": "string"
+          },
+          "effectiveness_score": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "key_insights": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "AI-generated insights from the week"
+    },
+    "recommendations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "AI-generated recommendations"
+    },
+    "pdf_url": {
+      "type": "string",
+      "description": "URL to the generated PDF report"
+    },
+    "sent_to": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Email addresses report was sent to"
+    },
+    "sent_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "generated",
+        "sent",
+        "archived"
+      ],
+      "default": "generated"
+    }
+  },
+  "required": [
+    "report_date",
+    "report_type"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {},
+    "delete": {}
+  }
+}
