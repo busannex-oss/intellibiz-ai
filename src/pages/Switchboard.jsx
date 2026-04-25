@@ -1,104 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { base44 } from '@/api/base44Client';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Phone, MessageSquare, Mail, Users, Clock, AlertCircle, Send } from 'lucide-react';
+import { Phone, MessageSquare, Mail, Users, AlertCircle, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useActiveSessions, useAgents } from '@/hooks/useEntityCache';
+import MetricCard from '@/components/common/MetricCard';
+import SessionList from '@/components/common/SessionList';
+import PageHeader from '@/components/common/PageHeader';
+import { assignSessionToAgent, markSessionResolved, sendResponse } from '@/utils/commonPatterns';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function Switchboard() {
-  const [activeCalls, setActiveCalls] = useState([]);
-  const [smsSessions, setSMSSessions] = useState([]);
-  const [emailSessions, setEmailSessions] = useState([]);
-  const [agents, setAgents] = useState([]);
+  const { data: sessions, isLoading: sessionsLoading } = useActiveSessions();
+  const { data: agents } = useAgents();
   const [selectedSession, setSelectedSession] = useState(null);
   const [sessionType, setSessionType] = useState('calls');
   const [replyMessage, setReplyMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSending, setIsSending] = useState(false);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    loadData();
-    const interval = setInterval(loadData, 5000); // Refresh every 5 seconds
-    return () => clearInterval(interval);
-  }, []);
-
-  const loadData = async () => {
+  const handleReply = async () => {
+    if (!replyMessage || !selectedSession) return;
+    setIsSending(true);
     try {
-      const [callsData, smsData, emailData, agentsData] = await Promise.all([
-        base44.entities.CallSession.filter({ status: { $in: ['ringing', 'active'] } }, '-created_date'),
-        base44.entities.SMSSession.filter({ requires_response: true }, '-created_date'),
-        base44.entities.EmailSession.filter({ requires_response: true }, '-created_date')
-      ]);
-
-      setActiveCalls(callsData);
-      setSMSSessions(smsData);
-      setEmailSessions(emailData);
-
-      const agents = await base44.entities.AIAgent.filter({ is_active: true });
-      setAgents(agents);
+      await sendResponse(sessionType, {
+        to: sessionType === 'sms' ? selectedSession.from_number : selectedSession.from_email,
+        message: replyMessage,
+        session_id: selectedSession.id
+      });
+      setReplyMessage('');
+      queryClient.invalidateQueries({ queryKey: ['activeSessions'] });
     } catch (error) {
-      console.error('Error loading switchboard data:', error);
+      console.error('Error sending reply:', error);
+    } finally {
+      setIsSending(false);
     }
   };
 
-  const assignToAgent = async (sessionId, agentId, type) => {
+  const handleAssign = async (sessionId, agentId) => {
+    const entityName = sessionType === 'calls' ? 'CallSession' : sessionType === 'sms' ? 'SMSSession' : 'EmailSession';
     try {
-      const entityName = type === 'calls' ? 'CallSession' : type === 'sms' ? 'SMSSession' : 'EmailSession';
-      const agent = agents.find(a => a.id === agentId);
-
-      await base44.entities[entityName].update(sessionId, {
-        assigned_agent_id: agentId,
-        assigned_agent_name: `${agent.first_name} ${agent.last_name}`
-      });
-
-      loadData();
+      await assignSessionToAgent(sessionId, agentId, entityName);
+      queryClient.invalidateQueries({ queryKey: ['activeSessions'] });
     } catch (error) {
       console.error('Error assigning session:', error);
     }
   };
 
-  const sendReply = async () => {
-    if (!replyMessage || !selectedSession) return;
-
-    setIsLoading(true);
+  const handleMarkResolved = async (sessionId) => {
+    const entityName = sessionType === 'sms' ? 'SMSSession' : 'EmailSession';
     try {
-      if (sessionType === 'sms') {
-        await base44.functions.invoke('sendSMSReply', {
-          to: selectedSession.from_number,
-          message: replyMessage,
-          session_id: selectedSession.id
-        });
-      } else if (sessionType === 'email') {
-        await base44.functions.invoke('sendEmailReply', {
-          to: selectedSession.from_email,
-          subject: `RE: ${selectedSession.subject}`,
-          body: replyMessage,
-          thread_id: selectedSession.thread_id
-        });
-      }
-
-      setReplyMessage('');
-      loadData();
-    } catch (error) {
-      console.error('Error sending reply:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const markResolved = async (sessionId, type) => {
-    try {
-      const entityName = type === 'sms' ? 'SMSSession' : 'EmailSession';
-      await base44.entities[entityName].update(sessionId, {
-        requires_response: false,
-        status: type === 'sms' ? 'delivered' : 'archived'
-      });
-      loadData();
+      await markSessionResolved(sessionId, entityName);
+      queryClient.invalidateQueries({ queryKey: ['activeSessions'] });
     } catch (error) {
       console.error('Error marking resolved:', error);
     }
   };
+
+  const calls = sessions?.calls || [];
+  const sms = sessions?.sms || [];
+  const email = sessions?.email || [];
 
   return (
     <motion.div
@@ -107,60 +70,17 @@ export default function Switchboard() {
       className="min-h-screen bg-slate-50 p-6"
     >
       <div className="max-w-7xl mx-auto space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">AI Switchboard & Receptionist</h1>
-          <p className="text-slate-600">Manage calls, SMS, and emails with AI agent assistance</p>
-        </div>
+        <PageHeader
+          title="AI Switchboard & Receptionist"
+          subtitle="Manage calls, SMS, and emails with AI agent assistance"
+        />
 
         {/* Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-3">
-                <Phone className="w-8 h-8 text-blue-500" />
-                <div>
-                  <p className="text-sm text-slate-600">Active Calls</p>
-                  <p className="text-2xl font-bold">{activeCalls.length}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-3">
-                <MessageSquare className="w-8 h-8 text-green-500" />
-                <div>
-                  <p className="text-sm text-slate-600">Pending SMS</p>
-                  <p className="text-2xl font-bold">{smsSessions.length}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-3">
-                <Mail className="w-8 h-8 text-purple-500" />
-                <div>
-                  <p className="text-sm text-slate-600">Pending Emails</p>
-                  <p className="text-2xl font-bold">{emailSessions.length}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center gap-3">
-                <Users className="w-8 h-8 text-amber-500" />
-                <div>
-                  <p className="text-sm text-slate-600">Active Agents</p>
-                  <p className="text-2xl font-bold">{agents.length}</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <MetricCard label="Active Calls" value={calls.length} icon={Phone} color="blue" />
+          <MetricCard label="Pending SMS" value={sms.length} icon={MessageSquare} color="green" />
+          <MetricCard label="Pending Emails" value={email.length} icon={Mail} color="purple" />
+          <MetricCard label="Active Agents" value={agents?.length || 0} icon={Users} color="amber" />
         </div>
 
         {/* Main Content */}
@@ -179,76 +99,52 @@ export default function Switchboard() {
                     <TabsTrigger value="email">Email</TabsTrigger>
                   </TabsList>
 
-                  <TabsContent value="calls" className="space-y-2 mt-4">
-                    {activeCalls.map(call => (
-                      <button
-                        key={call.id}
-                        onClick={() => {
-                          setSelectedSession(call);
-                          setSessionType('calls');
-                        }}
-                        className={`w-full text-left p-3 rounded-lg border transition-all ${
-                          selectedSession?.id === call.id
-                            ? 'bg-blue-50 border-blue-300'
-                            : 'hover:bg-slate-100 border-slate-200'
-                        }`}
-                      >
-                        <p className="font-medium text-sm">{call.caller_number}</p>
-                        <p className="text-xs text-slate-500">{call.assigned_agent_name}</p>
-                        <span className={`text-xs px-2 py-1 rounded mt-1 inline-block ${
-                          call.status === 'active' ? 'bg-red-100 text-red-700' : 'bg-yellow-100 text-yellow-700'
-                        }`}>
-                          {call.status}
-                        </span>
-                      </button>
-                    ))}
+                  <TabsContent value="calls" className="mt-4">
+                    <SessionList
+                      sessions={calls}
+                      selectedId={selectedSession?.id}
+                      onSelect={setSelectedSession}
+                      renderItem={(call) => (
+                        <>
+                          <p className="font-medium text-sm">{call.caller_number}</p>
+                          <p className="text-xs text-slate-500">{call.assigned_agent_name}</p>
+                        </>
+                      )}
+                      emptyMessage="No active calls"
+                    />
                   </TabsContent>
 
-                  <TabsContent value="sms" className="space-y-2 mt-4">
-                    {smsSessions.map(sms => (
-                      <button
-                        key={sms.id}
-                        onClick={() => {
-                          setSelectedSession(sms);
-                          setSessionType('sms');
-                        }}
-                        className={`w-full text-left p-3 rounded-lg border transition-all ${
-                          selectedSession?.id === sms.id
-                            ? 'bg-green-50 border-green-300'
-                            : 'hover:bg-slate-100 border-slate-200'
-                        }`}
-                      >
-                        <p className="font-medium text-sm">{sms.from_number}</p>
-                        <p className="text-xs text-slate-600 truncate">{sms.body}</p>
-                        <p className="text-xs text-slate-500 mt-1">{sms.assigned_agent_name}</p>
-                      </button>
-                    ))}
+                  <TabsContent value="sms" className="mt-4">
+                    <SessionList
+                      sessions={sms}
+                      selectedId={selectedSession?.id}
+                      onSelect={setSelectedSession}
+                      renderItem={(msg) => (
+                        <>
+                          <p className="font-medium text-sm">{msg.from_number}</p>
+                          <p className="text-xs text-slate-600 truncate">{msg.body}</p>
+                        </>
+                      )}
+                      emptyMessage="No pending SMS"
+                    />
                   </TabsContent>
 
-                  <TabsContent value="email" className="space-y-2 mt-4">
-                    {emailSessions.map(email => (
-                      <button
-                        key={email.id}
-                        onClick={() => {
-                          setSelectedSession(email);
-                          setSessionType('email');
-                        }}
-                        className={`w-full text-left p-3 rounded-lg border transition-all ${
-                          selectedSession?.id === email.id
-                            ? 'bg-purple-50 border-purple-300'
-                            : 'hover:bg-slate-100 border-slate-200'
-                        } ${email.sentiment === 'urgent' ? 'border-l-4 border-l-red-500' : ''}`}
-                      >
-                        <p className="font-medium text-sm truncate">{email.subject}</p>
-                        <p className="text-xs text-slate-600 truncate">{email.from_email}</p>
-                        <div className="flex gap-1 mt-1">
-                          {email.priority === 'urgent' && (
-                            <AlertCircle className="w-3 h-3 text-red-500" />
-                          )}
-                          <p className="text-xs text-slate-500">{email.assigned_agent_name}</p>
-                        </div>
-                      </button>
-                    ))}
+                  <TabsContent value="email" className="mt-4">
+                    <SessionList
+                      sessions={email}
+                      selectedId={selectedSession?.id}
+                      onSelect={setSelectedSession}
+                      renderItem={(msg) => (
+                        <>
+                          <div className="flex gap-1 items-start">
+                            {msg.priority === 'urgent' && <AlertCircle className="w-3 h-3 text-red-500 mt-0.5" />}
+                            <p className="font-medium text-sm flex-1 truncate">{msg.subject}</p>
+                          </div>
+                          <p className="text-xs text-slate-600 truncate">{msg.from_email}</p>
+                        </>
+                      )}
+                      emptyMessage="No pending emails"
+                    />
                   </TabsContent>
                 </Tabs>
               </CardContent>
@@ -326,13 +222,13 @@ export default function Switchboard() {
                     <div>
                       <p className="text-sm font-medium text-slate-700 mb-2">Assign to Agent</p>
                       <select
-                        onChange={(e) => assignToAgent(selectedSession.id, e.target.value, sessionType)}
+                        onChange={(e) => handleAssign(selectedSession.id, e.target.value)}
                         className="w-full px-3 py-2 border rounded-lg text-sm"
                       >
                         <option value={selectedSession.assigned_agent_id}>
                           {selectedSession.assigned_agent_name} (Current)
                         </option>
-                        {agents.map(agent => (
+                        {agents?.map(agent => (
                           <option key={agent.id} value={agent.id}>
                             {agent.first_name} {agent.last_name} ({agent.job_title})
                           </option>
@@ -357,15 +253,15 @@ export default function Switchboard() {
                       />
                       <div className="flex gap-2">
                         <Button
-                          onClick={sendReply}
-                          disabled={!replyMessage || isLoading}
+                          onClick={handleReply}
+                          disabled={!replyMessage || isSending}
                           className="flex-1 bg-violet-600 hover:bg-violet-700"
                         >
                           <Send className="w-4 h-4 mr-2" />
                           Send
                         </Button>
                         <Button
-                          onClick={() => markResolved(selectedSession.id, sessionType)}
+                          onClick={() => handleMarkResolved(selectedSession.id)}
                           variant="outline"
                         >
                           Mark Resolved
