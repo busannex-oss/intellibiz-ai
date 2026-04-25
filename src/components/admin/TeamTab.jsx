@@ -194,9 +194,6 @@ function AgentCard({ agent, onSave, onDelete, isNew }) {
                 <Button onClick={() => setEditing(true)} variant="outline" size="sm" className="flex-1 h-8 text-xs gap-1">
                   <Edit2 className="w-3 h-3" />Edit
                 </Button>
-                <Button onClick={handleSave} disabled={saving} size="sm" className="flex-1 h-8 text-xs gap-1 bg-violet-600 hover:bg-violet-700 text-white">
-                  {saving ? <Loader2 className="w-3 h-3 animate-spin" /> : <Save className="w-3 h-3" />}Save
-                </Button>
                 <Button onClick={() => onDelete(agent.id)} variant="ghost" size="sm" className="h-8 text-xs gap-1 text-red-500 hover:bg-red-50 px-2">
                   <Trash2 className="w-3 h-3" />
                 </Button>
@@ -221,10 +218,14 @@ export default function TeamTab() {
   const saveMutation = useMutation({
     mutationFn: async (form) => {
       const { id, ...data } = form;
-      if (id) return base44.entities.AIAgent.update(id, data);
-      return base44.entities.AIAgent.create(data);
+      if (id) return await base44.entities.AIAgent.update(id, data);
+      return await base44.entities.AIAgent.create(data);
     },
-    onSuccess: () => { toast.success('Saved!'); queryClient.invalidateQueries({ queryKey: ['aiAgents'] }); setShowNew(false); },
+    onSuccess: () => { 
+      toast.success('Saved!');
+      setShowNew(false);
+      setTimeout(() => queryClient.invalidateQueries({ queryKey: ['aiAgents'] }), 100);
+    },
     onError: (e) => toast.error('Save failed: ' + e.message),
   });
 

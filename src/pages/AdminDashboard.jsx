@@ -109,7 +109,10 @@ export default function AdminDashboard() {
       if (appSettings?.id) return await base44.entities.AppSettings.update(appSettings.id, data);
       return await base44.entities.AppSettings.create(data);
     },
-    onSuccess: () => { toast.success('Settings saved'); queryClient.invalidateQueries({ queryKey: ['appSettings'] }); },
+    onSuccess: () => { 
+      toast.success('Settings saved'); 
+      setTimeout(() => queryClient.invalidateQueries({ queryKey: ['appSettings'] }), 100);
+    },
     onError: (error) => { toast.error('Failed to save: ' + error.message); },
   });
 
