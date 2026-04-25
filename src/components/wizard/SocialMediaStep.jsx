@@ -18,12 +18,6 @@ const PLATFORMS = [
   { id: 'threads', name: 'Threads', headerSize: 'N/A', profileSize: '320x320', icon: '🧵', recommended: false },
 ];
 
-// Add delete asset function
-const deleteAsset = async (platformId) => {
-  const updatedAssets = (project?.social_media_assets || []).filter(a => a.platform !== platformId);
-  await onUpdate({ social_media_assets: updatedAssets });
-};
-
 export default function SocialMediaStep({ project, onUpdate, onNext, onPrev }) {
   const [selectedPlatforms, setSelectedPlatforms] = useState(
     project?.selected_platforms || ['facebook', 'instagram', 'twitter', 'linkedin']

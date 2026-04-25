@@ -1,3 +1,4 @@
+const styles = `
 /* =============================================
    ADMIN Panel Styles
    Scope: .admin-scope
@@ -64,3 +65,6 @@
   border-left: 3px solid #ef4444;
   padding-left: 12px;
 }
+`;
+
+export default styles;

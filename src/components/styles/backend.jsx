@@ -1,3 +1,4 @@
+const styles = `
 /* =============================================
    BACKEND (App / Dashboard) Styles
    Scope: .backend-scope
@@ -8,7 +9,7 @@
           PerformanceReports, ColorThemes, Onboarding,
           KnowledgeBase, BusinessReport, PitchDeck,
           AccountSettings, CustomerJourney, etc.
-   ============================================= */
+    ============================================= */
 
 /* --- Typography --- */
 .backend-scope p,
@@ -69,3 +70,6 @@
   transition: background-color 0.15s ease, color 0.15s ease;
   border-radius: 0.5rem;
 }
+`;
+
+export default styles;

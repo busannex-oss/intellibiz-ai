@@ -28,7 +28,8 @@ export default function CreateBusiness() {
   const { data: existingProject, isLoading } = useQuery({
     queryKey: ['project', projectId],
     queryFn: async () => {
-      const projects = await base44.entities.BusinessProject.filter({ id: projectId });
+      if (!projectId) return null;
+      const projects = await base44.entities.BusinessProject.filter({ id: projectId }, undefined, 1);
       return projects[0];
     },
     enabled: !!projectId

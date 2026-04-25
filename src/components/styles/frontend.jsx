@@ -1,10 +1,11 @@
+const styles = `
 /* =============================================
    FRONTEND (Public-Facing) Styles
    Scope: .frontend-scope
    Pages: Home, HowItWorks, Services, WhiteLabel,
           InvestorInfo, PrivacyPolicy, TermsOfService,
           CookiePolicy, Disclaimer, Resources, PlatformVideo
-   ============================================= */
+    ============================================= */
 
 /* --- Typography --- */
 .frontend-scope body,
@@ -50,3 +51,6 @@
   .frontend-scope h1 { font-size: 2rem; }
   .frontend-scope h2 { font-size: 1.5rem; }
 }
+`;
+
+export default styles;
