@@ -17,7 +17,6 @@ import { createPageUrl } from '@/utils';
 import ThemeTab from '@/components/admin/ThemeTab';
 import BrandAuditTab from '@/components/admin/BrandAuditTab';
 import TeamTab from '@/components/admin/TeamTab';
-import AgentsTab from '@/components/admin/AgentsTab';
 import { toast } from 'sonner';
 
 export default function AdminDashboard() {
@@ -272,16 +271,15 @@ export default function AdminDashboard() {
         <Tabs defaultValue="users" className="w-full">
           <TabsList className="bg-white border border-slate-200 mb-6 shadow-sm flex-wrap h-auto gap-1 p-1">
            {[
-             { value: 'users', icon: Users, label: 'Users' },
-             { value: 'agents', icon: Bot, label: 'AI Agents', superOnly: true },
-             { value: 'team', icon: Bot, label: 'The Team', superOnly: true },
-             { value: 'brand_audit', icon: ShieldCheck, label: 'Brand Audit' },
-             { value: 'hero', icon: Image, label: 'Hero' },
-             { value: 'theme', icon: Type, label: 'Theme & Brand', superOnly: true },
-             { value: 'permissions', icon: Lock, label: 'Permissions' },
-             { value: 'seo', icon: Search, label: 'SEO' },
-             { value: 'social', icon: Globe, label: 'Social & Footer' },
-           ].filter(t => !t.superOnly || isSuperAdmin || currentUser?.permissions?.manage_theme).map(({ value, icon: Icon, label }) => (
+              { value: 'users', icon: Users, label: 'Users' },
+              { value: 'agents', icon: Bot, label: 'AI Agents', superOnly: true },
+              { value: 'brand_audit', icon: ShieldCheck, label: 'Brand Audit' },
+              { value: 'hero', icon: Image, label: 'Hero' },
+              { value: 'theme', icon: Type, label: 'Theme & Brand', superOnly: true },
+              { value: 'permissions', icon: Lock, label: 'Permissions' },
+              { value: 'seo', icon: Search, label: 'SEO' },
+              { value: 'social', icon: Globe, label: 'Social & Footer' },
+            ].filter(t => !t.superOnly || isSuperAdmin || currentUser?.permissions?.manage_theme).map(({ value, icon: Icon, label }) => (
               <TabsTrigger key={value} value={value} className="data-[state=active]:bg-violet-600 data-[state=active]:text-white">
                 <Icon className="w-4 h-4 mr-2" />
                 {label}
@@ -401,11 +399,6 @@ export default function AdminDashboard() {
 
           {/* === AI AGENTS TAB === */}
           <TabsContent value="agents">
-            <AgentsTab />
-          </TabsContent>
-
-          {/* === THE TEAM TAB === */}
-          <TabsContent value="team">
             <TeamTab />
           </TabsContent>
 
