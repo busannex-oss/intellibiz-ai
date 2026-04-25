@@ -1,0 +1,258 @@
+import React, { useState, useEffect } from 'react';
+import { base44 } from '@/api/base44Client';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Card, CardContent } from '@/components/ui/card';
+import { AlertCircle, Download, RefreshCw, Loader2 } from 'lucide-react';
+import { motion } from 'framer-motion';
+
+import PartyInfoForm from '@/components/LetterOfIntent/PartyInfoForm';
+import LOIVariation from '@/components/LetterOfIntent/LOIVariation';
+import LOIVersionHistory from '@/components/LetterOfIntent/LOIVersionHistory';
+
+export default function LetterOfIntent() {
+  const [partyInfo, setPartyInfo] = useState({
+    partyName: '',
+    context: 'investor',
+    amount: '',
+    date: new Date().toISOString().split('T')[0]
+  });
+  const [lois, setLOIs] = useState({
+    investor: null,
+    whitelabel: null,
+    acquisition: null
+  });
+  const [activeTab, setActiveTab] = useState('investor');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [lastSaved, setLastSaved] = useState(new Date());
+  const [versions, setVersions] = useState([]);
+
+  // Auto-save every 60 seconds
+  useEffect(() => {
+    const autoSaveTimer = setInterval(() => {
+      if (Object.values(lois).some(l => l)) {
+        saveLOIs();
+      }
+    }, 60000);
+    return () => clearInterval(autoSaveTimer);
+  }, [lois, partyInfo]);
+
+  const saveLOIs = async () => {
+    try {
+      setLastSaved(new Date());
+      await base44.functions.invoke('saveLetterOfIntent', {
+        partyInfo,
+        lois,
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Error saving LOIs:', error);
+    }
+  };
+
+  const generateLOIs = async () => {
+    if (!partyInfo.partyName) {
+      alert('Please enter party name first');
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const result = await base44.functions.invoke('generateLetterOfIntent', {
+        partyInfo,
+        platformName: 'Business Annex'
+      });
+
+      setLOIs(result);
+      setVersions([
+        ...versions,
+        {
+          id: Date.now(),
+          timestamp: new Date().toISOString(),
+          lois: result,
+          note: 'AI Generated'
+        }
+      ]);
+      saveLOIs();
+    } catch (error) {
+      console.error('Error generating LOIs:', error);
+      alert('Failed to generate LOIs. Please try again.');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const handleVariationUpdate = (variation, updatedContent) => {
+    setLOIs(prev => ({
+      ...prev,
+      [variation]: updatedContent
+    }));
+  };
+
+  const exportPDF = async (variation) => {
+    try {
+      await base44.functions.invoke('exportLetterOfIntentPDF', {
+        variation,
+        partyInfo,
+        content: lois[variation],
+        timestamp: new Date().toISOString()
+      });
+    } catch (error) {
+      console.error('Error exporting PDF:', error);
+      alert('Failed to export PDF. Please try again.');
+    }
+  };
+
+  const restoreVersion = (version) => {
+    setLOIs(version.lois);
+    setVersions([
+      ...versions,
+      {
+        id: Date.now(),
+        timestamp: new Date().toISOString(),
+        lois: version.lois,
+        note: `Restored from ${new Date(version.timestamp).toLocaleString()}`
+      }
+    ]);
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="min-h-screen bg-slate-50 p-6"
+    >
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-slate-900">Letters of Intent</h1>
+            <p className="text-slate-500 mt-1">Business Annex Platform</p>
+          </div>
+          <div className="text-right">
+            <p className="text-sm text-slate-500">Last saved: {lastSaved.toLocaleTimeString()}</p>
+            <div className="flex gap-2 mt-3">
+              <Button
+                onClick={generateLOIs}
+                disabled={isGenerating}
+                className="bg-violet-600 hover:bg-violet-700 text-white"
+              >
+                {isGenerating ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Generate All LOIs
+                  </>
+                )}
+              </Button>
+              <Button
+                onClick={saveLOIs}
+                variant="outline"
+                className="border-slate-300"
+              >
+                Save Now
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Legal Disclaimer */}
+        <div className="flex gap-3 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+          <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+          <div className="text-sm text-amber-800">
+            <strong>Legal Disclaimer:</strong> These Letters of Intent are generated by AI and should be reviewed by a qualified legal professional before execution. Business Annex provides these templates as guidelines only and does not constitute legal advice.
+          </div>
+        </div>
+
+        {/* Party Information Form */}
+        <PartyInfoForm partyInfo={partyInfo} setPartyInfo={setPartyInfo} />
+
+        {/* LOIs Tabs */}
+        {Object.values(lois).some(l => l) ? (
+          <Card className="border-0 shadow-lg">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="grid w-full grid-cols-3 bg-slate-100 p-1 m-4 rounded-lg">
+                <TabsTrigger value="investor" className="data-[state=active]:bg-white">
+                  Investor LOI
+                </TabsTrigger>
+                <TabsTrigger value="whitelabel" className="data-[state=active]:bg-white">
+                  White Label LOI
+                </TabsTrigger>
+                <TabsTrigger value="acquisition" className="data-[state=active]:bg-white">
+                  Acquisition/Partnership
+                </TabsTrigger>
+              </TabsList>
+
+              <CardContent className="p-6 space-y-6">
+                <TabsContent value="investor" className="space-y-4">
+                  {lois.investor && (
+                    <LOIVariation
+                      variation="investor"
+                      title="Investor Letter of Intent"
+                      content={lois.investor}
+                      partyInfo={partyInfo}
+                      onUpdate={handleVariationUpdate}
+                      onExport={() => exportPDF('investor')}
+                      onRegenerate={generateLOIs}
+                      isGenerating={isGenerating}
+                    />
+                  )}
+                </TabsContent>
+
+                <TabsContent value="whitelabel" className="space-y-4">
+                  {lois.whitelabel && (
+                    <LOIVariation
+                      variation="whitelabel"
+                      title="White Label Licensing Letter of Intent"
+                      content={lois.whitelabel}
+                      partyInfo={partyInfo}
+                      onUpdate={handleVariationUpdate}
+                      onExport={() => exportPDF('whitelabel')}
+                      onRegenerate={generateLOIs}
+                      isGenerating={isGenerating}
+                    />
+                  )}
+                </TabsContent>
+
+                <TabsContent value="acquisition" className="space-y-4">
+                  {lois.acquisition && (
+                    <LOIVariation
+                      variation="acquisition"
+                      title="Acquisition or Strategic Partnership Letter of Intent"
+                      content={lois.acquisition}
+                      partyInfo={partyInfo}
+                      onUpdate={handleVariationUpdate}
+                      onExport={() => exportPDF('acquisition')}
+                      onRegenerate={generateLOIs}
+                      isGenerating={isGenerating}
+                    />
+                  )}
+                </TabsContent>
+              </CardContent>
+            </Tabs>
+          </Card>
+        ) : (
+          <Card className="border-0 shadow-lg p-12 text-center">
+            <p className="text-slate-500 mb-4">No Letters of Intent generated yet.</p>
+            <Button
+              onClick={generateLOIs}
+              disabled={isGenerating}
+              className="bg-violet-600 hover:bg-violet-700 text-white mx-auto"
+            >
+              {isGenerating ? 'Generating...' : 'Generate Letters of Intent'}
+            </Button>
+          </Card>
+        )}
+
+        {/* Version History */}
+        {versions.length > 0 && (
+          <LOIVersionHistory versions={versions} onRestore={restoreVersion} />
+        )}
+      </div>
+    </motion.div>
+  );
+}

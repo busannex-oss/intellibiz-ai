@@ -15,6 +15,7 @@ import WhiteLabelSettings from './pages/WhiteLabelSettings';
 import ServiceAgreement from './pages/ServiceAgreement';
 import IndependentContractorAgreement from './pages/IndependentContractorAgreement';
 import PartnershipAgreement from './pages/PartnershipAgreement';
+import LetterOfIntent from './pages/LetterOfIntent';
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
@@ -72,6 +73,7 @@ const AuthenticatedApp = () => {
       <Route path="/ServiceAgreement" element={<LayoutWrapper currentPageName="ServiceAgreement"><ServiceAgreement /></LayoutWrapper>} />
       <Route path="/IndependentContractorAgreement" element={<LayoutWrapper currentPageName="IndependentContractorAgreement"><IndependentContractorAgreement /></LayoutWrapper>} />
       <Route path="/PartnershipAgreement" element={<LayoutWrapper currentPageName="PartnershipAgreement"><PartnershipAgreement /></LayoutWrapper>} />
+      <Route path="/LetterOfIntent" element={<LayoutWrapper currentPageName="LetterOfIntent"><LetterOfIntent /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
