@@ -12,6 +12,7 @@ import PWAPrompt from './components/PWAPrompt';
 import AgentMemoryLogPage from './pages/AgentMemoryLog';
 import AgentProfilesPage from './pages/AgentProfiles';
 import WhiteLabelSettings from './pages/WhiteLabelSettings';
+import ServiceAgreement from './pages/ServiceAgreement';
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
@@ -66,6 +67,7 @@ const AuthenticatedApp = () => {
       <Route path="/AgentMemoryLog" element={<LayoutWrapper currentPageName="AgentMemoryLog"><AgentMemoryLogPage /></LayoutWrapper>} />
 
       <Route path="/WhiteLabelSettings" element={<LayoutWrapper currentPageName="WhiteLabelSettings"><WhiteLabelSettings /></LayoutWrapper>} />
+      <Route path="/ServiceAgreement" element={<LayoutWrapper currentPageName="ServiceAgreement"><ServiceAgreement /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
