@@ -3,12 +3,12 @@ import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent } from '@/components/ui/card';
-import { AlertCircle, Download, RefreshCw, Loader2 } from 'lucide-react';
+import { AlertCircle, RefreshCw, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 import PartyInfoForm from '@/components/LetterOfIntent/PartyInfoForm';
 import LOIVariation from '@/components/LetterOfIntent/LOIVariation';
-import LOIVersionHistory from '@/components/LetterOfIntent/LOIVersionHistory';
+import DocumentVersionHistory from '@/components/documents/DocumentVersionHistory';
 
 export default function LetterOfIntent() {
   const [partyInfo, setPartyInfo] = useState({
@@ -131,32 +131,23 @@ export default function LetterOfIntent() {
           </div>
           <div className="text-right">
             <p className="text-sm text-slate-500">Last saved: {lastSaved.toLocaleTimeString()}</p>
-            <div className="flex gap-2 mt-3">
-              <Button
-                onClick={generateLOIs}
-                disabled={isGenerating}
-                className="bg-violet-600 hover:bg-violet-700 text-white"
-              >
-                {isGenerating ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Generating...
-                  </>
-                ) : (
-                  <>
-                    <RefreshCw className="w-4 h-4 mr-2" />
-                    Generate All LOIs
-                  </>
-                )}
-              </Button>
-              <Button
-                onClick={saveLOIs}
-                variant="outline"
-                className="border-slate-300"
-              >
-                Save Now
-              </Button>
-            </div>
+            <Button
+              onClick={generateLOIs}
+              disabled={isGenerating}
+              className="bg-violet-600 hover:bg-violet-700 text-white mt-3"
+            >
+              {isGenerating ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Generate All LOIs
+                </>
+              )}
+            </Button>
           </div>
         </div>
 
@@ -250,7 +241,7 @@ export default function LetterOfIntent() {
 
         {/* Version History */}
         {versions.length > 0 && (
-          <LOIVersionHistory versions={versions} onRestore={restoreVersion} />
+          <DocumentVersionHistory versions={versions} onRestore={(v) => restoreVersion(v)} />
         )}
       </div>
     </motion.div>

@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { AlertCircle, Download, RefreshCw, Loader2 } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { AlertCircle, RefreshCw, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useDocumentManagement } from '@/hooks/useDocumentManagement';
 
 import EngagementInfoForm from '@/components/TermsOfEngagement/EngagementInfoForm';
-import TermsOfEngagementContent from '@/components/TermsOfEngagement/TermsOfEngagementContent';
-import EngagementVersionHistory from '@/components/TermsOfEngagement/EngagementVersionHistory';
+import DocumentContent from '@/components/documents/DocumentContent';
+import DocumentVersionHistory from '@/components/documents/DocumentVersionHistory';
 
 export default function TermsOfEngagement() {
   const [engagementInfo, setEngagementInfo] = useState({
@@ -18,32 +19,7 @@ export default function TermsOfEngagement() {
     date: new Date().toISOString().split('T')[0]
   });
   const [terms, setTerms] = useState(null);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [lastSaved, setLastSaved] = useState(new Date());
-  const [versions, setVersions] = useState([]);
-
-  // Auto-save every 60 seconds
-  useEffect(() => {
-    const autoSaveTimer = setInterval(() => {
-      if (terms) {
-        saveTerms();
-      }
-    }, 60000);
-    return () => clearInterval(autoSaveTimer);
-  }, [terms, engagementInfo]);
-
-  const saveTerms = async () => {
-    try {
-      setLastSaved(new Date());
-      await base44.functions.invoke('saveTermsOfEngagement', {
-        engagementInfo,
-        terms,
-        timestamp: new Date().toISOString()
-      });
-    } catch (error) {
-      console.error('Error saving terms:', error);
-    }
-  };
+  const { isGenerating, lastSaved, versions, restoreVersion } = useDocumentManagement('TermsOfEngagement');
 
   const generateTerms = async () => {
     if (!engagementInfo.clientName) {
@@ -51,34 +27,12 @@ export default function TermsOfEngagement() {
       return;
     }
 
-    setIsGenerating(true);
-    try {
-      const result = await base44.functions.invoke('generateTermsOfEngagement', {
-        engagementInfo,
-        platformName: 'Business Annex'
-      });
+    const result = await base44.functions.invoke('generateTermsOfEngagement', {
+      engagementInfo,
+      platformName: 'Business Annex'
+    });
 
-      setTerms(result);
-      setVersions([
-        ...versions,
-        {
-          id: Date.now(),
-          timestamp: new Date().toISOString(),
-          terms: result,
-          note: 'AI Generated'
-        }
-      ]);
-      saveTerms();
-    } catch (error) {
-      console.error('Error generating terms:', error);
-      alert('Failed to generate terms. Please try again.');
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
-  const handleTermsUpdate = (updatedContent) => {
-    setTerms(updatedContent);
+    setTerms(result.terms || result);
   };
 
   const exportPDF = async () => {
@@ -92,19 +46,6 @@ export default function TermsOfEngagement() {
       console.error('Error exporting PDF:', error);
       alert('Failed to export PDF. Please try again.');
     }
-  };
-
-  const restoreVersion = (version) => {
-    setTerms(version.terms);
-    setVersions([
-      ...versions,
-      {
-        id: Date.now(),
-        timestamp: new Date().toISOString(),
-        terms: version.terms,
-        note: `Restored from ${new Date(version.timestamp).toLocaleString()}`
-      }
-    ]);
   };
 
   return (
@@ -122,32 +63,23 @@ export default function TermsOfEngagement() {
           </div>
           <div className="text-right">
             <p className="text-sm text-slate-500">Last saved: {lastSaved.toLocaleTimeString()}</p>
-            <div className="flex gap-2 mt-3">
-              <Button
-                onClick={generateTerms}
-                disabled={isGenerating}
-                className="bg-violet-600 hover:bg-violet-700 text-white"
-              >
-                {isGenerating ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Generating...
-                  </>
-                ) : (
-                  <>
-                    <RefreshCw className="w-4 h-4 mr-2" />
-                    Generate Terms
-                  </>
-                )}
-              </Button>
-              <Button
-                onClick={saveTerms}
-                variant="outline"
-                className="border-slate-300"
-              >
-                Save Now
-              </Button>
-            </div>
+            <Button
+              onClick={generateTerms}
+              disabled={isGenerating}
+              className="bg-violet-600 hover:bg-violet-700 text-white mt-3"
+            >
+              {isGenerating ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Generate Terms
+                </>
+              )}
+            </Button>
           </div>
         </div>
 
@@ -164,14 +96,25 @@ export default function TermsOfEngagement() {
 
         {/* Terms Document */}
         {terms ? (
-          <TermsOfEngagementContent
-            content={terms}
-            engagementInfo={engagementInfo}
-            onUpdate={handleTermsUpdate}
-            onExport={exportPDF}
-            onRegenerate={generateTerms}
-            isGenerating={isGenerating}
-          />
+          <>
+            <DocumentContent
+              content={terms}
+              title="Terms of Engagement"
+              infoData={engagementInfo}
+              infoDisplayFields={[
+                { key: 'clientName', label: 'Client' },
+                { key: 'engagementType', label: 'Type' },
+                { key: 'date', label: 'Start Date' }
+              ]}
+              onUpdate={setTerms}
+              onExport={exportPDF}
+              onRegenerate={generateTerms}
+              isGenerating={isGenerating}
+            />
+            {versions.length > 0 && (
+              <DocumentVersionHistory versions={versions} onRestore={(v) => restoreVersion(v, engagementInfo)} />
+            )}
+          </>
         ) : (
           <Card className="border-0 shadow-lg p-12 text-center">
             <p className="text-slate-500 mb-4">No Terms of Engagement generated yet.</p>
@@ -183,11 +126,6 @@ export default function TermsOfEngagement() {
               {isGenerating ? 'Generating...' : 'Generate Terms'}
             </Button>
           </Card>
-        )}
-
-        {/* Version History */}
-        {versions.length > 0 && (
-          <EngagementVersionHistory versions={versions} onRestore={restoreVersion} />
         )}
       </div>
     </motion.div>

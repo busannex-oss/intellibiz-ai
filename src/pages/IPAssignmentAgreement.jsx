@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
-import { AlertCircle, Download, RefreshCw, Loader2 } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { AlertCircle, RefreshCw, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { useDocumentManagement } from '@/hooks/useDocumentManagement';
 
 import AssignmentInfoForm from '@/components/IPAssignmentAgreement/AssignmentInfoForm';
-import IPAssignmentAgreementContent from '@/components/IPAssignmentAgreement/IPAssignmentAgreementContent';
-import AssignmentVersionHistory from '@/components/IPAssignmentAgreement/AssignmentVersionHistory';
+import DocumentContent from '@/components/documents/DocumentContent';
+import DocumentVersionHistory from '@/components/documents/DocumentVersionHistory';
 
 export default function IPAssignmentAgreement() {
   const [assignmentInfo, setAssignmentInfo] = useState({
@@ -18,32 +19,7 @@ export default function IPAssignmentAgreement() {
     date: new Date().toISOString().split('T')[0]
   });
   const [agreement, setAgreement] = useState(null);
-  const [isGenerating, setIsGenerating] = useState(false);
-  const [lastSaved, setLastSaved] = useState(new Date());
-  const [versions, setVersions] = useState([]);
-
-  // Auto-save every 60 seconds
-  useEffect(() => {
-    const autoSaveTimer = setInterval(() => {
-      if (agreement) {
-        saveAgreement();
-      }
-    }, 60000);
-    return () => clearInterval(autoSaveTimer);
-  }, [agreement, assignmentInfo]);
-
-  const saveAgreement = async () => {
-    try {
-      setLastSaved(new Date());
-      await base44.functions.invoke('saveIPAssignmentAgreement', {
-        assignmentInfo,
-        agreement,
-        timestamp: new Date().toISOString()
-      });
-    } catch (error) {
-      console.error('Error saving agreement:', error);
-    }
-  };
+  const { isGenerating, lastSaved, versions, restoreVersion } = useDocumentManagement('IPAssignmentAgreement');
 
   const generateAgreement = async () => {
     if (!assignmentInfo.assignor) {
@@ -51,34 +27,12 @@ export default function IPAssignmentAgreement() {
       return;
     }
 
-    setIsGenerating(true);
-    try {
-      const result = await base44.functions.invoke('generateIPAssignmentAgreement', {
-        assignmentInfo,
-        platformName: 'Business Annex'
-      });
+    const result = await base44.functions.invoke('generateIPAssignmentAgreement', {
+      assignmentInfo,
+      platformName: 'Business Annex'
+    });
 
-      setAgreement(result);
-      setVersions([
-        ...versions,
-        {
-          id: Date.now(),
-          timestamp: new Date().toISOString(),
-          agreement: result,
-          note: 'AI Generated'
-        }
-      ]);
-      saveAgreement();
-    } catch (error) {
-      console.error('Error generating agreement:', error);
-      alert('Failed to generate agreement. Please try again.');
-    } finally {
-      setIsGenerating(false);
-    }
-  };
-
-  const handleAgreementUpdate = (updatedContent) => {
-    setAgreement(updatedContent);
+    setAgreement(result.agreement || result);
   };
 
   const exportPDF = async () => {
@@ -92,19 +46,6 @@ export default function IPAssignmentAgreement() {
       console.error('Error exporting PDF:', error);
       alert('Failed to export PDF. Please try again.');
     }
-  };
-
-  const restoreVersion = (version) => {
-    setAgreement(version.agreement);
-    setVersions([
-      ...versions,
-      {
-        id: Date.now(),
-        timestamp: new Date().toISOString(),
-        agreement: version.agreement,
-        note: `Restored from ${new Date(version.timestamp).toLocaleString()}`
-      }
-    ]);
   };
 
   return (
@@ -122,32 +63,23 @@ export default function IPAssignmentAgreement() {
           </div>
           <div className="text-right">
             <p className="text-sm text-slate-500">Last saved: {lastSaved.toLocaleTimeString()}</p>
-            <div className="flex gap-2 mt-3">
-              <Button
-                onClick={generateAgreement}
-                disabled={isGenerating}
-                className="bg-violet-600 hover:bg-violet-700 text-white"
-              >
-                {isGenerating ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Generating...
-                  </>
-                ) : (
-                  <>
-                    <RefreshCw className="w-4 h-4 mr-2" />
-                    Generate Agreement
-                  </>
-                )}
-              </Button>
-              <Button
-                onClick={saveAgreement}
-                variant="outline"
-                className="border-slate-300"
-              >
-                Save Now
-              </Button>
-            </div>
+            <Button
+              onClick={generateAgreement}
+              disabled={isGenerating}
+              className="bg-violet-600 hover:bg-violet-700 text-white mt-3"
+            >
+              {isGenerating ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Generating...
+                </>
+              ) : (
+                <>
+                  <RefreshCw className="w-4 h-4 mr-2" />
+                  Generate Agreement
+                </>
+              )}
+            </Button>
           </div>
         </div>
 
@@ -164,14 +96,25 @@ export default function IPAssignmentAgreement() {
 
         {/* Agreement */}
         {agreement ? (
-          <IPAssignmentAgreementContent
-            content={agreement}
-            assignmentInfo={assignmentInfo}
-            onUpdate={handleAgreementUpdate}
-            onExport={exportPDF}
-            onRegenerate={generateAgreement}
-            isGenerating={isGenerating}
-          />
+          <>
+            <DocumentContent
+              content={agreement}
+              title="IP Assignment Agreement"
+              infoData={assignmentInfo}
+              infoDisplayFields={[
+                { key: 'assignor', label: 'Assignor' },
+                { key: 'assignee', label: 'Assignee' },
+                { key: 'date', label: 'Date' }
+              ]}
+              onUpdate={setAgreement}
+              onExport={exportPDF}
+              onRegenerate={generateAgreement}
+              isGenerating={isGenerating}
+            />
+            {versions.length > 0 && (
+              <DocumentVersionHistory versions={versions} onRestore={(v) => restoreVersion(v, assignmentInfo)} />
+            )}
+          </>
         ) : (
           <Card className="border-0 shadow-lg p-12 text-center">
             <p className="text-slate-500 mb-4">No agreement generated yet.</p>
@@ -183,11 +126,6 @@ export default function IPAssignmentAgreement() {
               {isGenerating ? 'Generating...' : 'Generate Agreement'}
             </Button>
           </Card>
-        )}
-
-        {/* Version History */}
-        {versions.length > 0 && (
-          <AssignmentVersionHistory versions={versions} onRestore={restoreVersion} />
         )}
       </div>
     </motion.div>

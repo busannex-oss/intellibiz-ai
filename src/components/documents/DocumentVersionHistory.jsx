@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Clock, RotateCcw } from 'lucide-react';
 
-export default function EngagementVersionHistory({ versions, onRestore }) {
+export default function DocumentVersionHistory({ versions, onRestore }) {
   const [expanded, setExpanded] = useState(false);
 
   return (

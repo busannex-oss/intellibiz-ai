@@ -4,9 +4,11 @@ import { Button } from '@/components/ui/button';
 import { Download, Edit2, RefreshCw, Loader2 } from 'lucide-react';
 import { Textarea } from '@/components/ui/textarea';
 
-export default function IPAssignmentAgreementContent({
+export default function DocumentContent({
   content,
-  assignmentInfo,
+  title,
+  infoData,
+  infoDisplayFields,
   onUpdate,
   onExport,
   onRegenerate,
@@ -20,12 +22,18 @@ export default function IPAssignmentAgreementContent({
     setIsEditing(false);
   };
 
+  const getFooterText = () => {
+    return infoDisplayFields
+      .map(field => `${field.label}: ${infoData[field.key] || field.label}`)
+      .join(' | ');
+  };
+
   return (
     <Card className="border-0 shadow-lg bg-white">
       <CardContent className="p-6 space-y-4">
         {/* Header with Actions */}
         <div className="flex items-center justify-between pb-4 border-b">
-          <h3 className="text-lg font-semibold text-slate-800">IP Assignment Agreement</h3>
+          <h3 className="text-lg font-semibold text-slate-800">{title}</h3>
           <div className="flex gap-2">
             {isEditing ? (
               <>
@@ -86,13 +94,13 @@ export default function IPAssignmentAgreementContent({
           </div>
         </div>
 
-        {/* Agreement Content */}
+        {/* Content */}
         {isEditing ? (
           <Textarea
             value={editedContent}
             onChange={(e) => setEditedContent(e.target.value)}
             className="min-h-[600px] font-mono text-sm border-slate-200 focus:border-violet-400"
-            placeholder="Agreement content..."
+            placeholder="Document content..."
           />
         ) : (
           <div className="prose prose-sm max-w-none bg-slate-50 p-6 rounded-lg min-h-[600px] overflow-y-auto text-slate-700 whitespace-pre-wrap font-serif text-sm leading-relaxed">
@@ -100,13 +108,9 @@ export default function IPAssignmentAgreementContent({
           </div>
         )}
 
-        {/* Assignment Info Footer */}
+        {/* Footer */}
         <div className="text-xs text-slate-500 pt-4 border-t">
-          <p>
-            Assignor: <strong>{assignmentInfo.assignor || 'Assignor'}</strong> |
-            Assignee: <strong>{assignmentInfo.assignee}</strong> |
-            Date: <strong>{assignmentInfo.date}</strong>
-          </p>
+          <p>{getFooterText()}</p>
         </div>
       </CardContent>
     </Card>
