@@ -23,6 +23,7 @@ import AgentAnalyticsDashboard from './pages/AgentAnalyticsDashboard';
 import AgentVersionHistoryPage from './pages/AgentVersionHistory';
 import WorkflowDesigner from './pages/WorkflowDesigner';
 import ReportingCenter from './pages/ReportingCenter';
+import Switchboard from './pages/Switchboard';
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
@@ -88,6 +89,7 @@ const AuthenticatedApp = () => {
       <Route path="/AgentVersionHistory" element={<LayoutWrapper currentPageName="AgentVersionHistory"><AgentVersionHistoryPage /></LayoutWrapper>} />
       <Route path="/WorkflowDesigner" element={<LayoutWrapper currentPageName="WorkflowDesigner"><WorkflowDesigner /></LayoutWrapper>} />
       <Route path="/ReportingCenter" element={<LayoutWrapper currentPageName="ReportingCenter"><ReportingCenter /></LayoutWrapper>} />
+      <Route path="/Switchboard" element={<LayoutWrapper currentPageName="Switchboard"><Switchboard /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
