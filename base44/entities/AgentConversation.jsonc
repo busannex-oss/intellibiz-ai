@@ -1,0 +1,98 @@
+{
+  "name": "AgentConversation",
+  "type": "object",
+  "properties": {
+    "workspace_id": {
+      "type": "string",
+      "description": "Shared workspace identifier"
+    },
+    "title": {
+      "type": "string",
+      "description": "Conversation/problem title"
+    },
+    "business_problem": {
+      "type": "string",
+      "description": "The complex business problem being solved"
+    },
+    "participating_agents": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "IDs of AI agents involved"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "resolved",
+        "archived"
+      ],
+      "default": "active"
+    },
+    "messages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "agent_id": {
+            "type": "string"
+          },
+          "agent_name": {
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "thinking_process": {
+            "type": "string",
+            "description": "Agent's reasoning/thought process"
+          },
+          "references_previous": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "IDs of previous messages referenced"
+          }
+        }
+      }
+    },
+    "consensus": {
+      "type": "string",
+      "description": "Agreed-upon solution or recommendation"
+    },
+    "outcome": {
+      "type": "string",
+      "description": "Final result or deliverable"
+    },
+    "resolution_time_minutes": {
+      "type": "number"
+    },
+    "effectiveness_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "How effective the collaboration was"
+    }
+  },
+  "required": [
+    "workspace_id",
+    "title",
+    "business_problem",
+    "participating_agents"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {},
+    "delete": {}
+  }
+}

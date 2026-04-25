@@ -1,0 +1,85 @@
+{
+  "name": "AgentPerformanceMetric",
+  "type": "object",
+  "properties": {
+    "agent_id": {
+      "type": "string",
+      "description": "Associated AI agent ID"
+    },
+    "agent_name": {
+      "type": "string"
+    },
+    "metric_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the metric was recorded"
+    },
+    "conversations_participated": {
+      "type": "number",
+      "default": 0
+    },
+    "successful_outcomes": {
+      "type": "number",
+      "default": 0
+    },
+    "success_rate": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Percentage of conversations with successful outcomes"
+    },
+    "avg_response_time_seconds": {
+      "type": "number"
+    },
+    "clarity_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "How clear and understandable the agent's contributions are"
+    },
+    "collaboration_effectiveness": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "How well the agent works with others"
+    },
+    "goal_alignment_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "How well agent recommendations align with business goals"
+    },
+    "deliverable_quality": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Quality of outputs and deliverables"
+    },
+    "knowledge_retention": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "How well agent retains and applies previous learnings"
+    },
+    "overall_performance_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Composite score across all metrics"
+    },
+    "feedback_comments": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "agent_id",
+    "agent_name",
+    "metric_date"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {},
+    "delete": {}
+  }
+}

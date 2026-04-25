@@ -1,0 +1,132 @@
+{
+  "name": "AgentVersionHistory",
+  "type": "object",
+  "properties": {
+    "agent_id": {
+      "type": "string",
+      "description": "Associated AI agent ID"
+    },
+    "version_number": {
+      "type": "number",
+      "description": "Version sequence number"
+    },
+    "changed_by": {
+      "type": "string",
+      "description": "Email of user who made the change"
+    },
+    "change_timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "change_description": {
+      "type": "string",
+      "description": "Summary of what changed"
+    },
+    "change_type": {
+      "type": "string",
+      "enum": [
+        "identity",
+        "conversation_flow",
+        "work_instructions",
+        "collaboration",
+        "boundaries",
+        "resume",
+        "metrics",
+        "other"
+      ],
+      "description": "Category of change"
+    },
+    "snapshot": {
+      "type": "object",
+      "description": "Complete agent data snapshot at this version",
+      "properties": {
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "age": {
+          "type": "number"
+        },
+        "job_title": {
+          "type": "string"
+        },
+        "mission": {
+          "type": "string"
+        },
+        "core_persona_prompt": {
+          "type": "string"
+        },
+        "initial_greeting": {
+          "type": "string"
+        },
+        "discovery_questions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "operational_guidelines": {
+          "type": "string"
+        },
+        "deliverables": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "primary_partners": {
+          "type": "array"
+        },
+        "team_meeting_role": {
+          "type": "string"
+        },
+        "non_disclosure_rules": {
+          "type": "string"
+        },
+        "expertise": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "achievements": {
+          "type": "string"
+        },
+        "work_history": {
+          "type": "array"
+        },
+        "technical_skills": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "success_metrics": {
+          "type": "array"
+        }
+      }
+    },
+    "is_current_version": {
+      "type": "boolean",
+      "default": true
+    },
+    "rollback_enabled": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "agent_id",
+    "version_number",
+    "changed_by",
+    "change_timestamp"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {},
+    "delete": {}
+  }
+}

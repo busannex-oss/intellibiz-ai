@@ -18,6 +18,9 @@ import PartnershipAgreement from './pages/PartnershipAgreement';
 import LetterOfIntent from './pages/LetterOfIntent';
 import IPAssignmentAgreement from './pages/IPAssignmentAgreement';
 import TermsOfEngagement from './pages/TermsOfEngagement';
+import SharedWorkspace from './pages/SharedWorkspace';
+import AgentAnalyticsDashboard from './pages/AgentAnalyticsDashboard';
+import AgentVersionHistoryPage from './pages/AgentVersionHistory';
 const { Pages, Layout, mainPage } = pagesConfig;
 const mainPageKey = mainPage ?? Object.keys(Pages)[0];
 const MainPage = mainPageKey ? Pages[mainPageKey] : <></>;
@@ -78,6 +81,9 @@ const AuthenticatedApp = () => {
       <Route path="/LetterOfIntent" element={<LayoutWrapper currentPageName="LetterOfIntent"><LetterOfIntent /></LayoutWrapper>} />
       <Route path="/IPAssignmentAgreement" element={<LayoutWrapper currentPageName="IPAssignmentAgreement"><IPAssignmentAgreement /></LayoutWrapper>} />
       <Route path="/TermsOfEngagement" element={<LayoutWrapper currentPageName="TermsOfEngagement"><TermsOfEngagement /></LayoutWrapper>} />
+      <Route path="/SharedWorkspace" element={<LayoutWrapper currentPageName="SharedWorkspace"><SharedWorkspace /></LayoutWrapper>} />
+      <Route path="/AgentAnalyticsDashboard" element={<LayoutWrapper currentPageName="AgentAnalyticsDashboard"><AgentAnalyticsDashboard /></LayoutWrapper>} />
+      <Route path="/AgentVersionHistory" element={<LayoutWrapper currentPageName="AgentVersionHistory"><AgentVersionHistoryPage /></LayoutWrapper>} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
