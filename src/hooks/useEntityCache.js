@@ -9,7 +9,7 @@ export function useAgents(enabled = true) {
       return data.filter(a => a.is_active);
     },
     enabled,
-    staleTime: 5 * 60 * 1000 // 5 minutes
+    staleTime: 30 * 1000 // 30 seconds
   });
 }
 
@@ -17,7 +17,7 @@ export function useConversations() {
   return useQuery({
     queryKey: ['conversations'],
     queryFn: () => base44.entities.AgentConversation.list('-created_date'),
-    staleTime: 2 * 60 * 1000 // 2 minutes
+    staleTime: 30 * 1000 // 30 seconds
   });
 }
 
@@ -25,7 +25,7 @@ export function useWorkflows() {
   return useQuery({
     queryKey: ['workflows'],
     queryFn: () => base44.entities.AgentWorkflow.list('-created_date'),
-    staleTime: 5 * 60 * 1000
+    staleTime: 30 * 1000
   });
 }
 
@@ -36,7 +36,7 @@ export function useMetrics(agentId = null) {
       const data = await base44.entities.AgentPerformanceMetric.list('-metric_date');
       return agentId ? data.filter(m => m.agent_id === agentId) : data;
     },
-    staleTime: 10 * 60 * 1000
+    staleTime: 60 * 1000 // 60 seconds
   });
 }
 
@@ -60,7 +60,7 @@ export function useReports() {
   return useQuery({
     queryKey: ['reports'],
     queryFn: () => base44.entities.WorkflowReport.list('-created_date'),
-    staleTime: 10 * 60 * 1000
+    staleTime: 60 * 1000
   });
 }
 
@@ -68,7 +68,7 @@ export function useSchedules() {
   return useQuery({
     queryKey: ['schedules'],
     queryFn: () => base44.entities.ReportSchedule.list(),
-    staleTime: 15 * 60 * 1000
+    staleTime: 60 * 1000
   });
 }
 
@@ -79,7 +79,7 @@ export function useVersionHistory(agentId) {
       { agent_id: agentId },
       '-created_date'
     ),
-    staleTime: 10 * 60 * 1000,
+    staleTime: 30 * 1000,
     enabled: !!agentId
   });
 }
