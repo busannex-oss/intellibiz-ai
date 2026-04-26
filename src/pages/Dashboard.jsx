@@ -558,7 +558,7 @@ export default function Dashboard() {
               </CardContent>
             </Card>
           </Link>
-          <Link to={createPageUrl(`Documents${projects[0]?.id ? `?projectId=${projects[0].id}` : ''}`)}>
+          <Link to={createPageUrl('Documents')}>
             <Card className="border-0 bg-gradient-to-br from-cyan-500/10 to-cyan-600/10 border border-cyan-500/20 hover:border-cyan-500/40 transition-all cursor-pointer h-full">
               <CardContent className="p-5">
                 <FileText className="w-9 h-9 text-cyan-400 mb-2" />
