@@ -3,10 +3,23 @@ import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   FileText, Scale, Search, ExternalLink,
-  CheckCircle2, Clock, AlertCircle, FileCheck, ChevronRight, Globe
+  CheckCircle2, Clock, AlertCircle, FileCheck, ChevronRight, Globe, Sparkles
 } from 'lucide-react';
+import AIDocModal from '@/components/documents/AIDocModal';
+
+// Doc types that support AI generation (key → modal doc_type)
+const AI_ENABLED = {
+  mission_statement: 'mission_statement',
+  white_paper: 'white_paper',
+  brand_style_guide: 'brand_style_guide',
+  privacy_policy: 'privacy_policy',
+  service_agreement_1: 'service_agreement',
+  service_agreement_2: 'service_agreement',
+  service_agreement_3: 'service_agreement',
+};
 
 const FOUNDATIONAL_DOCS = [
   { key: 'mission_statement', name: 'Mission Statement', route: null },
@@ -84,37 +97,51 @@ function StatusBadge({ docKey }) {
   );
 }
 
-function DocCard({ doc }) {
+function DocCard({ doc, onAIGenerate }) {
   const isLinked = !!doc.route;
+  const isAIEnabled = !!AI_ENABLED[doc.key];
 
-  const cardContent = (
+  const inner = (
     <div className={`group bg-slate-800/50 border rounded-xl p-4 flex flex-col gap-3 transition-all duration-200 h-full
-      ${isLinked ? 'border-slate-700 hover:border-slate-500 hover:bg-slate-800 cursor-pointer' : 'border-slate-700/40 opacity-70'}`}>
+      ${(isLinked || isAIEnabled) ? 'border-slate-700 hover:border-slate-500 hover:bg-slate-800' : 'border-slate-700/40 opacity-60'}
+      ${isLinked ? 'cursor-pointer' : ''}`}>
       <div className="flex items-start justify-between gap-2">
         <p className="text-sm font-medium text-white leading-snug">{doc.name}</p>
         {isLinked && <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-amber-400 shrink-0 mt-0.5 transition-colors" />}
       </div>
-      <div className="flex items-center justify-between mt-auto">
+      <div className="flex items-center justify-between mt-auto flex-wrap gap-2">
         <StatusBadge docKey={doc.key} />
-        {isLinked ? (
-          <span className="text-xs text-amber-400 font-medium flex items-center gap-1">
-            Open <ExternalLink className="w-3 h-3" />
-          </span>
-        ) : (
-          <span className="text-xs text-slate-600">Coming soon</span>
-        )}
+        <div className="flex items-center gap-1.5">
+          {isAIEnabled && (
+            <button
+              onClick={e => { e.preventDefault(); e.stopPropagation(); onAIGenerate(AI_ENABLED[doc.key]); }}
+              className="flex items-center gap-1 text-xs font-medium text-violet-400 hover:text-violet-300 bg-violet-500/10 hover:bg-violet-500/20 px-2 py-1 rounded-md transition-colors"
+            >
+              <Sparkles className="w-3 h-3" /> AI Generate
+            </button>
+          )}
+          {isLinked && (
+            <span className="text-xs text-amber-400 font-medium flex items-center gap-1">
+              Open <ExternalLink className="w-3 h-3" />
+            </span>
+          )}
+          {!isLinked && !isAIEnabled && (
+            <span className="text-xs text-slate-600">Coming soon</span>
+          )}
+        </div>
       </div>
     </div>
   );
 
   if (isLinked) {
-    return <Link to={createPageUrl(doc.route)} className="block h-full">{cardContent}</Link>;
+    return <Link to={createPageUrl(doc.route)} className="block h-full">{inner}</Link>;
   }
-  return cardContent;
+  return inner;
 }
 
 export default function Documents() {
   const [search, setSearch] = useState('');
+  const [activeModal, setActiveModal] = useState(null);
 
   const filter = (docs) => docs.filter(d =>
     d.name.toLowerCase().includes(search.toLowerCase())
@@ -133,16 +160,22 @@ export default function Documents() {
               </div>
               <h1 className="text-3xl md:text-4xl font-bold text-white tracking-[-0.02em]">Documents & Legal Suite</h1>
             </div>
-            <p className="text-slate-400 mt-1 text-sm pl-13">All BrandForge platform documents — foundational strategy and legal agreements</p>
+            <p className="text-slate-400 mt-1 text-sm ml-13">All BrandForge platform documents — foundational strategy and legal agreements</p>
           </div>
-          <div className="relative w-full md:w-72">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-            <Input
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              placeholder="Search documents..."
-              className="pl-9 bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
-            />
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5 text-xs text-violet-400 bg-violet-500/10 border border-violet-500/20 rounded-full px-3 py-1.5">
+              <Sparkles className="w-3.5 h-3.5" />
+              AI-powered generation available
+            </div>
+            <div className="relative w-full md:w-64">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+              <Input
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="Search documents..."
+                className="pl-9 bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
+              />
+            </div>
           </div>
         </div>
 
@@ -157,7 +190,7 @@ export default function Documents() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
             {filter(FOUNDATIONAL_DOCS).map(doc => (
-              <DocCard key={doc.key} doc={doc} />
+              <DocCard key={doc.key} doc={doc} onAIGenerate={setActiveModal} />
             ))}
           </div>
         </div>
@@ -173,12 +206,19 @@ export default function Documents() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
             {filter(LEGAL_DOCS).map(doc => (
-              <DocCard key={doc.key} doc={doc} />
+              <DocCard key={doc.key} doc={doc} onAIGenerate={setActiveModal} />
             ))}
           </div>
         </div>
 
       </div>
+
+      {/* AI Generation Modal */}
+      <AIDocModal
+        docType={activeModal}
+        open={!!activeModal}
+        onClose={() => setActiveModal(null)}
+      />
     </div>
   );
 }
