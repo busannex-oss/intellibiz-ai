@@ -28,6 +28,7 @@ import {
   Radar,
   FileDown,
   BookText,
+  FileText,
   Loader2,
   Zap,
   TrendingUp,
@@ -554,6 +555,15 @@ export default function Dashboard() {
                 <Settings className="w-9 h-9 text-emerald-400 mb-2" />
                 <h3 className="font-semibold text-white text-sm mb-0.5">Settings</h3>
                 <p className="text-xs text-slate-400">Account & API</p>
+              </CardContent>
+            </Card>
+          </Link>
+          <Link to={createPageUrl('Documents')}>
+            <Card className="border-0 bg-gradient-to-br from-cyan-500/10 to-cyan-600/10 border border-cyan-500/20 hover:border-cyan-500/40 transition-all cursor-pointer h-full">
+              <CardContent className="p-5">
+                <FileText className="w-9 h-9 text-cyan-400 mb-2" />
+                <h3 className="font-semibold text-white text-sm mb-0.5">Documents</h3>
+                <p className="text-xs text-slate-400">Legal & Foundational</p>
               </CardContent>
             </Card>
           </Link>
