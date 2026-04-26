@@ -6,7 +6,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Sparkles, Loader2, Copy, Download, CheckCheck } from 'lucide-react';
+import { Sparkles, Loader2, Copy, FileText, CheckCheck, FileDown } from 'lucide-react';
+import { jsPDF } from 'jspdf';
 
 const DOC_CONFIG = {
   mission_statement: {
@@ -87,7 +88,158 @@ export default function AIDocModal({ docType, open, onClose }) {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleDownload = () => {
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pageW = doc.internal.pageSize.getWidth();
+    const pageH = doc.internal.pageSize.getHeight();
+    const margin = 20;
+    const contentW = pageW - margin * 2;
+
+    // --- Brand header bar ---
+    doc.setFillColor(15, 23, 42); // slate-900
+    doc.rect(0, 0, pageW, 28, 'F');
+
+    // Amber accent line
+    doc.setFillColor(245, 158, 11); // amber-500
+    doc.rect(0, 28, pageW, 2, 'F');
+
+    // Platform name
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(13);
+    doc.setTextColor(255, 255, 255);
+    doc.text('BrandForge', margin, 17);
+
+    // Document title (right side of header)
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(148, 163, 184); // slate-400
+    doc.text(config.label, pageW - margin, 17, { align: 'right' });
+
+    // --- Document title block ---
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(15, 23, 42);
+    doc.text(config.label, margin, 48);
+
+    // Date line
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(100, 116, 139); // slate-500
+    const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    doc.text(`Generated: ${dateStr}`, margin, 55);
+
+    // Divider
+    doc.setDrawColor(226, 232, 240); // slate-200
+    doc.setLineWidth(0.4);
+    doc.line(margin, 60, pageW - margin, 60);
+
+    // --- Body text ---
+    let cursorY = 68;
+    const lineHeight = 5.5;
+    const lines = content.split('\n');
+
+    doc.setTextColor(30, 41, 59); // slate-800
+
+    for (const rawLine of lines) {
+      const line = rawLine.trimEnd();
+
+      // Detect heading patterns: lines starting with # or all-caps short lines or numbered section headers
+      const isH1 = /^#{1,2}\s/.test(line);
+      const isH2 = /^#{3,4}\s/.test(line) || /^\d+\.\s[A-Z]/.test(line);
+      const isBold = /^\*\*(.+)\*\*$/.test(line) || /^__(.+)__$/.test(line);
+      const isBullet = /^[-•*]\s/.test(line) || /^\s+[-•*]\s/.test(line);
+      const isEmpty = line.trim() === '';
+
+      // Page break check (leave room for footer)
+      if (cursorY > pageH - 25) {
+        // Footer on current page
+        doc.setFillColor(248, 250, 252);
+        doc.rect(0, pageH - 14, pageW, 14, 'F');
+        doc.setFontSize(7.5);
+        doc.setTextColor(148, 163, 184);
+        doc.text('BrandForge Platform — Confidential', margin, pageH - 5);
+        doc.text(`Page ${doc.internal.getCurrentPageInfo().pageNumber}`, pageW - margin, pageH - 5, { align: 'right' });
+
+        doc.addPage();
+        // Thin header bar on continuation pages
+        doc.setFillColor(15, 23, 42);
+        doc.rect(0, 0, pageW, 10, 'F');
+        doc.setFillColor(245, 158, 11);
+        doc.rect(0, 10, pageW, 1.5, 'F');
+        doc.setFontSize(7.5);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(148, 163, 184);
+        doc.text('BrandForge — ' + config.label, margin, 7);
+        cursorY = 20;
+      }
+
+      if (isEmpty) {
+        cursorY += 3;
+        continue;
+      }
+
+      // Clean markdown syntax from display text
+      const cleanText = line
+        .replace(/^#{1,4}\s*/, '')
+        .replace(/\*\*(.+?)\*\*/g, '$1')
+        .replace(/^[-•*]\s+/, '• ')
+        .replace(/^\s+[-•*]\s+/, '  • ');
+
+      if (isH1) {
+        cursorY += 3;
+        doc.setFontSize(13);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(15, 23, 42);
+        doc.text(cleanText, margin, cursorY);
+        // Underline
+        doc.setDrawColor(245, 158, 11);
+        doc.setLineWidth(0.5);
+        doc.line(margin, cursorY + 1.5, margin + doc.getTextWidth(cleanText), cursorY + 1.5);
+        cursorY += lineHeight + 3;
+      } else if (isH2) {
+        cursorY += 2;
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(30, 41, 59);
+        doc.text(cleanText, margin, cursorY);
+        cursorY += lineHeight + 1;
+      } else if (isBold) {
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(30, 41, 59);
+        const wrapped = doc.splitTextToSize(cleanText, contentW);
+        doc.text(wrapped, margin, cursorY);
+        cursorY += wrapped.length * lineHeight;
+      } else if (isBullet) {
+        doc.setFontSize(9.5);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(51, 65, 85);
+        const wrapped = doc.splitTextToSize(cleanText, contentW - 4);
+        doc.text(wrapped, margin + 2, cursorY);
+        cursorY += wrapped.length * lineHeight;
+      } else {
+        doc.setFontSize(9.5);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(51, 65, 85);
+        const wrapped = doc.splitTextToSize(cleanText, contentW);
+        doc.text(wrapped, margin, cursorY);
+        cursorY += wrapped.length * lineHeight;
+      }
+    }
+
+    // Footer on last page
+    doc.setFillColor(248, 250, 252);
+    doc.rect(0, pageH - 14, pageW, 14, 'F');
+    doc.setFontSize(7.5);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(148, 163, 184);
+    doc.text('BrandForge Platform — Confidential', margin, pageH - 5);
+    doc.text(`Page ${doc.internal.getCurrentPageInfo().pageNumber}`, pageW - margin, pageH - 5, { align: 'right' });
+
+    doc.save(`${config.label.replace(/\s+/g, '_')}_BrandForge.pdf`);
+  };
+
+  const handleDownloadTxt = () => {
     const blob = new Blob([content], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -165,9 +317,13 @@ export default function AIDocModal({ docType, open, onClose }) {
                     {copied ? <CheckCheck className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
                     <span className="ml-1 text-xs">{copied ? 'Copied' : 'Copy'}</span>
                   </Button>
-                  <Button size="sm" variant="ghost" onClick={handleDownload} className="text-slate-400 hover:text-white h-7 px-2">
-                    <Download className="w-4 h-4" />
-                    <span className="ml-1 text-xs">Download</span>
+                  <Button size="sm" variant="ghost" onClick={handleDownloadTxt} className="text-slate-400 hover:text-white h-7 px-2">
+                    <FileText className="w-4 h-4" />
+                    <span className="ml-1 text-xs">.txt</span>
+                  </Button>
+                  <Button size="sm" onClick={handleDownloadPDF} className="bg-amber-500 hover:bg-amber-600 text-white h-7 px-3">
+                    <FileDown className="w-4 h-4 mr-1" />
+                    <span className="text-xs font-medium">PDF</span>
                   </Button>
                 </div>
               </div>
