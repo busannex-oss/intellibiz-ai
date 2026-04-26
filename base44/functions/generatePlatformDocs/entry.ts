@@ -21,45 +21,41 @@ Requirements:
 Format as clean prose (no headers/bullets).`,
 
   white_paper: ({ focus }) => `
-Write a comprehensive White Paper for ${PLATFORM_NAME}.
+Write a focused White Paper for ${PLATFORM_NAME}.
 Platform Description: ${PLATFORM_DESC}
 Focus Area: ${focus || 'The Future of AI-Powered Business Building'}
 
-Structure:
-1. Executive Summary (2 paragraphs)
-2. The Problem: Barriers to Entrepreneurship (2–3 paragraphs)
-3. The Solution: How ${PLATFORM_NAME} Works (overview of all pillars)
-4. Key Technology & AI Architecture (how AI agents collaborate)
-5. Market Opportunity & Competitive Landscape
-6. The 8 Business Building Pillars (brief description of each)
-7. Case Studies / Use Cases (3 hypothetical but realistic examples)
-8. Business Model & Pricing Philosophy
-9. Future Roadmap & Vision
+Structure (keep each section concise but substantive):
+1. Executive Summary
+2. The Problem: Barriers to Entrepreneurship
+3. The Solution: How ${PLATFORM_NAME} Works
+4. Key Technology & AI Architecture
+5. Market Opportunity
+6. The 8 Business Building Pillars
+7. Use Cases (2 examples)
+8. Business Model
+9. Future Roadmap
 10. Conclusion & Call to Action
 
-Tone: Professional, authoritative, data-informed, forward-thinking.
-Length: Detailed and thorough. Each section should be substantive.`,
+Tone: Professional, authoritative, forward-thinking.`,
 
   brand_style_guide: ({ colors, fonts, personality }) => `
-Create a comprehensive Brand Style Guide document for ${PLATFORM_NAME}.
+Create a Brand Style Guide for ${PLATFORM_NAME}.
 Platform Description: ${PLATFORM_DESC}
 Primary Brand Colors: ${colors || 'Amber (#F59E0B), Orange (#F97316), Slate Dark (#0F172A), Slate Mid (#1E293B), White (#FFFFFF)'}
-Typography: ${fonts || 'Inter (primary), system-ui fallback. Weights: 300, 400, 500, 600, 700, 800, 900'}
+Typography: ${fonts || 'Inter (primary), system-ui fallback. Weights: 300–900'}
 Brand Personality: ${personality || 'Bold, Modern, Trustworthy, Innovative, Empowering'}
 
-Required Sections:
-1. Brand Overview & Mission
-2. Logo Usage Guidelines (primary, secondary, monochrome, clear space, minimum sizes, forbidden uses)
-3. Color Palette (primary, secondary, accent, neutral, semantic colors — with hex codes and usage rules)
-4. Typography System (headings scale, body text, UI labels, letter-spacing, line-height guidelines)
-5. Imagery & Photography Style (mood, subject matter, composition rules, what to avoid)
-6. Iconography Standards (style, size, usage context)
-7. Voice & Tone Guidelines (personality traits, do/don't examples, tone by context)
-8. UI Component Standards (buttons, cards, badges, form inputs — color and radius conventions)
-9. Digital Application Examples (website, email, social media)
-10. Brand Don'ts (common misuses to avoid)
+Sections:
+1. Brand Overview
+2. Logo Usage Guidelines
+3. Color Palette (with hex codes and usage rules)
+4. Typography System
+5. Voice & Tone Guidelines (with do/don't examples)
+6. UI Component Standards
+7. Brand Don'ts
 
-Tone: Clear, prescriptive, professional. Write as if this will be handed to a design or marketing team.`,
+Tone: Clear, prescriptive, professional — as if handed to a design team.`,
 
   privacy_policy: ({ company, contact_email, effective_date }) => `
 Generate a comprehensive Privacy Policy and Terms of Service document for ${PLATFORM_NAME}.
@@ -150,7 +146,7 @@ Deno.serve(async (req) => {
 
     const result = await base44.integrations.Core.InvokeLLM({
       prompt,
-      model: 'claude_sonnet_4_6'
+      model: 'gpt_5_mini'
     });
 
     return Response.json({ content: result, doc_type });
