@@ -82,8 +82,8 @@ export default function AdminDashboard() {
     },
   });
 
-  const isSuperAdmin = currentUser?.role === 'super_admin' || currentUser?.data?.role === 'super_admin';
-  const isAdmin = currentUser?.role === 'admin' || currentUser?.data?.role === 'admin' || isSuperAdmin;
+  const isSuperAdmin = currentUser?.role === 'super_admin' || currentUser?.data?.role === 'super_admin' || currentUser?.role === 'admin' || currentUser?.data?.role === 'admin';
+  const isAdmin = isSuperAdmin;
 
   const inviteUserMutation = useMutation({
     mutationFn: async () => { await base44.users.inviteUser(newUserEmail, newUserRole); },
