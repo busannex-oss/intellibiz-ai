@@ -6,9 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   FileText, Scale, Search, ExternalLink,
-  CheckCircle2, Clock, AlertCircle, FileCheck, ChevronRight, Globe, Sparkles
+  CheckCircle2, Clock, AlertCircle, FileCheck, ChevronRight, Globe, Sparkles, Archive
 } from 'lucide-react';
 import AIDocModal from '@/components/documents/AIDocModal';
+import ArchivesView from '@/components/documents/ArchivesView';
 import { base44 } from '@/api/base44Client';
 
 // Doc types that support AI generation (key → modal doc_type)
@@ -149,18 +150,33 @@ function DocCard({ doc, onAIGenerate, isSaved }) {
 export default function Documents() {
   const [search, setSearch] = useState('');
   const [activeModal, setActiveModal] = useState(null);
-  const [savedDocs, setSavedDocs] = useState({}); // doc_type → true
+  const [activeTab, setActiveTab] = useState('library');
+  const [savedDocs, setSavedDocs] = useState({});
+  const [archivedDocs, setArchivedDocs] = useState([]);
+  const [archivesLoading, setArchivesLoading] = useState(false);
 
-  useEffect(() => {
+  const loadDocs = () => {
     base44.entities.PlatformDocument.list().then(docs => {
       const map = {};
       (docs || []).forEach(d => { map[d.doc_type] = true; });
       setSavedDocs(map);
+      setArchivedDocs(docs || []);
     }).catch(() => {});
+  };
+
+  useEffect(() => {
+    setArchivesLoading(true);
+    base44.entities.PlatformDocument.list().then(docs => {
+      const map = {};
+      (docs || []).forEach(d => { map[d.doc_type] = true; });
+      setSavedDocs(map);
+      setArchivedDocs(docs || []);
+    }).catch(() => {}).finally(() => setArchivesLoading(false));
   }, []);
 
   const handleSaved = (docType) => {
     setSavedDocs(prev => ({ ...prev, [docType]: true }));
+    loadDocs();
   };
 
   const filter = (docs) => docs.filter(d =>
@@ -187,21 +203,58 @@ export default function Documents() {
               <Sparkles className="w-3.5 h-3.5" />
               AI-powered generation available
             </div>
-            <div className="relative w-full md:w-64">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
-              <Input
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                placeholder="Search documents..."
-                className="pl-9 bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
-              />
-            </div>
+            {activeTab === 'library' && (
+              <div className="relative w-full md:w-64">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                <Input
+                  value={search}
+                  onChange={e => setSearch(e.target.value)}
+                  placeholder="Search documents..."
+                  className="pl-9 bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
+                />
+              </div>
+            )}
           </div>
         </div>
 
+        {/* Tabs */}
+        <div className="flex items-center gap-1 border-b border-slate-700 mb-8">
+          <button
+            onClick={() => setActiveTab('library')}
+            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px
+              ${activeTab === 'library'
+                ? 'border-amber-400 text-white'
+                : 'border-transparent text-slate-400 hover:text-white'}`}
+          >
+            <FileText className="w-4 h-4" />
+            Document Library
+          </button>
+          <button
+            onClick={() => setActiveTab('archives')}
+            className={`flex items-center gap-2 px-4 py-2.5 text-sm font-medium border-b-2 transition-colors -mb-px
+              ${activeTab === 'archives'
+                ? 'border-amber-400 text-white'
+                : 'border-transparent text-slate-400 hover:text-white'}`}
+          >
+            <Archive className="w-4 h-4" />
+            Archives
+            {archivedDocs.length > 0 && (
+              <span className="bg-amber-500/20 text-amber-400 text-xs font-medium px-1.5 py-0.5 rounded-full">
+                {archivedDocs.length}
+              </span>
+            )}
+          </button>
+        </div>
+
+        {/* Archives View */}
+        {activeTab === 'archives' && (
+          <ArchivesView docs={archivedDocs} loading={archivesLoading} />
+        )}
+
         {/* Foundational Documents */}
+        {activeTab === 'library' && <div>
         <div className="mb-10">
-          <div className="flex items-center gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-4">
             <div className="w-8 h-8 rounded-lg bg-blue-500/20 flex items-center justify-center">
               <FileCheck className="w-4 h-4 text-blue-400" />
             </div>
@@ -215,21 +268,22 @@ export default function Documents() {
           </div>
         </div>
 
-        {/* Legal Suite */}
-        <div className="mb-10">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
-              <Scale className="w-4 h-4 text-amber-400" />
+          {/* Legal Suite */}
+          <div className="mb-10">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-8 h-8 rounded-lg bg-amber-500/20 flex items-center justify-center">
+                <Scale className="w-4 h-4 text-amber-400" />
+              </div>
+              <h2 className="text-lg font-bold text-white">Legal Suite</h2>
+              <Badge className="bg-amber-500/10 text-amber-400 border-amber-500/20 border ml-1">{LEGAL_DOCS.length}</Badge>
             </div>
-            <h2 className="text-lg font-bold text-white">Legal Suite</h2>
-            <Badge className="bg-amber-500/10 text-amber-400 border-amber-500/20 border ml-1">{LEGAL_DOCS.length}</Badge>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+              {filter(LEGAL_DOCS).map(doc => (
+                <DocCard key={doc.key} doc={doc} onAIGenerate={setActiveModal} isSaved={!!savedDocs[AI_ENABLED[doc.key]]} />
+              ))}
+            </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-            {filter(LEGAL_DOCS).map(doc => (
-              <DocCard key={doc.key} doc={doc} onAIGenerate={setActiveModal} isSaved={!!savedDocs[AI_ENABLED[doc.key]]} />
-            ))}
-          </div>
-        </div>
+          </div>}
 
       </div>
 
