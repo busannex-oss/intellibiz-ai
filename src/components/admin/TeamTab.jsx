@@ -245,11 +245,11 @@ export default function TeamTab() {
     <div>
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h2 className="text-xl font-bold text-slate-900">The Team</h2>
-          <p className="text-sm text-slate-500">Manage your AI team members — their profiles, personalities, and responsibilities.</p>
+          <h2 className="text-xl font-bold text-slate-900">AI Agents</h2>
+          <p className="text-sm text-slate-500">Manage your AI agents — their profiles, personalities, and responsibilities.</p>
         </div>
         <Button onClick={() => setShowNew(true)} disabled={showNew} className="bg-violet-600 hover:bg-violet-700 gap-2">
-          <Plus className="w-4 h-4" />Add Team Member
+          <Plus className="w-4 h-4" />Add Agent
         </Button>
       </div>
 
@@ -273,9 +273,9 @@ export default function TeamTab() {
         {!showNew && agents.length === 0 && (
           <div className="col-span-full text-center py-20">
             <Bot className="w-16 h-16 text-slate-200 mx-auto mb-4" />
-            <p className="text-slate-400 text-lg mb-4">No team members yet</p>
+            <p className="text-slate-400 text-lg mb-4">No agents yet</p>
             <Button onClick={() => setShowNew(true)} className="bg-violet-600 hover:bg-violet-700 gap-2">
-              <Plus className="w-4 h-4" />Add First Team Member
+              <Plus className="w-4 h-4" />Add First Agent
             </Button>
           </div>
         )}
