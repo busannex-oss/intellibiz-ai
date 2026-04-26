@@ -1,0 +1,46 @@
+{
+  "name": "PlatformDocument",
+  "type": "object",
+  "properties": {
+    "doc_type": {
+      "type": "string",
+      "description": "Document type key (e.g. mission_statement, white_paper, privacy_policy)"
+    },
+    "doc_label": {
+      "type": "string",
+      "description": "Human-readable document label"
+    },
+    "content": {
+      "type": "string",
+      "description": "Full document text content"
+    },
+    "inputs": {
+      "type": "object",
+      "description": "Inputs used to generate the document"
+    },
+    "version": {
+      "type": "number",
+      "default": 1,
+      "description": "Version number, incremented on each regeneration"
+    }
+  },
+  "required": [
+    "doc_type",
+    "content"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "super_admin"
+          ]
+        }
+      }
+    }
+  }
+}

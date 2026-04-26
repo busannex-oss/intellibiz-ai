@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 import { Badge } from "@/components/ui/badge";
@@ -9,6 +9,7 @@ import {
   CheckCircle2, Clock, AlertCircle, FileCheck, ChevronRight, Globe, Sparkles
 } from 'lucide-react';
 import AIDocModal from '@/components/documents/AIDocModal';
+import { base44 } from '@/api/base44Client';
 
 // Doc types that support AI generation (key → modal doc_type)
 const AI_ENABLED = {
@@ -78,7 +79,12 @@ const STATUS_MAP = {
   terms_of_engagement: 'in_progress',
 };
 
-function StatusBadge({ docKey }) {
+function StatusBadge({ docKey, isSaved }) {
+  if (isSaved) return (
+    <span className="flex items-center gap-1 text-xs font-medium text-emerald-400">
+      <CheckCircle2 className="w-3.5 h-3.5" /> Saved
+    </span>
+  );
   const status = STATUS_MAP[docKey] || 'not_started';
   if (status === 'complete') return (
     <span className="flex items-center gap-1 text-xs font-medium text-emerald-400">
@@ -97,20 +103,21 @@ function StatusBadge({ docKey }) {
   );
 }
 
-function DocCard({ doc, onAIGenerate }) {
+function DocCard({ doc, onAIGenerate, isSaved }) {
   const isLinked = !!doc.route;
   const isAIEnabled = !!AI_ENABLED[doc.key];
 
   const inner = (
     <div className={`group bg-slate-800/50 border rounded-xl p-4 flex flex-col gap-3 transition-all duration-200 h-full
       ${(isLinked || isAIEnabled) ? 'border-slate-700 hover:border-slate-500 hover:bg-slate-800' : 'border-slate-700/40 opacity-60'}
+      ${isSaved ? 'border-emerald-700/40' : ''}
       ${isLinked ? 'cursor-pointer' : ''}`}>
       <div className="flex items-start justify-between gap-2">
         <p className="text-sm font-medium text-white leading-snug">{doc.name}</p>
         {isLinked && <ChevronRight className="w-4 h-4 text-slate-500 group-hover:text-amber-400 shrink-0 mt-0.5 transition-colors" />}
       </div>
       <div className="flex items-center justify-between mt-auto flex-wrap gap-2">
-        <StatusBadge docKey={doc.key} />
+        <StatusBadge docKey={doc.key} isSaved={isSaved} />
         <div className="flex items-center gap-1.5">
           {isAIEnabled && (
             <button
@@ -142,6 +149,19 @@ function DocCard({ doc, onAIGenerate }) {
 export default function Documents() {
   const [search, setSearch] = useState('');
   const [activeModal, setActiveModal] = useState(null);
+  const [savedDocs, setSavedDocs] = useState({}); // doc_type → true
+
+  useEffect(() => {
+    base44.entities.PlatformDocument.list().then(docs => {
+      const map = {};
+      (docs || []).forEach(d => { map[d.doc_type] = true; });
+      setSavedDocs(map);
+    }).catch(() => {});
+  }, []);
+
+  const handleSaved = (docType) => {
+    setSavedDocs(prev => ({ ...prev, [docType]: true }));
+  };
 
   const filter = (docs) => docs.filter(d =>
     d.name.toLowerCase().includes(search.toLowerCase())
@@ -190,7 +210,7 @@ export default function Documents() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
             {filter(FOUNDATIONAL_DOCS).map(doc => (
-              <DocCard key={doc.key} doc={doc} onAIGenerate={setActiveModal} />
+              <DocCard key={doc.key} doc={doc} onAIGenerate={setActiveModal} isSaved={!!savedDocs[AI_ENABLED[doc.key]]} />
             ))}
           </div>
         </div>
@@ -206,7 +226,7 @@ export default function Documents() {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
             {filter(LEGAL_DOCS).map(doc => (
-              <DocCard key={doc.key} doc={doc} onAIGenerate={setActiveModal} />
+              <DocCard key={doc.key} doc={doc} onAIGenerate={setActiveModal} isSaved={!!savedDocs[AI_ENABLED[doc.key]]} />
             ))}
           </div>
         </div>
@@ -218,6 +238,7 @@ export default function Documents() {
         docType={activeModal}
         open={!!activeModal}
         onClose={() => setActiveModal(null)}
+        onSaved={handleSaved}
       />
     </div>
   );
