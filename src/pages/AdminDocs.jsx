@@ -4,12 +4,14 @@ import { base44 } from '@/api/base44Client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Link } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 import {
   Shield, Users, Zap, BookOpen, Search, ChevronDown, ChevronRight,
   Bot, Image, Palette, TrendingUp, Globe, FileText, MessageSquare,
   Target, Lightbulb, ShieldCheck, Layers, Megaphone, BarChart2,
   Star, AlertTriangle, CheckCircle2, Lock, Sparkles, Crown,
-  Video, Mail, Phone, Layout, Clipboard, Eye, ArrowRight
+  Video, Mail, Phone, Layout, Clipboard, Eye, ArrowRight, Brain
 } from 'lucide-react';
 
 // ── Agent Registry ──────────────────────────────────────────────────────────
@@ -540,6 +542,9 @@ function AgentCard({ agent }) {
                   <ArrowRight className="w-3.5 h-3.5" />
                   <span>{agent.accessPath}</span>
                 </div>
+                <Link to={`${createPageUrl('AgentMemoryLog')}?agent=${agent.id}`} className="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg border border-violet-200 bg-violet-50 hover:bg-violet-100 text-violet-700 text-xs font-medium transition-colors w-full">
+                  <Brain className="w-3.5 h-3.5" />View {agent.name.split(' ')[0]}'s Memory Log
+                </Link>
               </div>
             </div>
           </div>
