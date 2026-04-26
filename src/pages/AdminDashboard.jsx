@@ -272,7 +272,7 @@ export default function AdminDashboard() {
           <TabsList className="bg-white border border-slate-200 mb-6 shadow-sm flex-wrap h-auto gap-1 p-1">
            {[
               { value: 'users', icon: Users, label: 'Users' },
-              { value: 'agents', icon: Bot, label: 'AI Agents', superOnly: true },
+              { value: 'agents', icon: Bot, label: 'AI Agents' },
               { value: 'brand_audit', icon: ShieldCheck, label: 'Brand Audit' },
               { value: 'hero', icon: Image, label: 'Hero' },
               { value: 'theme', icon: Type, label: 'Theme & Brand', superOnly: true },
