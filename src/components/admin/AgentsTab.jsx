@@ -1,115 +1,270 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { base44 } from '@/api/base44Client';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Sparkles, Loader2, Trash2 } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { Edit2, Trash2, Save, X, Plus, Loader2, RefreshCw, Bot, Brain } from 'lucide-react';
 import { toast } from 'sonner';
+import { Link } from 'react-router-dom';
+import { createPageUrl } from '@/utils';
 
-const DEFAULT_AGENTS = [
-  { agent_key: 'graphic_artist', first_name: 'Graphic', last_name: 'Artist', job_title: 'Senior Visual QA Director', personality: 'Detail-oriented, critical, constructive', responsibilities: 'Inspects all platform images for publication quality, transparency, composition, and brand alignment', is_active: true },
-  { agent_key: 'brand_sentinel', first_name: 'Brand', last_name: 'Sentinel', job_title: 'Brand Consistency Enforcer', personality: 'Rigorous, systematic, authoritative', responsibilities: 'Enforces visual and verbal brand consistency across all touchpoints and outputs', is_active: true },
-  { agent_key: 'brand_consistency_guardian', first_name: 'Reliability', last_name: 'Diagnostics', job_title: 'Diagnostic & Reliability Agent', personality: 'Analytical, methodical, user-invoked', responsibilities: 'Identifies errors, inconsistencies, and misconfigurations in the platform', is_active: true },
-  { agent_key: 'cms_design_guardian', first_name: 'Theme', last_name: 'Coordinator', job_title: 'Platform Design System Authority', personality: 'Systematic, delegated, compliance-focused', responsibilities: 'Manages platform themes, branding, and design system compliance', is_active: true },
-  { agent_key: 'logo_standards_guardian', first_name: 'Logo', last_name: 'Standards Guardian', job_title: 'Logo Asset Authority', personality: 'Precise, standards-driven, quality assurance', responsibilities: 'Ensures every logo meets agency-grade professional standards and transparency requirements', is_active: true },
-  { agent_key: 'business_assistant', first_name: 'Business', last_name: 'Assistant', job_title: 'Business Advisor', personality: 'Helpful, strategic, user-focused', responsibilities: 'Provides business strategy, planning guidance, and market positioning advice', is_active: true },
-  { agent_key: 'market_intelligence', first_name: 'Market', last_name: 'Intelligence', job_title: 'Research & Insights Analyst', personality: 'Data-driven, analytical, forward-thinking', responsibilities: 'Conducts market research, competitor analysis, and identifies growth opportunities', is_active: true },
-  { agent_key: 'business_plan_architect', first_name: 'Business', last_name: 'Plan Architect', job_title: 'Financial Planning Specialist', personality: 'Comprehensive, detailed, investor-focused', responsibilities: 'Generates 30-year business plans with financial projections and strategy', is_active: true },
-  { agent_key: 'commercial_video_architect', first_name: 'Commercial', last_name: 'Video Architect', job_title: 'Video Content Strategist', personality: 'Creative, strategic, platform-aware', responsibilities: 'Generates commercial video scripts and production briefs for multiple platforms', is_active: true },
-  { agent_key: 'board_advisor', first_name: 'Board', last_name: 'Advisor', job_title: 'Executive Strategy Counselor', personality: 'Strategic, authoritative, experienced', responsibilities: 'Provides C-suite level strategic guidance and business decision analysis', is_active: true },
-  { agent_key: 'seo_growth_engine', first_name: 'SEO', last_name: 'Growth Engine', job_title: 'Search Growth Strategist', personality: 'Data-driven, optimization-focused, competitive', responsibilities: 'Conducts keyword research and SEO strategy to outrank competitors', is_active: true },
-  { agent_key: 'advertising_manager', first_name: 'Advertising', last_name: 'Manager', job_title: 'Multi-Channel Campaign Manager', personality: 'Strategic, creative, ROI-focused', responsibilities: 'Plans and optimizes advertising campaigns across Google, Meta, LinkedIn, and TikTok', is_active: true },
-  { agent_key: 'seasonal_newsletter_strategist', first_name: 'Newsletter', last_name: 'Strategist', job_title: 'Email Content Strategist', personality: 'Creative, strategic, audience-aware', responsibilities: 'Plans and writes branded email newsletters aligned to seasonal campaigns', is_active: true },
-  { agent_key: 'performance_monitor', first_name: 'Performance', last_name: 'Monitor', job_title: 'Analytics & Insights Engine', personality: 'Analytical, insightful, data-driven', responsibilities: 'Analyzes metrics to surface insights, detect anomalies, and predict trends', is_active: true },
-  { agent_key: 'security_sentinel', first_name: 'Security', last_name: 'Sentinel', job_title: 'Constitutional Authority', personality: 'Vigilant, systematic, immutable', responsibilities: 'Enforces Super Admin policy and platform security protocols', is_active: true },
-  { agent_key: 'project_manager', first_name: 'Project', last_name: 'Manager', job_title: 'Platform Command Center', personality: 'Organized, vigilant, compliance-focused', responsibilities: 'Monitors all AI agents and submits daily compliance reports', is_active: true },
+const AGENT_KEYS = [
+  'brand_sentinel','business_assistant','project_manager','graphic_artist',
+  'market_intelligence','logo_standards_guardian','brand_consistency_guardian',
+  'cms_design_guardian','performance_monitor','business_plan_architect',
+  'seo_growth_engine','board_advisor','commercial_video_architect',
+  'seasonal_newsletter_strategist','advertising_manager','security_sentinel',
 ];
+
+const EMPTY = {
+  agent_key: '', first_name: '', last_name: '', age: '', gender: 'male',
+  job_title: '', personality: '', responsibilities: '', headshot_url: '', is_active: true,
+};
+
+function AgentCard({ agent, onSave, onDelete, isNew }) {
+  const [editing, setEditing] = useState(!!isNew);
+  const [form, setForm] = useState({ ...agent });
+  const [generatingPhoto, setGeneratingPhoto] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
+
+  const generateHeadshot = async () => {
+    if (generatingPhoto) return;
+    setGeneratingPhoto(true);
+    const genderDesc = form.gender === 'female' ? 'woman' : 'man';
+    const age = form.age || 32;
+    const name = [form.first_name, form.last_name].filter(Boolean).join(' ') || 'professional';
+    const title = form.job_title || 'AI specialist';
+    const personality = form.personality || 'professional and confident';
+    const prompt = `Professional corporate headshot photograph of a ${age}-year-old ${genderDesc} named ${name}. Job title: ${title}. Personality traits: ${personality}. Crisp studio lighting, neutral grey background, business professional attire, sharp focus on face, photorealistic, LinkedIn-style portrait, high resolution.`;
+    const res = await base44.integrations.Core.GenerateImage({ prompt });
+    if (res?.url) set('headshot_url', res.url);
+    else toast.error('Image generation failed');
+    setGeneratingPhoto(false);
+  };
+
+  const handleSave = async () => {
+    if (!form.agent_key || !form.first_name) {
+      toast.error('Agent key and first name are required');
+      return;
+    }
+    setSaving(true);
+    await onSave({ ...form, age: form.age ? parseInt(form.age) : undefined });
+    setSaving(false);
+    if (!isNew) setEditing(false);
+  };
+
+  const cancel = () => { setForm({ ...agent }); setEditing(false); };
+
+  return (
+    <Card className="overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+      <CardContent className="p-0">
+        {/* Headshot */}
+        <div
+          className="relative h-52 bg-gradient-to-br from-violet-100 to-indigo-100 flex items-center justify-center overflow-hidden"
+          onClick={editing ? generateHeadshot : undefined}
+          style={{ cursor: editing ? 'pointer' : 'default' }}
+          title={editing ? 'Click to generate a new headshot' : ''}
+        >
+          {form.headshot_url ? (
+            <img src={form.headshot_url} alt="headshot" className="w-full h-full object-cover object-top" />
+          ) : (
+            <div className="flex flex-col items-center gap-2 text-violet-400">
+              <Bot className="w-14 h-14" />
+              {editing && <span className="text-xs font-medium text-violet-500">Click to generate headshot</span>}
+            </div>
+          )}
+          {generatingPhoto && (
+            <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-white">
+              <Loader2 className="w-10 h-10 animate-spin mb-2" />
+              <span className="text-sm font-medium">Generating...</span>
+            </div>
+          )}
+          {editing && form.headshot_url && !generatingPhoto && (
+            <div className="absolute inset-0 bg-black/30 opacity-0 hover:opacity-100 transition-opacity flex flex-col items-center justify-center text-white">
+              <RefreshCw className="w-8 h-8 mb-1" />
+              <span className="text-sm font-medium">Click for new photo</span>
+            </div>
+          )}
+          <div className="absolute top-3 right-3">
+            <Badge className={form.is_active ? 'bg-emerald-500 text-white' : 'bg-slate-400 text-white'}>
+              {form.is_active ? 'Active' : 'Inactive'}
+            </Badge>
+          </div>
+        </div>
+
+        <div className="p-4 space-y-3">
+          {editing ? (
+            <>
+              <div className="grid grid-cols-2 gap-2">
+                <div><Label className="text-xs text-slate-500">First Name *</Label>
+                  <Input value={form.first_name} onChange={e => set('first_name', e.target.value)} placeholder="Alex" className="h-8 text-sm" /></div>
+                <div><Label className="text-xs text-slate-500">Last Name</Label>
+                  <Input value={form.last_name} onChange={e => set('last_name', e.target.value)} placeholder="Rivera" className="h-8 text-sm" /></div>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <div><Label className="text-xs text-slate-500">Age</Label>
+                  <Input type="number" value={form.age} onChange={e => set('age', e.target.value)} placeholder="32" min={18} max={99} className="h-8 text-sm" /></div>
+                <div><Label className="text-xs text-slate-500">Gender</Label>
+                  <select value={form.gender} onChange={e => set('gender', e.target.value)} className="w-full h-8 px-2 text-sm border border-slate-200 rounded-md bg-white">
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="non-binary">Non-binary</option>
+                  </select></div>
+              </div>
+              <div><Label className="text-xs text-slate-500">Agent Key *</Label>
+                {agent.id ? (
+                  <Input value={form.agent_key} disabled className="h-8 text-sm bg-slate-100 text-slate-400" />
+                ) : (
+                  <select value={form.agent_key} onChange={e => set('agent_key', e.target.value)} className="w-full h-8 px-2 text-sm border border-slate-200 rounded-md bg-white">
+                    <option value="">Select agent...</option>
+                    {AGENT_KEYS.map(k => <option key={k} value={k}>{k.replace(/_/g, ' ')}</option>)}
+                  </select>
+                )}</div>
+              <div><Label className="text-xs text-slate-500">Job Title</Label>
+                <Input value={form.job_title} onChange={e => set('job_title', e.target.value)} placeholder="Chief Brand Intelligence Officer" className="h-8 text-sm" /></div>
+              <div><Label className="text-xs text-slate-500">Personality</Label>
+                <Textarea value={form.personality} onChange={e => set('personality', e.target.value)} placeholder="Analytical, detail-oriented..." className="h-16 text-sm resize-none" /></div>
+              <div><Label className="text-xs text-slate-500">Responsibilities</Label>
+                <Textarea value={form.responsibilities} onChange={e => set('responsibilities', e.target.value)} placeholder="Monitors brand consistency..." className="h-16 text-sm resize-none" /></div>
+              <div className="flex gap-2 pt-1">
+                <Button onClick={handleSave} disabled={saving} className="flex-1 bg-violet-600 hover:bg-violet-700 h-8 text-sm">
+                  {saving ? <Loader2 className="w-3 h-3 animate-spin mr-1" /> : <Save className="w-3 h-3 mr-1" />}Save
+                </Button>
+                {!isNew && <Button variant="outline" onClick={cancel} size="sm" className="h-8"><X className="w-3 h-3" /></Button>}
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="border-b border-slate-100 pb-3">
+                <h3 className="text-base font-bold text-slate-900 leading-tight">{form.first_name} {form.last_name}</h3>
+                <p className="text-sm text-violet-600 font-medium">{form.job_title || '—'}</p>
+                <p className="text-xs text-slate-400 mt-0.5">Age: {form.age || '—'} · <span className="capitalize">{form.agent_key.replace(/_/g, ' ')}</span></p>
+              </div>
+
+              <div>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Personality</p>
+                <p className="text-sm text-slate-600 leading-snug line-clamp-3">{form.personality || '—'}</p>
+              </div>
+
+              <div>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Responsibilities</p>
+                <p className="text-sm text-slate-600 leading-snug line-clamp-3">{form.responsibilities || '—'}</p>
+              </div>
+
+              <div className="bg-slate-50 rounded-lg p-3 border border-slate-200">
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Memory Log</p>
+                <Link to={`${createPageUrl('AgentMemoryLog')}?agent=${form.agent_key}`}>
+                  <Button variant="outline" size="sm" className="w-full h-8 text-xs gap-1.5 border-violet-300 text-violet-600 hover:bg-violet-50">
+                    <Brain className="w-3.5 h-3.5" />View Memory Log
+                  </Button>
+                </Link>
+              </div>
+
+              <div className="flex items-center justify-between pt-1 border-t border-slate-100">
+                <span className="text-sm font-medium text-slate-600">Active</span>
+                <Switch
+                  checked={!!form.is_active}
+                  onCheckedChange={async (val) => {
+                    setForm(p => ({ ...p, is_active: val }));
+                    await onSave({ ...agent, is_active: val });
+                  }}
+                />
+              </div>
+
+              <div className="flex gap-2 pt-1">
+                <Button onClick={() => setEditing(true)} variant="outline" size="sm" className="flex-1 h-8 text-xs gap-1">
+                  <Edit2 className="w-3 h-3" />Edit
+                </Button>
+                <Button onClick={() => onDelete(agent.id)} variant="ghost" size="sm" className="h-8 text-xs gap-1 text-red-500 hover:bg-red-50 px-2">
+                  <Trash2 className="w-3 h-3" />
+                </Button>
+              </div>
+            </>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
 
 export default function AgentsTab() {
   const queryClient = useQueryClient();
+  const [showNew, setShowNew] = useState(false);
 
   const { data: agents = [], isLoading } = useQuery({
     queryKey: ['ai-agents'],
-    queryFn: () => base44.entities.AIAgent.list(),
+    queryFn: () => base44.entities.AIAgent.list('-created_date'),
   });
 
-
+  const saveMutation = useMutation({
+    mutationFn: async (form) => {
+      const { id, ...data } = form;
+      if (id) return await base44.entities.AIAgent.update(id, data);
+      return await base44.entities.AIAgent.create(data);
+    },
+    onSuccess: () => {
+      toast.success('Saved!');
+      setShowNew(false);
+      setTimeout(() => queryClient.invalidateQueries({ queryKey: ['ai-agents'] }), 100);
+    },
+    onError: (e) => toast.error('Save failed: ' + e.message),
+  });
 
   const deleteMutation = useMutation({
     mutationFn: (id) => base44.entities.AIAgent.delete(id),
-    onSuccess: () => {
-      toast.success('Agent deleted');
-      queryClient.invalidateQueries({ queryKey: ['ai-agents'] });
-    },
-    onError: (err) => toast.error(err.message),
+    onSuccess: () => { toast.success('Deleted'); queryClient.invalidateQueries({ queryKey: ['ai-agents'] }); },
+    onError: (e) => toast.error('Delete failed: ' + e.message),
   });
 
-  const seedMutation = useMutation({
-    mutationFn: async () => {
-      await base44.entities.AIAgent.bulkCreate(DEFAULT_AGENTS);
-    },
-    onSuccess: () => {
-      toast.success('All agents loaded');
-      queryClient.invalidateQueries({ queryKey: ['ai-agents'] });
-    },
-    onError: (err) => toast.error('Failed to seed: ' + err.message),
-  });
-
-
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center p-12">
-        <Loader2 className="w-6 h-6 animate-spin text-violet-600" />
-      </div>
-    );
-  }
+  if (isLoading) return (
+    <div className="flex items-center justify-center py-20">
+      <Loader2 className="w-8 h-8 animate-spin text-violet-500" />
+    </div>
+  );
 
   return (
-    <div className="space-y-6">
-      <Card className="wizard-card border-0">
-        <CardHeader className="border-b border-slate-100">
-          <div className="flex items-center justify-between">
-            <div>
-              <CardTitle className="text-slate-900 flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-violet-500" />
-                AI Agents Management
-              </CardTitle>
-              <CardDescription>Team of AI agents on the platform</CardDescription>
-            </div>
-            {agents.length === 0 && (
-              <Button onClick={() => seedMutation.mutate()} disabled={seedMutation.isPending} className="bg-emerald-600 hover:bg-emerald-700">
-                {seedMutation.isPending ? 'Loading...' : 'Load All Agents'}
-              </Button>
-            )}
-          </div>
-        </CardHeader>
+    <div>
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h2 className="text-xl font-bold text-slate-900">AI Agents</h2>
+          <p className="text-sm text-slate-500">Manage your AI agents — their profiles, personalities, and responsibilities.</p>
+        </div>
+        <Button onClick={() => setShowNew(true)} disabled={showNew} className="bg-violet-600 hover:bg-violet-700 gap-2">
+          <Plus className="w-4 h-4" />Add Agent
+        </Button>
+      </div>
 
-        <CardContent className="pt-6">
-          <div className="space-y-3">
-            {agents.map(agent => (
-              <div key={agent.id} className="p-4 bg-slate-50 rounded-xl border border-slate-100 flex items-start justify-between gap-4">
-                <div className="flex items-start gap-4 flex-1">
-                  {agent.headshot_url && <img src={agent.headshot_url} alt={agent.first_name} className="w-16 h-16 rounded-lg object-cover" />}
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-slate-900">{agent.first_name} {agent.last_name || ''}</h3>
-                    <p className="text-sm text-slate-600">{agent.agent_key}</p>
-                    <p className="text-sm text-slate-500">{agent.job_title || 'No title'}</p>
-                    <div className="mt-2 flex gap-2">
-                      {agent.is_active && <Badge className="bg-emerald-100 text-emerald-700">Active</Badge>}
-                      {!agent.is_active && <Badge className="bg-slate-100 text-slate-600">Inactive</Badge>}
-                    </div>
-                  </div>
-                </div>
-                <Button size="sm" variant="ghost" onClick={() => { if (confirm('Delete this agent?')) deleteMutation.mutate(agent.id); }} className="text-red-500 hover:bg-red-50">
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              </div>
-            ))}
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {showNew && (
+          <AgentCard
+            agent={{ ...EMPTY }}
+            isNew
+            onSave={(form) => saveMutation.mutateAsync(form)}
+            onDelete={() => setShowNew(false)}
+          />
+        )}
+        {agents.map(agent => (
+          <AgentCard
+            key={agent.id}
+            agent={agent}
+            onSave={(form) => saveMutation.mutateAsync(form)}
+            onDelete={(id) => { if (confirm(`Delete ${agent.first_name} ${agent.last_name}?`)) deleteMutation.mutate(id); }}
+          />
+        ))}
+        {!showNew && agents.length === 0 && (
+          <div className="col-span-full text-center py-20">
+            <Bot className="w-16 h-16 text-slate-200 mx-auto mb-4" />
+            <p className="text-slate-400 text-lg">No agents yet</p>
           </div>
-        </CardContent>
-      </Card>
+        )}
+      </div>
     </div>
   );
 }
