@@ -470,18 +470,30 @@ function AgentCard({ agent }) {
       >
         <CardHeader className="pb-3">
           <div className="flex items-start gap-4">
-            <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${agent.color} flex items-center justify-center flex-shrink-0 shadow-sm`}>
-              <Icon className="w-6 h-6 text-white" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 flex-wrap mb-1">
-                <h3 className="font-bold text-slate-900 text-base">{agent.name}</h3>
-                <Badge className={`${agent.badge} text-[11px]`}>{agent.category}</Badge>
-                <Badge className={`${CLEARANCE_COLORS[agent.clearance] || 'bg-slate-100 text-slate-600'} text-[11px]`}>
-                  <Lock className="w-2.5 h-2.5 mr-1" />{agent.clearance}
-                </Badge>
+            {/* Headshot or gradient icon */}
+            {agent.headshot_url ? (
+              <img
+                src={agent.headshot_url}
+                alt={agent.name}
+                className="w-14 h-14 rounded-xl object-cover object-top flex-shrink-0 shadow-sm border border-slate-200"
+              />
+            ) : (
+              <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${agent.color} flex items-center justify-center flex-shrink-0 shadow-sm`}>
+                {Icon && <Icon className="w-7 h-7 text-white" />}
               </div>
-              <p className="text-sm text-slate-500 leading-relaxed">{agent.tagline}</p>
+            )}
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 flex-wrap mb-0.5">
+                <h3 className="font-bold text-slate-900 text-base">{agent.name}</h3>
+                {agent.badge && <Badge className={`${agent.badge} text-[11px]`}>{agent.category}</Badge>}
+                {agent.clearance && (
+                  <Badge className={`${CLEARANCE_COLORS[agent.clearance] || 'bg-slate-100 text-slate-600'} text-[11px]`}>
+                    <Lock className="w-2.5 h-2.5 mr-1" />{agent.clearance}
+                  </Badge>
+                )}
+              </div>
+              {agent.job_title && <p className="text-xs font-medium text-violet-600 mb-0.5">{agent.job_title}{agent.age ? ` · Age ${agent.age}` : ''}</p>}
+              <p className="text-sm text-slate-500 leading-relaxed">{agent.personality || agent.tagline}</p>
             </div>
             <div className="flex-shrink-0 text-slate-400">
               {expanded ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
@@ -550,26 +562,35 @@ export default function AdminDocs() {
     queryFn: () => base44.entities.AIAgent.list(),
   });
 
-  // Merge database agents with UI config
+  // Merge database agents with UI config — real name/headshot/personality from DB, functional config from UI_CONFIG
   const AGENTS = dbAgents
     .filter((agent) => agent.is_active)
-    .map((agent) => ({
-      id: agent.agent_key,
-      name: AGENT_UI_CONFIG[agent.agent_key]?.name || `${agent.first_name} ${agent.last_name}`,
-      icon: AGENT_UI_CONFIG[agent.agent_key]?.icon,
-      color: AGENT_UI_CONFIG[agent.agent_key]?.color,
-      badge: AGENT_UI_CONFIG[agent.agent_key]?.badge,
-      category: AGENT_UI_CONFIG[agent.agent_key]?.category,
-      status: 'active',
-      clearance: AGENT_UI_CONFIG[agent.agent_key]?.clearance,
-      tagline: AGENT_UI_CONFIG[agent.agent_key]?.tagline,
-      description: AGENT_UI_CONFIG[agent.agent_key]?.description,
-      responsibilities: agent.responsibilities
-        ? agent.responsibilities.split('\n').filter(Boolean)
-        : AGENT_UI_CONFIG[agent.agent_key]?.responsibilities || [],
-      useCases: AGENT_UI_CONFIG[agent.agent_key]?.useCases || [],
-      accessPath: AGENT_UI_CONFIG[agent.agent_key]?.accessPath || '',
-    }))
+    .map((agent) => {
+      const ui = AGENT_UI_CONFIG[agent.agent_key] || {};
+      const fullName = [agent.first_name, agent.last_name].filter(Boolean).join(' ');
+      return {
+        id: agent.agent_key,
+        name: fullName || ui.name || agent.agent_key,
+        headshot_url: agent.headshot_url,
+        job_title: agent.job_title,
+        age: agent.age,
+        gender: agent.gender,
+        personality: agent.personality,
+        tone: agent.tone,
+        education: agent.education,
+        icon: ui.icon,
+        color: ui.color,
+        badge: ui.badge,
+        category: ui.category,
+        status: 'active',
+        clearance: ui.clearance,
+        tagline: ui.tagline,
+        description: ui.description,
+        responsibilities: ui.responsibilities || [],
+        useCases: ui.useCases || [],
+        accessPath: ui.accessPath || '',
+      };
+    })
     .sort((a, b) => a.name.localeCompare(b.name));
 
   if (isLoading) {
@@ -649,10 +670,14 @@ export default function AdminDocs() {
                     const AgentIcon = agent.icon;
                     return (
                       <div key={agent.id} className="flex flex-col items-center gap-2">
-                        <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${agent.color} flex items-center justify-center shadow-lg`}>
-                          <AgentIcon className="w-6 h-6 text-white" />
-                        </div>
-                        <span className="text-xs text-violet-200 text-center leading-tight max-w-[60px]">{agent.name}</span>
+                        {agent.headshot_url ? (
+                          <img src={agent.headshot_url} alt={agent.name} className="w-12 h-12 rounded-full object-cover object-top shadow-lg border-2 border-violet-400/40" />
+                        ) : (
+                          <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${agent.color} flex items-center justify-center shadow-lg`}>
+                            {AgentIcon && <AgentIcon className="w-6 h-6 text-white" />}
+                          </div>
+                        )}
+                        <span className="text-xs text-violet-200 text-center leading-tight max-w-[60px]">{agent.name.split(' ')[0]}</span>
                       </div>
                     );
                   })}
