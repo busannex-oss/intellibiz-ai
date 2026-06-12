@@ -1,0 +1,56 @@
+{
+  "name": "DocumentVersion",
+  "type": "object",
+  "properties": {
+    "platform_document_id": {
+      "type": "string",
+      "description": "ID of the parent PlatformDocument"
+    },
+    "doc_type": {
+      "type": "string",
+      "description": "Document type key (mirrors parent)"
+    },
+    "doc_label": {
+      "type": "string",
+      "description": "Human-readable label"
+    },
+    "version": {
+      "type": "number",
+      "description": "Version number of this snapshot"
+    },
+    "content": {
+      "type": "string",
+      "description": "Full document text at this version"
+    },
+    "inputs": {
+      "type": "object",
+      "description": "Inputs used to generate this version"
+    },
+    "saved_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "When this version was saved"
+    }
+  },
+  "required": [
+    "platform_document_id",
+    "doc_type",
+    "version",
+    "content"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "super_admin"
+          ]
+        }
+      }
+    }
+  }
+}

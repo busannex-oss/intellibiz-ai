@@ -1,0 +1,223 @@
+{
+  "name": "PhoneSystem",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "description": "Associated business project ID"
+    },
+    "provider": {
+      "type": "string",
+      "enum": [
+        "twilio",
+        "vonage",
+        "plivo",
+        "telnyx",
+        "bandwidth"
+      ],
+      "description": "Selected telecom provider"
+    },
+    "provider_configured": {
+      "type": "boolean",
+      "default": false
+    },
+    "phone_numbers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "number": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "local",
+              "toll_free",
+              "mobile"
+            ]
+          },
+          "label": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "inactive",
+              "pending"
+            ]
+          },
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "assigned_to": {
+            "type": "string"
+          },
+          "ivr_flow_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "extensions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "extension": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "department": {
+            "type": "string"
+          },
+          "voicemail_enabled": {
+            "type": "boolean"
+          },
+          "forward_to": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "available",
+              "busy",
+              "away",
+              "dnd",
+              "offline"
+            ]
+          }
+        }
+      }
+    },
+    "ivr_flows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "greeting_text": {
+            "type": "string"
+          },
+          "ai_enabled": {
+            "type": "boolean"
+          },
+          "nodes": {
+            "type": "array"
+          }
+        }
+      }
+    },
+    "call_queue_settings": {
+      "type": "object",
+      "properties": {
+        "max_wait_time": {
+          "type": "number"
+        },
+        "queue_music": {
+          "type": "string"
+        },
+        "position_announcements": {
+          "type": "boolean"
+        },
+        "callback_option": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ai_settings": {
+      "type": "object",
+      "properties": {
+        "ai_receptionist_enabled": {
+          "type": "boolean"
+        },
+        "ai_voice": {
+          "type": "string"
+        },
+        "ai_personality": {
+          "type": "string"
+        },
+        "business_hours_response": {
+          "type": "string"
+        },
+        "after_hours_response": {
+          "type": "string"
+        },
+        "faq_responses": {
+          "type": "array"
+        },
+        "appointment_booking": {
+          "type": "boolean"
+        },
+        "call_transcription": {
+          "type": "boolean"
+        },
+        "sentiment_analysis": {
+          "type": "boolean"
+        },
+        "smart_routing": {
+          "type": "boolean"
+        }
+      }
+    },
+    "business_hours": {
+      "type": "object",
+      "properties": {
+        "timezone": {
+          "type": "string"
+        },
+        "schedule": {
+          "type": "object"
+        }
+      }
+    },
+    "sms_settings": {
+      "type": "object",
+      "properties": {
+        "auto_reply_enabled": {
+          "type": "boolean"
+        },
+        "auto_reply_message": {
+          "type": "string"
+        },
+        "ai_sms_enabled": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "required": [
+    "project_id"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

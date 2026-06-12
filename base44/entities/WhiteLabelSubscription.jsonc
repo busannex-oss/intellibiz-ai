@@ -1,0 +1,105 @@
+{
+  "name": "WhiteLabelSubscription",
+  "type": "object",
+  "properties": {
+    "plan": {
+      "type": "string",
+      "enum": [
+        "free",
+        "starter",
+        "professional",
+        "white_label"
+      ],
+      "description": "Subscription plan type matching MembershipGroup slug"
+    },
+    "billing_cycle": {
+      "type": "string",
+      "enum": [
+        "monthly",
+        "yearly"
+      ],
+      "default": "monthly"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "active",
+        "cancelled",
+        "past_due",
+        "trialing"
+      ],
+      "default": "trialing"
+    },
+    "branding": {
+      "type": "object",
+      "properties": {
+        "company_name": {
+          "type": "string"
+        },
+        "logo_url": {
+          "type": "string"
+        },
+        "favicon_url": {
+          "type": "string"
+        },
+        "primary_color": {
+          "type": "string"
+        },
+        "secondary_color": {
+          "type": "string"
+        },
+        "custom_domain": {
+          "type": "string"
+        }
+      }
+    },
+    "features": {
+      "type": "object",
+      "properties": {
+        "remove_branding": {
+          "type": "boolean"
+        },
+        "custom_domain": {
+          "type": "boolean"
+        },
+        "white_label_emails": {
+          "type": "boolean"
+        },
+        "api_access": {
+          "type": "boolean"
+        },
+        "priority_support": {
+          "type": "boolean"
+        },
+        "team_seats": {
+          "type": "number"
+        }
+      }
+    },
+    "trial_ends_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "current_period_end": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "plan"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

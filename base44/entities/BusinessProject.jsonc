@@ -1,0 +1,273 @@
+{
+  "name": "BusinessProject",
+  "type": "object",
+  "properties": {
+    "business_name": {
+      "type": "string",
+      "description": "Name of the business"
+    },
+    "industry": {
+      "type": "string",
+      "description": "Industry/niche of the business"
+    },
+    "description": {
+      "type": "string",
+      "description": "Brief description of the business idea"
+    },
+    "target_audience": {
+      "type": "string",
+      "description": "Target market/audience"
+    },
+    "location": {
+      "type": "string",
+      "description": "Business location/market"
+    },
+    "market_research": {
+      "type": "object",
+      "description": "AI-generated market research data with detailed demographics"
+    },
+    "competitive_advantages": {
+      "type": "array",
+      "description": "Key advantages over competitors"
+    },
+    "unique_value_proposition": {
+      "type": "string",
+      "description": "AI-generated UVP based on market research"
+    },
+    "business_plan": {
+      "type": "object",
+      "description": "Generated 30-year business plan content"
+    },
+    "logo_url": {
+      "type": "string",
+      "description": "URL of the currently published logo with transparent background"
+    },
+    "logo_prompt": {
+      "type": "string",
+      "description": "Prompt used to generate the currently published logo"
+    },
+    "saved_logos": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "published": {
+            "type": "boolean",
+            "default": false
+          },
+          "created_at": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Array of saved logo variations"
+    },
+    "website_content": {
+      "type": "object",
+      "description": "Generated website sections and content"
+    },
+    "commercial_videos": {
+      "type": "object",
+      "description": "Generated commercial videos by duration and style"
+    },
+    "selected_commercial_video": {
+      "type": "string",
+      "description": "Key of the video selected for website display"
+    },
+    "social_media_assets": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "selected_platforms": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "seo_strategy": {
+      "type": "object",
+      "description": "SEO recommendations based on competitor analysis"
+    },
+    "content_strategy": {
+      "type": "object",
+      "description": "Content recommendations to outperform competitors"
+    },
+    "current_step": {
+      "type": "number",
+      "default": 1,
+      "description": "Current wizard step"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "in_progress",
+        "completed"
+      ],
+      "default": "draft"
+    },
+    "brand_colors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "hex": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "primary",
+              "secondary",
+              "accent",
+              "neutral",
+              "custom"
+            ]
+          },
+          "psychology": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "Brand color palette with psychology"
+    },
+    "brand_personality": {
+      "type": "object",
+      "description": "Brand personality traits based on market positioning"
+    },
+    "newsletter_settings": {
+      "type": "object",
+      "properties": {
+        "theme": {
+          "type": "string"
+        },
+        "custom_themes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "colors": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "email_from_name": {
+          "type": "string"
+        },
+        "email_signature": {
+          "type": "string"
+        }
+      }
+    },
+    "gmail_integration": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "financial_data": {
+      "type": "object",
+      "description": "Comprehensive 30-year financial planning data"
+    },
+    "business_plan_customization": {
+      "type": "object",
+      "properties": {
+        "included_sections": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "executive_summary",
+            "market_research",
+            "business_strategy",
+            "financial_projections_30yr",
+            "operations",
+            "risk_analysis"
+          ]
+        },
+        "color_theme": {
+          "type": "string",
+          "enum": [
+            "brand",
+            "professional_blue",
+            "executive_navy",
+            "modern_purple",
+            "growth_green",
+            "warm_orange"
+          ],
+          "default": "brand"
+        },
+        "custom_header": {
+          "type": "object",
+          "properties": {
+            "company_name": {
+              "type": "string"
+            },
+            "tagline": {
+              "type": "string"
+            },
+            "contact_info": {
+              "type": "string"
+            }
+          }
+        },
+        "custom_footer": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string"
+            },
+            "show_page_numbers": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        }
+      },
+      "description": "Business plan report customization options"
+    }
+  },
+  "required": [
+    "business_name",
+    "industry",
+    "description"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

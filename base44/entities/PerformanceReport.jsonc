@@ -1,0 +1,128 @@
+{
+  "name": "PerformanceReport",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "description": "Associated business project ID"
+    },
+    "report_type": {
+      "type": "string",
+      "enum": [
+        "monthly",
+        "quarterly",
+        "annual",
+        "custom"
+      ],
+      "description": "Report period type"
+    },
+    "period_start": {
+      "type": "string",
+      "format": "date",
+      "description": "Report period start date"
+    },
+    "period_end": {
+      "type": "string",
+      "format": "date",
+      "description": "Report period end date"
+    },
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "revenue": {
+          "type": "number"
+        },
+        "expenses": {
+          "type": "number"
+        },
+        "profit": {
+          "type": "number"
+        },
+        "customer_count": {
+          "type": "number"
+        },
+        "new_customers": {
+          "type": "number"
+        },
+        "churn_rate": {
+          "type": "number"
+        },
+        "avg_order_value": {
+          "type": "number"
+        },
+        "conversion_rate": {
+          "type": "number"
+        }
+      }
+    },
+    "ai_insights": {
+      "type": "object",
+      "properties": {
+        "summary": {
+          "type": "string"
+        },
+        "opportunities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "risks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "recommendations": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "predictions": {
+          "type": "object",
+          "properties": {
+            "next_month_revenue": {
+              "type": "number"
+            },
+            "next_quarter_growth": {
+              "type": "number"
+            },
+            "trend_direction": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "generated",
+        "published"
+      ],
+      "default": "draft"
+    }
+  },
+  "required": [
+    "project_id",
+    "report_type",
+    "period_start",
+    "period_end"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

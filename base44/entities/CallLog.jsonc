@@ -1,0 +1,112 @@
+{
+  "name": "CallLog",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string"
+    },
+    "phone_system_id": {
+      "type": "string"
+    },
+    "call_sid": {
+      "type": "string"
+    },
+    "direction": {
+      "type": "string",
+      "enum": [
+        "inbound",
+        "outbound"
+      ]
+    },
+    "from_number": {
+      "type": "string"
+    },
+    "to_number": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "queued",
+        "ringing",
+        "in_progress",
+        "completed",
+        "missed",
+        "voicemail",
+        "failed"
+      ]
+    },
+    "duration": {
+      "type": "number"
+    },
+    "recording_url": {
+      "type": "string"
+    },
+    "transcription": {
+      "type": "string"
+    },
+    "sentiment": {
+      "type": "string",
+      "enum": [
+        "positive",
+        "neutral",
+        "negative"
+      ]
+    },
+    "ai_summary": {
+      "type": "string"
+    },
+    "handled_by": {
+      "type": "string"
+    },
+    "department": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "notes": {
+      "type": "string"
+    },
+    "caller_info": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "company": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "previous_calls": {
+          "type": "number"
+        }
+      }
+    }
+  },
+  "required": [
+    "project_id",
+    "direction",
+    "from_number",
+    "to_number"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

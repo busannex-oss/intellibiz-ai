@@ -1,0 +1,70 @@
+{
+  "name": "KnowledgeBase",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "description": "Associated business project ID"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "getting_started",
+        "dashboard",
+        "phone_system",
+        "omnichannel",
+        "website",
+        "social_media",
+        "branding",
+        "analytics",
+        "billing",
+        "faq"
+      ],
+      "description": "Knowledge category"
+    },
+    "title": {
+      "type": "string",
+      "description": "Article title"
+    },
+    "content": {
+      "type": "string",
+      "description": "Article content in markdown"
+    },
+    "keywords": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Search keywords"
+    },
+    "order": {
+      "type": "number",
+      "default": 0,
+      "description": "Display order within category"
+    },
+    "is_auto_generated": {
+      "type": "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "project_id",
+    "category",
+    "title",
+    "content"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

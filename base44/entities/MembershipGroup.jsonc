@@ -1,0 +1,155 @@
+{
+  "name": "MembershipGroup",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Membership group name (Free, Starter, Professional, White Label)"
+    },
+    "slug": {
+      "type": "string",
+      "enum": [
+        "free",
+        "starter",
+        "professional",
+        "white_label"
+      ],
+      "description": "Unique machine-readable identifier"
+    },
+    "description": {
+      "type": "string",
+      "description": "Short description of what this tier includes"
+    },
+    "price_monthly": {
+      "type": "number",
+      "default": 0,
+      "description": "Monthly price in USD"
+    },
+    "price_yearly": {
+      "type": "number",
+      "default": 0,
+      "description": "Yearly price in USD"
+    },
+    "permissions": {
+      "type": "object",
+      "description": "Feature permission flags for this group",
+      "properties": {
+        "allow_project_creation": {
+          "type": "boolean",
+          "default": true
+        },
+        "max_projects": {
+          "type": "number",
+          "default": 1
+        },
+        "allow_business_plan": {
+          "type": "boolean",
+          "default": false
+        },
+        "allow_logo_generation": {
+          "type": "boolean",
+          "default": false
+        },
+        "allow_website_generation": {
+          "type": "boolean",
+          "default": false
+        },
+        "allow_social_media": {
+          "type": "boolean",
+          "default": false
+        },
+        "allow_omnichannel": {
+          "type": "boolean",
+          "default": false
+        },
+        "allow_newsletter": {
+          "type": "boolean",
+          "default": false
+        },
+        "allow_phone_system": {
+          "type": "boolean",
+          "default": false
+        },
+        "allow_analytics": {
+          "type": "boolean",
+          "default": false
+        },
+        "allow_knowledge_base": {
+          "type": "boolean",
+          "default": false
+        },
+        "allow_white_label": {
+          "type": "boolean",
+          "default": false
+        },
+        "allow_custom_domain": {
+          "type": "boolean",
+          "default": false
+        },
+        "allow_api_access": {
+          "type": "boolean",
+          "default": false
+        },
+        "allow_priority_support": {
+          "type": "boolean",
+          "default": false
+        },
+        "allow_remove_branding": {
+          "type": "boolean",
+          "default": false
+        },
+        "max_team_seats": {
+          "type": "number",
+          "default": 1
+        }
+      }
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether this membership tier is currently offered"
+    },
+    "display_order": {
+      "type": "number",
+      "default": 0,
+      "description": "Sort order for display (1=Free, 2=Starter, etc.)"
+    }
+  },
+  "required": [
+    "name",
+    "slug"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "super_admin"
+          ]
+        }
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "super_admin"
+          ]
+        }
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "super_admin"
+          ]
+        }
+      }
+    }
+  }
+}

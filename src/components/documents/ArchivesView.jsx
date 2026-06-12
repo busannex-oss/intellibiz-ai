@@ -5,10 +5,11 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import {
   Search, FileDown, FileText, SortAsc, SortDesc,
-  LayoutGrid, List, Calendar, Layers, CheckSquare, Square
+  LayoutGrid, List, Calendar, Layers, CheckSquare, Square, History
 } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import { format } from 'date-fns';
+import DocVersionDrawer from './DocVersionDrawer';
 
 const DOC_TYPE_LABELS = {
   mission_statement: 'Mission Statement',
@@ -132,7 +133,7 @@ function exportDocAsPDF(doc) {
   pdf.save(`${label.replace(/\s+/g, '_')}_BrandForge.pdf`);
 }
 
-export default function ArchivesView({ docs, loading }) {
+export default function ArchivesView({ docs, loading, onRefresh }) {
   const [search, setSearch] = useState('');
   const [typeFilter, setTypeFilter] = useState('all');
   const [sortField, setSortField] = useState('updated_date');
@@ -140,6 +141,7 @@ export default function ArchivesView({ docs, loading }) {
   const [viewMode, setViewMode] = useState('grid');
   const [selected, setSelected] = useState(new Set());
   const [bulkExporting, setBulkExporting] = useState(false);
+  const [historyDoc, setHistoryDoc] = useState(null);
 
   const allTypes = useMemo(() => {
     const types = new Set((docs || []).map(d => d.doc_type));
@@ -352,6 +354,12 @@ export default function ArchivesView({ docs, loading }) {
                   <div className="flex items-center gap-2">
                     <span className="text-xs text-slate-600">v{doc.version || 1}</span>
                     <button
+                      onClick={e => { e.stopPropagation(); setHistoryDoc(doc); }}
+                      className="text-xs text-violet-400 hover:text-violet-300 flex items-center gap-1 bg-violet-500/10 hover:bg-violet-500/20 px-2 py-1 rounded-md transition-colors"
+                    >
+                      <History className="w-3 h-3" /> History
+                    </button>
+                    <button
                       onClick={e => { e.stopPropagation(); exportDocAsPDF(doc); }}
                       className="text-xs text-amber-400 hover:text-amber-300 flex items-center gap-1 bg-amber-500/10 hover:bg-amber-500/20 px-2 py-1 rounded-md transition-colors"
                     >
@@ -404,7 +412,7 @@ export default function ArchivesView({ docs, loading }) {
                     Ver {sortField === 'version' && <SortIcon className="w-3 h-3" />}
                   </span>
                 </th>
-                <th className="px-4 py-3 text-xs font-medium text-slate-400 text-right">Export</th>
+                <th className="px-4 py-3 text-xs font-medium text-slate-400 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-700/50">
@@ -440,12 +448,20 @@ export default function ArchivesView({ docs, loading }) {
                     </td>
                     <td className="px-4 py-3 text-xs text-slate-500">v{doc.version || 1}</td>
                     <td className="px-4 py-3 text-right" onClick={e => e.stopPropagation()}>
-                      <button
-                        onClick={() => exportDocAsPDF(doc)}
-                        className="text-xs text-amber-400 hover:text-amber-300 flex items-center gap-1 bg-amber-500/10 hover:bg-amber-500/20 px-2 py-1 rounded-md transition-colors ml-auto"
-                      >
-                        <FileDown className="w-3 h-3" /> PDF
-                      </button>
+                      <div className="flex items-center gap-1.5 justify-end">
+                        <button
+                          onClick={() => setHistoryDoc(doc)}
+                          className="text-xs text-violet-400 hover:text-violet-300 flex items-center gap-1 bg-violet-500/10 hover:bg-violet-500/20 px-2 py-1 rounded-md transition-colors"
+                        >
+                          <History className="w-3 h-3" /> History
+                        </button>
+                        <button
+                          onClick={() => exportDocAsPDF(doc)}
+                          className="text-xs text-amber-400 hover:text-amber-300 flex items-center gap-1 bg-amber-500/10 hover:bg-amber-500/20 px-2 py-1 rounded-md transition-colors"
+                        >
+                          <FileDown className="w-3 h-3" /> PDF
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 );
@@ -460,6 +476,14 @@ export default function ArchivesView({ docs, loading }) {
           No documents match your filters.
         </div>
       )}
+
+      {/* Version History Drawer */}
+      <DocVersionDrawer
+        doc={historyDoc}
+        open={!!historyDoc}
+        onClose={() => setHistoryDoc(null)}
+        onReverted={() => { setHistoryDoc(null); if (onRefresh) onRefresh(); }}
+      />
     </div>
   );
 }

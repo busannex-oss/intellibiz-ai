@@ -111,12 +111,24 @@ export default function AIDocModal({ docType, open, onClose, onSaved }) {
     setSaving(true);
     try {
       if (existingDoc) {
+        // Snapshot the current version before overwriting
+        await base44.entities.DocumentVersion.create({
+          platform_document_id: existingDoc.id,
+          doc_type: docType,
+          doc_label: config.label,
+          version: existingDoc.version || 1,
+          content: existingDoc.content,
+          inputs: existingDoc.inputs || {},
+          saved_at: new Date().toISOString(),
+        });
+        const newVersion = (existingDoc.version || 1) + 1;
         await base44.entities.PlatformDocument.update(existingDoc.id, {
           content,
           inputs,
           doc_label: config.label,
-          version: (existingDoc.version || 1) + 1,
+          version: newVersion,
         });
+        setExistingDoc(prev => ({ ...prev, content, inputs, version: newVersion }));
       } else {
         const created = await base44.entities.PlatformDocument.create({
           doc_type: docType,

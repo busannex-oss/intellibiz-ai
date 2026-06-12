@@ -1,0 +1,74 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "role": {
+      "type": "string",
+      "enum": [
+        "super_admin",
+        "admin",
+        "user"
+      ],
+      "default": "user",
+      "description": "User role - super_admin has full access, admin can manage users, user is standard"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the user account is active"
+    },
+    "permissions": {
+      "type": "object",
+      "properties": {
+        "manage_users": {
+          "type": "boolean",
+          "default": false
+        },
+        "manage_projects": {
+          "type": "boolean",
+          "default": true
+        },
+        "manage_settings": {
+          "type": "boolean",
+          "default": false
+        },
+        "view_analytics": {
+          "type": "boolean",
+          "default": true
+        },
+        "manage_billing": {
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "description": "Granular permissions for the user"
+    },
+    "onboarding_completed": {
+      "type": "boolean",
+      "default": false
+    },
+    "onboarding_checklist": {
+      "type": "object"
+    },
+    "adwizar_config": {
+      "type": "object",
+      "properties": {
+        "api_key": {
+          "type": "string"
+        },
+        "account_id": {
+          "type": "string"
+        },
+        "connected": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    }
+  },
+  "required": [
+    "permissions",
+    "onboarding_checklist",
+    "adwizar_config"
+  ]
+}

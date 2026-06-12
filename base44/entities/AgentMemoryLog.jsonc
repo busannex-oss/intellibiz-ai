@@ -1,0 +1,105 @@
+{
+  "name": "AgentMemoryLog",
+  "type": "object",
+  "properties": {
+    "agent_name": {
+      "type": "string",
+      "description": "Name of the AI agent that owns this memory"
+    },
+    "memory_type": {
+      "type": "string",
+      "enum": [
+        "observation",
+        "decision",
+        "learning",
+        "context",
+        "error",
+        "user_preference"
+      ],
+      "description": "Category of memory"
+    },
+    "content": {
+      "type": "string",
+      "description": "The memory content"
+    },
+    "summary": {
+      "type": "string",
+      "description": "Short one-line summary of the memory"
+    },
+    "keywords": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Extracted keywords for semantic search"
+    },
+    "embedding_vector": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "description": "Numeric vector for similarity search (stored as array of floats)"
+    },
+    "importance": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 10,
+      "default": 5,
+      "description": "Importance score 1-10"
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Session or task ID this memory belongs to"
+    },
+    "project_id": {
+      "type": "string",
+      "description": "Optional associated business project ID"
+    },
+    "related_memory_ids": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "IDs of related memory entries"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "access_count": {
+      "type": "number",
+      "default": 0,
+      "description": "How many times this memory has been retrieved"
+    },
+    "last_accessed": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "is_archived": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "agent_name",
+    "memory_type",
+    "content"
+  ],
+  "rls": {
+    "create": {},
+    "read": {},
+    "update": {},
+    "delete": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "super_admin"
+          ]
+        }
+      }
+    }
+  }
+}

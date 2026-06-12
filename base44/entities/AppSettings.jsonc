@@ -1,0 +1,208 @@
+{
+  "name": "AppSettings",
+  "type": "object",
+  "properties": {
+    "site_name": {
+      "type": "string",
+      "description": "Platform/site name shown in navigation and branding"
+    },
+    "site_tagline": {
+      "type": "string",
+      "description": "Short tagline shown in hero or nav"
+    },
+    "logo_url": {
+      "type": "string",
+      "description": "Custom logo URL (overrides default icon)"
+    },
+    "favicon_url": {
+      "type": "string",
+      "description": "Favicon URL"
+    },
+    "color_theme": {
+      "type": "string",
+      "enum": [
+        "amber",
+        "blue",
+        "violet",
+        "emerald",
+        "rose",
+        "slate"
+      ],
+      "default": "amber",
+      "description": "Primary color theme for the platform"
+    },
+    "hero": {
+      "type": "object",
+      "properties": {
+        "headline": {
+          "type": "string"
+        },
+        "subheadline": {
+          "type": "string"
+        },
+        "cta_primary_text": {
+          "type": "string"
+        },
+        "cta_primary_link": {
+          "type": "string"
+        },
+        "cta_secondary_text": {
+          "type": "string"
+        },
+        "cta_secondary_link": {
+          "type": "string"
+        },
+        "image_url": {
+          "type": "string"
+        },
+        "badge_text": {
+          "type": "string"
+        }
+      }
+    },
+    "navigation": {
+      "type": "array",
+      "description": "Custom navigation links",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "type": "string"
+          },
+          "page": {
+            "type": "string"
+          },
+          "visible": {
+            "type": "boolean",
+            "default": true
+          },
+          "admin_only": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      }
+    },
+    "social_media": {
+      "type": "object",
+      "properties": {
+        "facebook": {
+          "type": "string"
+        },
+        "twitter": {
+          "type": "string"
+        },
+        "instagram": {
+          "type": "string"
+        },
+        "linkedin": {
+          "type": "string"
+        },
+        "youtube": {
+          "type": "string"
+        },
+        "tiktok": {
+          "type": "string"
+        }
+      }
+    },
+    "footer_content": {
+      "type": "object",
+      "properties": {
+        "copyright_text": {
+          "type": "string",
+          "default": "\u00a9 2026 BrandForge. All rights reserved."
+        },
+        "show_social_icons": {
+          "type": "boolean",
+          "default": true
+        },
+        "footer_tagline": {
+          "type": "string"
+        }
+      }
+    },
+    "permissions": {
+      "type": "object",
+      "description": "Global feature permission toggles",
+      "properties": {
+        "allow_user_signup": {
+          "type": "boolean",
+          "default": true
+        },
+        "allow_project_creation": {
+          "type": "boolean",
+          "default": true
+        },
+        "allow_white_label": {
+          "type": "boolean",
+          "default": true
+        },
+        "allow_knowledge_base": {
+          "type": "boolean",
+          "default": true
+        },
+        "allow_phone_system": {
+          "type": "boolean",
+          "default": true
+        },
+        "allow_analytics": {
+          "type": "boolean",
+          "default": true
+        },
+        "max_projects_per_user": {
+          "type": "number",
+          "default": 10
+        }
+      }
+    },
+    "seo": {
+      "type": "object",
+      "properties": {
+        "meta_title": {
+          "type": "string"
+        },
+        "meta_description": {
+          "type": "string"
+        },
+        "og_image_url": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "required": [],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "super_admin"
+          ]
+        }
+      }
+    },
+    "read": {},
+    "update": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "super_admin"
+          ]
+        }
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "super_admin"
+          ]
+        }
+      }
+    }
+  }
+}

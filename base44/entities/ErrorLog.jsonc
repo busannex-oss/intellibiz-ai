@@ -1,0 +1,97 @@
+{
+  "name": "ErrorLog",
+  "type": "object",
+  "properties": {
+    "error_type": {
+      "type": "string",
+      "enum": [
+        "404",
+        "403",
+        "500",
+        "network",
+        "broken_link",
+        "other"
+      ],
+      "description": "Type of error"
+    },
+    "url": {
+      "type": "string",
+      "description": "URL where error occurred"
+    },
+    "referrer": {
+      "type": "string",
+      "description": "Page that led to the error"
+    },
+    "user_agent": {
+      "type": "string",
+      "description": "Browser/device info"
+    },
+    "error_message": {
+      "type": "string",
+      "description": "Error details"
+    },
+    "stack_trace": {
+      "type": "string",
+      "description": "Stack trace if available"
+    },
+    "user_email": {
+      "type": "string",
+      "description": "Email of user who encountered error"
+    },
+    "resolved": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether error has been fixed"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Admin notes about the error"
+    }
+  },
+  "required": [
+    "error_type",
+    "url"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "super_admin"
+          ]
+        }
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "super_admin"
+          ]
+        }
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "super_admin"
+          ]
+        }
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "super_admin"
+          ]
+        }
+      }
+    }
+  }
+}

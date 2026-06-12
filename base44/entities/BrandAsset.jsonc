@@ -1,0 +1,80 @@
+{
+  "name": "BrandAsset",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "description": "Associated business project ID"
+    },
+    "asset_type": {
+      "type": "string",
+      "enum": [
+        "logo",
+        "font",
+        "image",
+        "icon",
+        "pattern",
+        "template",
+        "video",
+        "document"
+      ],
+      "description": "Type of brand asset"
+    },
+    "name": {
+      "type": "string",
+      "description": "Asset name"
+    },
+    "description": {
+      "type": "string",
+      "description": "Asset description or usage notes"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "URL to the asset file"
+    },
+    "file_format": {
+      "type": "string",
+      "description": "File format (png, jpg, svg, ttf, etc.)"
+    },
+    "file_size": {
+      "type": "number",
+      "description": "File size in bytes"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Tags for organization"
+    },
+    "usage_guidelines": {
+      "type": "string",
+      "description": "How and when to use this asset"
+    },
+    "is_primary": {
+      "type": "boolean",
+      "default": false,
+      "description": "Is this the primary/main version of this asset type"
+    }
+  },
+  "required": [
+    "project_id",
+    "asset_type",
+    "name",
+    "file_url"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

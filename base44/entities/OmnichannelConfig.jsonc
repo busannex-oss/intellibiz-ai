@@ -1,0 +1,167 @@
+{
+  "name": "OmnichannelConfig",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "description": "Associated business project ID"
+    },
+    "channels": {
+      "type": "object",
+      "properties": {
+        "website_chat": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "widget_color": {
+              "type": "string"
+            },
+            "greeting": {
+              "type": "string"
+            },
+            "ai_enabled": {
+              "type": "boolean"
+            }
+          }
+        },
+        "whatsapp": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "phone_number": {
+              "type": "string"
+            },
+            "business_id": {
+              "type": "string"
+            }
+          }
+        },
+        "facebook_messenger": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "page_id": {
+              "type": "string"
+            },
+            "page_name": {
+              "type": "string"
+            }
+          }
+        },
+        "instagram": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "account_id": {
+              "type": "string"
+            },
+            "username": {
+              "type": "string"
+            }
+          }
+        },
+        "twitter": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "handle": {
+              "type": "string"
+            }
+          }
+        },
+        "email": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "support_email": {
+              "type": "string"
+            },
+            "ai_auto_reply": {
+              "type": "boolean"
+            }
+          }
+        },
+        "sms": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "phone_number": {
+              "type": "string"
+            }
+          }
+        },
+        "telegram": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "bot_username": {
+              "type": "string"
+            }
+          }
+        },
+        "slack": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "workspace": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "unified_inbox_enabled": {
+      "type": "boolean",
+      "default": true
+    },
+    "ai_routing": {
+      "type": "boolean",
+      "default": true
+    },
+    "auto_translate": {
+      "type": "boolean",
+      "default": false
+    },
+    "business_hours": {
+      "type": "object"
+    },
+    "canned_responses": {
+      "type": "array"
+    }
+  },
+  "required": [
+    "project_id"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

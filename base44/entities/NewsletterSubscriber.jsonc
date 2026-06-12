@@ -1,0 +1,53 @@
+{
+  "name": "NewsletterSubscriber",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "description": "Associated business project ID"
+    },
+    "email": {
+      "type": "string",
+      "description": "Subscriber email"
+    },
+    "name": {
+      "type": "string",
+      "description": "Subscriber name"
+    },
+    "opted_in": {
+      "type": "boolean",
+      "default": true
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "website",
+        "social",
+        "manual"
+      ],
+      "default": "website"
+    },
+    "unsubscribed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "project_id",
+    "email"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

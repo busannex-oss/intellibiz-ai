@@ -1,0 +1,115 @@
+{
+  "name": "CustomerFeedback",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "description": "Associated business project ID"
+    },
+    "customer_name": {
+      "type": "string",
+      "description": "Customer name (optional)"
+    },
+    "customer_email": {
+      "type": "string",
+      "description": "Customer email (optional)"
+    },
+    "feedback_text": {
+      "type": "string",
+      "description": "Raw feedback content"
+    },
+    "source": {
+      "type": "string",
+      "enum": [
+        "survey",
+        "email",
+        "chat",
+        "social_media",
+        "phone",
+        "website",
+        "review"
+      ],
+      "description": "Feedback source"
+    },
+    "rating": {
+      "type": "number",
+      "minimum": 1,
+      "maximum": 5,
+      "description": "Customer rating (1-5 stars)"
+    },
+    "ai_analysis": {
+      "type": "object",
+      "properties": {
+        "sentiment": {
+          "type": "string",
+          "enum": [
+            "positive",
+            "neutral",
+            "negative"
+          ]
+        },
+        "themes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "key_points": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "actionable_insights": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "urgency": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "new",
+        "reviewed",
+        "actioned",
+        "archived"
+      ],
+      "default": "new"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "required": [
+    "project_id",
+    "feedback_text",
+    "source"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

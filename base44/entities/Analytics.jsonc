@@ -1,0 +1,74 @@
+{
+  "name": "Analytics",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string",
+      "description": "Associated business project ID"
+    },
+    "metric_type": {
+      "type": "string",
+      "enum": [
+        "page_view",
+        "lead_generated",
+        "conversion",
+        "scroll_depth",
+        "time_on_page",
+        "button_click",
+        "form_submit"
+      ],
+      "description": "Type of metric being tracked"
+    },
+    "page_url": {
+      "type": "string",
+      "description": "URL where the event occurred"
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Unique session identifier"
+    },
+    "user_id": {
+      "type": "string",
+      "description": "User identifier if available"
+    },
+    "value": {
+      "type": "number",
+      "description": "Metric value (e.g., scroll percentage, time in seconds)"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Additional event metadata"
+    },
+    "device_type": {
+      "type": "string",
+      "enum": [
+        "desktop",
+        "mobile",
+        "tablet"
+      ],
+      "description": "Device type"
+    },
+    "referrer": {
+      "type": "string",
+      "description": "Traffic source/referrer"
+    }
+  },
+  "required": [
+    "project_id",
+    "metric_type"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

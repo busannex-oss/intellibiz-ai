@@ -248,7 +248,7 @@ export default function Documents() {
 
         {/* Archives View */}
         {activeTab === 'archives' && (
-          <ArchivesView docs={archivedDocs} loading={archivesLoading} />
+          <ArchivesView docs={archivedDocs} loading={archivesLoading} onRefresh={loadDocs} />
         )}
 
         {/* Foundational Documents */}

@@ -1,0 +1,79 @@
+{
+  "name": "SMSMessage",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string"
+    },
+    "phone_system_id": {
+      "type": "string"
+    },
+    "message_sid": {
+      "type": "string"
+    },
+    "direction": {
+      "type": "string",
+      "enum": [
+        "inbound",
+        "outbound"
+      ]
+    },
+    "from_number": {
+      "type": "string"
+    },
+    "to_number": {
+      "type": "string"
+    },
+    "body": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "queued",
+        "sent",
+        "delivered",
+        "failed",
+        "received"
+      ]
+    },
+    "media_urls": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "ai_generated": {
+      "type": "boolean",
+      "default": false
+    },
+    "conversation_id": {
+      "type": "string"
+    },
+    "read": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "required": [
+    "project_id",
+    "direction",
+    "from_number",
+    "to_number",
+    "body"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

@@ -1,0 +1,147 @@
+{
+  "name": "Conversation",
+  "type": "object",
+  "properties": {
+    "project_id": {
+      "type": "string"
+    },
+    "channel": {
+      "type": "string",
+      "enum": [
+        "website_chat",
+        "whatsapp",
+        "facebook_messenger",
+        "instagram",
+        "twitter",
+        "email",
+        "sms",
+        "telegram",
+        "slack",
+        "phone"
+      ]
+    },
+    "contact": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "avatar_url": {
+          "type": "string"
+        },
+        "channel_id": {
+          "type": "string"
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "open",
+        "pending",
+        "resolved",
+        "closed"
+      ],
+      "default": "open"
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "urgent"
+      ],
+      "default": "medium"
+    },
+    "assigned_to": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "last_message": {
+      "type": "string"
+    },
+    "last_message_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "unread_count": {
+      "type": "number",
+      "default": 0
+    },
+    "sentiment": {
+      "type": "string",
+      "enum": [
+        "positive",
+        "neutral",
+        "negative"
+      ]
+    },
+    "ai_summary": {
+      "type": "string"
+    },
+    "messages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "sender": {
+            "type": "string",
+            "enum": [
+              "customer",
+              "agent",
+              "ai"
+            ]
+          },
+          "content": {
+            "type": "string"
+          },
+          "attachments": {
+            "type": "array"
+          },
+          "timestamp": {
+            "type": "string"
+          },
+          "read": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  },
+  "required": [
+    "project_id",
+    "channel"
+  ],
+  "rls": {
+    "create": {
+      "created_by": "{{user.email}}"
+    },
+    "read": {
+      "created_by": "{{user.email}}"
+    },
+    "update": {
+      "created_by": "{{user.email}}"
+    },
+    "delete": {
+      "created_by": "{{user.email}}"
+    }
+  }
+}

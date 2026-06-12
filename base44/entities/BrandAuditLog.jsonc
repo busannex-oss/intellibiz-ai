@@ -1,0 +1,158 @@
+{
+  "name": "BrandAuditLog",
+  "type": "object",
+  "properties": {
+    "audit_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the audit was run (YYYY-MM-DD)"
+    },
+    "overall_score": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Overall market-readiness score out of 100"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "not_ready",
+        "needs_work",
+        "almost_ready",
+        "market_ready"
+      ],
+      "default": "needs_work",
+      "description": "Market readiness status derived from overall score"
+    },
+    "issues": {
+      "type": "array",
+      "description": "List of identified issues",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "branding",
+              "color_theme",
+              "typography",
+              "content",
+              "consistency",
+              "professionalism",
+              "audience_alignment",
+              "ux",
+              "seo",
+              "mobile"
+            ]
+          },
+          "severity": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "high",
+              "medium",
+              "low"
+            ]
+          },
+          "page_or_component": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "recommendation": {
+            "type": "string"
+          },
+          "resolved": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "string",
+      "description": "AI-generated executive summary of the audit findings"
+    },
+    "category_scores": {
+      "type": "object",
+      "description": "Score per audit category (0-100)",
+      "properties": {
+        "branding": {
+          "type": "number"
+        },
+        "color_theme": {
+          "type": "number"
+        },
+        "typography": {
+          "type": "number"
+        },
+        "content": {
+          "type": "number"
+        },
+        "consistency": {
+          "type": "number"
+        },
+        "professionalism": {
+          "type": "number"
+        },
+        "audience_alignment": {
+          "type": "number"
+        },
+        "ux": {
+          "type": "number"
+        }
+      }
+    },
+    "triggered_by": {
+      "type": "string",
+      "enum": [
+        "scheduled",
+        "manual"
+      ],
+      "default": "scheduled"
+    }
+  },
+  "required": [
+    "audit_date"
+  ],
+  "rls": {
+    "create": {},
+    "read": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "super_admin"
+          ]
+        }
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "super_admin"
+          ]
+        }
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": {
+          "$in": [
+            "admin",
+            "super_admin"
+          ]
+        }
+      }
+    }
+  }
+}
